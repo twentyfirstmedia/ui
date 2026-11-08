@@ -2,7 +2,21 @@
   "name": "@twentyfirstmedia/ui-core",
   "version": "0.0.0",
   "description": "Components, hooks, icons and formatters shared by the Halo and Pro kits.",
-  "license": "UNLICENSED",
+  "license": "MIT",
+  "author": "Twentyfirst Media (https://twentyfirst.media)",
+  "homepage": "https://ui.twentyfirst.media",
+  "bugs": {
+    "url": "https://github.com/twentyfirstmedia/ui/issues"
+  },
+  "keywords": [
+    "react",
+    "ui",
+    "components",
+    "design-system",
+    "halo",
+    "pro",
+    "accessible"
+  ],
   "type": "module",
   "repository": {
     "type": "git",
@@ -10,8 +24,8 @@
     "directory": "packages/core"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "restricted"
+    "access": "public",
+    "provenance": true
   },
   "sideEffects": [
     "**/*.css"

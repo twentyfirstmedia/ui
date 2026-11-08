@@ -1,0 +1,22 @@
+name: Feature request
+description: A new component, prop, pattern or MCP tool.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What do you want to build?
+      description: The use case, not only the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: The API you imagine (props, markup), and how it should look in Halo and in Pro.
+      render: tsx
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and prior art
+      description: Workarounds you tried, or how other libraries solve it.

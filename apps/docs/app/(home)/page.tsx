@@ -132,6 +132,7 @@ const jsonLd = {
       codeRepository: GITHUB,
       programmingLanguage: ["TypeScript", "CSS"],
       runtimePlatform: "React 19",
+      license: "https://opensource.org/licenses/MIT",
       url: `${ROOT_URL}/`,
       hasPart: [
         { "@type": "SoftwareSourceCode", name: "@twentyfirstmedia/halo", url: `${ROOT_URL}/halo/` },
@@ -254,9 +255,10 @@ export default function Landing() {
             <p className="lp-eyebrow">For coding agents</p>
             <h2 id="lp-agents">Your agent knows every component</h2>
             <p>
-              The kits are private, so no model has seen them. The MCP server gives Claude Code,
-              Cursor, VS Code and Codex the docs of the version you installed: search, props,
-              examples, tokens and a usage check. Offline, no account, one command.
+              The kits are newer than most models&apos; training data, and exact props matter. The
+              MCP server gives Claude Code, Cursor, VS Code and Codex the docs of the version you
+              installed: search, props, examples, tokens and a usage check. Offline, no account, one
+              command.
             </p>
             <ul className="lp-checks">
               <li>8 tools: search, components, patterns, guides, tokens, icons and check_usage</li>
@@ -349,7 +351,7 @@ export default function Landing() {
         <div className="lp-footer-brand">
           <Logo size={18} className="lp-logo" />
           <span>Twentyfirst UI</span>
-          <small>Two React UI kits, one API. By Twentyfirst Media.</small>
+          <small>Two React UI kits, one API. MIT licensed. Made by Twentyfirst Media.</small>
         </div>
         <nav aria-label="Docs">
           <h2>Docs</h2>
@@ -366,6 +368,7 @@ export default function Landing() {
           <a href={`${BASE_PATH}/llms-full.txt`}>llms-full.txt</a>
           <a href={`${BASE_PATH}/sitemap.xml`}>Sitemap</a>
           <a href={GITHUB}>GitHub</a>
+          <a href="https://www.npmjs.com/package/@twentyfirstmedia/halo">npm</a>
         </nav>
       </footer>
     </LandingShell>

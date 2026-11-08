@@ -136,6 +136,6 @@ export function mcpInit({ cwd, kit, clients, rules, log }: McpInitOptions): void
     }
   }
   log.log(
-    `Done. Restart your agent or reload its MCP servers; the server runs \`npx ${serverArgs(kit).join(" ")}\` and needs the same NPM_TOKEN as the install.`,
+    `Done. Restart your agent or reload its MCP servers; the server runs \`npx ${serverArgs(kit).join(" ")}\`.`,
   );
 }

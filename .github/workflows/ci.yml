@@ -29,7 +29,9 @@ jobs:
 
   e2e:
     name: e2e
-    runs-on: ubuntu-latest
+    # Screenshot baselines are recorded on this image (font rasterising differs between systems);
+    # bump it together with new baselines from the "Update screenshots" workflow.
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Twentyfirst UI: two React UI kits with one component API, published as private npm packages, plus a docs site.
+Twentyfirst UI: two React UI kits with one component API, published as public, MIT-licensed npm packages, plus a docs site and an MCP server for coding agents.
 
 - **Halo** (`@twentyfirstmedia/halo`): soft, rounded, light-first. The gold standard; its look and behaviour are defined by `reference/halo/`.
 - **Pro** (`@twentyfirstmedia/pro`): sharp, dense, hairline grid, dark-first. Same components, props and markup as Halo; only tokens and CSS differ. Its look comes from `reference/pro/`.
@@ -24,7 +24,7 @@ The kits are independent of any app. HQ, FollowerPilot and Capitaso adopt them l
 - **Privacy:** fonts are self-hosted (no Google Fonts CDN), no telemetry (`NEXT_TELEMETRY_DISABLED=1`, `TURBO_TELEMETRY_DISABLED=1`), no external requests from components.
 - **Accessibility:** keyboard paths, focus rings and aria as in the reference; axe must pass for every docs preview.
 - TypeScript strict, ESM only, React 19, exact versions pinned for fast-moving deps. English for code, comments and docs; German for PR summaries and `docs/PLAN.md` notes.
-- Never commit secrets. The npm token for GitHub Packages lives in Actions secrets only.
+- Never commit secrets. The npm token (npmjs.com) lives in Actions secrets only (`NPM_TOKEN`).
 
 ## Commands (once phase 0 exists)
 

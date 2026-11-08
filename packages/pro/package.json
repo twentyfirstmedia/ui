@@ -2,7 +2,22 @@
   "name": "@twentyfirstmedia/pro",
   "version": "0.0.0",
   "description": "Pro: sharp, dense, hairline grid, dark-first. Same components and props as Halo.",
-  "license": "UNLICENSED",
+  "license": "MIT",
+  "author": "Twentyfirst Media (https://twentyfirst.media)",
+  "homepage": "https://ui.twentyfirst.media/pro/",
+  "bugs": {
+    "url": "https://github.com/twentyfirstmedia/ui/issues"
+  },
+  "keywords": [
+    "react",
+    "ui-kit",
+    "components",
+    "design-system",
+    "tailwind",
+    "dark-mode",
+    "accessible",
+    "pro"
+  ],
   "type": "module",
   "repository": {
     "type": "git",
@@ -10,8 +25,8 @@
     "directory": "packages/pro"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "restricted"
+    "access": "public",
+    "provenance": true
   },
   "sideEffects": [
     "**/*.css"

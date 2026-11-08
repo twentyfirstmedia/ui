@@ -3,7 +3,7 @@ title: AI agents and MCP
 description: Give Claude Code, Cursor, VS Code and other coding agents the complete kit docs, so they build with real components instead of guessing.
 ---
 
-The kits are private packages, so no model knows them from its training. Two things fix that: an MCP server that answers from the docs of the exact version you installed, and plain Markdown for every page of this site.
+The kits are newer than most models' training data, and the exact props matter. Two things fix that: an MCP server that answers from the docs of the exact version you installed, and plain Markdown for every page of this site.
 
 ## MCP server
 
@@ -13,7 +13,7 @@ The CLI includes an MCP server (stdio, no network access, the docs are bundled).
 npx @twentyfirstmedia/ui mcp init --kit {{kit}}
 ```
 
-It writes `.mcp.json` (Claude Code), `.cursor/mcp.json` (Cursor) and `.vscode/mcp.json` (VS Code). Pick clients with `--client claude,cursor,vscode` and skip the rules with `--no-rules`. The server needs the same `NPM_TOKEN` as the install.
+It writes `.mcp.json` (Claude Code), `.cursor/mcp.json` (Cursor) and `.vscode/mcp.json` (VS Code). Pick clients with `--client claude,cursor,vscode` and skip the rules with `--no-rules`.
 
 Or add it by hand. Claude Code:
 

@@ -29,7 +29,8 @@ afterAll(() => {
 describe("twentyfirst-ui", () => {
   it("init sets up the kit, styles, provider and layout", () => {
     expect(run(["init", "--kit", "halo", "--no-install", "--cwd", dir], log)).toBe(0);
-    expect(file(".npmrc")).toContain("@twentyfirstmedia:registry=https://npm.pkg.github.com");
+    // the packages are on the public npm registry: no .npmrc needed
+    expect(existsSync(join(dir, ".npmrc"))).toBe(false);
     const css = file("app/globals.css");
     expect(css.indexOf('@import "tailwindcss"')).toBeLessThan(
       css.indexOf("@twentyfirstmedia/halo/styles.css"),
@@ -48,9 +49,17 @@ describe("twentyfirst-ui", () => {
   });
 
   it("init is idempotent", () => {
-    const before = [file("app/globals.css"), file("app/layout.tsx"), file(".npmrc")];
+    const before = [
+      file("app/globals.css"),
+      file("app/layout.tsx"),
+      file("components/ui-root.tsx"),
+    ];
     expect(run(["init", "--kit", "halo", "--no-install", "--cwd", dir], log)).toBe(0);
-    expect([file("app/globals.css"), file("app/layout.tsx"), file(".npmrc")]).toEqual(before);
+    expect([
+      file("app/globals.css"),
+      file("app/layout.tsx"),
+      file("components/ui-root.tsx"),
+    ]).toEqual(before);
   });
 
   it("add copies components with imports from the public package", () => {
