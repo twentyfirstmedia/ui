@@ -288,7 +288,7 @@ export function ListRow(p: ListRowProps) {
         }}
       >
         <span className="tf-row-title">
-          {p.unread && <span className="tf-unread" aria-label={L("Unread")} />}
+          {p.unread && <span className="tf-unread" role="img" aria-label={L("Unread")} />}
           {p.title}
         </span>
         {p.subtitle && (
@@ -419,7 +419,7 @@ export function Progress(p: ProgressProps) {
       aria-valuenow={v}
       aria-valuemin={0}
       aria-valuemax={100}
-      aria-label={p.label}
+      aria-label={p.label || L("Progress")}
     >
       <span
         style={{

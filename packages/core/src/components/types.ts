@@ -113,6 +113,7 @@ export interface SwitchProps extends BaseProps {
   children?: ReactNode;
   spread?: boolean;
   disabled?: boolean;
+  label?: string;
 }
 export interface TabsProps extends BaseProps {
   items: string[];

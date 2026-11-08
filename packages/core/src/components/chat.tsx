@@ -173,7 +173,7 @@ export function CodeBlock(p: CodeBlockProps) {
           {copied[0] ? L("Copied") : L("Copy")}
         </button>
       </div>
-      <pre>
+      <pre tabIndex={0}>
         <code>
           {String(p.code || "")
             .split("\n")
@@ -529,6 +529,7 @@ export function ModelPicker(p: ModelPickerProps) {
 }
 
 export function Composer(p: ComposerProps) {
+  const fileRef = React.useRef<HTMLInputElement>(null);
   const ta = React.useRef<HTMLTextAreaElement>(null),
     v = useControlled(p.value, "", p.onChange),
     files = p.attachments || [],
@@ -653,18 +654,25 @@ export function Composer(p: ComposerProps) {
       <div className="tf-composer-bar">
         {p.onAttach && (
           <Tooltip label={L("Attach files")}>
-            <label className="tf-composer-tool" aria-label={L("Attach files")}>
+            <button
+              type="button"
+              className="tf-composer-tool"
+              aria-label={L("Attach files")}
+              onClick={() => fileRef.current?.click()}
+            >
               <Icon name="paperclip" size={16} />
               <input
+                ref={fileRef}
                 type="file"
                 multiple
                 hidden
+                tabIndex={-1}
                 onChange={(e) => {
                   if (e.target.files) p.onAttach?.(e.target.files);
                   e.target.value = "";
                 }}
               />
-            </label>
+            </button>
           </Tooltip>
         )}
         {p.commands && (

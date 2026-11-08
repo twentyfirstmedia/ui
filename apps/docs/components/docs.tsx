@@ -30,7 +30,7 @@ export function PropsTable({ component }: { component: string }) {
   return (
     <>
       <h3 id={`props-${component}`}>{component}</h3>
-      <div className="docs-table-wrap">
+      <div className="docs-table-wrap" tabIndex={0} role="region" aria-label={`${component} props`}>
         <table className="docs-table">
           <thead>
             <tr>

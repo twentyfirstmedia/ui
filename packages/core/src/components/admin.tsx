@@ -205,7 +205,7 @@ export function StatusSelect(p: StatusSelectProps) {
           className={cx("tf-statussel", p.size === "sm" && "sm")}
           aria-haspopup="listbox"
           aria-expanded={s.open}
-          aria-label={p.label}
+          aria-label={p.label ? `${p.label}: ${cur.label ?? ""}` : undefined}
           onClick={(e) => {
             e.stopPropagation();
             s.toggle();
@@ -520,7 +520,13 @@ export function MapView(p: MapViewProps) {
               width: r || undefined,
               height: r || undefined,
             }}
-            aria-label={pt.label + (pt.value != null ? ", " + formatNumber(pt.value) : "")}
+            aria-label={[
+              typeof pt.text === "string" && !p.bubbles ? pt.text : null,
+              pt.label,
+              pt.value != null ? formatNumber(pt.value) : null,
+            ]
+              .filter(Boolean)
+              .join(", ")}
             onClick={() => {
               sel[1](sel[0] === pt.id ? null : pt.id);
             }}
@@ -743,7 +749,9 @@ export function WebhookEndpoint(p: WebhookEndpointProps) {
             })}
           </span>
         )}
-        {p.onToggle && <Switch checked={p.enabled !== false} onChange={p.onToggle} />}
+        {p.onToggle && (
+          <Switch checked={p.enabled !== false} onChange={p.onToggle} label={L("Enabled")} />
+        )}
         {p.menu && (
           <Popover
             width={200}
@@ -1269,9 +1277,9 @@ export function LocaleSwitcher(p: LocaleSwitcherProps) {
           aria-haspopup="dialog"
           aria-expanded={s.open}
           onClick={s.toggle}
-          aria-label={L("Language and currency")}
+          title={L("Language and currency")}
         >
-          {L0.flag ? <span aria-hidden>{L0.flag}</span> : <Icon name="globe" size={15} />}
+          {L0.flag ? <span>{L0.flag}</span> : <Icon name="globe" size={15} />}
           <span>{(L0.short || lang[0] || "").toUpperCase()}</span>
           {cur[0] && <span className="tf-locsw-cur">{cur[0]}</span>}
           <Icon name="chevronDown" size={13} />
@@ -1631,7 +1639,7 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
       </ol>
       {step[0] === 0 && (
         <div className="tf-2fa-scan">
-          <div className="tf-2fa-qr" aria-label={L("QR code")}>
+          <div className="tf-2fa-qr" role="img" aria-label={L("QR code")}>
             {p.qr || <Icon name="grid" size={48} />}
           </div>
           <div
@@ -1817,6 +1825,7 @@ export function ColorField(p: ColorFieldProps) {
         </label>
         <input
           id={id}
+          aria-label={p.label ? undefined : L("Pick a colour")}
           className="tf-input tf-mono"
           value={v[0]}
           onChange={(e) => {

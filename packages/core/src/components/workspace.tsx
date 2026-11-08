@@ -200,7 +200,7 @@ export function CommandPalette(p: CommandPaletteProps) {
           />
           <kbd>{L("Esc")}</kbd>
         </div>
-        <div className="tf-palette-list" role="listbox">
+        <div className="tf-palette-list" role="listbox" aria-label={L("Results")}>
           {res.length ? (
             groups.map((g) => (
               <div key={g.g}>

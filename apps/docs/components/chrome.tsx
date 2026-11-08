@@ -43,7 +43,9 @@ export function Chrome({
 }) {
   const router = useRouter();
   const pathname = usePathname() ?? `/${kit}/`;
-  const [theme, setTheme] = useState<ThemeName>(kit === "pro" ? "dark" : "light");
+  // undefined until the saved theme is read: the inline script in <head> has already set it
+  const [saved, setTheme] = useState<ThemeName | undefined>(undefined);
+  const theme: ThemeName = saved ?? (kit === "pro" ? "dark" : "light");
   const [lang, setLang] = useState<Lang>("en");
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -92,7 +94,7 @@ export function Chrome({
   return (
     <UIProvider
       kit={kit}
-      theme={theme}
+      theme={saved}
       locale={lang === "de" ? "de-DE" : "en-US"}
       labels={lang === "de" ? de : undefined}
     >

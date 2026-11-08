@@ -70,6 +70,7 @@ function App() {
           <Panel title="Instructions" subtitle="What it does, how it talks, what it must never do">
             <textarea
               className="tf-input"
+              aria-label="Instructions"
               rows={5}
               style={{
                 fontFamily: "var(--font-mono)",

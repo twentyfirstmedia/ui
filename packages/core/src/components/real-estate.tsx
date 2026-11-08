@@ -273,7 +273,9 @@ export function SavedSearch(p: SavedSearchProps) {
         {(p.newCount ?? 0) > 0 && (
           <span className="tf-nav-count">{formatNumber(p.newCount ?? 0)}</span>
         )}
-        {p.onToggle && <Switch checked={p.enabled !== false} onChange={p.onToggle} />}
+        {p.onToggle && (
+          <Switch checked={p.enabled !== false} onChange={p.onToggle} label={L("Enabled")} />
+        )}
       </div>
       <div className="tf-saved-crit">
         {(p.criteria || []).map((c, i) => (

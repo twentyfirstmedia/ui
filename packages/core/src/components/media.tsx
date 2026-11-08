@@ -176,9 +176,9 @@ export function Gallery(p: GalleryProps) {
               onClick={() => {
                 i[1](k);
               }}
-              aria-label={L("Image {n}", {
-                n: k + 1,
-              })}
+              aria-label={
+                it.caption || it.alt || (it.src ? L("Image {n}", { n: k + 1 }) : undefined)
+              }
             >
               {pic(it, "tf-gallery-thumb")}
             </button>

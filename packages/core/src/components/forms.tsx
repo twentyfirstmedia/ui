@@ -555,7 +555,7 @@ export function Calendar(p: CalendarProps) {
           }}
         />
       </div>
-      <div className="tf-cal-grid" role="grid">
+      <div className="tf-cal-grid" role="group" aria-label={monthName(first)}>
         {weekdays().map((w, i) => (
           <span key={i} className="tf-cal-wd">
             {w}
@@ -582,7 +582,7 @@ export function Calendar(p: CalendarProps) {
                 isTo && from && "end",
               )}
               aria-pressed={isFrom || isTo}
-              aria-label={fmtD(d)}
+              aria-label={formatDate(d, { day: "numeric", month: "long", year: "numeric" })}
               onPointerEnter={() => {
                 p.range && hov[1](d);
               }}

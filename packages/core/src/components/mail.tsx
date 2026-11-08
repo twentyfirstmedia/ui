@@ -117,7 +117,11 @@ export function InboxList(p: InboxListProps) {
             p.onOpen && p.onOpen(m);
           }}
         >
-          <span className="tf-mailrow-dot" aria-label={m.unread ? L("Unread") : undefined} />
+          <span
+            className="tf-mailrow-dot"
+            role={m.unread ? "img" : undefined}
+            aria-label={m.unread ? L("Unread") : undefined}
+          />
           <span className="tf-mailrow-main">
             <span className="tf-mailrow-top">
               <b>{m.from}</b>

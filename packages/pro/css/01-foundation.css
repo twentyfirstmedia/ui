@@ -718,6 +718,10 @@ select.tf-input {
   align-items: center;
   gap: 4px;
   margin: 0 auto;
+  /* many areas scroll inside the bar instead of pushing the profile out of the frame */
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 .tf-nav-item {
   display: inline-flex;
@@ -2705,6 +2709,10 @@ select.tf-input {
 }
 
 .tf-paper {
+  /* documents stay on white paper in both themes: text tokens follow the paper */
+  --ink: var(--paper-ink);
+  --ink-muted: var(--paper-muted);
+  --ink-subtle: var(--paper-subtle);
   position: sticky;
   top: calc(env(safe-area-inset-top, 0px) + 16px);
   background: var(--surface);

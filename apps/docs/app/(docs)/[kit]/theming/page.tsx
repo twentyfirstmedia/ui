@@ -35,7 +35,7 @@ function TokenTable({
   return (
     <>
       <h2>{title}</h2>
-      <div className="docs-table-wrap">
+      <div className="docs-table-wrap" tabIndex={0} role="region" aria-label={`${title} tokens`}>
         <table className="docs-table">
           <thead>
             <tr>

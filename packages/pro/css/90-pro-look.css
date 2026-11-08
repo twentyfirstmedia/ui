@@ -587,6 +587,11 @@ select.tf-input {
   line-height: 16px;
   padding: 4px 8px;
 }
+.tf-tooltip kbd {
+  color: var(--on-accent);
+  background: transparent;
+  border: var(--line-width) solid var(--on-accent);
+}
 .tf-toast {
   border-radius: 0;
   background: var(--surface);

@@ -43,7 +43,7 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--bg-300` | `{line}` | `#e7e7ea` / `#1e1e23` | Selected: active nav item, selected row, pressed segment, open menu trigger. |
 | `--fg-100` | `{ink}` | `#111114` / `#ededf0` | Primary text and icons on every surface (bg-000 to bg-300). |
 | `--fg-200` | `{ink-muted}` | `#4f4f58` / `#a6a6b0` | Secondary text: descriptions, table cells that are not the row's key, inactive nav items. On bg-000 to bg-300. |
-| `--fg-300` | `{ink-muted}` | `#63636d` / `#8b8b96` | Muted text: meta, timestamps, column headers, eyebrows. On bg-000 to bg-300. |
+| `--fg-300` | `{ink-muted}` | `#5e5e68` / `#90909b` | Muted text: meta, timestamps, column headers, eyebrows. On bg-000 to bg-300. |
 | `--fg-400` | `{ink-subtle}` | `#a3a3ad` / `#5c5c66` | Disabled text and placeholders only. Below 4.5:1 by design; never for information. |
 | `--line-100` | `{line}` | `#ececef` / `#1a1a1f` | Faint hairline: row separators inside tables and lists, background grid. |
 | `--line-200` | `{line}` | `#dfdfe3` / `#26262c` | Hairline: the structural 1px grid between cells, panel and overlay borders, table header rule. Decorative, not a control boundary. |
@@ -87,7 +87,7 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--media-shadow` | `rgba(0, 0, 0, 0.3)` | `rgba(0, 0, 0, 0.3)` | Shadow behind lines drawn on photos. Same in both themes. |
 | `--lightbox` | `rgba(8, 8, 8, 0.92)` | `rgba(8, 8, 8, 0.92)` | Full-screen image viewer background. Same in both themes. |
 | `--lightbox-ink` | `rgba(255, 255, 255, 0.8)` | `rgba(255, 255, 255, 0.8)` | Captions in the image viewer. Same in both themes. |
-| `--paper-muted` | `#8a8984` | `#8a8984` | Secondary text on `paper`. Same in both themes. |
+| `--paper-muted` | `#706f6a` | `#706f6a` | Secondary text on paper (4.5:1 on white). |
 | `--paper-subtle` | `#6b6a65` | `#6b6a65` | Small print on `paper`. Same in both themes. |
 | `--serp-ink` | `#202124` | `#202124` | Search ad preview: text. Same in both themes. |
 | `--serp-muted` | `#4d5156` | `#4d5156` | Search ad preview: description and URL. Same in both themes. |

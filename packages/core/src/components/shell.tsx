@@ -73,7 +73,7 @@ function railBtn(it: RailItem, i: number) {
       style={{
         animationDelay: 200 + i * 50 + "ms",
       }}
-      aria-label={it.label}
+      aria-label={it.count ? `${it.label}, ${it.count}` : it.label}
       title={it.label}
       aria-current={it.active ? "page" : undefined}
       onClick={it.onClick}

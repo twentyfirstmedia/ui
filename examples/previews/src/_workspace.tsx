@@ -56,11 +56,11 @@ export function Shell(p: ShellProps) {
           email: "mara@halo.app",
         }}
         extra={[
-          <button key="s" type="button" className="tf-topbtn" aria-label="Search">
+          <button key="s" type="button" className="tf-topbtn">
             <Icon name="search" size={15} />
             Search<kbd>⌘K</kbd>
           </button>,
-          <button key="b" type="button" className="tf-topbtn icon" aria-label="Notifications">
+          <button key="b" type="button" className="tf-topbtn icon" aria-label="Notifications, 4">
             <Icon name="bell" size={17} />
             <span className="tf-nav-count">{4}</span>
           </button>,
