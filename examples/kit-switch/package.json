@@ -1,0 +1,21 @@
+{
+  "name": "example-kit-switch",
+  "private": true,
+  "type": "module",
+  "description": "Both kits in one app, switched at runtime with data-kit. Used by the e2e test.",
+  "scripts": {
+    "build": "node build.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@twentyfirstmedia/ui-core": "workspace:*",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "esbuild": "0.28.2",
+    "typescript": "6.0.3"
+  }
+}

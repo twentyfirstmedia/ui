@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { cx } from "../cx.js";
-import { L, formatNumber } from "../i18n.js";
+import { L, LK, formatNumber } from "../i18n.js";
 import { Icon } from "../Icon.js";
 import { useControlled } from "../hooks.js";
 import { Avatar, Badge, TintIcon } from "./foundation.js";
@@ -706,12 +706,12 @@ export function Composer(p: ComposerProps) {
 }
 
 const AGENT_TONE: Record<string, Tone> = {
-  Running: "success",
-  Thinking: "info",
-  "Waiting for approval": "highlight",
-  Idle: "neutral",
-  Paused: "neutral",
-  Error: "danger",
+  [LK("Running")]: "success",
+  [LK("Thinking")]: "info",
+  [LK("Waiting for approval")]: "highlight",
+  [LK("Idle")]: "neutral",
+  [LK("Paused")]: "neutral",
+  [LK("Error")]: "danger",
 };
 
 export function AgentStatus(p: AgentStatusProps) {
