@@ -161,6 +161,21 @@ describe("rendering", () => {
     );
   });
 
+  it("takes title and the other attributes of the same element", async () => {
+    const host = mount(`<tf-panel title="Team" subtitle="Who has access"></tf-panel>`);
+    await settle();
+    expect(host.querySelector(".tf-panel-title")!.textContent).toBe("Team");
+    expect(host.querySelector(".tf-panel-sub")!.textContent).toBe("Who has access");
+    const panel = host.firstElementChild as HTMLElementTagNameMap["tf-panel"];
+    panel.setAttribute("title", "People");
+    await settle();
+    expect(host.querySelector(".tf-panel-title")!.textContent).toBe("People");
+    expect(panel.hasAttribute("title")).toBe(false);
+    panel.title = "Members";
+    await settle();
+    expect(host.querySelector(".tf-panel-title")!.textContent).toBe("Members");
+  });
+
   it("renders ReactNode props from DOM nodes set as properties", async () => {
     const host = mount(`<tf-empty-state title="Nothing yet"></tf-empty-state>`);
     await settle();
@@ -234,15 +249,27 @@ describe("events", () => {
     const host = mount(`<tf-switch label="Alerts"></tf-switch>`);
     await settle();
     const details: unknown[] = [];
+    const own: unknown[] = [];
     host.addEventListener("change", (e) => details.push((e as CustomEvent).detail));
+    host.firstElementChild!.addEventListener("change", (e) => own.push((e as CustomEvent).detail));
     const input = host.querySelector("input")!;
     input.click();
     await settle();
     expect(details).toEqual([true]);
+    expect(own).toEqual([true]);
     expect(input.checked).toBe(true);
     input.click();
     await settle();
     expect(details).toEqual([true, false]);
+  });
+
+  it("leaves native events of content passed in alone", async () => {
+    const host = mount(`<tf-tabs items="One"><input slot="panels:One" id="own" /></tf-tabs>`);
+    await settle();
+    const seen: string[] = [];
+    host.addEventListener("change", (e) => seen.push((e.target as Element).localName));
+    host.querySelector("#own")!.dispatchEvent(new Event("change", { bubbles: true }));
+    expect(seen).toEqual(["input"]);
   });
 
   it("keeps controlled values in step unless the event is cancelled", async () => {

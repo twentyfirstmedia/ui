@@ -486,12 +486,20 @@ export class TfElement extends HTMLElement {
     if (set?.delete(listener) && set.size === 0) this._bumpTree(type);
   }
 
-  /** Someone listens for `type` here (listener, `on…` handler) or on a tf-* element above. */
+  /**
+   * Someone listens for `type` here (a listener, an `on…` handler, Svelte's delegated `__type`
+   * handler) or on a tf-* element above.
+   */
   _listens(type: string): boolean {
-    const own = (el: TfElement) =>
-      !!el._listeners.get(type)?.size ||
-      el.hasAttribute(`on${type}`) ||
-      typeof (el as unknown as Record<string, unknown>)[`on${type}`] === "function";
+    const own = (el: TfElement) => {
+      const props = el as unknown as Record<string, unknown>;
+      return (
+        !!el._listeners.get(type)?.size ||
+        el.hasAttribute(`on${type}`) ||
+        typeof props[`on${type}`] === "function" ||
+        typeof props[`__${type}`] === "function"
+      );
+    };
     if (own(this)) return true;
     for (let n = ownerOf(this); n; n = ownerOf(n)) if (own(n)) return true;
     return false;

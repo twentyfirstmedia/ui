@@ -34,6 +34,7 @@ export const GUIDE_ORDER = [
   "cli",
   "theming",
   "ai",
+  "html",
   "status-and-approvals",
 ];
 
@@ -210,7 +211,7 @@ export function readGuides(): Guide[] {
     slug: "changelog",
     title: "Changelog",
     description:
-      "What changed in each release of the Halo and Pro kits, the shared core and the CLI. All four packages are versioned together.",
+      "What changed in each release of the Halo and Pro kits, the shared core, the CLI and the custom elements. All five packages are versioned together.",
     markdown: existsSync(log)
       ? readFileSync(log, "utf8").replace(/^# .*\n+/, "")
       : "No release yet. The first release is 0.1.0; every later change is described with a changeset and listed here.",
