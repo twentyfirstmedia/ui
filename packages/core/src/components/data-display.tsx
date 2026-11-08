@@ -213,7 +213,7 @@ export function PageHeader(p: PageHeaderProps) {
   );
 }
 export function Stagger(p: StaggerProps) {
-  const st = Object.assign({}, p.style || {});
+  const st: Record<string, unknown> = { ...p.style };
   if (p.delay) st["--base"] = p.delay + "ms";
   return React.createElement(
     p.as || "div",
@@ -249,9 +249,11 @@ export function Table(p: TableProps) {
       </thead>
       <tbody
         className={p.animate === false ? undefined : "tf-stagger"}
-        style={{
-          "--base": "180ms",
-        }}
+        style={
+          {
+            "--base": "180ms",
+          } as React.CSSProperties
+        }
       >
         {(p.rows || []).map((r, i) => (
           <tr key={i}>
@@ -311,9 +313,11 @@ export function Timeline(p: TimelineProps) {
   return (
     <ol
       className="tf-timeline tf-stagger"
-      style={{
-        "--base": (p.delay || 200) + "ms",
-      }}
+      style={
+        {
+          "--base": (p.delay || 200) + "ms",
+        } as React.CSSProperties
+      }
     >
       {(p.items || []).map((it, i) => (
         <li key={i} className="tf-tl-item">

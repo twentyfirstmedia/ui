@@ -460,9 +460,11 @@ export function PromptStarters(p: PromptStartersProps) {
           key={i}
           type="button"
           className="tf-starter tf-in"
-          style={{
-            "--d": i * 60 + "ms",
-          }}
+          style={
+            {
+              "--d": i * 60 + "ms",
+            } as React.CSSProperties
+          }
           onClick={() => {
             p.onPick && p.onPick(s.prompt || s.title);
           }}

@@ -338,9 +338,11 @@ export function Flow(p: FlowProps) {
   return (
     <ol
       className="tf-flow tf-stagger"
-      style={{
-        "--base": "120ms",
-      }}
+      style={
+        {
+          "--base": "120ms",
+        } as React.CSSProperties
+      }
     >
       {(p.steps || []).map((s, i) => {
         const steps = STEP(),
@@ -561,9 +563,11 @@ export function PermissionMatrix(p: PermissionMatrixProps) {
         </thead>
         <tbody
           className="tf-stagger"
-          style={{
-            "--base": "120ms",
-          }}
+          style={
+            {
+              "--base": "120ms",
+            } as React.CSSProperties
+          }
         >
           {(p.roles || []).map((r, ri) => (
             <tr key={r.name}>
