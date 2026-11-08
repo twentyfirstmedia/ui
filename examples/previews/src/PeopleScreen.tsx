@@ -201,9 +201,13 @@ function App() {
       </div>
       <Stagger
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "repeat(4, 1fr)",
-        }}
+        style={
+          {
+            "--cols": "repeat(4, 1fr)",
+            "--cols-sm": "repeat(2, minmax(0, 1fr))",
+            "--cols-md": "repeat(2, minmax(0, 1fr))",
+          } as React.CSSProperties
+        }
         delay={80}
       >
         <StatTile tint="sky" value="38" label="Members" />

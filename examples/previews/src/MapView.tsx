@@ -1,3 +1,4 @@
+import * as React from "react";
 import { IconButton, MapView } from "@twentyfirstmedia/ui-core";
 import type { MapPoint } from "@twentyfirstmedia/ui-core";
 
@@ -91,11 +92,13 @@ const city: MapPoint[] = [
 export default function Preview() {
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 16,
-      }}
+      className="tf-grid"
+      style={
+        {
+          "--cols": "1fr 1fr",
+          gap: 16,
+        } as React.CSSProperties
+      }
     >
       <div
         className="tf-panel"

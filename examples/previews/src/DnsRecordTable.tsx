@@ -1,3 +1,4 @@
+import * as React from "react";
 import { DnsRecordTable, DomainList, MailAuthStatus } from "@twentyfirstmedia/ui-core";
 
 const recs = [
@@ -60,11 +61,13 @@ export default function Preview() {
         />
       </div>
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 16,
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "1fr 1fr",
+            gap: 16,
+          } as React.CSSProperties
+        }
       >
         <div className="tf-panel tf-panel-flush tf-panel-list">
           <DomainList

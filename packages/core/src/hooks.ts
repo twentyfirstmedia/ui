@@ -139,3 +139,38 @@ export function useWidth<T extends HTMLElement = HTMLDivElement>(
 export function useId(prefix = "tf"): string {
   return `${prefix}-${React.useId().replace(/[^\w-]/g, "")}`;
 }
+
+/**
+ * Keeps a floating element (tooltip, popover) inside the screen, or inside the scrolling box that
+ * clips it, on narrow screens: caps its width and shifts it sideways with `translate`, which leaves
+ * the element's own `transform` (centering, entrance animation) alone.
+ */
+export function useKeepInView(ref: RefObject<HTMLElement | null>, active: boolean): void {
+  useIsoLayoutEffect(() => {
+    const el = ref.current;
+    if (!active || !el) return;
+    el.style.translate = "";
+    el.style.maxWidth = "";
+    let lo = 8,
+      hi = window.innerWidth - 8;
+    for (let a = el.parentElement; a; a = a.parentElement) {
+      const cs = getComputedStyle(a);
+      if (cs.overflowX !== "visible") {
+        const c = a.getBoundingClientRect();
+        lo = Math.max(lo, c.left + a.clientLeft + parseFloat(cs.paddingLeft));
+        hi = Math.min(hi, c.left + a.clientLeft + a.clientWidth - parseFloat(cs.paddingRight));
+        break;
+      }
+    }
+    if (hi - lo < 40) return;
+    let r = el.getBoundingClientRect();
+    if (r.width > hi - lo) {
+      el.style.maxWidth = hi - lo + "px";
+      r = el.getBoundingClientRect();
+    }
+    let shift = 0;
+    if (r.right > hi) shift = hi - r.right;
+    if (r.left + shift < lo) shift = lo - r.left;
+    if (shift) el.style.translate = `${Math.round(shift)}px 0`;
+  }, [active]);
+}

@@ -36,12 +36,14 @@ function App() {
     >
       <CheckoutSteps current={step[0]} onPick={step[1]} />
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) 340px",
-          gap: 16,
-          alignItems: "start",
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "minmax(0, 1fr) 340px",
+            gap: 16,
+            alignItems: "start",
+          } as React.CSSProperties
+        }
       >
         <div className="tf-panel">
           {lines[0].map((l) => (

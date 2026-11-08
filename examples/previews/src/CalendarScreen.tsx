@@ -225,6 +225,7 @@ function App() {
             "--d": "120ms",
             padding: 16,
             gap: 0,
+            overflowX: "auto",
           } as React.CSSProperties
         }
       >
@@ -232,6 +233,7 @@ function App() {
           style={{
             display: "grid",
             gridTemplateColumns: "48px repeat(5, 1fr)",
+            minWidth: 560,
             gap: 8,
             paddingBottom: 12,
           }}
@@ -257,6 +259,7 @@ function App() {
           style={{
             display: "grid",
             gridTemplateColumns: "48px repeat(5, 1fr)",
+            minWidth: 560,
             gap: 8,
             position: "relative",
           }}

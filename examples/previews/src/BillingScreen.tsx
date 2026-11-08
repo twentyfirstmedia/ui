@@ -177,9 +177,13 @@ function App() {
       </div>
       <Stagger
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "repeat(4, 1fr)",
-        }}
+        style={
+          {
+            "--cols": "repeat(4, 1fr)",
+            "--cols-sm": "repeat(2, minmax(0, 1fr))",
+            "--cols-md": "repeat(2, minmax(0, 1fr))",
+          } as React.CSSProperties
+        }
         delay={80}
       >
         <StatTile tint="butter" value="$48,210" label="Collected (MTD)" />
@@ -189,9 +193,11 @@ function App() {
       </Stagger>
       <Stagger
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "1fr 1fr",
-        }}
+        style={
+          {
+            "--cols": "1fr 1fr",
+          } as React.CSSProperties
+        }
         delay={280}
       >
         <div

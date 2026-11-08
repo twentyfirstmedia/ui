@@ -65,6 +65,17 @@ export function Chrome({
     return () => document.removeEventListener("keydown", k);
   }, []);
   useEffect(() => setMenu(false), [pathname]);
+  useEffect(() => {
+    if (!menu) return;
+    const root = document.documentElement;
+    root.classList.add("docs-locked");
+    const esc = (e: KeyboardEvent) => e.key === "Escape" && setMenu(false);
+    document.addEventListener("keydown", esc);
+    return () => {
+      root.classList.remove("docs-locked");
+      document.removeEventListener("keydown", esc);
+    };
+  }, [menu]);
 
   const rest = pathname.replace(/^\/(halo|pro)/, "");
   const switchKit = (k: string) => router.push(`/${k}${rest || "/"}`);
@@ -90,6 +101,42 @@ export function Chrome({
     const target = `/${kit}/${href ? `${href}/` : ""}`;
     return pathname === target || pathname === target.replace(/\/$/, "");
   };
+  const flat = sections.flatMap((s) => s.links);
+  const here = flat.findIndex((l) => isActive(l.href));
+  const prev = here > 0 ? flat[here - 1] : undefined;
+  const next = here >= 0 && here < flat.length - 1 ? flat[here + 1] : undefined;
+  const href = (h: string) => `/${kit}/${h ? `${h}/` : ""}`;
+
+  /** Language, theme and GitHub: in the header on wide screens, in the menu on phones. */
+  const prefs = () => (
+    <>
+      <Segmented
+        size="sm"
+        label="Language"
+        value={lang}
+        onChange={(v) => pick(v as Lang)}
+        options={[
+          { value: "en", label: "EN" },
+          { value: "de", label: "DE" },
+        ]}
+      />
+      <Tooltip label={theme === "dark" ? "Light theme" : "Dark theme"}>
+        <IconButton
+          icon={theme === "dark" ? "sun" : "moon"}
+          label={theme === "dark" ? "Light theme" : "Dark theme"}
+          onClick={toggleTheme}
+        />
+      </Tooltip>
+      <a
+        className="tf-iconbtn tf-iconbtn-soft"
+        href={GITHUB}
+        aria-label="GitHub repository"
+        title="GitHub repository"
+      >
+        <Icon name="code" />
+      </a>
+    </>
+  );
 
   return (
     <UIProvider
@@ -106,10 +153,11 @@ export function Chrome({
           type="button"
           className="docs-menu-btn tf-iconbtn tf-iconbtn-soft"
           aria-label="Menu"
+          aria-controls="docs-nav"
           aria-expanded={menu}
           onClick={() => setMenu(!menu)}
         >
-          <Icon name="menu" />
+          <Icon name={menu ? "x" : "menu"} />
         </button>
         <Link className="docs-brand" href={`/${kit}/`}>
           <span className="tf-brand-dot" aria-hidden />
@@ -123,6 +171,7 @@ export function Chrome({
             <kbd className="tf-kbd">⌘K</kbd>
           </button>
           <Segmented
+            className="docs-kit-switch"
             size="sm"
             label="Kit"
             value={kit}
@@ -132,36 +181,21 @@ export function Chrome({
               { value: "pro", label: "Pro" },
             ]}
           />
-          <Segmented
-            className="docs-lang"
-            size="sm"
-            label="Language"
-            value={lang}
-            onChange={(v) => pick(v as Lang)}
-            options={[
-              { value: "en", label: "EN" },
-              { value: "de", label: "DE" },
-            ]}
-          />
-          <Tooltip label={theme === "dark" ? "Light theme" : "Dark theme"}>
-            <IconButton
-              icon={theme === "dark" ? "sun" : "moon"}
-              label={theme === "dark" ? "Light theme" : "Dark theme"}
-              onClick={toggleTheme}
-            />
-          </Tooltip>
-          <a
-            className="tf-iconbtn tf-iconbtn-soft docs-gh"
-            href={GITHUB}
-            aria-label="GitHub repository"
-            title="GitHub repository"
-          >
-            <Icon name="code" />
-          </a>
+          <div className="docs-prefs">{prefs()}</div>
         </div>
       </header>
       <div className="docs-body">
-        <nav className={`docs-nav${menu ? " open" : ""}`} aria-label="Docs">
+        {menu && (
+          <button
+            type="button"
+            className="docs-scrim"
+            aria-label="Close menu"
+            tabIndex={-1}
+            onClick={() => setMenu(false)}
+          />
+        )}
+        <nav id="docs-nav" className={`docs-nav${menu ? " open" : ""}`} aria-label="Docs">
+          <div className="docs-nav-prefs">{prefs()}</div>
           {sections.map((s) => (
             <div key={s.title} className="docs-nav-section">
               <h2 className="docs-nav-title">{s.title}</h2>
@@ -182,6 +216,22 @@ export function Chrome({
         </nav>
         <main id="content" className="docs-main">
           {children}
+          {(prev || next) && (
+            <nav className="docs-pager" aria-label="Previous and next page">
+              {prev && (
+                <Link href={href(prev.href)} rel="prev">
+                  <small>Previous</small>
+                  <b>{prev.label}</b>
+                </Link>
+              )}
+              {next && (
+                <Link className="next" href={href(next.href)} rel="next">
+                  <small>Next</small>
+                  <b>{next.label}</b>
+                </Link>
+              )}
+            </nav>
+          )}
         </main>
       </div>
       {search && (

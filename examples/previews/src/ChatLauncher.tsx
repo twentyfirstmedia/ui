@@ -21,12 +21,14 @@ function App() {
         Free plan: 3 stagings left this month.
       </AnnouncementBar>
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 16,
-          alignItems: "end",
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "1fr 1fr",
+            gap: 16,
+            alignItems: "end",
+          } as React.CSSProperties
+        }
       >
         <CookieConsent
           inline

@@ -12,6 +12,7 @@ import { DataTable } from "./data-table.js";
 import { ConfirmDialog, Toaster } from "./feedback.js";
 import { RangeSlider } from "./admin.js";
 import { Pagination } from "./navigation.js";
+import { Tooltip } from "./overlays.js";
 
 beforeAll(() => {
   window.matchMedia ??= ((q: string) => ({
@@ -216,6 +217,21 @@ describe("RangeSlider", () => {
     const [lo] = screen.getAllByRole("slider");
     fireEvent.change(lo as HTMLElement, { target: { value: "30" } });
     expect(onChange).toHaveBeenLastCalledWith([30, 80]);
+  });
+});
+
+describe("Tooltip", () => {
+  it("starts open with defaultOpen and closes with Escape", () => {
+    render(
+      <Tooltip label="Copy share link" shortcut="⌘L" defaultOpen>
+        <button type="button">Share</button>
+      </Tooltip>,
+    );
+    const btn = screen.getByRole("button", { name: "Share" });
+    expect(screen.getByRole("tooltip").textContent).toContain("Copy share link");
+    expect(btn.getAttribute("aria-describedby")).toBe(screen.getByRole("tooltip").id);
+    fireEvent.keyDown(btn, { key: "Escape" });
+    expect(screen.queryByRole("tooltip")).toBeNull();
   });
 });
 

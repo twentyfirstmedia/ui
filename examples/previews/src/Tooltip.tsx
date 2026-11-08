@@ -30,20 +30,11 @@ function App() {
             View invoice
           </button>
         </Tooltip>
-        <span className="tf-tip-anchor">
+        <Tooltip label="Copy share link" shortcut="⌘L" defaultOpen>
           <button type="button" className="tf-iconbtn tf-iconbtn-soft" aria-label="Share">
             <Icon name="share" />
           </button>
-          <span
-            role="tooltip"
-            className="tf-tooltip tf-tip-top"
-            style={{
-              animation: "none",
-            }}
-          >
-            Copy share link<kbd>⌘L</kbd>
-          </span>
-        </span>
+        </Tooltip>
       </div>
       <div
         className="tf-row"

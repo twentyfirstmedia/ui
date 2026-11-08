@@ -1,14 +1,17 @@
+import * as React from "react";
 import { AgentCard, AgentDetails, Button } from "@twentyfirstmedia/ui-core";
 
 export default function Preview() {
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr 300px",
-        gap: 16,
-        alignItems: "start",
-      }}
+      className="tf-grid"
+      style={
+        {
+          "--cols": "1fr 1fr 300px",
+          gap: 16,
+          alignItems: "start",
+        } as React.CSSProperties
+      }
     >
       <AgentCard
         name="Atlas"

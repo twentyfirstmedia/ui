@@ -129,6 +129,14 @@ export function tokensCss(kit: Kit, t: KitTokens, scoped = false): string {
   css += `@media (prefers-color-scheme: light) {\n${block(self('[data-theme="system"]'), themeDecls(t, "light"), "  ")}}\n`;
   css += block(self('[data-theme="dark"]'), themeDecls(t, "dark"));
   css += block(self('[data-theme="light"]'), themeDecls(t, "light"));
+  // touch screens get comfortable hit targets unless a density is chosen explicitly
+  if (t.defaultDensity === "compact") {
+    css += `@media (pointer: coarse) {\n${block(
+      `${k}:not([data-density])`,
+      Object.entries(t.density.comfortable).map(([n, v]) => `--${n}: ${ref(v)};`),
+      "  ",
+    )}}\n`;
+  }
   for (const d of ["compact", "comfortable"] as const) {
     css += block(
       self(`[data-density="${d}"]`),

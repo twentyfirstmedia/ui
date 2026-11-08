@@ -39,7 +39,7 @@ export default function TextAndLocale() {
 L("Remove {name}", { name: "Mara" });   // "Mara entfernen"
 formatMoney(1240.5);                    // "1.240,50 €"`}
       />
-      {ex && <ExampleView name={ex.name} code={ex.code} width={ex.width} />}
+      {ex && <ExampleView name={ex.name} code={ex.code} />}
     </>
   );
 }

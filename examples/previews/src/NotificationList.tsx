@@ -5,6 +5,7 @@ export default function Preview() {
     <div
       style={{
         width: 380,
+        maxWidth: "100%",
         background: "var(--surface)",
         borderRadius: 24,
         padding: 8,

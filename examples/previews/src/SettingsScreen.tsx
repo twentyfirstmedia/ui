@@ -46,12 +46,14 @@ function App() {
         />
       </div>
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "240px 1fr",
-          gap: 24,
-          alignItems: "start",
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "240px 1fr",
+            gap: 24,
+            alignItems: "start",
+          } as React.CSSProperties
+        }
       >
         <div className="tf-panel tf-panel-flush tf-panel-list">
           <Stagger className="tf-list" delay={100}>
@@ -93,10 +95,12 @@ function App() {
             </div>
             <div
               className="tf-grid"
-              style={{
-                gridTemplateColumns: "1fr 1fr",
-                gap: 16,
-              }}
+              style={
+                {
+                  "--cols": "1fr 1fr",
+                  gap: 16,
+                } as React.CSSProperties
+              }
             >
               <Input label="Full name" defaultValue="Mara Ellis" />
               <Input

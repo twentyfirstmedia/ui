@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Breadcrumb,
   Button,
@@ -42,21 +43,27 @@ function App() {
         </div>
       </div>
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1.1fr) minmax(0, 1fr)",
-          gap: 32,
-          padding: 24,
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "minmax(0, 1.1fr) minmax(0, 1fr)",
+            gap: 32,
+            padding: 24,
+          } as React.CSSProperties
+        }
       >
         <div className="tf-col">
           <ProductArt kind="tee" tint="sky" />
           <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: 12,
-            }}
+            className="tf-grid"
+            style={
+              {
+                "--cols": "repeat(4, 1fr)",
+                "--cols-sm": "repeat(4, minmax(0, 1fr))",
+                "--cols-md": "repeat(2, minmax(0, 1fr))",
+                gap: 12,
+              } as React.CSSProperties
+            }
           >
             {(["sky", "mint", "butter", "lilac"] as const).map((t) => (
               <ProductArt key={t} kind="tee" tint={t} />

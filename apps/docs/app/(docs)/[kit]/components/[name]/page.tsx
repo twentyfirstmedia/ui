@@ -31,7 +31,7 @@ export default async function ComponentPage({
     <>
       <PageHead title={humanize(name)} lead={`${ex.group} · ${shown.join(", ") || name}`} />
       {readmes[name] && <Markdown text={readmes[name]} />}
-      <ExampleView name={ex.name} code={ex.code} width={ex.width} />
+      <ExampleView name={ex.name} code={ex.code} />
       {shown.length > 0 && (
         <>
           <h2>Props</h2>

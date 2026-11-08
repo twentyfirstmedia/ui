@@ -10,13 +10,14 @@ function App() {
     });
   return (
     <div
-      className="tf-panel"
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 16,
-        alignContent: "start",
-      }}
+      className="tf-panel tf-grid"
+      style={
+        {
+          "--cols": "1fr 1fr",
+          gap: 16,
+          alignContent: "start",
+        } as React.CSSProperties
+      }
     >
       <DatePicker label="Due date" value={d[0]} onChange={d[1]} today={new Date(2026, 3, 16)} />
       <DatePicker
@@ -37,6 +38,7 @@ function App() {
           style={{
             position: "static",
             width: 476,
+            maxWidth: "100%",
             animation: "none",
           }}
         >

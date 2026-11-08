@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   AppShell,
   BarChart,
@@ -94,9 +95,13 @@ function App() {
       </div>
       <Stagger
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "repeat(4, 1fr)",
-        }}
+        style={
+          {
+            "--cols": "repeat(4, 1fr)",
+            "--cols-sm": "repeat(2, minmax(0, 1fr))",
+            "--cols-md": "repeat(2, minmax(0, 1fr))",
+          } as React.CSSProperties
+        }
         delay={80}
       >
         <Kpi
@@ -138,9 +143,11 @@ function App() {
       </Stagger>
       <Stagger
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "1.6fr 1fr",
-        }}
+        style={
+          {
+            "--cols": "1.6fr 1fr",
+          } as React.CSSProperties
+        }
         delay={300}
       >
         <Panel
@@ -217,9 +224,11 @@ function App() {
       </Stagger>
       <Stagger
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "1fr 1.2fr",
-        }}
+        style={
+          {
+            "--cols": "1fr 1.2fr",
+          } as React.CSSProperties
+        }
         delay={480}
       >
         <Panel title="Sign-ups this week" subtitle="Thursday was the launch email">

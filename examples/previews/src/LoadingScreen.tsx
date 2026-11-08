@@ -64,9 +64,13 @@ function App() {
         </div>
         <Stagger
           className="tf-grid"
-          style={{
-            gridTemplateColumns: "repeat(4, 1fr)",
-          }}
+          style={
+            {
+              "--cols": "repeat(4, 1fr)",
+              "--cols-sm": "repeat(2, minmax(0, 1fr))",
+              "--cols-md": "repeat(2, minmax(0, 1fr))",
+            } as React.CSSProperties
+          }
         >
           <StatTile tint="sky" value="18" label="All projects" />
           <StatTile tint="mint" value="11" label="Live" />
@@ -75,9 +79,11 @@ function App() {
         </Stagger>
         <Stagger
           className="tf-grid"
-          style={{
-            gridTemplateColumns: "repeat(3, 1fr)",
-          }}
+          style={
+            {
+              "--cols": "repeat(3, 1fr)",
+            } as React.CSSProperties
+          }
           delay={200}
         >
           <Card
@@ -133,9 +139,13 @@ function App() {
       </div>
       <div
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "repeat(4, 1fr)",
-        }}
+        style={
+          {
+            "--cols": "repeat(4, 1fr)",
+            "--cols-sm": "repeat(2, minmax(0, 1fr))",
+            "--cols-md": "repeat(2, minmax(0, 1fr))",
+          } as React.CSSProperties
+        }
       >
         {[0, 1, 2, 3].map((i) => (
           <Skeleton key={i} variant="block" height={84} />
@@ -143,9 +153,11 @@ function App() {
       </div>
       <div
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "repeat(3, 1fr)",
-        }}
+        style={
+          {
+            "--cols": "repeat(3, 1fr)",
+          } as React.CSSProperties
+        }
       >
         {[0, 1, 2, 3, 4, 5].map((i) => (
           <SkelCard key={i} />

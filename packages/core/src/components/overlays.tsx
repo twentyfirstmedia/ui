@@ -1,16 +1,18 @@
 "use client";
 import * as React from "react";
-import { useControlled, useId, useOutside } from "../hooks.js";
+import { useControlled, useId, useKeepInView, useOutside } from "../hooks.js";
 import { cx } from "../cx.js";
 import type { PopoverProps, TooltipProps } from "./types.js";
 
 /* ── Popover & Tooltip ── */
 export function Popover(p: PopoverProps) {
   const ref = React.useRef<HTMLSpanElement>(null),
+    pop = React.useRef<HTMLDivElement>(null),
     st = useControlled(p.open, false, p.onOpenChange);
   useOutside(ref, st[0], () => {
     st[1](false);
   });
+  useKeepInView(pop, st[0]);
   const trigger =
     typeof p.trigger === "function" ? (
       p.trigger({
@@ -33,6 +35,7 @@ export function Popover(p: PopoverProps) {
       {trigger}
       {st[0] && (
         <div
+          ref={pop}
           className={cx(
             "tf-popover",
             "tf-pop-" + (p.align || "start"),
@@ -40,9 +43,13 @@ export function Popover(p: PopoverProps) {
             p.flush && "flush",
           )}
           role={p.role || "dialog"}
-          style={{
-            width: p.width,
-          }}
+          style={
+            p.width == null
+              ? undefined
+              : ({
+                  "--pop-w": typeof p.width === "number" ? p.width + "px" : p.width,
+                } as React.CSSProperties)
+          }
         >
           {typeof p.children === "function"
             ? p.children({
@@ -59,8 +66,12 @@ export function Popover(p: PopoverProps) {
 
 export function Tooltip(p: TooltipProps) {
   const id = useId("tip"),
-    st = React.useState(false),
-    t = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    st = React.useState(!!p.defaultOpen),
+    t = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined),
+    tip = React.useRef<HTMLSpanElement>(null),
+    side = p.side || "top";
+  // keep a top or bottom tooltip inside the screen (or the scrolling box around it)
+  useKeepInView(tip, st[0] && side !== "left" && side !== "right");
   function show() {
     clearTimeout(t.current);
     t.current = setTimeout(() => {
@@ -89,7 +100,7 @@ export function Tooltip(p: TooltipProps) {
         "aria-describedby": st[0] ? id : undefined,
       })}
       {st[0] && (
-        <span id={id} role="tooltip" className={cx("tf-tooltip", "tf-tip-" + (p.side || "top"))}>
+        <span id={id} ref={tip} role="tooltip" className={cx("tf-tooltip", "tf-tip-" + side)}>
           {p.label}
           {p.shortcut && <kbd>{p.shortcut}</kbd>}
         </span>

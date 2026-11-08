@@ -16,7 +16,7 @@ export default function RealEstate() {
         lead="A listing search page: results toolbar with bulk actions, listings as cards or rows, a map with price pins, valuation, energy class and the photo gallery."
       />
       {parts.map((ex) => (
-        <ExampleView key={ex.name} name={ex.name} code={ex.code} width={ex.width} />
+        <ExampleView key={ex.name} name={ex.name} code={ex.code} />
       ))}
     </div>
   );

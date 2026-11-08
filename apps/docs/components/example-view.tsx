@@ -1,10 +1,10 @@
 "use client";
 import { CodeBlock, Segmented, UIProvider, useUI } from "@twentyfirstmedia/ui-core";
-import { useState, type CSSProperties } from "react";
+import { useState } from "react";
 import { registry } from "@/generated/registry";
 
 /** A live example in the current kit, with its source one click away. */
-export function ExampleView({ name, code, width }: { name: string; code: string; width: number }) {
+export function ExampleView({ name, code }: { name: string; code: string }) {
   const [tab, setTab] = useState("preview");
   const { kit, theme } = useUI();
   const Example = registry[name];
@@ -31,13 +31,7 @@ export function ExampleView({ name, code, width }: { name: string; code: string;
           aria-label={`${name} preview`}
         >
           {/* a subtree provider keeps overlays (modals, sheets, toasts) inside the preview frame */}
-          <UIProvider
-            scope="subtree"
-            kit={kit}
-            theme={theme}
-            className="docs-preview-inner"
-            style={{ "--docs-w": `${width}px` } as CSSProperties}
-          >
+          <UIProvider scope="subtree" kit={kit} theme={theme} className="docs-preview-inner">
             {Example ? <Example /> : null}
           </UIProvider>
         </div>

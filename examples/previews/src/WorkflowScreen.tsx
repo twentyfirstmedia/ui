@@ -76,12 +76,14 @@ function App() {
         />
       </div>
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 300px) minmax(0, 1fr)",
-          gap: 16,
-          alignItems: "start",
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "minmax(0, 300px) minmax(0, 1fr)",
+            gap: 16,
+            alignItems: "start",
+          } as React.CSSProperties
+        }
       >
         <div
           className="tf-panel tf-panel-flush tf-in"

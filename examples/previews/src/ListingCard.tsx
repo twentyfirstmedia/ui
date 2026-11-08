@@ -124,6 +124,7 @@ function App() {
         onView={view[1]}
       />
       <div
+        className="tf-grid"
         style={
           view[0] === "list"
             ? {
@@ -131,11 +132,10 @@ function App() {
                 flexDirection: "column",
                 gap: 12,
               }
-            : {
-                display: "grid",
-                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+            : ({
+                "--cols": "repeat(3, minmax(0, 1fr))",
                 gap: 16,
-              }
+              } as React.CSSProperties)
         }
       >
         {list[0].map((x) => (

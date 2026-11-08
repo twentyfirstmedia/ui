@@ -640,6 +640,8 @@ export interface TooltipProps extends BaseProps {
   label: ReactNode;
   shortcut?: string;
   side?: "top" | "bottom" | "left" | "right";
+  /** Starts open (for demos and onboarding hints); it still closes on blur and Escape. */
+  defaultOpen?: boolean;
   children: ReactNode;
 }
 export interface PopoverProps extends BaseProps {

@@ -1,12 +1,15 @@
+import * as React from "react";
 import { Badge, Button, Card, IconButton, Stagger, TintIcon } from "@twentyfirstmedia/ui-core";
 
 export default function Preview() {
   return (
     <Stagger
       className="tf-grid"
-      style={{
-        gridTemplateColumns: "repeat(3, 1fr)",
-      }}
+      style={
+        {
+          "--cols": "repeat(3, 1fr)",
+        } as React.CSSProperties
+      }
     >
       <Card
         title="Quarterly onboarding"

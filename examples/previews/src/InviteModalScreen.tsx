@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   AppShell,
   Avatar,
@@ -37,9 +38,13 @@ function App() {
         />
         <div
           className="tf-grid"
-          style={{
-            gridTemplateColumns: "repeat(4, 1fr)",
-          }}
+          style={
+            {
+              "--cols": "repeat(4, 1fr)",
+              "--cols-sm": "repeat(2, minmax(0, 1fr))",
+              "--cols-md": "repeat(2, minmax(0, 1fr))",
+            } as React.CSSProperties
+          }
         >
           <StatTile tint="sky" value="38" label="Members" />
           <StatTile tint="mint" value="31" label="Active today" />
@@ -48,9 +53,11 @@ function App() {
         </div>
         <div
           className="tf-grid"
-          style={{
-            gridTemplateColumns: "repeat(3, 1fr)",
-          }}
+          style={
+            {
+              "--cols": "repeat(3, 1fr)",
+            } as React.CSSProperties
+          }
         >
           {["Mara Ellis", "Jonah Petit", "Sun Lee", "Rui Costa", "Ida Nolan", "Ava Brandt"].map(
             (n) => (

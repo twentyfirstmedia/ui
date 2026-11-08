@@ -1,14 +1,17 @@
+import * as React from "react";
 import { Button, ConfigPRSummary, ModuleRegistry } from "@twentyfirstmedia/ui-core";
 
 export default function Preview() {
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 16,
-        alignItems: "start",
-      }}
+      className="tf-grid"
+      style={
+        {
+          "--cols": "1fr 1fr",
+          gap: 16,
+          alignItems: "start",
+        } as React.CSSProperties
+      }
     >
       <ConfigPRSummary
         title="New team: Support for Chatteo"

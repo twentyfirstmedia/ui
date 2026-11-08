@@ -22,12 +22,14 @@ function App() {
     s = React.useState<string | number>(1);
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "360px 1fr",
-        gap: 16,
-        alignItems: "start",
-      }}
+      className="tf-grid"
+      style={
+        {
+          "--cols": "360px 1fr",
+          gap: 16,
+          alignItems: "start",
+        } as React.CSSProperties
+      }
     >
       <div
         className="tf-panel"

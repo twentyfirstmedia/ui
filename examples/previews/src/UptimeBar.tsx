@@ -1,3 +1,4 @@
+import * as React from "react";
 import { DeployPipeline, Meter, ServerCard, UptimeBar } from "@twentyfirstmedia/ui-core";
 import type { UptimeDay } from "@twentyfirstmedia/ui-core";
 
@@ -21,11 +22,13 @@ for (let i = 0; i < 90; i++)
 export default function Preview() {
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 16,
-      }}
+      className="tf-grid"
+      style={
+        {
+          "--cols": "1fr 1fr",
+          gap: 16,
+        } as React.CSSProperties
+      }
     >
       <ServerCard
         name="ax41-fsn1"

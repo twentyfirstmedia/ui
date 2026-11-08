@@ -97,6 +97,33 @@ export default async function Theming({ params }: { params: Promise<{ kit: KitNa
         lang="tsx"
         code={`<UIProvider theme="dark" density="compact">…</UIProvider>\n// Tailwind: bg-surface text-ink rounded-lg shadow-card text-h2`}
       />
+      <h2>Layout and breakpoints</h2>
+      <div className="docs-prose">
+        <p>
+          The kits are mobile first: every component works from a 320px wide screen up, and from
+          1181px on everything looks exactly like the reference. Phones (up to 760px) get one
+          column: the shell stacks, rail and page nav become scrolling rows, the dock sticks to the
+          bottom, tables scroll inside their box, dialogs open as bottom sheets and popovers stay on
+          screen. Tablets (761–1180px) move asides below the main column. On touch screens text
+          fields use 16px so browsers do not zoom in, and a compact kit (Pro) switches to
+          comfortable hit targets unless <Code>data-density</Code> is set.
+        </p>
+        <p>
+          For your own grids, <Code>tf-grid</Code> takes its columns from custom properties:{" "}
+          <Code>--cols</Code> on desktop, <Code>--cols-md</Code> on tablets (defaults to{" "}
+          <Code>--cols</Code>) and <Code>--cols-sm</Code> on phones (defaults to one column).
+        </p>
+      </div>
+      <CodeBlock
+        lang="tsx"
+        code={`<div
+  className="tf-grid"
+  style={{ "--cols": "repeat(4, minmax(0, 1fr))", "--cols-sm": "1fr 1fr" } as React.CSSProperties}
+>
+  <StatTile value="18" label="Projects" />
+  …
+</div>`}
+      />
       <TokenTable title="Colour" group="color" swatch />
       <TokenTable title="Shadow" group="shadow" />
       <TokenTable title="Component knobs" group="component" />

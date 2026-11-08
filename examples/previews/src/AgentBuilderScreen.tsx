@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Button,
   ChatMessage,
@@ -54,12 +55,14 @@ function App() {
         ]}
       />
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) 340px",
-          gap: 16,
-          alignItems: "start",
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "minmax(0, 1fr) 340px",
+            gap: 16,
+            alignItems: "start",
+          } as React.CSSProperties
+        }
       >
         <div
           className="tf-col"

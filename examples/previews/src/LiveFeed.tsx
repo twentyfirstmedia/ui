@@ -84,12 +84,14 @@ function App() {
   }, []);
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1.4fr 1fr",
-        gap: 16,
-        alignItems: "start",
-      }}
+      className="tf-grid"
+      style={
+        {
+          "--cols": "1.4fr 1fr",
+          gap: 16,
+          alignItems: "start",
+        } as React.CSSProperties
+      }
     >
       <div className="tf-panel">
         <LiveFeed items={it[0]} types={types} maxHeight={420} />

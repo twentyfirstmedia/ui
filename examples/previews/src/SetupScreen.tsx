@@ -115,9 +115,11 @@ function App() {
             >
               <div
                 className="tf-grid"
-                style={{
-                  gridTemplateColumns: "1fr 1fr",
-                }}
+                style={
+                  {
+                    "--cols": "1fr 1fr",
+                  } as React.CSSProperties
+                }
               >
                 {["Google Workspace", "Microsoft 365", "IMAP / SMTP", "Halo Mail"].map((m, i) => (
                   <div
@@ -145,9 +147,13 @@ function App() {
       <PageHeader title="Good morning, Mara" subtitle="Everything that needs a decision today" />
       <div
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-        }}
+        style={
+          {
+            "--cols": "repeat(4, minmax(0, 1fr))",
+            "--cols-sm": "repeat(2, minmax(0, 1fr))",
+            "--cols-md": "repeat(2, minmax(0, 1fr))",
+          } as React.CSSProperties
+        }
       >
         <StatTile tint="sky" value="15" label="All projects" />
         <StatTile tint="mint" value="8" label="Live" />

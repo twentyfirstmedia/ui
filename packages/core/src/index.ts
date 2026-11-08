@@ -30,6 +30,7 @@ export {
   FOCUSABLE,
   useControlled,
   useId,
+  useKeepInView,
   useMounted,
   useOutside,
   useTrap,

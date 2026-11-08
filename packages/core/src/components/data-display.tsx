@@ -227,45 +227,47 @@ export function Stagger(p: StaggerProps) {
 export function Table(p: TableProps) {
   const cols = p.columns || [];
   return (
-    <table className="tf-table">
-      <thead>
-        <tr>
-          {cols.map((c) => (
-            <th
-              key={c.key}
-              className={c.align === "right" ? "tf-num" : undefined}
-              style={
-                c.width
-                  ? {
-                      width: c.width,
-                    }
-                  : undefined
-              }
-            >
-              {c.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody
-        className={p.animate === false ? undefined : "tf-stagger"}
-        style={
-          {
-            "--base": "180ms",
-          } as React.CSSProperties
-        }
-      >
-        {(p.rows || []).map((r, i) => (
-          <tr key={i}>
+    <div className="tf-table-scroll">
+      <table className="tf-table">
+        <thead>
+          <tr>
             {cols.map((c) => (
-              <td key={c.key} className={c.align === "right" ? "tf-num" : undefined}>
-                {c.render ? c.render(r) : r[c.key]}
-              </td>
+              <th
+                key={c.key}
+                className={c.align === "right" ? "tf-num" : undefined}
+                style={
+                  c.width
+                    ? {
+                        width: c.width,
+                      }
+                    : undefined
+                }
+              >
+                {c.label}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody
+          className={p.animate === false ? undefined : "tf-stagger"}
+          style={
+            {
+              "--base": "180ms",
+            } as React.CSSProperties
+          }
+        >
+          {(p.rows || []).map((r, i) => (
+            <tr key={i}>
+              {cols.map((c) => (
+                <td key={c.key} className={c.align === "right" ? "tf-num" : undefined}>
+                  {c.render ? c.render(r) : r[c.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 export function ListRow(p: ListRowProps) {

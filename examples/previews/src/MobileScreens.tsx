@@ -22,6 +22,7 @@ function Phone(p: { d: number; tab: number; children?: React.ReactNode }) {
         {
           "--d": p.d + "ms",
           width: 360,
+          maxWidth: "100%",
           height: 760,
           borderRadius: 44,
           background: "var(--frame)",
@@ -29,6 +30,7 @@ function Phone(p: { d: number; tab: number; children?: React.ReactNode }) {
           boxSizing: "border-box",
           boxShadow: "var(--shadow-float)",
           flex: "none",
+          scrollSnapAlign: "center",
         } as React.CSSProperties
       }
     >
@@ -119,7 +121,9 @@ function App() {
       style={{
         display: "flex",
         gap: 28,
-        justifyContent: "center",
+        justifyContent: "safe center",
+        overflowX: "auto",
+        scrollSnapType: "x mandatory",
         padding: "20px 0",
         background: "var(--canvas)",
         borderRadius: 30,
@@ -147,10 +151,13 @@ function App() {
         </div>
         <Stagger
           className="tf-grid"
-          style={{
-            gridTemplateColumns: "1fr 1fr",
-            gap: 12,
-          }}
+          style={
+            {
+              "--cols": "1fr 1fr",
+              "--cols-sm": "1fr 1fr",
+              gap: 12,
+            } as React.CSSProperties
+          }
           delay={150}
         >
           <StatTile tint="sky" value="18" label="Projects" />
