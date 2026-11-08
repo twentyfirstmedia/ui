@@ -38,7 +38,6 @@
 .lp-logo {
   flex: none;
   color: var(--ink);
-  --logo-glyph: var(--canvas);
 }
 .lp-nav {
   display: none;

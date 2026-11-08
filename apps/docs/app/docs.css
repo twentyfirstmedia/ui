@@ -661,5 +661,4 @@ html.docs-locked {
 .docs-brand .docs-logo {
   flex: none;
   color: var(--ink);
-  --logo-glyph: var(--surface);
 }

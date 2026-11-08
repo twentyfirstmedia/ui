@@ -66,7 +66,7 @@ export function LandingShell({ children }: { children: ReactNode }) {
       </a>
       <header className="lp-header">
         <Link className="lp-brand" href="/" aria-label="Twentyfirst UI home">
-          <Logo size={28} className="lp-logo" />
+          <Logo size={20} className="lp-logo" />
           <span>Twentyfirst UI</span>
         </Link>
         <nav className="lp-nav" aria-label="Main">

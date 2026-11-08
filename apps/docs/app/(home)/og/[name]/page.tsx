@@ -25,7 +25,7 @@ export default async function OgCard({ params }: { params: Promise<{ name: strin
       <main className="og">
         <div className="og-copy">
           <p className="og-brand">
-            <Logo size={44} className="lp-logo" />
+            <Logo size={34} className="lp-logo" />
             Twentyfirst UI
           </p>
           <h1>

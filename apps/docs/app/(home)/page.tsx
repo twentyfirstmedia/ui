@@ -347,7 +347,7 @@ export default function Landing() {
       </main>
       <footer className="lp-footer">
         <div className="lp-footer-brand">
-          <Logo size={24} className="lp-logo" />
+          <Logo size={18} className="lp-logo" />
           <span>Twentyfirst UI</span>
           <small>Two React UI kits, one API. By Twentyfirst Media.</small>
         </div>

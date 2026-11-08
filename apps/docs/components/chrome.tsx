@@ -138,7 +138,7 @@ export function Chrome({
           <Icon name={menu ? "x" : "menu"} />
         </button>
         <Link className="docs-brand" href="/">
-          <Logo size={24} className="docs-logo" />
+          <Logo size={18} className="docs-logo" />
           Twentyfirst UI
           <span className="docs-brand-kit">{KIT_LABEL[kit]}</span>
         </Link>

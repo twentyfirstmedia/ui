@@ -20,14 +20,12 @@ const ROOT = join(DOCS, "../..");
 const PORT = 4199;
 
 const svg = readFileSync(join(DOCS, "app/icon.svg"), "utf8");
-// full bleed: square corners (iOS and Android mask the icon themselves), glyph inside the safe zone
+// full bleed: square corners (iOS and Android mask the icon themselves), mark inside the safe zone
 const bleed = (glyphScale: number) =>
   svg
-    .replace(' rx="8"', "")
-    .replace(
-      /<path /,
-      `<path transform="translate(16 16) scale(${glyphScale}) translate(-16 -16)" `,
-    );
+    .replace(' rx="7"', "")
+    .replace("<g ", `<g transform="translate(16 16) scale(${glyphScale}) translate(-16 -16)"><g `)
+    .replace("</g>", "</g></g>");
 
 const server = spawn("node", [join(ROOT, "e2e/serve.mjs"), join(DOCS, "out"), String(PORT)], {
   stdio: "ignore",
