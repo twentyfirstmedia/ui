@@ -26,6 +26,9 @@ function App() {
   ];
   return (
     <AppShell
+      brand="Halo"
+      tag="Admin"
+      user={{ name: "Mara Ellis", email: "mara@halo.app" }}
       active="Projects"
       side={
         <Panel side title="Activity" subtitle="Last 7 days">

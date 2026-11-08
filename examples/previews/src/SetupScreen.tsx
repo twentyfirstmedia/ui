@@ -58,6 +58,7 @@ function App() {
           >
             <div className="tf-backdrop" />
             <Wizard
+              brand="Halo"
               current={c[0]}
               onPick={c[1]}
               done={{

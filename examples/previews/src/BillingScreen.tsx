@@ -61,6 +61,9 @@ const INV = [
 function App() {
   return (
     <AppShell
+      brand="Halo"
+      tag="Admin"
+      user={{ name: "Mara Ellis", email: "mara@halo.app" }}
       active="Billing"
       side={
         <Panel side title="Your plan" subtitle="Renews on 01.05.2026">

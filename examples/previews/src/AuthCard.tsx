@@ -11,6 +11,7 @@ export default function Preview() {
       }}
     >
       <AuthCard
+        brand="Halo"
         title="Welcome back"
         text="Sign in to the Halo workspace."
         foot="New here? Create a workspace"
@@ -20,6 +21,7 @@ export default function Preview() {
         <Button>Sign in</Button>
       </AuthCard>
       <AuthCard
+        brand="Halo"
         icon="key"
         tint="butter"
         title="Reset your password"
@@ -30,6 +32,7 @@ export default function Preview() {
         <Button icon="send">Send reset link</Button>
       </AuthCard>
       <AuthCard
+        brand="Halo"
         icon="shield"
         tint="sky"
         title="Enter your code"
