@@ -1,0 +1,13 @@
+{
+  "name": "example-html",
+  "private": true,
+  "type": "module",
+  "description": "Plain HTML page with the tf-* custom elements, no build step. build.mjs only copies it next to the bundle and the kit CSS for the e2e test.",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "@twentyfirstmedia/elements": "workspace:*",
+    "@twentyfirstmedia/ui-core": "workspace:*"
+  }
+}

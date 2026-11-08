@@ -1,0 +1,72 @@
+{
+  "name": "@twentyfirstmedia/elements",
+  "version": "0.0.0",
+  "description": "Every Twentyfirst UI component as a custom element: <tf-button>, <tf-data-table> … for plain HTML, Vue, Svelte, Angular, Astro and server templates.",
+  "license": "MIT",
+  "author": "Twentyfirst Media (https://twentyfirst.media)",
+  "homepage": "https://ui.twentyfirst.media/halo/html/",
+  "bugs": {
+    "url": "https://github.com/twentyfirstmedia/ui/issues"
+  },
+  "keywords": [
+    "web-components",
+    "custom-elements",
+    "html",
+    "vue",
+    "svelte",
+    "angular",
+    "astro",
+    "ui-kit",
+    "components",
+    "design-system",
+    "accessible",
+    "halo",
+    "pro"
+  ],
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/twentyfirstmedia/ui.git",
+    "directory": "packages/elements"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "sideEffects": true,
+  "main": "./dist/elements.js",
+  "module": "./dist/elements.js",
+  "types": "./dist/elements.d.ts",
+  "unpkg": "./dist/elements.global.js",
+  "jsdelivr": "./dist/elements.global.js",
+  "customElements": "./dist/custom-elements.json",
+  "exports": {
+    ".": {
+      "types": "./dist/elements.d.ts",
+      "default": "./dist/elements.js"
+    },
+    "./global": "./dist/elements.global.js",
+    "./custom-elements.json": "./dist/custom-elements.json",
+    "./vscode.html-custom-data.json": "./dist/vscode.html-custom-data.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node scripts/generate.ts && node scripts/build.ts",
+    "typecheck": "node scripts/generate.ts && tsc --noEmit"
+  },
+  "devDependencies": {
+    "@twentyfirstmedia/ui-core": "workspace:*",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "esbuild": "0.28.2",
+    "jsdom": "31.0.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}
