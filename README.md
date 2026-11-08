@@ -49,7 +49,9 @@
 - **Finished from the first render.** Empty, loading, error and approval states come with the components.
 - **Mobile first.** Works from 320px up: shells collapse, tables scroll, dialogs become sheets, inputs never zoom.
 - **Accessible.** Keyboard paths, focus rings and ARIA on every component; axe (WCAG 2.1 AA) runs on every example in both kits, light and dark.
-- **Tokens only.** No colour literals in component CSS. One token file per kit feeds CSS variables and a Tailwind v4 preset.
+- **Themes like shadcn/ui.** The same variables (`--primary`, `--secondary`, `--muted`, `--accent`, `--destructive`, `--border`, `--ring`, `--radius`, charts, sidebar) restyle every component in both kits, light and dark. Paste a theme from ui.shadcn.com/themes or build one live.
+- **Tokens only.** No colour literals in component CSS. One token file per kit feeds CSS variables and a Tailwind v4 preset with shadcn's utility names (`bg-primary`, `text-muted-foreground`).
+- **Any stack.** React first; every component also ships as a custom element for plain HTML, Vue, Svelte, Angular and Astro.
 - **Private by default.** Self-hosted fonts, no telemetry, no network requests from components. Tree-shakeable: a Button is about 3 KB.
 - **Built for coding agents.** An MCP server, `llms.txt` and a Markdown version of every docs page, so Claude Code, Cursor and friends use the real components instead of guessing.
 
@@ -104,6 +106,39 @@ export function App() {
 **Both kits in one app:** import `@twentyfirstmedia/ui-core/themes.css` instead and switch with `<UIProvider kit="pro">` or `data-kit="pro"` on `<html>`.
 
 **Tailwind v4:** `@import "@twentyfirstmedia/halo/tailwind.css";` after `@import "tailwindcss";` maps every token to utilities (`bg-surface`, `text-ink`, `rounded-lg`, `shadow-card`).
+
+## Theming
+
+Both kits read shadcn/ui's theme variables, so any shadcn theme works as it is, and every component follows it:
+
+```css
+@import "@twentyfirstmedia/halo/styles.css";
+
+:root {
+  --primary: oklch(0.546 0.245 262.881);
+  --primary-foreground: oklch(0.985 0 0);
+  --radius: 0.75rem;
+}
+.dark {
+  --primary: oklch(0.707 0.165 254.624);
+}
+```
+
+Six brand presets ship as CSS (`@twentyfirstmedia/halo/themes/violet.css`), `npx @twentyfirstmedia/ui theme ./shadcn-theme.css` writes and imports a theme, `<UIProvider tokens={…}>` sets one at runtime, and the [theme builder](https://ui.twentyfirst.media/halo/themes/) shows it live on real components. A test applies a theme to every example in both kits, light and dark, and fails if any part ignores it.
+
+## Plain HTML, Vue, Svelte, Angular
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@twentyfirstmedia/halo/dist/styles.css" />
+<script type="module" src="https://cdn.jsdelivr.net/npm/@twentyfirstmedia/elements/dist/elements.js"></script>
+
+<tf-panel title="Workspace">
+  <tf-text-field label="Name" default-value="Northwind"></tf-text-field>
+  <tf-button variant="primary">Save</tf-button>
+</tf-panel>
+```
+
+See [Plain HTML and frameworks](https://ui.twentyfirst.media/halo/html/).
 
 ## Use it with AI agents
 
