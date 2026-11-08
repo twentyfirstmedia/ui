@@ -22,6 +22,11 @@ Die Previews in `reference/halo/design-system/components/*/preview.html` laden `
    - `@twentyfirstmedia/pro`: dasselbe mit Pro-Tokens und Pro-CSS.
    - `@twentyfirstmedia/ui` (CLI, `npx @twentyfirstmedia/ui …`): `init --kit halo|pro` (Package installieren, CSS-Import, Tailwind-Preset, `UIProvider` mit Locale und deutschen Labels einrichten, `.npmrc`-Hinweis), `add <komponente…>` (Quelltext einer Komponente als eigene Datei in die App kopieren, Imports auf `ui-core` umgeschrieben, zum Anpassen), `list`, `diff <komponente>`.
 3. **Klassen-Präfix** neutral `tf-` statt `ha-`. Gleiches Markup in beiden Kits.
+3a. **Beide Kits sind immer 1:1 und zur Laufzeit als Themes umschaltbar.** Eine App kann beide gleichzeitig laden und per `data-kit="halo|pro"` am `<html>` (oder an einem Teilbaum) wechseln, ohne Reload und ohne dass sich Layout, Props oder Verhalten ändern:
+   - Jedes Kit-CSS ist unter `[data-kit="…"]` gescoped; `@twentyfirstmedia/halo/styles.css`, `@twentyfirstmedia/pro/styles.css` und zusätzlich `@twentyfirstmedia/ui-core/themes.css` (beide zusammen) werden ausgeliefert.
+   - Beide Kits definieren exakt dieselben Token-Namen; `UIProvider` bekommt `kit`, `theme` (light/dark/system) und `density`.
+   - **Parität wird per Test erzwungen:** ein Test schlägt fehl, wenn eine Komponente, eine Klasse oder ein Token nur in einem Kit gestylt bzw. definiert ist; der Screenshot-Test läuft für jede Vorschau in beiden Kits; jede neue Komponente braucht Halo- und Pro-CSS im selben PR.
+   - Die Doku hat für beide Kits dieselben Seiten; ein Umschalter wechselt live das Kit derselben Seite.
 4. **Theming:** Light und Dark per `[data-theme]` und `prefers-color-scheme` wie in der Referenz; Dichte per `[data-density]` (Pro nutzt kompakt als Standard, Halo komfortabel).
 5. **Texte:** `L()`/`Lx()`, `setLabels`, `setLocale`, `formatNumber/Money/Date` aus der Referenz übernehmen, zusätzlich `<UIProvider locale labels currency weekStart>`. Mitgeliefert: `labels/en.json` (Schlüssel = englischer Text) und `labels/de.json` (vollständig, Du-Form, kurz und sachlich). Ein Test prüft, dass `de.json` jeden Schlüssel aus dem Quelltext abdeckt.
 6. **Client/Server:** interaktive Komponenten mit `"use client"`, rein darstellende server-tauglich. Portale nur clientseitig.
@@ -61,8 +66,10 @@ In Batches, jeweils TSX + Halo-CSS + Tests + Doku-Seite:
 - [ ] Immobilien und Medien (ListingCard, ResultsToolbar, SavedSearch, ValuationCard, EnergyClass, Gallery, BeforeAfter, ImageVariants)
 - [ ] Seiten-Chrome (CookieConsent, AnnouncementBar, StatusScreen, AuthCard, TwoFactorSetup)
 
-### Phase 4: Pro-Kit
-- [ ] Pro-CSS für jede Komponente nach dem Look in `reference/pro/` (Hairline-Grid, eckig, dicht, Geist); gleiches Markup, keine JS-Änderung
+### Phase 4: Pro-Kit (1:1 zu Halo)
+- [ ] Pro-CSS für **jede** Halo-Komponente nach dem Look in `reference/pro/` (Hairline-Grid, eckig, dicht, Geist); gleiches Markup, keine JS-Änderung. Auch Komponenten, die es in `reference/pro/` nicht gibt, bekommen einen Pro-Look, abgeleitet aus dessen Regeln.
+- [ ] Laufzeit-Wechsel Halo ↔ Pro in einer App (Beispiel-App + Test: Umschalten ohne Reload, keine Konsole-Fehler, Layout bleibt stabil)
+- [ ] Paritätstest grün (Komponenten, Klassen, Tokens)
 - [ ] Wo Pro in der Referenz eine Komponente anders löst, gewinnt die Halo-API; nur die Optik folgt Pro
 
 ### Phase 5: Deutsche Texte
