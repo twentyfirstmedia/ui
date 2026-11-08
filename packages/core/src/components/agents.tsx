@@ -646,10 +646,12 @@ export function ScheduleCalendar(p: ScheduleCalendarProps) {
   return (
     <div
       className="tf-sched"
-      style={{
-        "--rows": hours.length,
-        "--row-h": rowH + "px",
-      }}
+      style={
+        {
+          "--rows": hours.length,
+          "--row-h": rowH + "px",
+        } as React.CSSProperties
+      }
     >
       <span />
       {days.map((d, i) => (

@@ -338,9 +338,9 @@ export function Combobox(p: ComboboxProps) {
             onKeyDown={key}
             style={
               !multi && selOne != null && !q[0]
-                ? {
+                ? ({
                     "--ph": "var(--ink)",
-                  }
+                  } as React.CSSProperties)
                 : undefined
             }
           />
@@ -792,9 +792,11 @@ export function Slider(p: SliderProps) {
             onChange={(e) => {
               v[1](+e.target.value);
             }}
-            style={{
-              "--pct": pct + "%",
-            }}
+            style={
+              {
+                "--pct": pct + "%",
+              } as React.CSSProperties
+            }
             aria-valuetext={f(v[0])}
           />
           <span

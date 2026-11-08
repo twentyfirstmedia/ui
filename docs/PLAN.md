@@ -89,7 +89,9 @@ Notiz: Pro-Struktur wird aus dem Halo-CSS abgeleitet (`scripts/pro-css.ts`, Teil
 Notiz: `pnpm labels` sammelt alle Schlüssel aus `L()`, `Lx()` und `LK()` (Marker für Schlüssel, die später per Variable übersetzt werden, z. B. Risikofamilien und Agent-Status) per TypeScript-AST in `labels/en.json`; der Test prüft Aktualität, Vollständigkeit von `de.json` und gleiche Platzhalter. Laufzeit-Wechsel: `examples/kit-switch` (esbuild, `themes.css`) und `e2e/kit-switch.spec.ts` (kein Reload, Zustand bleibt, identisches Markup, keine Konsolenfehler, kein horizontaler Überlauf). Die Default-Marke „Halo" ist aus TopBar, AuthCard und Rechnung entfernt (wäre in Pro falsch).
 
 ### Phase 6: CLI
-- [ ] `init`, `add`, `list`, `diff` mit Tests gegen eine Beispiel-App in `examples/next-app`
+- [x] `init`, `add`, `list`, `diff` mit Tests gegen eine Beispiel-App in `examples/next-app`
+
+Notiz: `init` setzt `.npmrc` (Scope auf GitHub Packages, Token aus `NPM_TOKEN`), installiert das Kit (abschaltbar mit `--no-install`), trägt `styles.css` bzw. mit `--both` `themes.css` und bei Tailwind v4 das Preset nach `@import "tailwindcss"` ein, legt `components/ui-root.tsx` (UIProvider, bei `de-*` mit `de.json`) an, umschließt `{children}` im Next-Layout und setzt `data-kit` am `<html>`; idempotent. `add` liest die Quellen aus dem installierten `ui-core` (Package liefert `src/` mit), kopiert die Komponente samt privater Helfer und importiert alles Öffentliche aus `@twentyfirstmedia/ui-core`. `diff` vergleicht die Kopie zeilenweise mit der aktuellen Quelle. Der Test kompiliert die Next-App mit Kopien, Provider und Layout. Inline-Styles mit CSS-Variablen sind jetzt explizit als `CSSProperties` getypt, damit Kopien ohne interne Typerweiterung kompilieren. pnpm 12 braucht `allowBuilds` (esbuild) in `pnpm-workspace.yaml`.
 
 ### Phase 7: Doku-Seite
 - [ ] Gerüst, Navigation, Suche, Kit-/Theme-/Sprach-Umschalter

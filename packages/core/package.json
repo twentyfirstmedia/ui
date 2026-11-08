@@ -28,7 +28,10 @@
   },
   "files": [
     "dist",
-    "labels"
+    "labels",
+    "src",
+    "!src/**/*.test.ts",
+    "!src/**/*.test.tsx"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node ../../scripts/build-css.ts themes",

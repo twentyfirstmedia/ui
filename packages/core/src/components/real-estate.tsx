@@ -425,9 +425,11 @@ export function EnergyClass(p: EnergyClassProps) {
           <span
             key={c}
             className={cx("tf-energy-c", k === i && "on")}
-            style={{
-              "--e": k / (scale.length - 1),
-            }}
+            style={
+              {
+                "--e": k / (scale.length - 1),
+              } as React.CSSProperties
+            }
           >
             {c}
           </span>

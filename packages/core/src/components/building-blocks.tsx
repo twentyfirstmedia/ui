@@ -188,9 +188,11 @@ export function SplitPane(p: SplitPaneProps) {
     <div
       ref={wrap}
       className={cx("tf-split", p.className)}
-      style={{
-        "--split": size[0] + "px",
-      }}
+      style={
+        {
+          "--split": size[0] + "px",
+        } as React.CSSProperties
+      }
     >
       <div className="tf-split-a">{p.left}</div>
       <div
