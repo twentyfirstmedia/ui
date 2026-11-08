@@ -45,7 +45,7 @@ pnpm dev          # the docs site with live reload
    pnpm test:e2e     # the full browser suite
    ```
 
-   If a change is meant to alter screenshots, update them with `pnpm exec playwright test e2e/screenshots.spec.ts --update-snapshots` and check the diff.
+   Screenshot baselines are recorded on CI's runner image, because font rasterising differs between systems, so screenshot tests may differ by a few pixels of text width on your machine. If a change is meant to alter screenshots, run the **Update screenshots** workflow on your branch (Actions tab), download its artifact into `e2e/screenshots.spec.ts-snapshots` and review the images before committing.
 4. Describe the change for the changelog: `pnpm changeset`.
 5. Open a pull request. Keep it focused; one feature or fix per PR.
 
