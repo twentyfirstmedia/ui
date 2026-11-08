@@ -1,7 +1,8 @@
 import * as React from "react";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
-import { L } from "../i18n.js";
+import { useId } from "../hooks.js";
+import { useFieldError } from "./form.js";
 import type {
   CheckboxProps,
   FieldProps,
@@ -13,24 +14,57 @@ import type {
 } from "./types.js";
 
 /* ── Forms ── */
-export function Field(p: FieldProps, control: React.ReactNode) {
+interface Wired {
+  id: string;
+  error: string | undefined;
+  describedBy: string | undefined;
+}
+/** Label, control and message; the message comes from `error` or the surrounding Form. */
+function useWired(p: FieldProps): Wired {
+  const auto = useId("in");
+  const fromForm = useFieldError(p.name);
+  const id = p.id || auto;
+  const error = p.error || fromForm;
+  return { id, error, describedBy: error || p.hint ? `${id}-msg` : undefined };
+}
+function Field(p: FieldProps, w: Wired, control: React.ReactNode) {
   return (
-    <label className="tf-field">
-      {p.label && <span className="tf-field-label">{p.label}</span>}
-      {control}
-      {p.error ? (
-        <span className="tf-field-error">{p.error}</span>
-      ) : (
-        p.hint && <span className="tf-field-hint">{p.hint}</span>
+    <div className={cx("tf-field", p.className)} style={p.style}>
+      {p.label && (
+        <label className="tf-field-label" htmlFor={w.id}>
+          {p.label}
+          {p.required && (
+            <span className="tf-req" aria-hidden>
+              {" *"}
+            </span>
+          )}
+        </label>
       )}
-    </label>
+      {control}
+      {w.error ? (
+        <span id={`${w.id}-msg`} className="tf-field-error" role="alert">
+          <Icon name="x" size={12} />
+          {w.error}
+        </span>
+      ) : (
+        p.hint && (
+          <span id={`${w.id}-msg`} className="tf-field-hint">
+            {p.hint}
+          </span>
+        )
+      )}
+    </div>
   );
 }
 
 export function Input(p: InputProps) {
+  const w = useWired(p);
   return Field(
     p,
+    w,
     <input
+      id={w.id}
+      name={p.name}
       className="tf-input"
       type={p.type || "text"}
       placeholder={p.placeholder}
@@ -38,19 +72,28 @@ export function Input(p: InputProps) {
       value={p.value}
       onChange={p.onChange}
       disabled={p.disabled}
-      aria-invalid={p.error ? "true" : undefined}
+      required={p.required}
+      aria-invalid={w.error ? "true" : undefined}
+      aria-describedby={w.describedBy}
     />,
   );
 }
 
 export function Select(p: SelectProps) {
+  const w = useWired(p);
   return Field(
     p,
+    w,
     <select
+      id={w.id}
+      name={p.name}
       className="tf-input"
       defaultValue={p.defaultValue}
       value={p.value}
       onChange={p.onChange}
+      required={p.required}
+      aria-invalid={w.error ? "true" : undefined}
+      aria-describedby={w.describedBy}
     >
       {(p.options || []).map((o) => (
         <option key={o} value={o}>
@@ -62,13 +105,23 @@ export function Select(p: SelectProps) {
 }
 
 export function Textarea(p: TextareaProps) {
+  const w = useWired(p);
   return Field(
     p,
+    w,
     <textarea
+      id={w.id}
+      name={p.name}
       className="tf-input"
       placeholder={p.placeholder}
+      value={p.value}
       defaultValue={p.defaultValue}
+      onChange={p.onChange}
+      disabled={p.disabled}
+      required={p.required}
       rows={p.rows || 4}
+      aria-invalid={w.error ? "true" : undefined}
+      aria-describedby={w.describedBy}
     />,
   );
 }
@@ -79,8 +132,8 @@ export function SearchField(p: SearchFieldProps) {
       <Icon name="search" size={15} />
       <input
         type="search"
-        placeholder={p.placeholder || L("Search")}
-        aria-label={p.placeholder || L("Search")}
+        placeholder={p.placeholder || "Search"}
+        aria-label={p.placeholder || "Search"}
         value={p.value}
         onChange={p.onChange}
       />
@@ -95,6 +148,9 @@ export function Checkbox(p: CheckboxProps) {
       <span className="tf-checkbox">
         <input
           type="checkbox"
+          name={p.name}
+          value={p.value}
+          required={p.required}
           defaultChecked={p.defaultChecked}
           checked={p.checked}
           onChange={p.onChange}
@@ -139,6 +195,7 @@ export function Switch(p: SwitchProps) {
         type="checkbox"
         role="switch"
         className="tf-switch"
+        name={p.name}
         defaultChecked={p.defaultChecked}
         checked={p.checked}
         onChange={p.onChange}

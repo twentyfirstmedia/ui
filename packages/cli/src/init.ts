@@ -17,30 +17,24 @@ export interface InitOptions {
   kit: Kit;
   /** Load both kits and switch at runtime. */
   both?: boolean;
-  locale?: string;
   install?: boolean;
   components?: string;
   log: Logger;
 }
 
-const PROVIDER = (kit: Kit, both: boolean, locale: string) => `"use client";
+const PROVIDER = (kit: Kit, both: boolean) => `"use client";
 import type { ReactNode } from "react";
 import { UIProvider } from "${SCOPE}/${kit}";
-${locale.startsWith("de") ? `import de from "${SCOPE}/ui-core/labels/de.json";\n` : ""}
-/** Kit, locale and labels for the whole app. Created by \`twentyfirst-ui init\`. */
+
+/** Kit settings for the whole app. Created by \`twentyfirst-ui init\`. */
 export function UIRoot({ children }: { children: ReactNode }) {
-  return (
-    <UIProvider${both ? ` kit="${kit}"` : ""} locale="${locale}"${locale.startsWith("de") ? " labels={de}" : ""}>
-      {children}
-    </UIProvider>
-  );
+  return <UIProvider${both ? ` kit="${kit}"` : ""}>{children}</UIProvider>;
 }
 `;
 
 export function init(o: InitOptions): Config {
   const p = detect(o.cwd);
   const pkgs = o.both ? [`${SCOPE}/halo`, `${SCOPE}/pro`] : [`${SCOPE}/${o.kit}`];
-  const locale = o.locale ?? "en-US";
   const done: string[] = [];
 
   // .npmrc: the scope lives in GitHub Packages
@@ -86,7 +80,7 @@ export function init(o: InitOptions): Config {
   const rootDir = join(o.cwd, componentsDir, "..");
   const providerPath = join(rootDir, "ui-root.tsx");
   if (!read(providerPath)) {
-    write(providerPath, PROVIDER(o.kit, !!o.both, locale));
+    write(providerPath, PROVIDER(o.kit, !!o.both));
     done.push(`${relative(o.cwd, providerPath)}: UIRoot with UIProvider`);
   }
 
@@ -106,8 +100,6 @@ export function init(o: InitOptions): Config {
       );
       layout = layout.replace(/\{children\}/, "<UIRoot>{children}</UIRoot>");
       layout = layout.replace(/<html(\s|>)/, (_m, c: string) => `<html data-kit="${o.kit}"${c}`);
-      if (locale && /<html[^>]*lang="[^"]*"/.test(layout))
-        layout = layout.replace(/(<html[^>]*lang=")[^"]*(")/, `$1${locale.split("-")[0]}$2`);
       write(p.layout, layout);
       done.push(`${relative(o.cwd, p.layout)}: UIRoot around the app, data-kit on <html>`);
     }
@@ -117,7 +109,6 @@ export function init(o: InitOptions): Config {
     kit: o.kit,
     components: componentsDir,
     css: relative(o.cwd, css),
-    locale,
   };
   if (o.both) config.both = true;
   write(join(o.cwd, CONFIG_FILE), JSON.stringify(config, null, 2) + "\n");

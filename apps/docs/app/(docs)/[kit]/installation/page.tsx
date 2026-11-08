@@ -30,7 +30,7 @@ export default async function Installation({ params }: { params: Promise<{ kit: 
       </div>
       <CodeBlock
         lang="sh"
-        code={`pnpm dlx @twentyfirstmedia/ui init --kit ${kit} --locale de-DE\n# or\npnpm add @twentyfirstmedia/${kit}`}
+        code={`pnpm dlx @twentyfirstmedia/ui init --kit ${kit}\n# or\npnpm add @twentyfirstmedia/${kit}`}
       />
       <div className="docs-prose">
         <h2>3. Styles and provider</h2>
@@ -42,13 +42,12 @@ export default async function Installation({ params }: { params: Promise<{ kit: 
       <CodeBlock
         lang="tsx"
         code={`import "@twentyfirstmedia/${kit}/styles.css";
-import de from "@twentyfirstmedia/ui-core/labels/de.json";
 import { UIProvider, Button } from "@twentyfirstmedia/${kit}";
 
 export function App() {
   return (
-    <UIProvider locale="de-DE" labels={de} theme="system">
-      <Button variant="primary">Speichern</Button>
+    <UIProvider theme="system">
+      <Button variant="primary">Save</Button>
     </UIProvider>
   );
 }`}

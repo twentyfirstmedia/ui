@@ -194,3 +194,45 @@ export function useScrollFocus(ref: RefObject<HTMLElement | null>): void {
     return () => ro.disconnect();
   }, [ref]);
 }
+
+/**
+ * Keyboard movement between the items of a composite widget (menus, toolbars, tab lists,
+ * accordions): arrow keys, Home/End and typeahead by first letter move focus between the
+ * elements matching `selector` inside `root`. Returns true when the key was handled.
+ */
+export function moveFocus(
+  e: { key: string; preventDefault(): void },
+  root: HTMLElement | null,
+  selector: string,
+  orientation: "horizontal" | "vertical" | "both" = "vertical",
+  loop = true,
+): boolean {
+  if (!root) return false;
+  const items = Array.from(root.querySelectorAll<HTMLElement>(selector)).filter(
+    (el) => !el.hasAttribute("disabled") && el.getAttribute("aria-disabled") !== "true",
+  );
+  if (!items.length) return false;
+  const i = items.indexOf(document.activeElement as HTMLElement);
+  const next = ["ArrowDown", "ArrowRight"].filter(
+    (k) => orientation === "both" || (orientation === "vertical") === (k === "ArrowDown"),
+  );
+  const prev = ["ArrowUp", "ArrowLeft"].filter(
+    (k) => orientation === "both" || (orientation === "vertical") === (k === "ArrowUp"),
+  );
+  let to: number;
+  if (next.includes(e.key)) to = i < 0 ? 0 : i + 1 >= items.length ? (loop ? 0 : i) : i + 1;
+  else if (prev.includes(e.key))
+    to = i < 0 ? items.length - 1 : i - 1 < 0 ? (loop ? items.length - 1 : 0) : i - 1;
+  else if (e.key === "Home") to = 0;
+  else if (e.key === "End") to = items.length - 1;
+  else if (e.key.length === 1 && /\S/.test(e.key)) {
+    const k = e.key.toLowerCase();
+    const order = items.slice(i + 1).concat(items.slice(0, i + 1));
+    const hit = order.find((el) => (el.textContent || "").trim().toLowerCase().startsWith(k));
+    if (!hit) return false;
+    to = items.indexOf(hit);
+  } else return false;
+  e.preventDefault();
+  items[to]?.focus();
+  return true;
+}

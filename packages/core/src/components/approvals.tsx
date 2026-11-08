@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import { L, LK } from "../i18n.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { StatusShape } from "./status.js";
@@ -18,33 +17,33 @@ import type {
 
 /* ── Approval A–D ── */
 const FAMILY: Record<RiskFamily, [IconName, string]> = {
-  money: ["card", LK("Money")],
-  infra: ["server", LK("Infrastructure")],
-  comms: ["mail", LK("Communication")],
-  marketing: ["trend", LK("Marketing")],
-  apps: ["code", LK("Own apps")],
-  legal: ["book", LK("Legal")],
+  money: ["card", "Money"],
+  infra: ["server", "Infrastructure"],
+  comms: ["mail", "Communication"],
+  marketing: ["trend", "Marketing"],
+  apps: ["code", "Own apps"],
+  legal: ["book", "Legal"],
 };
 
 export function ApprovalCard(p: ApprovalCardProps) {
   const opts: ApprovalOption[] = p.options || [
     {
       key: "A",
-      label: p.approveLabel || L("Yes, run it as shown"),
+      label: p.approveLabel || "Yes, run it as shown",
     },
     {
       key: "B",
-      label: L("Yes, with a change"),
-      input: L("What should change?"),
+      label: "Yes, with a change",
+      input: "What should change?",
     },
     {
       key: "C",
-      label: L("No, discard"),
+      label: "No, discard",
     },
     {
       key: "D",
-      label: L("Different instruction"),
-      input: L("What should happen instead?"),
+      label: "Different instruction",
+      input: "What should happen instead?",
     },
   ];
   const open = React.useState<ApprovalKey | null>(null),
@@ -116,7 +115,7 @@ export function ApprovalCard(p: ApprovalCardProps) {
     >
       <div className="tf-approval-top">
         <StatusShape status="signal" />
-        <b>{p.heading || L("Approval needed")}</b>
+        <b>{p.heading || "Approval needed"}</b>
         {(p.agent || p.project) && (
           <span className="tf-approval-who">
             {[p.agent, p.project].filter(Boolean).join(" · ")}
@@ -125,7 +124,7 @@ export function ApprovalCard(p: ApprovalCardProps) {
         {fam && (
           <Badge tone="neutral" dot={false} className="tf-family">
             <Icon name={fam[0]} size={12} />
-            {p.familyLabel || L(fam[1])}
+            {p.familyLabel || fam[1]}
           </Badge>
         )}
         {p.age && <span className="tf-approval-age">{p.age}</span>}
@@ -179,7 +178,7 @@ export function ApprovalCard(p: ApprovalCardProps) {
                       open[1](null);
                     }}
                   >
-                    {L("Cancel")}
+                    {"Cancel"}
                   </Button>
                   <Button
                     size="sm"
@@ -188,7 +187,7 @@ export function ApprovalCard(p: ApprovalCardProps) {
                       decide(o);
                     }}
                   >
-                    {o.key + " · " + L("Send")}
+                    {o.key + " · " + "Send"}
                   </Button>
                 </div>
               </div>
@@ -218,7 +217,7 @@ export function ApprovalInbox(p: ApprovalInboxProps) {
     <div
       className="tf-inbox"
       role="listbox"
-      aria-label={p.label || L("Approvals")}
+      aria-label={p.label || "Approvals"}
       onKeyDown={(e) => {
         const i = items.findIndex((x) => x.id === p.selected);
         if (e.key === "j" || e.key === "ArrowDown") {
@@ -237,7 +236,7 @@ export function ApprovalInbox(p: ApprovalInboxProps) {
         <EmptyState
           icon="check"
           tint="mint"
-          title={p.emptyTitle || L("Nothing waiting for you")}
+          title={p.emptyTitle || "Nothing waiting for you"}
           text={p.emptyText}
         />
       ) : (
@@ -262,7 +261,7 @@ export function ApprovalInbox(p: ApprovalInboxProps) {
               {fam && (
                 <Badge tone="neutral" dot={false} className="tf-family">
                   <Icon name={fam[0]} size={12} />
-                  {x.familyLabel || L(fam[1])}
+                  {x.familyLabel || fam[1]}
                 </Badge>
               )}
               <span className={cx("tf-inbox-age", x.urgent && "warn")}>

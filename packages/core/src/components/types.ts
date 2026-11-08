@@ -29,6 +29,8 @@ export interface ButtonProps extends BaseProps {
   type?: "button" | "submit";
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   children?: ReactNode;
+  /** Render the single child element (a link, a router Link) with the button's look instead of a <button>. */
+  asChild?: boolean;
 }
 export interface IconButtonProps extends BaseProps {
   icon: IconName;
@@ -37,6 +39,9 @@ export interface IconButtonProps extends BaseProps {
   size?: "sm" | "md" | "lg";
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
+  /** Render the single child element (a link) with the button's look; the icon is placed inside it. */
+  asChild?: boolean;
+  children?: ReactNode;
 }
 export interface ChipProps extends BaseProps {
   selected?: boolean;
@@ -72,6 +77,10 @@ export interface FieldProps extends BaseProps {
   label?: string;
   hint?: string;
   error?: string;
+  /** Form field name: the value's key in `Form`, and where its validation message shows. */
+  name?: string;
+  id?: string;
+  required?: boolean;
 }
 export interface InputProps extends FieldProps, BaseProps {
   type?: string;
@@ -89,8 +98,11 @@ export interface SelectProps extends FieldProps, BaseProps {
 }
 export interface TextareaProps extends FieldProps, BaseProps {
   placeholder?: string;
+  value?: string;
   defaultValue?: string;
   rows?: number;
+  disabled?: boolean;
+  onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 export interface SearchFieldProps extends BaseProps {
   placeholder?: string;
@@ -99,6 +111,9 @@ export interface SearchFieldProps extends BaseProps {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 export interface CheckboxProps extends BaseProps {
+  name?: string;
+  value?: string;
+  required?: boolean;
   checked?: boolean;
   defaultChecked?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -107,6 +122,7 @@ export interface CheckboxProps extends BaseProps {
   label?: string;
 }
 export interface SwitchProps extends BaseProps {
+  name?: string;
   checked?: boolean;
   defaultChecked?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -121,6 +137,10 @@ export interface TabsProps extends BaseProps {
   defaultValue?: string;
   onChange?: (v: string) => void;
   block?: boolean;
+  /** Content per tab; renders the tab panels under the bar, wired with tab/tabpanel roles. */
+  panels?: Record<string, ReactNode>;
+  /** Accessible name of the tab list. */
+  label?: string;
 }
 export interface StatTileProps extends BaseProps {
   value: ReactNode;
@@ -357,10 +377,23 @@ export interface MenuItem {
   icon?: IconName;
   shortcut?: string;
   danger?: boolean;
+  disabled?: boolean;
+  /** A checkbox or radio item (shows a check or dot when `checked`). Radio items with the same `group` belong together. */
+  type?: "checkbox" | "radio";
+  checked?: boolean;
+  group?: string;
+  /** A submenu; opens on click, hover or →. */
+  items?: (MenuItem | "-")[];
   onClick?: () => void;
 }
 export interface MenuProps extends BaseProps {
   items: (MenuItem | "-")[];
+  /** Accessible name of the menu. */
+  label?: string;
+  /** Focus the first item on mount (menus opened from a button or the keyboard). */
+  autoFocus?: boolean;
+  /** Called after an item runs, and on Escape, so the owner can close the menu. */
+  onClose?: () => void;
 }
 export interface ModalProps extends BaseProps {
   title: string;
@@ -387,7 +420,7 @@ export interface SubNavProps extends BaseProps {
   onPick?: (id: string) => void;
   children?: ReactNode;
 }
-export interface DrawerProps extends BaseProps {
+export interface DrawerProps extends BaseProps, DrawerSide {
   title: string;
   subtitle?: ReactNode;
   avatar?: string;
@@ -411,6 +444,16 @@ export interface CommandPaletteProps extends BaseProps {
   onClose?: () => void;
   placeholder?: string;
   inline?: boolean;
+  /** Results are on their way (async search): shows a loading row. */
+  loading?: boolean;
+  /** Shown when nothing matches (default: "Nothing matches …"). */
+  empty?: ReactNode;
+  /** Called with the query as the user types, for searching on a server. */
+  onQueryChange?: (query: string) => void;
+}
+export interface DrawerSide {
+  /** Edge the sheet slides in from (default right). */
+  side?: "right" | "left" | "top" | "bottom";
 }
 export interface NotificationItem {
   id: string | number;
@@ -504,6 +547,8 @@ export interface Option {
 }
 export interface FormFieldProps extends BaseProps {
   id?: string;
+  /** Field name inside a `Form`: the field shows that name's validation message. */
+  name?: string;
   label?: ReactNode;
   required?: boolean;
   optional?: boolean;
@@ -2165,4 +2210,223 @@ export interface AnnouncementBarProps extends BaseProps {
   icon?: IconName | false;
   action?: ReactNode;
   onDismiss?: (() => void) | false;
+}
+
+/* ── Primitives (shadcn parity) ── */
+export interface AccordionItem {
+  /** Stable id (defaults to the index). */
+  id?: string;
+  title: ReactNode;
+  /** Secondary text on the right of the header. */
+  meta?: ReactNode;
+  icon?: IconName;
+  disabled?: boolean;
+  content: ReactNode;
+}
+export interface AccordionProps extends BaseProps {
+  items: AccordionItem[];
+  /** Several sections open at once (default: one at a time). */
+  multiple?: boolean;
+  /** Open section ids (controlled). */
+  value?: string[];
+  defaultValue?: string[];
+  onChange?: (open: string[]) => void;
+  /** `cards`: each section is a card; `flush`: hairlines only (inside a panel). */
+  variant?: "cards" | "flush";
+}
+export interface SeparatorProps extends BaseProps {
+  orientation?: "horizontal" | "vertical";
+  /** Text in the middle of the line ("or"). */
+  label?: string;
+}
+export interface AspectRatioProps extends BaseProps {
+  /** Width divided by height (default 16 / 9). */
+  ratio?: number;
+  children?: ReactNode;
+}
+export interface LabelProps extends BaseProps {
+  htmlFor?: string;
+  required?: boolean;
+  /** Muted text after the label ("optional"). */
+  hint?: ReactNode;
+  children?: ReactNode;
+}
+export interface ToggleProps extends BaseProps {
+  pressed?: boolean;
+  defaultPressed?: boolean;
+  onChange?: (pressed: boolean) => void;
+  icon?: IconName;
+  /** Accessible name; required when the toggle shows only an icon. */
+  label?: string;
+  size?: "sm" | "md";
+  disabled?: boolean;
+  children?: ReactNode;
+}
+export interface ToggleGroupProps extends BaseProps {
+  items: (string | Option)[];
+  /** `single`: at most one pressed; `multiple`: any number. */
+  type?: "single" | "multiple";
+  value?: string[];
+  defaultValue?: string[];
+  onChange?: (value: string[]) => void;
+  /** Accessible name of the group. */
+  label: string;
+  size?: "sm" | "md";
+}
+export interface ButtonGroupProps extends BaseProps {
+  /** Accessible name of the group. */
+  label?: string;
+  orientation?: "horizontal" | "vertical";
+  children?: ReactNode;
+}
+export interface ScrollAreaProps extends BaseProps {
+  /** Fixed height of the scrolling box. */
+  height?: number | string;
+  maxHeight?: number | string;
+  orientation?: "vertical" | "horizontal" | "both";
+  /** Accessible name; the box is a focusable region so it scrolls from the keyboard. */
+  label: string;
+  children?: ReactNode;
+}
+export interface HoverCardProps extends BaseProps {
+  /** The element that opens the card on hover and keyboard focus. */
+  trigger: ReactNode;
+  children?: ReactNode;
+  side?: "top" | "bottom";
+  align?: "start" | "center" | "end";
+  openDelay?: number;
+  closeDelay?: number;
+  width?: number;
+}
+export interface CarouselProps extends BaseProps {
+  slides: ReactNode[];
+  /** Accessible name of the carousel. */
+  label: string;
+  /** Slides visible at once on wide screens (1 on phones). */
+  perView?: number;
+  /** Next on the last slide goes back to the first. */
+  loop?: boolean;
+  /** Dots under the slides. */
+  dots?: boolean;
+  index?: number;
+  defaultIndex?: number;
+  onChange?: (index: number) => void;
+}
+
+/* ── Form ── */
+export type FormValues = Record<string, string | string[]>;
+export interface FormRule {
+  /** Must not be empty; a string replaces the default message. */
+  required?: boolean | string;
+  /** Must look like an email address. */
+  email?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  /** For numbers. */
+  min?: number;
+  max?: number;
+  pattern?: RegExp;
+  /** Message for `pattern`, `min`/`max`, `minLength`/`maxLength` and `email`. */
+  message?: string;
+  /** Custom check: return a message when the value is not valid. */
+  validate?: (value: string, values: FormValues) => string | null | undefined | false;
+}
+export interface FormProps extends BaseProps {
+  /** Rules by field `name`. Fields show their message under the input. */
+  rules?: Record<string, FormRule>;
+  /** Called with the values (by `name`) when every rule passes. */
+  onSubmit?: (values: FormValues) => void;
+  /** Called with the messages when the form is submitted with errors. */
+  onInvalid?: (errors: Record<string, string>) => void;
+  /** Messages from the server, by field name (for example after a failed save). */
+  errors?: Record<string, string>;
+  children?: ReactNode;
+}
+
+/* ── SelectMenu ── */
+export interface SelectMenuOption extends Option {
+  /** Options with the same group are listed under that heading. */
+  group?: string;
+}
+export interface SelectMenuProps extends FieldProps, BaseProps {
+  options: (string | SelectMenuOption)[];
+  value?: string;
+  defaultValue?: string;
+  onChange?: (value: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
+}
+
+/* ── Navigation ── */
+export interface MenubarMenu {
+  label: string;
+  items: (MenuItem | "-")[];
+}
+export interface MenubarProps extends BaseProps {
+  menus: MenubarMenu[];
+  /** Accessible name of the bar. */
+  label?: string;
+}
+export interface NavigationMenuLink {
+  label: string;
+  href?: string;
+  description?: string;
+  icon?: IconName;
+  onClick?: () => void;
+}
+export interface NavigationMenuItem {
+  label: string;
+  /** A plain link (no panel). */
+  href?: string;
+  /** Links in the dropdown panel. */
+  links?: NavigationMenuLink[];
+  /** Extra content on the left of the panel (a highlighted card). */
+  feature?: ReactNode;
+}
+export interface NavigationMenuProps extends BaseProps {
+  items: NavigationMenuItem[];
+  /** Accessible name of the navigation. */
+  label?: string;
+}
+export interface SidebarItem {
+  id?: string;
+  label: string;
+  icon: IconName;
+  count?: number;
+  /** One level of nested pages, shown when the item is open. */
+  items?: Omit<SidebarItem, "items">[];
+}
+export interface SidebarGroup {
+  label?: string;
+  items: SidebarItem[];
+}
+export interface SidebarProps extends BaseProps {
+  groups: SidebarGroup[];
+  /** Id (or label) of the current page. */
+  current?: string;
+  onPick?: (id: string) => void;
+  /** Icons only. */
+  collapsed?: boolean;
+  defaultCollapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
+  /** Top of the sidebar (brand, workspace switcher). */
+  header?: ReactNode;
+  /** Bottom of the sidebar (account, settings). */
+  footer?: ReactNode;
+  /** Accessible name of the navigation. */
+  label?: string;
+}
+
+/* ── ResizablePanels ── */
+export interface ResizablePanelsProps extends BaseProps {
+  panels: ReactNode[];
+  /** Start sizes in percent (default: equal). */
+  defaultSizes?: number[];
+  /** Smallest size of a panel in percent (default 10). */
+  min?: number;
+  orientation?: "horizontal" | "vertical";
+  /** Remembers the sizes in localStorage under this key. */
+  storageKey?: string;
+  /** Accessible names of the panels, used for the resize handles. */
+  labels?: string[];
 }

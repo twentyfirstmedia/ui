@@ -18,6 +18,8 @@ const DIR = join(__dirname, "../../../reference/halo/design-system/components");
 const previews = existsSync(DIR)
   ? readdirSync(DIR).filter(
       (d) =>
+        // the label system it demonstrates is not part of the kits (English only)
+        d !== "Labels" &&
         existsSync(join(DIR, d, "preview.html")) &&
         readFileSync(join(DIR, d, "preview.html"), "utf8").includes("<script>"),
     )

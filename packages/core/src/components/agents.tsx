@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cx } from "../cx.js";
-import { L, formatMoney } from "../i18n.js";
+import { formatMoney } from "../format.js";
 import { Icon } from "../Icon.js";
 import { useControlled } from "../hooks.js";
 import { AgentMark, TypingDots } from "./chat.js";
@@ -53,9 +53,7 @@ export function AgentCard(p: AgentCardProps) {
         {p.onChat && (
           <IconButton
             icon="mail"
-            label={L("Chat with {name}", {
-              name: p.name,
-            })}
+            label={`Chat with ${p.name}`}
             size="sm"
             onClick={(e) => {
               e.stopPropagation();
@@ -69,9 +67,9 @@ export function AgentCard(p: AgentCardProps) {
         dense
         items={
           [
-            [L("Model"), p.model],
-            [L("Cost today"), p.cost, true],
-            [L("Last action"), p.last],
+            ["Model", p.model],
+            ["Cost today", p.cost, true],
+            ["Last action", p.last],
           ].filter((r) => r[1] != null) as KeyValueItem[]
         }
       />
@@ -120,7 +118,7 @@ export function ChatList(p: ChatListProps) {
   return (
     <div className="tf-chatlist">
       <SearchField
-        placeholder={p.searchPlaceholder || L("Search chats")}
+        placeholder={p.searchPlaceholder || "Search chats"}
         value={q[0]}
         onChange={(e) => {
           q[1](e.target.value);
@@ -136,7 +134,7 @@ export function ChatList(p: ChatListProps) {
               padding: 12,
             }}
           >
-            {L("No chats match")}
+            {"No chats match"}
           </p>
         ) : (
           groups.map((g) => (
@@ -196,7 +194,7 @@ export function SearchHits(p: SearchHitsProps) {
   return (
     <div className="tf-hits">
       {(p.items || []).length === 0 ? (
-        <EmptyState icon="search" title={L("Nothing found")} text={p.emptyText} />
+        <EmptyState icon="search" title="Nothing found" text={p.emptyText} />
       ) : (
         p.items.map((x) => {
           const parts = String(x.text).split(
@@ -230,7 +228,7 @@ export function ThinkingLine(p: ThinkingLineProps) {
   return (
     <div className="tf-thinking" role="status">
       <TypingDots />
-      <span>{p.text || L("Thinking…")}</span>
+      <span>{p.text || "Thinking…"}</span>
     </div>
   );
 }
@@ -244,7 +242,7 @@ export function FeedbackRating(p: FeedbackRatingProps) {
     return (
       <span className="tf-feedback-done">
         <Icon name="check" size={13} />
-        {p.thanks || L("Thanks, noted")}
+        {p.thanks || "Thanks, noted"}
       </span>
     );
   return (
@@ -261,7 +259,7 @@ export function FeedbackRating(p: FeedbackRatingProps) {
           type="button"
           className={cx("tf-msg-act", v[0] === "up" && "on")}
           aria-pressed={v[0] === "up"}
-          aria-label={L("Good")}
+          aria-label="Good"
           onClick={() => {
             v[1]("up");
             if (!p.askOnUp) {
@@ -276,7 +274,7 @@ export function FeedbackRating(p: FeedbackRatingProps) {
           type="button"
           className={cx("tf-msg-act", v[0] === "down" && "on")}
           aria-pressed={v[0] === "down"}
-          aria-label={L("Not good")}
+          aria-label="Not good"
           onClick={() => {
             v[1]("down");
           }}
@@ -296,14 +294,14 @@ export function FeedbackRating(p: FeedbackRatingProps) {
           <input
             className="tf-input"
             autoFocus
-            placeholder={p.placeholder || L("What should be different?")}
+            placeholder={p.placeholder || "What should be different?"}
             value={c[0]}
             onChange={(e) => {
               c[1](e.target.value);
             }}
           />
           <Button type="submit" size="sm">
-            {L("Send")}
+            {"Send"}
           </Button>
         </form>
       )}
@@ -366,7 +364,7 @@ export function DailyBriefing(p: DailyBriefingProps) {
               padding: 0,
             }}
           >
-            {p.attentionTitle || L("Needs you")}
+            {p.attentionTitle || "Needs you"}
           </span>
           {p.attention.map((a, i) => (
             <button key={i} type="button" className="tf-briefing-item" onClick={a.onClick}>
@@ -390,7 +388,7 @@ export function DailyBriefing(p: DailyBriefingProps) {
               padding: 0,
             }}
           >
-            {p.suggestionsTitle || L("Suggestions")}
+            {p.suggestionsTitle || "Suggestions"}
           </span>
           <ul className="tf-briefing-sugg">
             {p.suggestions.map((s, i) => (
@@ -407,20 +405,20 @@ export function BudgetStop(p: BudgetStopProps) {
     <div className="tf-budgetstop">
       <Alert
         tone="danger"
-        title={p.title || L("Budget used up · agents paused")}
+        title={p.title || "Budget used up · agents paused"}
         action={
           p.onRaise && (
             <Button size="sm" variant="secondary" onClick={p.onRaise}>
-              {p.actionLabel || L("Raise budget")}
+              {p.actionLabel || "Raise budget"}
             </Button>
           )
         }
       >
         {p.text ||
-          L("Everything is kept. Agents continue where they stopped once the budget allows it.")}
+          "Everything is kept. Agents continue where they stopped once the budget allows it."}
       </Alert>
       <Meter
-        label={L("Spent this month")}
+        label="Spent this month"
         value={p.spent}
         max={p.budget}
         text={formatMoney(p.spent) + " / " + formatMoney(p.budget)}
@@ -430,8 +428,8 @@ export function BudgetStop(p: BudgetStopProps) {
         <KeyValue
           dense
           items={[
-            [L("Paused"), p.paused],
-            [L("Still running"), p.running || L("Nothing")],
+            ["Paused", p.paused],
+            ["Still running", p.running || "Nothing"],
           ]}
         />
       )}
@@ -454,7 +452,7 @@ export function MemoryViewer(p: MemoryViewerProps) {
     <div className="tf-memory">
       <div className="tf-filterbar">
         <SearchField
-          placeholder={L("Search memory")}
+          placeholder="Search memory"
           value={q[0]}
           onChange={(e) => {
             q[1](e.target.value);
@@ -477,7 +475,7 @@ export function MemoryViewer(p: MemoryViewerProps) {
         ))}
       </div>
       {list.length === 0 ? (
-        <p className="tf-card-desc">{L("Nothing remembered here yet.")}</p>
+        <p className="tf-card-desc">{"Nothing remembered here yet."}</p>
       ) : (
         list.map((m) => (
           <div key={m.id} className="tf-memitem">
@@ -499,7 +497,7 @@ export function MemoryViewer(p: MemoryViewerProps) {
                 {p.onEdit && (
                   <IconButton
                     icon="edit"
-                    label={L("Edit")}
+                    label="Edit"
                     size="sm"
                     variant="ghost"
                     onClick={() => {
@@ -510,7 +508,7 @@ export function MemoryViewer(p: MemoryViewerProps) {
                 {p.onDelete && (
                   <IconButton
                     icon="trash"
-                    label={L("Forget")}
+                    label="Forget"
                     size="sm"
                     variant="ghost"
                     onClick={() => {
@@ -563,12 +561,12 @@ export function OverrideDiff(p: OverrideDiffProps) {
         >
           {p.onDiscard && (
             <Button size="sm" variant="ghost" onClick={p.onDiscard}>
-              {p.discardLabel || L("Discard override")}
+              {p.discardLabel || "Discard override"}
             </Button>
           )}
           {p.onPromote && (
             <Button size="sm" variant="soft" icon="branch" onClick={p.onPromote}>
-              {p.promoteLabel || L("Move to code")}
+              {p.promoteLabel || "Move to code"}
             </Button>
           )}
         </span>
@@ -618,11 +616,11 @@ export function TriggerList(p: TriggerListProps) {
             />
           )}
           {p.onRun && (
-            <Tooltip label={L("Run now")}>
+            <Tooltip label="Run now">
               <button
                 type="button"
                 className="tf-iconbtn tf-iconbtn-soft tf-iconbtn-sm"
-                aria-label={L("Run now")}
+                aria-label="Run now"
                 onClick={() => {
                   p.onRun?.(t);
                 }}
@@ -739,16 +737,13 @@ export function VoiceMode(p: VoiceModeProps) {
       <AgentMark tint={p.tint || "lilac"} size={72} live={st !== "idle"} />
       <b className="tf-voice-name">{p.name}</b>
       <span className="tf-voice-state">
-        {p.stateLabel ||
-          L(
-            st === "listening"
-              ? "Listening…"
-              : st === "thinking"
-                ? "Thinking…"
-                : st === "speaking"
-                  ? "Speaking…"
-                  : "Paused",
-          )}
+        {p.stateLabel || st === "listening"
+          ? "Listening…"
+          : st === "thinking"
+            ? "Thinking…"
+            : st === "speaking"
+              ? "Speaking…"
+              : "Paused"}
       </span>
       <div className="tf-voice-wave" aria-hidden>
         {bars.map((b) => (
@@ -771,7 +766,7 @@ export function VoiceMode(p: VoiceModeProps) {
         {p.onMute && (
           <IconButton
             icon={p.muted ? "x" : "user"}
-            label={p.muted ? L("Unmute") : L("Mute")}
+            label={p.muted ? "Unmute" : "Mute"}
             variant="soft"
             size="lg"
             onClick={p.onMute}
@@ -782,7 +777,7 @@ export function VoiceMode(p: VoiceModeProps) {
             type="button"
             className="tf-voice-end"
             onClick={p.onEnd}
-            aria-label={L("End conversation")}
+            aria-label="End conversation"
           >
             <Icon name="x" size={20} />
           </button>

@@ -18,8 +18,7 @@
     "test:e2e": "turbo run build && playwright test",
     "tokens": "node scripts/tokens.ts && node scripts/pro-css.ts",
     "changeset": "changeset",
-    "release": "turbo run build --filter=./packages/* && changeset publish",
-    "labels": "node scripts/labels.ts"
+    "release": "turbo run build --filter=./packages/* && changeset publish"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",

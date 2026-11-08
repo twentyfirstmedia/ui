@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { cx } from "../cx.js";
-import { L } from "../i18n.js";
 import { useControlled, useOutside } from "../hooks.js";
 import { Icon } from "../Icon.js";
 import { Menu } from "./feedback.js";
@@ -12,6 +11,7 @@ import type {
   InlineEditProps,
   KbdProps,
   KeyValueProps,
+  ResizablePanelsProps,
   SpinnerProps,
   SplitPaneProps,
   TreeItem,
@@ -59,7 +59,7 @@ export function Spinner(p: SpinnerProps) {
     <span
       className={cx("tf-spinner", p.size === "lg" && "lg")}
       role="status"
-      aria-label={p.label || L("Loading")}
+      aria-label={p.label || "Loading"}
     />
   );
 }
@@ -330,5 +330,113 @@ export function InlineEdit(p: InlineEditProps) {
         if (e.key === "Escape") ed[1](false);
       }}
     />
+  );
+}
+
+/**
+ * ResizablePanels: two or more panes with drag handles between them, side by side or stacked.
+ * Handles are separators with a value (percent); ←/→ (↑/↓ when stacked) resize by 2%, Home/End
+ * jump to the limits, double-click resets.
+ */
+export function ResizablePanels(p: ResizablePanelsProps) {
+  const n = (p.panels || []).length;
+  const vertical = p.orientation === "vertical";
+  const min = p.min ?? 10;
+  const initial = (): number[] => {
+    const even = Array.from({ length: n }, () => 100 / n);
+    const base = p.defaultSizes && p.defaultSizes.length === n ? p.defaultSizes : even;
+    try {
+      const saved = p.storageKey ? localStorage.getItem("tf-panels-" + p.storageKey) : null;
+      const arr = saved ? (JSON.parse(saved) as number[]) : null;
+      if (arr && arr.length === n) return arr;
+    } catch {
+      /* storage unavailable */
+    }
+    return base;
+  };
+  const [sizes, setSizes] = React.useState<number[]>(initial);
+  const wrap = React.useRef<HTMLDivElement>(null);
+  const drag = React.useRef<number | null>(null);
+  const save = (next: number[]) => {
+    setSizes(next);
+    try {
+      if (p.storageKey) localStorage.setItem("tf-panels-" + p.storageKey, JSON.stringify(next));
+    } catch {
+      /* storage unavailable */
+    }
+  };
+  // move the boundary after panel i to `at` percent of the whole, keeping both neighbours ≥ min
+  const move = (i: number, delta: number) => {
+    const a = sizes[i] ?? 0,
+      b = sizes[i + 1] ?? 0;
+    const d = Math.max(min - a, Math.min(b - min, delta));
+    if (!d) return;
+    const next = sizes.slice();
+    next[i] = a + d;
+    next[i + 1] = b - d;
+    save(next);
+  };
+  React.useEffect(() => {
+    const mv = (e: PointerEvent) => {
+      const i = drag.current;
+      if (i == null || !wrap.current) return;
+      const r = wrap.current.getBoundingClientRect();
+      const pos = vertical ? (e.clientY - r.top) / r.height : (e.clientX - r.left) / r.width;
+      const before = sizes.slice(0, i + 1).reduce((x, y) => x + y, 0);
+      move(i, pos * 100 - before);
+    };
+    const up = () => {
+      drag.current = null;
+      document.body.style.cursor = "";
+    };
+    window.addEventListener("pointermove", mv);
+    window.addEventListener("pointerup", up);
+    return () => {
+      window.removeEventListener("pointermove", mv);
+      window.removeEventListener("pointerup", up);
+    };
+  });
+  const cols = sizes.map((s) => `minmax(0, ${s}fr)`).join(" 9px ");
+  return (
+    <div
+      ref={wrap}
+      className={cx("tf-panels", vertical && "vertical", p.className)}
+      style={{ [vertical ? "gridTemplateRows" : "gridTemplateColumns"]: cols, ...p.style }}
+    >
+      {(p.panels || []).map((panel, i) => (
+        <React.Fragment key={i}>
+          <div className="tf-panels-pane">{panel}</div>
+          {i < n - 1 && (
+            <div
+              className="tf-panels-handle"
+              role="separator"
+              aria-orientation={vertical ? "horizontal" : "vertical"}
+              aria-label={`Resize ${p.labels?.[i] ?? `panel ${i + 1}`}`}
+              aria-valuenow={Math.round(sizes[i] ?? 0)}
+              aria-valuemin={min}
+              aria-valuemax={Math.round((sizes[i] ?? 0) + (sizes[i + 1] ?? 0) - min)}
+              tabIndex={0}
+              onPointerDown={(e) => {
+                e.preventDefault();
+                drag.current = i;
+                document.body.style.cursor = vertical ? "row-resize" : "col-resize";
+              }}
+              onDoubleClick={() => save(Array.from({ length: n }, () => 100 / n))}
+              onKeyDown={(e) => {
+                const back = vertical ? "ArrowUp" : "ArrowLeft",
+                  fwd = vertical ? "ArrowDown" : "ArrowRight";
+                if (e.key === back || e.key === fwd) {
+                  e.preventDefault();
+                  move(i, e.key === fwd ? 2 : -2);
+                } else if (e.key === "Home" || e.key === "End") {
+                  e.preventDefault();
+                  move(i, e.key === "End" ? 100 : -100);
+                }
+              }}
+            />
+          )}
+        </React.Fragment>
+      ))}
+    </div>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import { L } from "../i18n.js";
 import { Icon } from "../Icon.js";
 import { cx } from "../cx.js";
 import { SearchField } from "./inputs.js";
@@ -55,9 +54,7 @@ export function FilterBar(p: FilterBarProps) {
                 <button
                   type="button"
                   className="x"
-                  aria-label={L("Remove filter {name}", {
-                    name: f.label,
-                  })}
+                  aria-label={`Remove filter ${f.label}`}
                   onClick={() => {
                     set(k, null);
                   }}
@@ -89,7 +86,7 @@ export function FilterBar(p: FilterBarProps) {
           trigger={(s) => (
             <button type="button" className="tf-chip tf-chip-dashed" onClick={s.toggle}>
               <Icon name="plus" size={14} />
-              {L("Filter")}
+              {"Filter"}
             </button>
           )}
         >
@@ -112,7 +109,7 @@ export function FilterBar(p: FilterBarProps) {
             p.onChange?.({});
           }}
         >
-          {L("Clear all")}
+          {"Clear all"}
         </button>
       )}
       {p.right && <div className="tf-filterbar-right">{p.right}</div>}
@@ -131,7 +128,7 @@ export function AddFilterMenu(p: {
       <Menu
         items={[
           {
-            label: L("Back"),
+            label: "Back",
             icon: "chevronLeft",
             onClick: () => {
               step[1](null);
@@ -232,11 +229,11 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
               width={220}
               flush
               trigger={(s) => (
-                <Tooltip label={L("Columns")}>
+                <Tooltip label="Columns">
                   <button
                     type="button"
                     className="tf-iconbtn tf-iconbtn-soft"
-                    aria-label={L("Choose columns")}
+                    aria-label="Choose columns"
                     onClick={s.toggle}
                   >
                     <Icon name="grid" />
@@ -245,7 +242,7 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
               )}
             >
               <div className="tf-menu tf-menu-static">
-                <div className="tf-menu-label">{L("Columns")}</div>
+                <div className="tf-menu-label">{"Columns"}</div>
                 {cols
                   .filter((c) => c.hideable !== false && c.label)
                   .map((c) => {
@@ -290,12 +287,12 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
                     () => {
                       sel[1](all ? [] : ids);
                     },
-                    L("Select all rows"),
+                    "Select all rows",
                     some,
                   )}
                 </th>
               )}
-              {p.renderExpanded && <th className="tf-dt-exp" aria-label={L("Expand")} />}
+              {p.renderExpanded && <th className="tf-dt-exp" aria-label="Expand" />}
               {vis.map((c) => {
                 const s = sort[0] && sort[0].key === c.key ? sort[0].dir : null;
                 return (
@@ -350,7 +347,7 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
             {rows.length === 0 ? (
               <tr>
                 <td colSpan={span} className="tf-dt-empty">
-                  {p.empty || L("Nothing matches these filters.")}
+                  {p.empty || "Nothing matches these filters."}
                 </td>
               </tr>
             ) : (
@@ -368,7 +365,7 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
                             () => {
                               toggle(id);
                             },
-                            L("Select row"),
+                            "Select row",
                           )}
                         </td>
                       )}
@@ -378,7 +375,7 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
                             type="button"
                             className={cx("tf-dt-toggle", ex && "open")}
                             aria-expanded={ex}
-                            aria-label={ex ? L("Collapse row") : L("Expand row")}
+                            aria-label={ex ? "Collapse row" : "Expand row"}
                             onClick={() => {
                               const n = Object.assign({}, open[0]);
                               n[String(id)] = !ex;
@@ -410,12 +407,8 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
         </table>
       </div>
       {p.selectable && selected.length > 0 && (
-        <div className="tf-bulkbar" role="toolbar" aria-label={L("Bulk actions")}>
-          <b>
-            {L("{n} selected", {
-              n: selected.length,
-            })}
-          </b>
+        <div className="tf-bulkbar" role="toolbar" aria-label="Bulk actions">
+          <b>{`${selected.length} selected`}</b>
           <button
             type="button"
             className="tf-linkbtn on-frame"
@@ -423,7 +416,7 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
               sel[1]([]);
             }}
           >
-            {L("Clear")}
+            {"Clear"}
           </button>
           <div className="tf-bulkbar-actions">
             {(p.bulkActions || []).map((a) => (

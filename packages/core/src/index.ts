@@ -1,22 +1,13 @@
 export { cx, durationToken, initials, reduced } from "./cx.js";
 export {
-  L,
-  Lx,
-  LK,
-  setLabels,
-  getLabels,
-  setLocale,
-  getLocale,
-  subscribeLocale,
-  localeVersion,
   formatNumber,
   formatPercent,
   formatMoney,
   formatDate,
-  type Labels,
-  type LocaleOptions,
-  type LocaleState,
-} from "./i18n.js";
+  LOCALE,
+  CURRENCY,
+  WEEK_START,
+} from "./format.js";
 export {
   UIProvider,
   useUI,

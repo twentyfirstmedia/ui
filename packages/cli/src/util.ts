@@ -13,7 +13,6 @@ export interface Config {
   both?: boolean;
   css?: string;
   components: string;
-  locale?: string;
 }
 
 export function read(path: string): string | null {

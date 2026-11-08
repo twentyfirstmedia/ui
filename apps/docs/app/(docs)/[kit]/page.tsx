@@ -30,8 +30,8 @@ const FEATURES: { icon: IconName; tint: Tint; title: string; text: string }[] = 
   {
     icon: "globe",
     tint: "butter",
-    title: "No fixed copy",
-    text: "Every string goes through the label system and every number, amount and date through Intl. English and German ship complete.",
+    title: "Ready-made states",
+    text: "Empty, loading, error and approval states come with the components, so screens look finished from the first render.",
   },
   {
     icon: "check",
@@ -83,10 +83,10 @@ export default async function Intro({ params }: { params: Promise<{ kit: KitName
       text: "Complete screens built only from kit parts.",
     },
     {
-      href: "text-and-locale/",
-      icon: "globe" as IconName,
-      title: "Text and locale",
-      text: "Labels, German, Intl formatting.",
+      href: "status-and-approvals/",
+      icon: "check" as IconName,
+      title: "Status and approvals",
+      text: "Status shapes, approval cards and the inbox.",
     },
   ];
   return (

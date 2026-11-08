@@ -13,35 +13,71 @@ import type {
 } from "./types.js";
 
 /* ── Actions ── */
+/** Renders `child` with extra class and content instead of a native element (`asChild`). */
+function slot(
+  child: React.ReactNode,
+  className: string,
+  extra: Record<string, unknown>,
+  content: (inner: React.ReactNode) => React.ReactNode,
+) {
+  if (!React.isValidElement<{ className?: string; children?: React.ReactNode }>(child)) return null;
+  return React.cloneElement(child, {
+    ...extra,
+    className: cx(className, child.props.className),
+    children: content(child.props.children),
+  });
+}
+
 export function Button(p: ButtonProps) {
   const v = p.variant || "primary";
+  const cls = cx("tf-btn", "tf-btn-" + v, p.size === "sm" && "tf-btn-sm", p.className);
+  const content = (inner: React.ReactNode) => (
+    <>
+      {p.icon && <Icon name={p.icon} size={15} />}
+      {inner}
+      {p.iconRight && <Icon name={p.iconRight} size={15} />}
+    </>
+  );
+  if (p.asChild) {
+    const el = slot(React.Children.only(p.children), cls, { style: p.style }, content);
+    if (el) return el;
+  }
   return (
     <button
       type={p.type || "button"}
-      className={cx("tf-btn", "tf-btn-" + v, p.size === "sm" && "tf-btn-sm", p.className)}
+      className={cls}
       style={p.style}
       disabled={p.disabled}
       onClick={p.onClick}
     >
-      {p.icon && <Icon name={p.icon} size={15} />}
-      {p.children}
-      {p.iconRight && <Icon name={p.iconRight} size={15} />}
+      {content(p.children)}
     </button>
   );
 }
 
 export function IconButton(p: IconButtonProps) {
+  const cls = cx(
+    "tf-iconbtn",
+    "tf-iconbtn-" + (p.variant || "soft"),
+    p.size && "tf-iconbtn-" + p.size,
+    p.className,
+  );
+  if (p.asChild && p.children) {
+    const el = slot(
+      React.Children.only(p.children),
+      cls,
+      { "aria-label": p.label, title: p.label, style: p.style },
+      () => <Icon name={p.icon} />,
+    );
+    if (el) return el;
+  }
   return (
     <button
       type="button"
       aria-label={p.label}
       title={p.label}
-      className={cx(
-        "tf-iconbtn",
-        "tf-iconbtn-" + (p.variant || "soft"),
-        p.size && "tf-iconbtn-" + p.size,
-        p.className,
-      )}
+      className={cls}
+      style={p.style}
       disabled={p.disabled}
       onClick={p.onClick}
     >

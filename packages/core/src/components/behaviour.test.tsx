@@ -3,7 +3,6 @@
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { useState } from "react";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { setLabels } from "../i18n.js";
 import { toast } from "../toast-store.js";
 import { UIProvider } from "../provider.js";
 import { ApprovalCard, ApprovalInbox } from "./approvals.js";
@@ -11,7 +10,6 @@ import { Combobox, DatePicker, OtpInput } from "./forms.js";
 import { DataTable } from "./data-table.js";
 import { ConfirmDialog, Toaster } from "./feedback.js";
 import { RangeSlider } from "./admin.js";
-import { Pagination } from "./navigation.js";
 import { Tooltip } from "./overlays.js";
 
 beforeAll(() => {
@@ -30,7 +28,6 @@ beforeAll(() => {
 afterEach(() => {
   cleanup();
   toast.clear();
-  setLabels({}, true);
   vi.useRealTimers();
 });
 
@@ -232,17 +229,5 @@ describe("Tooltip", () => {
     expect(btn.getAttribute("aria-describedby")).toBe(screen.getByRole("tooltip").id);
     fireEvent.keyDown(btn, { key: "Escape" });
     expect(screen.queryByRole("tooltip")).toBeNull();
-  });
-});
-
-describe("labels", () => {
-  it("translate aria labels", () => {
-    render(
-      <UIProvider labels={{ Pagination: "Seitennavigation", "Next page": "Nächste Seite" }}>
-        <Pagination total={5} />
-      </UIProvider>,
-    );
-    expect(screen.getByRole("navigation", { name: "Seitennavigation" })).toBeTruthy();
-    expect(screen.getByRole("button", { name: "Nächste Seite" })).toBeTruthy();
   });
 });

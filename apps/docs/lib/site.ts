@@ -34,6 +34,7 @@ export const BASE_PATH = process.env.DOCS_BASE_PATH ?? "";
 /** Component groups in sidebar order; "Pages" become the patterns section. */
 export const GROUP_ORDER = [
   "Foundations",
+  "Navigation",
   "Forms",
   "Data",
   "Charts",
@@ -45,7 +46,7 @@ export const GROUP_ORDER = [
   "Media",
 ];
 
-export const components = examples.filter((e) => e.group !== "Pages" && e.name !== "Labels");
+export const components = examples.filter((e) => e.group !== "Pages");
 export const patterns = examples.filter((e) => e.group === "Pages");
 
 export interface NavLink {
@@ -62,7 +63,6 @@ export const GUIDES: NavLink[] = [
   { href: "installation", label: "Installation" },
   { href: "cli", label: "CLI" },
   { href: "theming", label: "Theming and tokens" },
-  { href: "text-and-locale", label: "Text and locale" },
   { href: "status-and-approvals", label: "Status and approvals" },
   { href: "changelog", label: "Changelog" },
 ];

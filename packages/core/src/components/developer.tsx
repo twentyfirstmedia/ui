@@ -2,7 +2,7 @@
 import * as React from "react";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
-import { L, formatMoney, formatNumber, formatPercent } from "../i18n.js";
+import { formatMoney, formatNumber, formatPercent } from "../format.js";
 import { useControlled, useId } from "../hooks.js";
 import { Portal } from "../portal.js";
 import { CodeBlock } from "./chat.js";
@@ -99,11 +99,11 @@ export function SecretField(p: SecretFieldProps) {
         }}
       >
         {p.onReveal && (
-          <Tooltip label={shown[0] ? L("Hide") : L("Reveal")}>
+          <Tooltip label={shown[0] ? "Hide" : "Reveal"}>
             <button
               type="button"
               className="tf-iconbtn tf-iconbtn-ghost tf-iconbtn-sm"
-              aria-label={shown[0] ? L("Hide") : L("Reveal")}
+              aria-label={shown[0] ? "Hide" : "Reveal"}
               onClick={() => {
                 if (shown[0]) return shown[1](false);
                 Promise.resolve(p.onReveal?.()).then((ok) => {
@@ -116,11 +116,11 @@ export function SecretField(p: SecretFieldProps) {
           </Tooltip>
         )}
         {p.onCopy && (
-          <Tooltip label={copied[0] ? L("Copied") : L("Copy")}>
+          <Tooltip label={copied[0] ? "Copied" : "Copy"}>
             <button
               type="button"
               className="tf-iconbtn tf-iconbtn-ghost tf-iconbtn-sm"
-              aria-label={L("Copy")}
+              aria-label="Copy"
               onClick={() => {
                 p.onCopy?.();
                 copied[1](true);
@@ -135,7 +135,7 @@ export function SecretField(p: SecretFieldProps) {
         )}
         {p.onRotate && (
           <Button size="sm" variant="soft" icon="refresh" onClick={p.onRotate}>
-            {L("Rotate")}
+            {"Rotate"}
           </Button>
         )}
       </span>
@@ -205,7 +205,7 @@ export function MoneyInput(p: MoneyInputProps) {
         {p.vatOptions && (
           <select
             className="tf-input tf-money-vat"
-            aria-label={L("VAT rate")}
+            aria-label="VAT rate"
             value={p.vat}
             onChange={(e) => {
               p.onVat && p.onVat(e.target.value);
@@ -230,11 +230,9 @@ export function MoneyInput(p: MoneyInputProps) {
       </div>
       {p.showGross && v[0] != null && p.vat != null && !isNaN(+p.vat) && (
         <span className="tf-field-hint">
-          {L("Gross {amount}", {
-            amount: formatMoney(v[0] * (1 + Number(p.vat) / 100), p.currency, {
-              minimumFractionDigits: 2,
-            }),
-          })}
+          {`Gross ${formatMoney(v[0] * (1 + Number(p.vat) / 100), p.currency, {
+            minimumFractionDigits: 2,
+          })}`}
         </span>
       )}
     </FormField>
@@ -279,7 +277,7 @@ export function ShortcutsOverlay(p: ShortcutsOverlayProps) {
           className="tf-modal tf-shortcuts"
           role="dialog"
           aria-modal="true"
-          aria-label={p.title || L("Keyboard shortcuts")}
+          aria-label={p.title || "Keyboard shortcuts"}
         >
           <div
             className="tf-row"
@@ -287,8 +285,8 @@ export function ShortcutsOverlay(p: ShortcutsOverlayProps) {
               justifyContent: "space-between",
             }}
           >
-            <h2 className="tf-modal-title">{p.title || L("Keyboard shortcuts")}</h2>
-            <IconButton icon="x" label={L("Close")} size="sm" onClick={p.onClose} />
+            <h2 className="tf-modal-title">{p.title || "Keyboard shortcuts"}</h2>
+            <IconButton icon="x" label="Close" size="sm" onClick={p.onClose} />
           </div>
           <div className="tf-shortcuts-grid">
             {(p.groups || []).map((g) => (
@@ -376,14 +374,9 @@ export function UptimeBar(p: UptimeBarProps) {
       <div className="tf-uptime-foot">
         <span>
           {hov[0] != null
-            ? (days[hov[0]].label ||
-                L("{n} days ago", {
-                  n: days.length - hov[0] - 1,
-                })) + (days[hov[0]].note ? " · " + days[hov[0]].note : "")
-            : p.caption ||
-              L("Last {n} days", {
-                n: days.length,
-              })}
+            ? (days[hov[0]].label || `${days.length - hov[0] - 1} days ago`) +
+              (days[hov[0]].note ? " · " + days[hov[0]].note : "")
+            : p.caption || `Last ${days.length} days`}
         </span>
         {p.uptime != null && (
           <b className="tf-mono">

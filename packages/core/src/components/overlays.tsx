@@ -13,6 +13,25 @@ export function Popover(p: PopoverProps) {
     st[1](false);
   });
   useKeepInView(pop, st[0]);
+  // open on the other side when there is no room on the requested one
+  const [flip, setFlip] = React.useState(false);
+  React.useLayoutEffect(() => {
+    if (!st[0]) {
+      setFlip(false);
+      return;
+    }
+    const el = pop.current,
+      anchor = ref.current;
+    if (!el || !anchor) return;
+    const r = el.getBoundingClientRect(),
+      a = anchor.getBoundingClientRect(),
+      vh = window.innerHeight;
+    const top = p.side === "top";
+    const roomBelow = vh - a.bottom - 8,
+      roomAbove = a.top - 8;
+    if (!top && r.bottom > vh - 8 && roomAbove > r.height && roomAbove > roomBelow) setFlip(true);
+    if (top && r.top < 8 && roomBelow > r.height) setFlip(true);
+  }, [st[0]]);
   const trigger =
     typeof p.trigger === "function" ? (
       p.trigger({
@@ -39,7 +58,7 @@ export function Popover(p: PopoverProps) {
           className={cx(
             "tf-popover",
             "tf-pop-" + (p.align || "start"),
-            p.side === "top" && "top",
+            (p.side === "top") !== flip && "top",
             p.flush && "flush",
           )}
           role={p.role || "dialog"}

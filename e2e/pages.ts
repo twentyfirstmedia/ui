@@ -14,9 +14,7 @@ export const WIDTHS = [390, 1440] as const;
 
 /** Every page that shows a live preview, as path below /<kit>/. */
 export const previewPages: string[] = [
-  ...examples
-    .filter((e) => e.group !== "Pages" && e.name !== "Labels")
-    .map((e) => `components/${e.name}`),
+  ...examples.filter((e) => e.group !== "Pages").map((e) => `components/${e.name}`),
   ...examples.filter((e) => e.group === "Pages").map((e) => `patterns/${e.name}`),
   "patterns/real-estate",
 ];
@@ -26,7 +24,6 @@ export const guidePages = [
   "installation",
   "cli",
   "theming",
-  "text-and-locale",
   "status-and-approvals",
   "changelog",
   "components",

@@ -3,7 +3,6 @@ import * as React from "react";
 import { useControlled } from "../hooks.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
-import { L } from "../i18n.js";
 import { Portal } from "../portal.js";
 import { StatusShape } from "./status.js";
 import { IconButton } from "./foundation.js";
@@ -41,7 +40,7 @@ export function ImageVariants(p: ImageVariantsProps) {
         )}
         {cur.label && <span className="tf-imgvar-tag">{cur.label}</span>}
       </div>
-      <div className="tf-imgvar-list" role="listbox" aria-label={L("Variants")}>
+      <div className="tf-imgvar-list" role="listbox" aria-label="Variants">
         {(p.variants || []).map((v) => (
           <button
             key={v.id}
@@ -130,7 +129,7 @@ export function Gallery(p: GalleryProps) {
       {n > 1 && (
         <IconButton
           icon="chevronLeft"
-          label={L("Previous image")}
+          label="Previous image"
           className="tf-gallery-prev"
           onClick={() => {
             go(-1);
@@ -140,7 +139,7 @@ export function Gallery(p: GalleryProps) {
       {n > 1 && (
         <IconButton
           icon="chevronRight"
-          label={L("Next image")}
+          label="Next image"
           className="tf-gallery-next"
           onClick={() => {
             go(1);
@@ -151,7 +150,7 @@ export function Gallery(p: GalleryProps) {
       {!full[0] && p.fullscreen !== false && (
         <IconButton
           icon="expand"
-          label={L("Full screen")}
+          label="Full screen"
           className="tf-gallery-full"
           onClick={() => {
             full[1](true);
@@ -165,7 +164,7 @@ export function Gallery(p: GalleryProps) {
     <div className="tf-gallery">
       {stage}
       {p.thumbs !== false && n > 1 && (
-        <div className="tf-gallery-thumbs" role="tablist" aria-label={L("Images")}>
+        <div className="tf-gallery-thumbs" role="tablist" aria-label="Images">
           {items.map((it, k) => (
             <button
               key={k}
@@ -176,9 +175,7 @@ export function Gallery(p: GalleryProps) {
               onClick={() => {
                 i[1](k);
               }}
-              aria-label={
-                it.caption || it.alt || (it.src ? L("Image {n}", { n: k + 1 }) : undefined)
-              }
+              aria-label={it.caption || it.alt || (it.src ? `Image ${k + 1}` : undefined)}
             >
               {pic(it, "tf-gallery-thumb")}
             </button>
@@ -187,10 +184,10 @@ export function Gallery(p: GalleryProps) {
       )}
       {full[0] && (
         <Portal>
-          <div className="tf-lightbox" role="dialog" aria-modal="true" aria-label={L("Images")}>
+          <div className="tf-lightbox" role="dialog" aria-modal="true" aria-label="Images">
             <IconButton
               icon="x"
-              label={L("Close")}
+              label="Close"
               className="tf-lightbox-close"
               onClick={() => {
                 full[1](false);
@@ -201,7 +198,7 @@ export function Gallery(p: GalleryProps) {
               {n > 1 && (
                 <IconButton
                   icon="chevronLeft"
-                  label={L("Previous image")}
+                  label="Previous image"
                   className="tf-gallery-prev"
                   onClick={() => {
                     go(-1);
@@ -211,7 +208,7 @@ export function Gallery(p: GalleryProps) {
               {n > 1 && (
                 <IconButton
                   icon="chevronRight"
-                  label={L("Next image")}
+                  label="Next image"
                   className="tf-gallery-next"
                   onClick={() => {
                     go(1);
@@ -273,8 +270,8 @@ export function BeforeAfter(p: BeforeAfterProps) {
       >
         {pane(p.before, "tf-ba-img")}
       </div>
-      <span className="tf-ba-tag left">{p.beforeLabel || L("Before")}</span>
-      <span className="tf-ba-tag right">{p.afterLabel || L("After")}</span>
+      <span className="tf-ba-tag left">{p.beforeLabel || "Before"}</span>
+      <span className="tf-ba-tag right">{p.afterLabel || "After"}</span>
       <div
         className="tf-ba-line"
         style={{
@@ -285,7 +282,7 @@ export function BeforeAfter(p: BeforeAfterProps) {
           className="tf-ba-knob"
           role="slider"
           tabIndex={0}
-          aria-label={L("Compare before and after")}
+          aria-label="Compare before and after"
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(pos[0])}

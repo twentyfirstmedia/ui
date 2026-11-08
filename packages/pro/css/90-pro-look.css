@@ -643,7 +643,8 @@ select.tf-input {
 .tf-bg-mint,
 .tf-bg-lilac,
 .tf-bg-butter,
-.tf-bg-blush {
+.tf-bg-blush,
+.tf-art[class*="tf-bg-"] {
   background: var(--bg-200);
 }
 .tf-avatar {
@@ -696,4 +697,40 @@ select.tf-input {
 /* Chat workspace panes are cells of the hairline grid */
 .tf-chatws > div {
   box-shadow: 0 0 0 var(--line-width) var(--line);
+}
+
+/* Primitives in Pro: dense rows, square selections on the hairline grid */
+.tf-accordion-head {
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  font: 500 var(--density-font-size) / var(--density-line-height) var(--font-sans);
+}
+.tf-accordion-body {
+  padding: 0 var(--space-3) var(--space-3);
+  font: 400 var(--density-font-size) / 20px var(--font-sans);
+}
+.tf-toggle[aria-pressed="true"] {
+  background: var(--bg-300);
+  box-shadow: inset 0 0 0 var(--line-width) var(--line-strong);
+}
+.tf-togglegroup {
+  padding: 2px;
+  gap: 2px;
+  background: var(--bg-000);
+  box-shadow: inset 0 0 0 var(--line-width) var(--line);
+}
+.tf-togglegroup .tf-toggle[aria-pressed="true"] {
+  background: var(--bg-300);
+  box-shadow: none;
+}
+.tf-hovercard {
+  padding: var(--space-3);
+}
+.tf-carousel-dot[aria-current="true"] {
+  width: 16px;
+}
+
+/* Navigation menu feature card: monochrome like other decorative surfaces */
+.tf-navmenu-feature {
+  background: var(--bg-200);
 }
