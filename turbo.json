@@ -9,13 +9,11 @@
     "typecheck": {
       "dependsOn": ["^build"]
     },
-    "tokens": {
-      "cache": false
-    },
     "dev": {
       "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     }
-  }
+  },
+  "globalDependencies": ["scripts/**", "tsconfig.base.json"]
 }

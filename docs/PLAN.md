@@ -46,10 +46,12 @@ Die Previews in `reference/halo/design-system/components/*/preview.html` laden `
 Notiz: Lokal läuft Node 22, CI Node 24. TypeScript 6.0 (nicht 7), weil typescript-eslint 7 noch nicht unterstützt. Playwright auf 1.63 gepinnt (passt zum vorinstallierten Chromium). Packages bauen mit `tsc` (eine Datei pro Modul, `"use client"` bleibt erhalten, tree-shakeable).
 
 ### Phase 1: Tokens und Fonts
-- [ ] Token-Generator: `tokens.json` je Kit → CSS-Variablen (hell/dunkel) + Tailwind-`@theme`; Test schlägt fehl, wenn die erzeugten Dateien veraltet sind
-- [ ] Halo-Tokens 1:1 aus `reference/halo/design-system/tokens.json` und `source/tokens.css` (inkl. Status-, Diff-, Paper-, Frame-, Media-, SERP-Tokens)
-- [ ] Pro-Tokens aus `reference/pro/tokens.json`, auf **dieselben Token-Namen** wie Halo abgebildet (fehlende sinnvoll ableiten, in einer Tabelle in der Doku festhalten)
-- [ ] Fonts selbst gehostet
+- [x] Token-Generator: `tokens.json` je Kit → CSS-Variablen (hell/dunkel) + Tailwind-`@theme`; Test schlägt fehl, wenn die erzeugten Dateien veraltet sind
+- [x] Halo-Tokens 1:1 aus `reference/halo/design-system/tokens.json` und `source/tokens.css` (inkl. Status-, Diff-, Paper-, Frame-, Media-, SERP-Tokens)
+- [x] Pro-Tokens aus `reference/pro/tokens.json`, auf **dieselben Token-Namen** wie Halo abgebildet (fehlende sinnvoll ableiten, in einer Tabelle in der Doku festhalten)
+- [x] Fonts selbst gehostet
+
+Notiz: `pnpm tokens` erzeugt pro Kit `generated/tokens.css` (`:root`, ohne `data-kit`), `generated/tokens.scoped.css` (`[data-kit="…"]`), `generated/tailwind.css` (`@theme inline reference`) und `docs/tokens.md` (Halo/Pro nebeneinander). Ein Test schlägt fehl, wenn etwas veraltet ist oder die Namen abweichen. Namenskonflikt in der Referenz: Halo `--hairline` ist eine Farbe, Pro `--hairline` eine Breite; die Farbe behält den Namen, die Breite heißt `--line-width`. Pro-`fg-400` liegt unter 4.5:1, daher ist `--ink-subtle` in Pro `fg-300` (axe). Fonts: latin + latin-ext aus `@fontsource(-variable)`, beim Build nach `dist/fonts/` kopiert, mit OFL-Lizenz.
 
 ### Phase 2: Core
 - [ ] Label- und Locale-System, `UIProvider`, Formatter

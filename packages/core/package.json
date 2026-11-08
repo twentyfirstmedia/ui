@@ -21,13 +21,15 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./themes.css": "./dist/themes.css",
+    "./fonts/*": "./dist/fonts/*",
     "./package.json": "./package.json"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && node ../../scripts/build-css.ts themes",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
