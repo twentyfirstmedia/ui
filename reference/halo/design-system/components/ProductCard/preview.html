@@ -1,0 +1,19 @@
+<!-- @dsCard group="Commerce" height=480 width=960 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>ProductCard</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+
+  function App() {
+    var w = useState(['p2']), a = useState([]);
+    var P = [{ id: 'p1', name: 'Halo Cotton Tee', meta: 'Apparel', art: 'tee', tint: 'sky', price: 32, compareAt: 39, rating: 4.7, reviews: 128, badge: 'Bestseller' }, { id: 'p2', name: 'Studio Mug', meta: 'Home', art: 'mug', tint: 'butter', price: 18, rating: 4.9, reviews: 96 }, { id: 'p3', name: 'Field Bottle', meta: 'Outdoor', art: 'bottle', tint: 'mint', price: 28, rating: 4.6, reviews: 61, badge: 'New' }, { id: 'p4', name: 'Canvas Tote', meta: 'Bags', art: 'tote', tint: 'lilac', price: 24, rating: 4.8, reviews: 143, stock: 0, badge: 'Sold out', badgeTone: 'neutral' }];
+    return h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 16 } }, P.map(function (x) { return h(H.ProductCard, Object.assign({ key: x.id, wished: w[0].indexOf(x.id) > -1, added: a[0].indexOf(x.id) > -1, onWish: function () { w[1](w[0].indexOf(x.id) > -1 ? w[0].filter(function (i) { return i !== x.id; }) : w[0].concat([x.id])); }, onAdd: function () { a[1](a[0].concat([x.id])); } }, x)); }),
+      h('div', { className: 'ha-panel', style: { gridColumn: '1 / -1', flexDirection: 'row', flexWrap: 'wrap', gap: 24, alignItems: 'center' } }, h(H.Price, { value: 32, compareAt: 39, size: 'lg' }), h(H.Rating, { value: 4.6, count: 61 }), h(H.StockBadge, { stock: 84 }), h(H.StockBadge, { stock: 6 }), h(H.StockBadge, { stock: 0 }), h('div', { style: { display: 'flex', gap: 8 } }, H.ProductArt.kinds.map(function (k, i) { return h(H.ProductArt, { key: k, kind: k, tint: ['sky', 'mint', 'butter', 'lilac', 'blush'][i % 5], size: 40 }); }))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

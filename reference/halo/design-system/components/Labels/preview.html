@@ -1,0 +1,20 @@
+<!-- @dsCard group="Foundations" height=560 width=900 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  var de = { 'Yes, run it as shown': 'Ja, so ausführen', 'Yes, with a change': 'Ja, mit Änderung', 'No, discard': 'Nein, verwerfen', 'Different instruction': 'Andere Anweisung', 'Approval needed': 'Freigabe nötig', 'Communication': 'Kommunikation', 'Send': 'Senden', 'Cancel': 'Abbrechen', 'What should change?': 'Was soll anders sein?', 'What should happen instead?': 'Was soll stattdessen passieren?' };
+  function App() { var lang = useState('en');
+    if (lang[0] === 'de') { H.setLabels(de, true); H.setLocale('de-DE'); } else { H.setLabels({}, true); H.setLocale('en-US'); }
+    return h('div', { className: 'ha-col', style: { gap: 16 } }, h(H.Segmented, { value: lang[0], onChange: lang[1], options: [{ value: 'en', label: 'Built-in (English)' }, { value: 'de', label: 'App labels (German)' }] }),
+      h('div', { key: lang[0] }, h(H.ApprovalCard, { agent: 'Atlas', project: 'Support', family: 'comms', title: 'Send this email to ida@northwind.io', age: H.formatDate(new Date(2026, 3, 16)) + ' · ' + H.formatMoney(1234.5) }, h('div', { className: 'ha-approval-mail' }, 'Hi Ida, …'))));
+  }
+  render(h(App));
+</script>
+</body>
+</html>

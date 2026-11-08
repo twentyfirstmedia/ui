@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>HQ · Domains &amp; DNS</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="hq-tokens.css">
+<link rel="stylesheet" href="ds/hq/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="hq" data-theme="{{theme}}" data-density="{{density}}" style="background: var(--bg-000); color: var(--fg-100); font-family: var(--font-sans); min-height: 960px; display: flex; flex-wrap: wrap; align-items: stretch;">
+
+<aside style="flex: 0 0 52px; background: var(--bg-100); border-right: 1px solid var(--line-200); display: flex; flex-direction: column; align-items: center;">
+ <a href="Main.dc.html" class="hq-glyph" style="margin: 10px 0; text-decoration: none;" aria-label="HQ Übersicht">HQ</a>
+ <nav class="hq-nav" aria-label="Hauptnavigation" style="padding: 6px; align-items: center;">
+  <a href="Stadt.dc.html" aria-label="Stadt" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg></a>
+  <a href="Freigaben.dc.html" aria-label="Freigaben" style="width: 36px; justify-content: center; padding: 0; color: var(--signal);"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg></a>
+  <a href="Webmail.dc.html" aria-label="Webmail" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></a>
+  <a href="#" aria-current="page" aria-label="Domains und DNS" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></a>
+  <a href="Finanzen.dc.html" aria-label="Finanzen" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></a>
+ </nav>
+</aside>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column;">
+ <header class="hq-topbar" style="border-bottom: 1px solid var(--line-200); flex-wrap: wrap;">
+  <div class="hq-crumbs"><span>Domains &amp; DNS</span><span class="sep">/</span><span class="cur">jasondevine.de</span></div>
+  <span class="grow"></span>
+  <span class="hq-badge hq-badge--outline"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5088 16.8447c.1475-.5068.0908-.9707-.1553-1.3154-.2246-.3164-.6045-.499-1.0615-.5205l-8.6592-.1123a.1559.1559 0 0 1-.1333-.0713c-.0283-.042-.0351-.0986-.021-.1553.0278-.084.1123-.1484.2036-.1562l8.7359-.1123c1.0351-.0489 2.1601-.8868 2.5537-1.9136l.499-1.3013c.0215-.0561.0293-.1128.0147-.168-.5625-2.5463-2.835-4.4453-5.5499-4.4453-2.5039 0-4.6284 1.6177-5.3876 3.8614-.4927-.3658-1.1187-.5625-1.794-.499-1.2026.119-2.1665 1.083-2.2861 2.2856-.0283.31-.0069.6128.0635.894C1.5683 13.171 0 14.7754 0 16.752c0 .1748.0142.3515.0352.5273.0141.083.0844.1475.1689.1475h15.9814c.0909 0 .1758-.0645.2032-.1553l.12-.4268zm2.7568-5.5634c-.0771 0-.1611 0-.2383.0112-.0566 0-.1054.0415-.127.0976l-.3378 1.1744c-.1475.5068-.0918.9707.1543 1.3164.2256.3164.6055.498 1.0625.5195l1.8437.1133c.0557 0 .1055.0263.1329.0703.0283.043.0351.1074.0214.1562-.0283.084-.1132.1485-.204.1553l-1.921.1123c-1.041.0488-2.1582.8867-2.5527 1.914l-.1406.3585c-.0283.0713.0215.1416.0986.1416h6.5977c.0771 0 .1474-.0489.169-.126.1122-.4082.1757-.837.1757-1.2803 0-2.6025-2.125-4.727-4.7344-4.727"/></svg>Cloudflare verbunden</span>
+  <span class="hq-avatar hq-avatar--human">RT</span>
+ </header>
+
+ <div style="flex: 1 1 auto; display: flex; flex-wrap: wrap; align-items: stretch;">
+  <section style="flex: 1 1 300px; min-width: 0; background: var(--bg-100); border-right: 1px solid var(--line-200); display: flex; flex-direction: column;">
+   <div style="padding: 10px 12px; border-bottom: 1px solid var(--line-200); display: flex; flex-direction: column; gap: 8px;">
+    <div style="display: flex; align-items: center; gap: 8px;"><span class="t-title">Domains</span><span class="hq-count">25</span><span class="grow"></span><button class="hq-btn hq-btn--sm hq-btn--icon" type="button" aria-label="Domain hinzufügen"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button></div>
+    <div class="hq-inputgroup"><span class="affix"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span><input class="hq-input" placeholder="Domain suchen" aria-label="Domain suchen"></div>
+   </div>
+   <span class="eyebrow" style="padding: 12px 12px 4px;">Braucht Aufmerksamkeit</span>
+   <nav class="hq-nav" aria-label="Domains" style="padding-top: 0;">
+    <a href="#"><i class="hq-shape hq-shape--tri is-warn"></i><span class="mono">followerx.ae</span><span class="mono" style="margin-left: auto; font-size: 12px; color: var(--warn);">20 T</span></a>
+    <a href="#"><i class="hq-shape hq-shape--square is-danger"></i><span class="mono">chatteo.de</span><span class="muted" style="margin-left: auto; font-size: 12px;">DKIM fehlt</span></a>
+    <span class="eyebrow">Alle</span>
+    <a href="#" aria-current="page"><i class="hq-shape hq-shape--dot is-ok"></i><span class="mono">jasondevine.de</span></a>
+    <a href="#"><i class="hq-shape hq-shape--dot is-ok"></i><span class="mono">followerpilot.de</span></a>
+    <a href="#"><i class="hq-shape hq-shape--dot is-ok"></i><span class="mono">followerx.de</span></a>
+    <a href="#"><i class="hq-shape hq-shape--dot is-ok"></i><span class="mono">twentyfirst.media</span></a>
+    <a href="#"><i class="hq-shape hq-shape--dot is-ok"></i><span class="mono">twentyfirst.ai</span></a>
+    <a href="#"><i class="hq-shape hq-shape--dot is-ok"></i><span class="mono">marketingpionier.de</span></a>
+    <span class="eyebrow">+ 17 weitere</span>
+   </nav>
+  </section>
+
+  <main style="flex: 3 1 640px; min-width: 0; padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+   <div style="display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;">
+    <div style="display: flex; flex-direction: column; gap: 4px; flex: 1 1 280px;"><span class="eyebrow">Domain</span><h1 class="t-display mono" style="margin: 0; font-family: var(--font-mono); letter-spacing: -0.03em;">jasondevine.de</h1></div>
+    <button class="hq-btn" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Record hinzufügen</button>
+   </div>
+
+   <div class="hq-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+    <div class="hq-cell"><span class="eyebrow">Registrar</span><span class="t-title">One.com</span></div>
+    <div class="hq-cell"><span class="eyebrow">DNS</span><span class="t-title">Cloudflare</span></div>
+    <div class="hq-cell"><span class="eyebrow">Läuft ab</span><span class="t-title mono">18.03.2027</span><span class="t-caption">in 156 Tagen</span></div>
+    <div class="hq-cell"><span class="eyebrow">SSL</span><span class="hq-status"><i class="hq-shape hq-shape--dot is-ok"></i>Gültig bis 02.01.2027</span></div>
+    <div class="hq-cell"><span class="eyebrow">Mail</span><span class="t-title">One.com</span><span class="t-caption">Umzug zu Mailcow geplant</span></div>
+   </div>
+
+   <section style="border: 1px solid var(--line-200); background: var(--bg-100);">
+    <div class="hq-tabs" role="tablist"><button role="tab" type="button" aria-selected="true">DNS-Records<span class="hq-count">9</span></button><button role="tab" type="button">Mail-Authentifizierung</button><button role="tab" type="button">Postfächer<span class="hq-count">3</span></button><button role="tab" type="button">Verlauf</button></div>
+    <div class="hq-tablewrap">
+     <table class="hq-table">
+      <thead><tr><th>Typ</th><th>Name</th><th>Inhalt</th><th class="num">TTL</th><th>Proxy</th><th></th></tr></thead>
+      <tbody>
+       <tr><td><span class="hq-badge hq-badge--mono">A</span></td><td class="mono key">jasondevine.de</td><td class="mono">49.13.204.18</td><td class="num">Auto</td><td>Proxied</td><td class="num"><button class="hq-btn hq-btn--sm hq-btn--ghost hq-btn--icon" type="button" aria-label="Aktionen"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td></tr>
+       <tr><td><span class="hq-badge hq-badge--mono">CNAME</span></td><td class="mono key">www</td><td class="mono">jasondevine.de</td><td class="num">Auto</td><td>Proxied</td><td class="num"><button class="hq-btn hq-btn--sm hq-btn--ghost hq-btn--icon" type="button" aria-label="Aktionen"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td></tr>
+       <tr><td><span class="hq-badge hq-badge--mono">MX</span></td><td class="mono key">jasondevine.de</td><td class="mono">10 mx1.one.com</td><td class="num">3600</td><td class="muted">DNS only</td><td class="num"><button class="hq-btn hq-btn--sm hq-btn--ghost hq-btn--icon" type="button" aria-label="Aktionen"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td></tr>
+       <tr><td><span class="hq-badge hq-badge--mono">TXT</span></td><td class="mono key">jasondevine.de</td><td class="mono truncate" style="max-width: 320px;">v=spf1 include:_spf.one.com ~all</td><td class="num">3600</td><td class="muted">DNS only</td><td class="num"><button class="hq-btn hq-btn--sm hq-btn--ghost hq-btn--icon" type="button" aria-label="Aktionen"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td></tr>
+       <tr><td><span class="hq-badge hq-badge--mono">TXT</span></td><td class="mono key">_dmarc</td><td class="mono">v=DMARC1; p=none</td><td class="num">3600</td><td class="muted">DNS only</td><td class="num"><button class="hq-btn hq-btn--sm hq-btn--ghost hq-btn--icon" type="button" aria-label="Aktionen"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td></tr>
+      </tbody>
+     </table>
+    </div>
+   </section>
+
+   <section style="border: 1px solid var(--line-200); background: var(--bg-100);">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line-200); flex-wrap: wrap;"><span class="t-title">Mail-Authentifizierung · alle Domains</span><span class="grow"></span><span class="t-caption">Checkliste für den Mail-Umzug</span></div>
+    <div class="hq-tablewrap">
+     <table class="hq-table hq-table--grid">
+      <thead><tr><th>Domain</th><th>MX</th><th>SPF</th><th>DKIM</th><th>DMARC</th><th>Mail bei</th></tr></thead>
+      <tbody>
+       <tr><td class="mono key">chatteo.de</td><td><span class="hq-status"><i class="hq-shape hq-shape--dot is-ok"></i><span class="txt">ok</span></span></td><td><span class="hq-status"><i class="hq-shape hq-shape--tri is-warn"></i><span class="txt">~all</span></span></td><td><span class="hq-status"><i class="hq-shape hq-shape--square is-danger"></i><span class="txt">fehlt</span></span></td><td><span class="hq-status"><i class="hq-shape hq-shape--square is-danger"></i><span class="txt">fehlt</span></span></td><td class="muted">One.com</td></tr>
+       <tr><td class="mono key">jasondevine.de</td><td><span class="hq-status"><i class="hq-shape hq-shape--dot is-ok"></i><span class="txt">ok</span></span></td><td><span class="hq-status"><i class="hq-shape hq-shape--dot is-ok"></i><span class="txt">ok</span></span></td><td><span class="hq-status"><i class="hq-shape hq-shape--dot is-ok"></i><span class="txt">ok</span></span></td><td><span class="hq-status"><i class="hq-shape hq-shape--tri is-warn"></i><span class="txt">p=none</span></span></td><td class="muted">One.com</td></tr>
+       <tr><td class="mono key">followerpilot.de</td><td><span class="hq-status"><i class="hq-shape hq-shape--dot is-ok"></i><span class="txt">ok</span></span></td><td><span class="hq-status"><i class="hq-shape hq-shape--dot is-ok"></i><span class="txt">ok</span></span></td><td><span class="hq-status"><i class="hq-shape hq-shape--dot is-ok"></i><span class="txt">ok</span></span></td><td><span class="hq-status"><i class="hq-shape hq-shape--dot is-ok"></i><span class="txt">quarantine</span></span></td><td>Mailcow</td></tr>
+      </tbody>
+     </table>
+    </div>
+   </section>
+  </main>
+ </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"density":{"editor":"enum","options":["compact","comfortable"],"default":"compact"},"$preview":{"width":1440,"height":960}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { theme: this.props.theme ?? 'dark', density: this.props.density ?? 'compact' };
+  }
+}
+</script>
+</body>
+</html>

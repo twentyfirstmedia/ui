@@ -1,0 +1,39 @@
+<!-- @dsCard group="Pages" height=780 width=1280 page subtitle="Workflow builder with a live test run that stops at the approval step" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>WorkflowScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  var AREAS = [['Workspace', 'home'], ['Customers', 'users'], ['Agents', 'bot'], ['Mail', 'mail'], ['Code', 'code'], ['Domains', 'globe'], ['Finance', 'card'], ['Files', 'folder'], ['Account', 'settings']];
+  function Shell(p) {
+    return h('div', { className: 'ha-shell', style: { position: 'relative' } },
+      h(H.TopBar, { brand: 'Halo', tag: 'Admin', active: p.area, items: AREAS.map(function (a) { return { label: a[0], icon: a[1], count: a[0] === 'Mail' ? 2 : null }; }), user: { name: 'Mara Ellis', email: 'mara@halo.app' },
+        extra: [h('button', { key: 's', type: 'button', className: 'ha-topbtn', 'aria-label': 'Search' }, h(H.Icon, { name: 'search', size: 15 }), 'Search', h('kbd', null, '⌘K')), h('button', { key: 'b', type: 'button', className: 'ha-topbtn icon', 'aria-label': 'Notifications' }, h(H.Icon, { name: 'bell', size: 17 }), h('span', { className: 'ha-nav-count' }, 4))] }),
+      h('div', { className: 'ha-sheet', style: { gridTemplateColumns: '200px minmax(0, 1fr)' + (p.side ? ' 300px' : ''), alignItems: 'start' } },
+        h(H.SubNav, { eyebrow: p.area, action: p.action, current: p.current, items: p.pages }),
+        h('main', { className: 'ha-main' }, p.children), p.side || null),
+      p.overlay || null);
+  }
+  function App() {
+    var run = React.useState(null);
+    React.useEffect(function () { if (run[0] == null || run[0] === 3 || run[0] >= 5) return; var t = setTimeout(function () { run[1](run[0] + 1); }, 800); return function () { clearTimeout(t); }; }, [run[0]]);
+    return h(Shell, { area: 'Agents', current: 'workflows', action: { label: 'New agent', icon: 'plus' }, pages: [{ id: 'fleet', label: 'Fleet', icon: 'bot' }, { id: 'chat', label: 'Chat', icon: 'mail' }, { id: 'workflows', label: 'Workflows', icon: 'zap' }, { id: 'runs', label: 'Runs', icon: 'refresh', count: 2 }, { id: 'knowledge', label: 'Knowledge', icon: 'book' }, { id: 'usage', label: 'Usage & cost', icon: 'chart' }] },
+      h('div', { className: 'ha-in' }, h(H.PageHeader, { title: 'Workflows', subtitle: 'Chain agents, approvals and actions', actions: [h(H.Button, { key: 'n', icon: 'plus' }, 'New workflow')] })),
+      h('div', { style: { display: 'grid', gridTemplateColumns: 'minmax(0, 300px) minmax(0, 1fr)', gap: 16, alignItems: 'start' } },
+        h('div', { className: 'ha-panel ha-panel-flush ha-in', style: { '--d': '80ms' } }, h(H.Stagger, { className: 'ha-list' }, h(H.ListRow, { active: true, leading: h(H.TintIcon, { icon: 'zap', tint: 'mint' }), title: 'Support replies', subtitle: '5 steps · 214 runs', trailing: h(H.Badge, { tone: 'success' }, 'On') }), h(H.ListRow, { leading: h(H.TintIcon, { icon: 'zap', tint: 'mint' }), title: 'Receipt to booking', subtitle: '5 steps · 96 runs', trailing: h(H.Badge, { tone: 'success' }, 'On') }), h(H.ListRow, { leading: h(H.TintIcon, { icon: 'zap', tint: 'plain' }), title: 'Lead research', subtitle: '3 steps · 37 runs', trailing: h(H.Badge, null, 'Off') }))),
+        h('div', { className: 'ha-panel ha-in', style: { '--d': '160ms', gap: 16 } },
+          h('div', { className: 'ha-header', style: { alignItems: 'center' } }, h('h2', { className: 'ha-panel-title' }, 'Support replies'), h(H.Button, { variant: 'soft', icon: 'play', disabled: run[0] != null && run[0] < 5, onClick: function () { run[1](0); } }, run[0] != null && run[0] < 5 ? 'Running…' : 'Test run')),
+          h(H.Flow, { active: run[0], waiting: run[0] === 3, onApprove: function () { run[1](4); }, onReject: function () { run[1](null); }, tools: function () { return [h(H.IconButton, { key: 'e', icon: 'edit', label: 'Edit step', size: 'sm' }), h(H.IconButton, { key: 't', icon: 'trash', label: 'Remove step', size: 'sm' })]; }, steps: [{ kind: 'trigger', text: 'New email arrives in Inbox' }, { kind: 'condition', text: 'Label is Customers' }, { kind: 'agent', text: 'Atlas drafts a reply from the knowledge base' }, { kind: 'approval', text: 'Mara approves the draft' }, { kind: 'action', text: 'Send the reply and log it on the company' }] }))));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

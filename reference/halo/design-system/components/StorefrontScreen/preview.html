@@ -1,0 +1,32 @@
+<!-- @dsCard group="Pages" height=900 width=1280 page subtitle="Customer storefront: product page with gallery, variants, stock and add to cart" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>StorefrontScreen</title></head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+    var AREAS = [['Workspace', 'home'], ['Customers', 'users'], ['Shop', 'cart'], ['Agents', 'bot'], ['Mail', 'mail'], ['Code', 'code'], ['Domains', 'globe'], ['Finance', 'card'], ['Files', 'folder'], ['Account', 'settings']];
+  function Shell(p) {
+    return h('div', { className: 'ha-shell', style: { position: 'relative' } },
+      h(H.TopBar, { brand: 'Halo', tag: 'Admin', active: p.area, items: AREAS.map(function (a) { return { label: a[0], icon: a[1], count: a[0] === 'Mail' ? 2 : null }; }), user: { name: 'Mara Ellis', email: 'mara@halo.app' },
+        extra: [h('button', { key: 's', type: 'button', className: 'ha-topbtn', 'aria-label': 'Search' }, h(H.Icon, { name: 'search', size: 15 }), 'Search', h('kbd', null, '⌘K')), h('button', { key: 'b', type: 'button', className: 'ha-topbtn icon', 'aria-label': 'Notifications' }, h(H.Icon, { name: 'bell', size: 17 }), h('span', { className: 'ha-nav-count' }, 4))] }),
+      h('div', { className: 'ha-sheet', style: { gridTemplateColumns: '208px minmax(0, 1fr)' + (p.side ? ' 304px' : ''), alignItems: 'start' } },
+        h(H.SubNav, { eyebrow: p.area, action: p.action, current: p.current, items: p.pages }),
+        h('main', { className: 'ha-main' }, p.children), p.side || null),
+      p.overlay || null);
+  }
+
+  function App() {
+    return h('div', { style: { borderRadius: 30, background: 'var(--canvas)', overflow: 'hidden', boxShadow: 'inset 0 0 0 1px var(--line)' } },
+      h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', background: 'var(--surface)', borderBottom: '1px solid var(--line)' } }, h('b', { style: { font: '700 20px/26px var(--font-sans)' } }, 'Halo Goods'), h('div', { className: 'ha-row' }, h(H.IconButton, { icon: 'heart', label: 'Saved' }), h(H.Button, { icon: 'cart' }, 'Cart'))),
+      h('div', { style: { display: 'grid', gridTemplateColumns: 'minmax(0, 1.1fr) minmax(0, 1fr)', gap: 32, padding: 24 } },
+        h('div', { className: 'ha-col' }, h(H.ProductArt, { kind: 'tee', tint: 'sky' }), h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 } }, ['sky', 'mint', 'butter', 'lilac'].map(function (t) { return h(H.ProductArt, { key: t, kind: 'tee', tint: t }); }))),
+        h('div', { className: 'ha-col', style: { gap: 20 } }, h(H.Breadcrumb, { items: ['Shop', 'Apparel', 'Halo Cotton Tee'] }), h('h1', { style: { margin: 0, font: '700 28px/34px var(--font-sans)' } }, 'Halo Cotton Tee'), h(H.Rating, { value: 4.7, count: 128 }), h(H.Price, { value: 32, compareAt: 39, size: 'lg' }),
+          h(H.VariantPicker, { label: 'Colour', type: 'color', defaultValue: 'Sky', options: [{ value: 'Sky', label: 'Sky', color: '#9fc3f0' }, { value: 'Ink', label: 'Ink', color: '#1d1d1f' }, { value: 'Bone', label: 'Bone', color: '#ece6d9' }] }),
+          h(H.VariantPicker, { label: 'Size', defaultValue: 'M', options: [{ value: 'XS', label: 'XS', disabled: true }, 'S', 'M', 'L', 'XL'] }), h(H.StockBadge, { stock: 84 }), h(H.Button, { icon: 'cart' }, 'Add to cart · €32'))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

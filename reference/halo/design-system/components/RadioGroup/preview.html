@@ -1,0 +1,22 @@
+<!-- @dsCard group="Forms" height=300 width=760 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+
+  function App() {
+    var a = useState('Team'), b = useState('Monthly');
+    return h('div', { className: 'ha-panel', style: { gap: 24 } },
+      h(H.RadioGroup, { label: 'Plan', cards: true, value: a[0], onChange: a[1], options: [{ value: 'Starter', label: 'Starter', hint: '€9 per seat · 3 projects' }, { value: 'Team', label: 'Team', hint: '€24 per seat · unlimited' }, { value: 'Business', label: 'Business', hint: 'SSO, audit log, SLA' }] }),
+      h('div', { style: { display: 'flex', gap: 48, flexWrap: 'wrap', alignItems: 'flex-start' } },
+        h(H.RadioGroup, { label: 'Invoice reminders', defaultValue: 'due', options: [{ value: 'never', label: 'Never' }, { value: 'due', label: 'On the due date' }, { value: 'weekly', label: 'Weekly until paid', hint: 'Stops when the bank feed matches it' }] }),
+        h('div', { className: 'ha-field' }, h('span', { className: 'ha-field-label' }, 'Billing'), h(H.Segmented, { label: 'Billing', value: b[0], onChange: b[1], options: ['Monthly', 'Yearly'] })),
+        h('div', { className: 'ha-field' }, h('span', { className: 'ha-field-label' }, 'View'), h(H.Segmented, { label: 'View', size: 'sm', defaultValue: 'grid', options: [{ value: 'grid', label: 'Grid', icon: 'grid' }, { value: 'list', label: 'List', icon: 'menu' }] }))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

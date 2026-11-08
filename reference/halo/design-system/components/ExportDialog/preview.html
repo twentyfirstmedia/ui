@@ -1,0 +1,14 @@
+<!-- @dsCard group="Overlays" height=620 width=900 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  render(h('div', { style: { display: 'grid', placeItems: 'center', padding: 24, background: 'var(--canvas)', borderRadius: 24 } }, h(H.ExportDialog, { inline: true, title: 'Export orders', count: 4812, formats: ['csv', 'xlsx', 'json'], columns: [{ key: 'id', label: 'Order number' }, { key: 'date', label: 'Date' }, { key: 'customer', label: 'Customer' }, { key: 'product', label: 'Product' }, { key: 'net', label: 'Net' }, { key: 'vat', label: 'VAT' }, { key: 'email', label: 'Email', default: false }, { key: 'ip', label: 'IP address', default: false }], note: 'Personal data is only included when you pick those columns.', onExport: function (o, prog) { return new Promise(function (r) { var x = 0; var t = setInterval(function () { x += 20; prog(x); if (x >= 100) { clearInterval(t); r(); } }, 300); }); }, onClose: function () {} })));
+</script>
+</body>
+</html>

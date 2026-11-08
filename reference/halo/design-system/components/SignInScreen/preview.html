@@ -1,0 +1,41 @@
+<!-- @dsCard group="Pages" height=800 width=1280 page subtitle="Split sign-in screen with form and live product tiles" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>SignInScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  function App() {
+    return h('div', { className: 'ha-shell', style: { padding: 8 } },
+      h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: 8, minHeight: 760 } },
+        h('div', { className: 'ha-sheet', style: { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 48, gridTemplateColumns: 'none' } },
+          h('span', { className: 'ha-brand ha-in', style: { color: 'var(--ink)', fontSize: 20 } }, 'Halo', h('span', { className: 'ha-brand-dot' })),
+          h('div', { className: 'ha-col', style: { gap: 18, maxWidth: 380, alignSelf: 'center', width: '100%' } },
+            h('div', { className: 'ha-in', style: { '--d': '80ms' } }, h('h1', { className: 'ha-header-title', style: { fontSize: 34, lineHeight: '40px' } }, 'Welcome back'), h('p', { className: 'ha-header-sub', style: { fontSize: 14 } }, 'Sign in to pick up where your team left off.')),
+            h(H.Stagger, { className: 'ha-col', style: { gap: 16 }, delay: 160 },
+              h(H.Button, { variant: 'secondary', icon: 'globe', style: { height: 44 } }, 'Continue with Google'),
+              h('div', { className: 'ha-row', style: { gap: 12, color: 'var(--ink-muted)', fontSize: 12, fontWeight: 600 } }, h('span', { style: { flex: 1, height: 1, background: 'var(--line)' } }), 'or with email', h('span', { style: { flex: 1, height: 1, background: 'var(--line)' } })),
+              h(H.Input, { label: 'Work email', placeholder: 'you@company.com' }),
+              h(H.Input, { label: 'Password', type: 'password', placeholder: '••••••••••' }),
+              h('div', { className: 'ha-row', style: { justifyContent: 'space-between' } }, h(H.Checkbox, { defaultChecked: true }, 'Keep me signed in'), h('a', { href: '#', style: { font: '600 12.5px var(--font-sans)', color: 'var(--ink)' } }, 'Forgot password?')),
+              h(H.Button, { iconRight: 'arrowUpRight', style: { height: 46 } }, 'Sign in'))),
+          h('span', { className: 'ha-card-desc ha-in', style: { '--d': '500ms' } }, 'New to Halo? ', h('a', { href: '#', style: { color: 'var(--ink)', fontWeight: 700 } }, 'Create a workspace'))),
+        h('div', { style: { position: 'relative', borderRadius: 24, overflow: 'hidden', padding: 40, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 16 } },
+          h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 'auto' }, delay: 200 },
+            h(H.StatTile, { tint: 'sky', value: '1,284', label: 'Members this month' }), h(H.StatTile, { tint: 'butter', value: '$48,210', label: 'Collected' }),
+            h('div', { className: 'ha-card ha-bg-lilac', style: { gridColumn: 'span 2', minHeight: 0 } }, h('span', { className: 'ha-card-title', style: { padding: 0 } }, 'Pricing page refresh'), h(H.Progress, { value: 64, label: 'Progress' }), h('div', { className: 'ha-row', style: { justifyContent: 'space-between' } }, h(H.Badge, { tone: 'success', live: true }, 'On track'), h(H.AvatarStack, { names: ['Mara Ellis', 'Jonah Petit', 'Sun Lee'], size: 26 }))),
+            h(H.EventCard, { kind: 'meeting', label: 'Team sync', date: 'Tue', time: '10:30', actions: false }, 'Roadmap check-in.'),
+            h(H.EventCard, { kind: 'launch', label: 'Launch', date: 'Fri', time: '17:00', actions: false }, 'Annual plans go live.')),
+          h('div', { className: 'ha-in', style: { '--d': '700ms', color: 'var(--on-frame)' } }, h('div', { style: { font: '700 26px/32px var(--font-sans)', letterSpacing: '-0.015em' } }, 'Every decision your team is waiting on, in one calm place.'), h('div', { style: { color: 'var(--on-frame-muted)', marginTop: 8, fontSize: 13 } }, 'Projects, people, billing and schedule — side by side.')))));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!-- @dsCard group="Commerce" height=620 width=1000 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  render(h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'start' } },
+    h(H.ReviewCard, { author: 'Jonas P.', verified: true, product: '1,000 followers', date: '2 days ago', rating: 2, state: 'pending', title: 'Slower than promised', text: 'Arrived after two days instead of one hour. Support answered quickly though, so two stars. Would be great to get a refund for the delay.', highlight: ['refund'], onPublish: function () {}, onHide: function () {}, onReply: function () {} }),
+    h(H.ReviewCard, { author: 'Ida N.', product: 'TikTok views', date: '12 Apr', rating: 5, state: 'published', text: 'Fast, simple, worked exactly as described.', reply: 'Thanks Ida, glad it worked!', onHide: function () {}, onReply: function () {} })));
+</script>
+</body>
+</html>

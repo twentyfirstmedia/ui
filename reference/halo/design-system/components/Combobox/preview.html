@@ -1,0 +1,23 @@
+<!-- @dsCard group="Forms" height=420 width=760 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+
+  var TZ = ['Europe/Berlin (UTC+1)', 'Europe/London (UTC+0)', 'Asia/Dubai (UTC+4)', 'Asia/Singapore (UTC+8)', 'America/New_York (UTC−5)', 'America/Los_Angeles (UTC−8)'];
+  var PEOPLE = [{ value: 'ava', label: 'Ava Vogel', hint: 'Engineering', avatar: true }, { value: 'ben', label: 'Ben Okafor', hint: 'Sales', avatar: true }, { value: 'clara', label: 'Clara Haddad', hint: 'Design', avatar: true }, { value: 'elif', label: 'Elif Sato', hint: 'Engineering', avatar: true }];
+  function App() {
+    var t = useState('Asia/Dubai (UTC+4)'), p = useState(['ava', 'clara']), tags = useState(['urgent', 'q3']);
+    return h('div', { className: 'ha-panel', style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignContent: 'start' } },
+      h(H.Combobox, { label: 'Time zone', options: TZ, value: t[0], onChange: t[1], placeholder: 'Search time zones' }),
+      h(H.Combobox, { label: 'Reviewers', multiple: true, options: PEOPLE, value: p[0], onChange: p[1], placeholder: 'Add people' }),
+      h(H.Combobox, { label: 'Label', creatable: true, options: ['Customers', 'Agents', 'Finance'], placeholder: 'Pick or create', hint: 'Type a new name to create it' }),
+      h(H.TagInput, { label: 'Tags', value: tags[0], onChange: tags[1] }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

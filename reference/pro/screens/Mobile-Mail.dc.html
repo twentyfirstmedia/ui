@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>HQ Mobile · Mail</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="hq-tokens.css">
+<link rel="stylesheet" href="ds/hq/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="hq" data-theme="{{theme}}" data-density="comfortable" style="width: 390px; height: 844px; box-sizing: border-box; background: var(--bg-000); color: var(--fg-100); font-family: var(--font-sans); display: flex; flex-direction: column; overflow: hidden;">
+ <header style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; background: var(--bg-100); border-bottom: 1px solid var(--line-200);">
+  <div style="display: flex; align-items: center; gap: 8px;">
+   <button class="hq-btn" type="button" style="flex: 1 1 auto; justify-content: flex-start; height: 40px; background: var(--bg-300); min-width: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg><span class="truncate">Alle Postfächer</span><span class="grow"></span><span class="hq-count">27</span><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg></button>
+   <button class="hq-btn hq-btn--primary hq-btn--icon" type="button" aria-label="Neue Mail" style="width: 40px; height: 40px;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg></button>
+  </div>
+  <div class="hq-seg" role="group" aria-label="Filter" style="align-self: stretch; display: flex;"><button type="button" aria-pressed="true" style="flex: 1; justify-content: center; height: 32px;">Alle</button><button type="button" style="flex: 1; justify-content: center; height: 32px;">Ungelesen</button><button type="button" style="flex: 1; justify-content: center; height: 32px;">Agent-Entwürfe</button></div>
+ </header>
+
+ <ul class="hq-inbox" style="flex: 1 1 auto; overflow: hidden; background: var(--bg-100);">
+  <li class="is-unread" style="padding: 12px;"><span class="unread"></span><span class="from" style="font-size: 15px;">Markus Schmidt</span><time>14:02</time><span class="subj" style="font-size: 14px;">Erstattung Bestellung #4182 <span class="snip">— leider ist das Paket …</span></span><span class="tags"><span class="hq-badge hq-badge--signal"><i class="hq-shape hq-shape--diamond is-signal"></i>Entwurf bereit</span><span class="hq-badge hq-badge--mono">support@followerpilot.de</span></span></li>
+  <li class="is-unread" style="padding: 12px;"><span class="unread"></span><span class="from" style="font-size: 15px;">Hetzner Online</span><time>11:40</time><span class="subj" style="font-size: 14px;">Ihre Rechnung 2026-10 <span class="snip">— Anbei Ihre Rechnung …</span></span><span class="tags"><span class="hq-badge hq-badge--info">Beleg erkannt</span><span class="hq-badge hq-badge--mono">business@followerx.de</span></span></li>
+  <li class="is-unread" style="padding: 12px;"><span class="unread"></span><span class="from" style="font-size: 15px;">Instagram</span><time>10:12</time><span class="subj" style="font-size: 14px;">Neue Anmeldung bei deinem Konto</span><span class="tags"><span class="hq-badge hq-badge--mono">hello@jasondevine.de</span></span></li>
+  <li style="padding: 12px;"><span></span><span class="from" style="font-size: 15px;">Julia Weber</span><time>Mo</time><span class="subj" style="font-size: 14px;">Kooperation Herbstkollektion</span><span class="tags"><span class="hq-badge hq-badge--ok"><i class="hq-shape hq-shape--dot is-ok"></i>Beantwortet · Agent</span></span></li>
+  <li style="padding: 12px;"><span></span><span class="from" style="font-size: 15px;">Anna Krüger</span><time>So</time><span class="subj" style="font-size: 14px;">Frage zu Chatteo Enterprise</span><span class="tags"><span class="hq-badge hq-badge--info"><i class="hq-shape hq-shape--pulse is-info"></i>Lead Researcher arbeitet</span></span></li>
+  <li style="padding: 12px;"><span></span><span class="from" style="font-size: 15px;">Stripe</span><time>Mo</time><span class="subj" style="font-size: 14px;">Auszahlung über 4.812,40 € unterwegs</span><span class="tags"><span class="hq-badge hq-badge--mono">business@followerx.de</span></span></li>
+ </ul>
+
+ <nav class="hq-tabbar" aria-label="Navigation">
+  <a href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>Stadt</a>
+  <a href="Mobile-Freigabe.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg>Freigaben<span class="hq-count hq-count--signal">3</span></a>
+  <a href="#" aria-current="page"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Mail<span class="hq-count">27</span></a>
+  <a href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>Finanzen</a>
+  <a href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>Mehr</a>
+ </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { theme: this.props.theme ?? 'dark' };
+  }
+}
+</script>
+</body>
+</html>

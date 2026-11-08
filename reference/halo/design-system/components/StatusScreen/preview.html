@@ -1,0 +1,15 @@
+<!-- @dsCard group="Pages" height=1060 width=1100 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>StatusScreen</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 } },
+    h('div', { className: 'ha-panel' }, h(H.StatusScreen, { code: '404' })), h('div', { className: 'ha-panel' }, h(H.StatusScreen, { code: '500', reference: 'req_8f2a91c4' })),
+    h('div', { className: 'ha-panel' }, h(H.StatusScreen, { code: 'maintenance', extra: h('div', { style: { width: '100%', maxWidth: 300 } }, h(H.UsageMeter, { label: 'Upgrade progress', used: 72, limit: 100, format: function (v) { return v + '%'; } })) })), h('div', { className: 'ha-panel' }, h(H.StatusScreen, { code: 'offline', actions: [h(H.Button, { key: 'r', icon: 'refresh' }, 'Try again')] }))));
+</script>
+</body>
+</html>

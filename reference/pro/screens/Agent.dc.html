@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>HQ · Support-Agent</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="hq-tokens.css">
+<link rel="stylesheet" href="ds/hq/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="hq" data-theme="{{theme}}" data-density="{{density}}" style="background: var(--bg-000); color: var(--fg-100); font-family: var(--font-sans); min-height: 940px; display: flex; flex-direction: column;">
+
+ <header class="hq-topbar" style="border-bottom: 1px solid var(--line-200); flex-wrap: wrap;">
+  <a class="hq-wordmark" href="Main.dc.html" style="margin-right: 8px;"><b>HQ</b><span>twentyfirst</span></a>
+  <div class="hq-crumbs"><a href="Stadt.dc.html" style="text-decoration: none;">Stadt</a><span class="sep">/</span><span>FollowerPilot</span><span class="sep">/</span><span>Support</span><span class="sep">/</span><span class="cur">Support-Agent</span></div>
+  <span class="grow"></span>
+  <a class="hq-btn hq-btn--sm" href="Freigaben.dc.html"><i class="hq-shape hq-shape--diamond is-signal"></i>Freigaben<span class="hq-count hq-count--signal">3</span></a>
+  <span class="hq-avatar hq-avatar--human">RT</span>
+ </header>
+
+ <div style="display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-100); border-bottom: 1px solid var(--line-200); flex-wrap: wrap;">
+  <span class="hq-avatar hq-avatar--lg">SA<i class="hq-shape hq-shape--diamond is-signal"></i></span>
+  <div style="display: flex; flex-direction: column;"><span class="t-heading">Support-Agent</span><span class="t-caption">Support · FollowerPilot · berichtet an Head Support</span></div>
+  <span class="hq-badge hq-badge--signal"><i class="hq-shape hq-shape--diamond is-signal"></i>Wartet auf Freigabe</span>
+  <span class="grow"></span>
+  <span class="hq-badge hq-badge--mono">claude-haiku-5-5</span>
+  <span class="mono muted" style="font-size: 12px;">2,18 € heute · 41 Läufe</span>
+  <a class="hq-btn hq-btn--sm" href="Chats-Sprache.dc.html"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 10v3" /> <path d="M6 6v11" /> <path d="M10 3v18" /> <path d="M14 8v7" /> <path d="M18 5v13" /> <path d="M22 10v3" /> </svg>Sprechen</a>
+  <button class="hq-btn hq-btn--sm" type="button">Pausieren</button>
+ </div>
+ <div class="hq-tabs" role="tablist" style="background: var(--bg-100);"><button role="tab" type="button" aria-selected="true">Chat</button><button role="tab" type="button">Aktivität</button><button role="tab" type="button">Konfiguration</button><button role="tab" type="button">Auslöser<span class="hq-count">2</span></button><button role="tab" type="button">Kosten</button><button role="tab" type="button">Feedback<span class="hq-count">4</span></button></div>
+
+ <div style="flex: 1 1 auto; display: flex; flex-wrap: wrap; align-items: stretch;">
+  <section style="flex: 3 1 560px; min-width: 0; display: flex; flex-direction: column; background: var(--bg-100); border-right: 1px solid var(--line-200);">
+   <div class="hq-thread" style="flex: 1 1 auto;">
+    <div class="hq-msg"><span class="hq-avatar">SA</span><div><div class="head"><b>Support-Agent</b><span class="role">neue Mail · support@followerpilot.de</span><time>14:02</time></div><div class="text">Markus Schmidt möchte die volle Erstattung für #4182 (79,00 €), Paket beschädigt, Fotos liegen bei. Ich habe die Bestellung geprüft.
+     <details class="hq-tool" open><summary><i class="hq-shape hq-shape--dot is-ok"></i><span class="name">followerpilot.orders.get</span><span>(4182)</span><span class="meta">0,4 s · 0,001 €</span></summary><pre>status: delivered · amount: 79,00 € · paid: stripe
+customer_since: 2024 · orders: 7 · refunds: 0</pre></details>
+     <details class="hq-tool"><summary><i class="hq-shape hq-shape--dot is-ok"></i><span class="name">mail.draft</span><span>(reply)</span><span class="meta">1,1 s · 0,002 €</span></summary></details>
+    </div></div></div>
+    <div class="hq-msg"><span class="hq-avatar">SA</span><div><div class="head"><b>Support-Agent</b><time>14:03</time></div><div class="text">Treuer Kunde ohne frühere Erstattungen. Ich schlage die volle Erstattung vor. Das liegt über meinem Limit von 50 €, deshalb frage ich.</div>
+     <div class="hq-approval" style="margin-top: 10px; max-width: 560px;">
+      <header><i class="hq-shape hq-shape--diamond is-signal"></i><span class="t">Freigabe nötig</span><span class="who">· Antwort mit Erstattung 79,00 €</span></header>
+      <div class="hq-options">
+       <button class="hq-option hq-option--primary" type="button"><span class="hq-kbd">A</span>Ja, so ausführen</button>
+       <button class="hq-option" type="button"><span class="hq-kbd">B</span>Ja, mit Änderung</button>
+       <button class="hq-option" type="button"><span class="hq-kbd">C</span>Nein, verwerfen</button>
+       <button class="hq-option" type="button" style="border-bottom: 0;"><span class="hq-kbd">D</span>Andere Anweisung …</button>
+      </div>
+     </div>
+    </div></div>
+    <div class="hq-msg hq-msg--human"><span class="hq-avatar hq-avatar--human">RT</span><div><div class="head"><b>Robin</b><time>14:09</time></div><div class="text">Wenn er Fotos schickt, kannst du bei Stammkunden künftig bis 100 € selbst erstatten.</div></div></div>
+    <div class="hq-msg"><span class="hq-avatar">SA</span><div><div class="head"><b>Support-Agent</b><time>14:09</time></div><div class="text">Verstanden. Das ändert meine Instruktion; ich lege es als Vorschlag beim Main Brain ab, damit es versioniert wird.</div>
+     <div style="display: flex; gap: 6px; margin-top: 8px;"><button class="hq-btn hq-btn--sm hq-btn--icon" type="button" aria-label="Gute Antwort"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg></button><button class="hq-btn hq-btn--sm hq-btn--icon" type="button" aria-label="Schlechte Antwort"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"/></svg></button></div>
+    </div></div>
+   </div>
+   <div class="hq-composer"><textarea aria-label="Nachricht an Support-Agent" placeholder="Nachricht an Support-Agent …"></textarea><div class="row"><label class="hq-btn hq-btn--ghost hq-btn--sm hq-btn--icon" aria-label="Datei anhängen" title="Datei anhängen (oder hineinziehen)"><input type="file" multiple><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" /> </svg></label><button class="hq-btn hq-btn--ghost hq-btn--sm hq-btn--icon" type="button" aria-label="Diktieren" title="Diktieren"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /> <path d="M19 10v2a7 7 0 0 1-14 0v-2" /> <line x1="12" x2="12" y1="19" y2="22" /> </svg></button><a class="hq-btn hq-btn--ghost hq-btn--sm hq-btn--icon" href="Chats-Sprache.dc.html" aria-label="Sprachgespräch starten" title="Sprachgespräch starten"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 10v3" /> <path d="M6 6v11" /> <path d="M10 3v18" /> <path d="M14 8v7" /> <path d="M18 5v13" /> <path d="M22 10v3" /> </svg></a><i class="vsep"></i><span class="hq-badge hq-badge--mono">haiku-5-5</span><span class="grow"></span><span class="t-caption">↵ senden · ⇧↵ Zeile</span><button class="hq-btn hq-btn--primary hq-btn--sm" type="button"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m5 12 7-7 7 7" /> <path d="M12 19V5" /> </svg>Senden</button></div></div>
+  </section>
+
+  <aside style="flex: 2 1 400px; min-width: 0; padding: 20px; display: flex; flex-direction: column; gap: 20px;">
+   <section class="hq-grid" style="grid-template-columns: minmax(0, 1fr);">
+    <div class="hq-cell"><span class="eyebrow">Konfiguration</span>
+     <dl class="hq-kv">
+      <dt>Modell</dt><dd class="mono">claude-haiku-5-5 <span class="muted">(Default Ausführer)</span></dd>
+      <dt>Tools</dt><dd><span style="display: flex; gap: 4px; flex-wrap: wrap;"><span class="hq-badge">mail.read</span><span class="hq-badge">mail.draft</span><span class="hq-badge hq-badge--outline">mail.send · Freigabe</span><span class="hq-badge">followerpilot.orders</span></span></dd>
+      <dt>Gedächtnis</dt><dd>Projekt FollowerPilot</dd>
+      <dt>Instruktion</dt><dd>Override v3 <span class="muted">· Code-Default v1</span></dd>
+     </dl>
+    </div>
+   </section>
+   <section style="border: 1px solid var(--line-200); background: var(--bg-100);">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line-200); flex-wrap: wrap;"><span class="t-title">Instruktion</span><span class="mono muted" style="font-size: 12px;">v1 → v3</span><span class="grow"></span><span class="t-caption">nach 4× Feedback „zu förmlich“</span></div>
+    <div class="hq-diff" style="border: 0;"><span class="ctx">Du bist der Support-Agent von FollowerPilot.</span><span class="del">Antworte förmlich und siezt Kunden.</span><span class="add">Antworte freundlich und direkt, sieze Kunden, vermeide Floskeln.</span><span class="ctx">Erstattungen bis 50 € darfst du selbst zusagen.</span><span class="add">Nenne immer eine konkrete Frist.</span></div>
+    <div style="display: flex; gap: 8px; justify-content: flex-end; padding: 10px 14px; border-top: 1px solid var(--line-200); flex-wrap: wrap;"><button class="hq-btn hq-btn--sm" type="button">Override verwerfen</button><button class="hq-btn hq-btn--sm hq-btn--primary" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" x2="6" y1="9" y2="21"/></svg>Als PR übernehmen</button></div>
+   </section>
+   <section style="border: 1px solid var(--line-200); background: var(--bg-100);">
+    <div style="padding: 10px 14px; border-bottom: 1px solid var(--line-200);"><span class="t-title">Auslöser</span></div>
+    <table class="hq-table">
+     <tbody>
+      <tr><td class="key">Neue Mail an support@followerpilot.de</td><td class="muted">Config</td><td class="num"><input type="checkbox" class="hq-switch" checked aria-label="Auslöser aktiv"></td></tr>
+      <tr><td class="key">Einmalig · Do 10:30 · nachfassen #4182</td><td class="muted">selbst</td><td class="num"><input type="checkbox" class="hq-switch" checked aria-label="Auslöser aktiv"></td></tr>
+     </tbody>
+    </table>
+   </section>
+  </aside>
+ </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"density":{"editor":"enum","options":["compact","comfortable"],"default":"compact"},"$preview":{"width":1440,"height":940}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { theme: this.props.theme ?? 'dark', density: this.props.density ?? 'compact' };
+  }
+}
+</script>
+</body>
+</html>

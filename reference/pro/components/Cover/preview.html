@@ -1,0 +1,45 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Cover</title>
+<style>
+  html, body { margin: 0; background: var(--bg-000); }
+  .cv { position: relative; width: 960px; height: 288px; overflow: hidden; background: var(--bg-000); }
+  .cv svg { position: absolute; inset: 0; }
+  .ink { fill: var(--fg-100); } .mid { fill: var(--fg-200); } .gra { fill: var(--line-300); } .sig { fill: var(--signal); }
+  .hl { stroke: var(--line-200); stroke-width: 1; fill: none; shape-rendering: crispEdges; }
+  .x { stroke: var(--line-300); stroke-width: 1; shape-rendering: crispEdges; }
+  .blk { rx: var(--radius-0); }
+  .name { position: absolute; left: 40px; bottom: 34px; width: 420px; }
+  .name h1 { margin: 0; font: 600 120px/0.9 var(--font-sans); letter-spacing: -0.045em; color: var(--fg-100); }
+  .name p { margin: 16px 0 0; font: 400 14px/20px var(--font-sans); color: var(--fg-300); }
+</style></head>
+<body>
+<div class="cv">
+<svg viewBox="0 0 960 288" width="960" height="288" aria-hidden="true">
+  <!--
+  blocks: fg-100 240×192 slab, fg-200 120×96, line-300 120×96, signal 120×48 (all on a 120 = 5×space-6 module, 1px hairline gaps)
+  arrangement: flush modular grid right of x=480, cells touching across line-200 hairlines, signal smallest at the bottom edge
+  pattern: plus marks at space-6 pitch in two empty cells — "precise, technical, mono, a hairline grid" is how the README describes HQ
+  scales: module 120px (space-6 × 5), pitch space-6 (24px), hairline 1px, radius-0 everywhere
+  -->
+  <g class="hl">
+    <line x1="480.5" y1="0" x2="480.5" y2="288"/><line x1="600.5" y1="0" x2="600.5" y2="288"/><line x1="720.5" y1="0" x2="720.5" y2="288"/><line x1="840.5" y1="0" x2="840.5" y2="288"/>
+    <line x1="480" y1="96.5" x2="960" y2="96.5"/><line x1="480" y1="192.5" x2="960" y2="192.5"/>
+  </g>
+  <rect class="ink blk" x="601" y="0" width="239" height="192"/>
+  <rect class="mid blk" x="481" y="97" width="119" height="95"/>
+  <rect class="gra blk" x="841" y="0" width="119" height="96"/>
+  <rect class="sig blk" x="841" y="240" width="119" height="48"/>
+  <g class="x" id="plus"></g>
+</svg>
+<div class="name"><h1>HQ</h1><p>Das Cockpit für Agents, Freigaben, Mail, Domains und Finanzen.</p></div>
+</div>
+<script>
+  var g = document.getElementById('plus'), ns = 'http://www.w3.org/2000/svg';
+  function plus(x, y) { [[x-4,y,x+4,y],[x,y-4,x,y+4]].forEach(function(c){ var l=document.createElementNS(ns,'line'); l.setAttribute('x1',c[0]+.5); l.setAttribute('y1',c[1]+.5); l.setAttribute('x2',c[2]+.5); l.setAttribute('y2',c[3]+.5); g.appendChild(l); }); }
+  for (var x = 504; x < 600; x += 24) for (var y = 24; y < 96; y += 24) plus(x, y);
+  for (var x2 = 624; x2 < 840; x2 += 24) for (var y2 = 216; y2 < 288; y2 += 24) plus(x2, y2);
+</script>
+</body>
+</html>

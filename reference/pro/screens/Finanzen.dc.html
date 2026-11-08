@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>HQ · Finanzen</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="hq-tokens.css">
+<link rel="stylesheet" href="ds/hq/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="hq" data-theme="{{theme}}" data-density="{{density}}" style="background: var(--bg-000); color: var(--fg-100); font-family: var(--font-sans); min-height: 1000px; display: flex; flex-wrap: wrap; align-items: stretch;">
+
+<aside style="flex: 0 0 52px; background: var(--bg-100); border-right: 1px solid var(--line-200); display: flex; flex-direction: column; align-items: center;">
+ <a href="Main.dc.html" class="hq-glyph" style="margin: 10px 0; text-decoration: none;" aria-label="HQ Übersicht">HQ</a>
+ <nav class="hq-nav" aria-label="Hauptnavigation" style="padding: 6px; align-items: center;">
+  <a href="Stadt.dc.html" aria-label="Stadt" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg></a>
+  <a href="Freigaben.dc.html" aria-label="Freigaben" style="width: 36px; justify-content: center; padding: 0; color: var(--signal);"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg></a>
+  <a href="Webmail.dc.html" aria-label="Webmail" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></a>
+  <a href="Domains.dc.html" aria-label="Domains und DNS" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></a>
+  <a href="#" aria-current="page" aria-label="Finanzen" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></a>
+ </nav>
+</aside>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column;">
+ <header class="hq-topbar" style="border-bottom: 1px solid var(--line-200); flex-wrap: wrap;">
+  <div class="hq-crumbs"><span>Finanzen</span><span class="sep">/</span><span class="cur">FollowerX GmbH</span><span class="sep">/</span><span>Oktober 2026</span></div>
+  <span class="grow"></span>
+  <button class="hq-btn hq-btn--sm" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>DATEV-Export</button>
+  <button class="hq-btn hq-btn--sm hq-btn--primary" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Neue Rechnung</button>
+  <span class="hq-avatar hq-avatar--human">RT</span>
+ </header>
+
+ <main style="padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+  <div style="display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;">
+   <div style="display: flex; flex-direction: column; gap: 4px; flex: 1 1 280px;"><span class="eyebrow">Finanzen</span><h1 class="t-display" style="margin: 0;">FollowerX GmbH</h1></div>
+   <div class="hq-seg" role="group" aria-label="Firma"><button type="button" aria-pressed="true">FollowerX GmbH</button><button type="button">Trepte Ventures UG</button><button type="button">Alle</button></div>
+   <div class="hq-seg" role="group" aria-label="Zeitraum"><button type="button" aria-pressed="true">Okt.</button><button type="button">Q4</button><button type="button">2026</button></div>
+  </div>
+
+  <div class="hq-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+   <div class="hq-cell hq-cell--lg"><span class="eyebrow">Erlöse netto</span><span class="t-numeric">50.620 €</span><span class="t-caption"><span class="mono" style="color: var(--ok);">▲ 12,4 %</span> vs. Sept.</span></div>
+   <div class="hq-cell hq-cell--lg"><span class="eyebrow">Aufwand netto</span><span class="t-numeric">1.880 €</span><span class="t-caption">davon KI-Dienste 1.240 €</span></div>
+   <div class="hq-cell hq-cell--lg"><span class="eyebrow">Ergebnis vor Steuern</span><span class="t-numeric">48.740 €</span><span class="t-caption">Marge 96,3 %</span></div>
+   <div class="hq-cell hq-cell--lg"><span class="eyebrow">USt-Zahllast</span><span class="t-numeric">9.181 €</span><span class="t-caption">geschätzt · fällig 10.11.</span></div>
+  </div>
+
+  <div class="hq-grid"><div class="hq-banner hq-banner--signal"><i class="hq-shape hq-shape--diamond is-signal"></i><div class="txt"><b>2 Belege aus Webmail warten.</b> <span>Hetzner Online 142,80 € · Anthropic 312,40 €, Firma und Projekt sind vorgeschlagen.</span></div><button class="hq-btn hq-btn--sm hq-btn--primary" type="button">Prüfen</button></div></div>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;">
+   <section style="flex: 2 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 0; border: 1px solid var(--line-200); background: var(--bg-100);">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line-200); flex-wrap: wrap;">
+     <span class="t-title">Buchungen</span><span class="grow"></span>
+     <button class="hq-btn hq-btn--sm" type="button">Projekt: alle</button><button class="hq-btn hq-btn--sm" type="button">Status: alle</button>
+     <div class="hq-inputgroup" style="width: 200px;"><span class="affix"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span><input class="hq-input" placeholder="Suchen" aria-label="Buchungen suchen"></div>
+    </div>
+    <div class="hq-tablewrap">
+     <table class="hq-table hq-table--grid">
+      <thead><tr><th>Datum</th><th>Beleg</th><th>Beschreibung</th><th>Kategorie</th><th>Projekt</th><th class="num">Netto</th><th class="num">USt</th><th class="num">Brutto</th><th>Status</th></tr></thead>
+      <tbody>
+       <tr><td class="mono">13.10.</td><td class="mono">ER-1182</td><td class="key">Hetzner Online · Server Okt.</td><td>Hosting</td><td><span class="hq-dotchip"><i style="background: #cf4646;"></i>FollowerPilot</span></td><td class="num neg">−120,00</td><td class="num neg">−22,80</td><td class="num neg">−142,80</td><td><span class="hq-badge hq-badge--signal"><i class="hq-shape hq-shape--diamond is-signal"></i>Vorschlag</span></td></tr>
+       <tr><td class="mono">12.10.</td><td class="mono">RE-0142</td><td class="key">Müller Digital GmbH · Beratung</td><td>Erlöse 19 %</td><td><span class="hq-dotchip"><i style="background: #194e9d;"></i>Chatteo</span></td><td class="num">1.042,02</td><td class="num">197,98</td><td class="num">1.240,00</td><td><span class="hq-badge hq-badge--ok"><i class="hq-shape hq-shape--dot is-ok"></i>Gebucht</span></td></tr>
+       <tr><td class="mono">11.10.</td><td class="mono">ER-1181</td><td class="key">Anthropic · API Sept.</td><td>KI-Dienste</td><td class="muted">aufgeteilt (3)</td><td class="num neg">−312,40</td><td class="num">0,00</td><td class="num neg">−312,40</td><td><span class="hq-badge hq-badge--signal"><i class="hq-shape hq-shape--diamond is-signal"></i>Vorschlag</span></td></tr>
+       <tr><td class="mono">10.10.</td><td class="mono">ST-2210</td><td class="key">Stripe · Auszahlung</td><td>Erlöse 19 %</td><td><span class="hq-dotchip"><i style="background: #cf4646;"></i>FollowerPilot</span></td><td class="num">4.044,03</td><td class="num">768,37</td><td class="num">4.812,40</td><td><span class="hq-badge hq-badge--ok"><i class="hq-shape hq-shape--dot is-ok"></i>Gebucht</span></td></tr>
+       <tr><td class="mono">08.10.</td><td class="mono">ER-1180</td><td class="key">Cloudflare · Pro Plan</td><td>Hosting</td><td class="muted">Global</td><td class="num neg">−21,01</td><td class="num neg">−3,99</td><td class="num neg">−25,00</td><td><span class="hq-badge hq-badge--ok"><i class="hq-shape hq-shape--dot is-ok"></i>Gebucht</span></td></tr>
+       <tr><td class="mono">05.10.</td><td class="mono">RE-0141</td><td class="key">Kanzlei Berg · AI-Workshop</td><td>Erlöse 19 %</td><td><span class="hq-dotchip"><i style="background: #6159e1;"></i>Twentyfirst AI</span></td><td class="num">2.000,00</td><td class="num">380,00</td><td class="num">2.380,00</td><td><span class="hq-badge"><i class="hq-shape hq-shape--ring is-idle"></i>Offen</span></td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="5">Saldo Oktober bis heute</td><td class="num">6.632,64</td><td class="num">1.319,56</td><td class="num">7.952,20</td><td></td></tr></tfoot>
+     </table>
+    </div>
+   </section>
+
+   <section style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; border: 1px solid var(--line-200); background: var(--bg-100);">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line-200);"><span class="t-title">GuV · 2026</span><span class="grow"></span><a href="#" style="font-size: 12px; color: var(--fg-200);">Vollständig</a></div>
+    <table class="hq-table">
+     <tbody>
+      <tr class="section"><td colspan="2">Erlöse</td></tr>
+      <tr><td>Umsatzerlöse 19 %</td><td class="num">129.300</td></tr>
+      <tr><td>Umsatzerlöse EU (Reverse Charge)</td><td class="num">6.530</td></tr>
+      <tr class="section"><td colspan="2">Aufwand</td></tr>
+      <tr><td>KI-Dienste &amp; APIs</td><td class="num neg">−3.440</td></tr>
+      <tr><td>Hosting &amp; Infrastruktur</td><td class="num neg">−1.860</td></tr>
+      <tr class="subtotal"><td>Ergebnis vor Steuern</td><td class="num">130.530</td></tr>
+      <tr><td class="muted">Steuern (geschätzt)</td><td class="num neg">−39.159</td></tr>
+      <tr class="subtotal"><td>Jahresüberschuss</td><td class="num">91.371</td></tr>
+     </tbody>
+    </table>
+    <div style="padding: 12px; border-top: 1px solid var(--line-200); display: flex; flex-direction: column; gap: 8px;">
+     <span class="eyebrow">Nach Projekt · Okt.</span>
+     <div style="display: flex; align-items: center; gap: 8px; font-size: 12px;"><span class="hq-dotchip" style="width: 110px;"><i style="background: #cf4646;"></i>FollowerPilot</span><div class="hq-meter grow"><div class="fill" style="width: 72%;"></div></div><span class="mono" style="width: 70px; text-align: right;">36.420</span></div>
+     <div style="display: flex; align-items: center; gap: 8px; font-size: 12px;"><span class="hq-dotchip" style="width: 110px;"><i style="background: #194e9d;"></i>Chatteo</span><div class="hq-meter grow"><div class="fill" style="width: 18%;"></div></div><span class="mono" style="width: 70px; text-align: right;">9.110</span></div>
+     <div style="display: flex; align-items: center; gap: 8px; font-size: 12px;"><span class="hq-dotchip" style="width: 110px;"><i style="background: #6159e1;"></i>Twentyfirst AI</span><div class="hq-meter grow"><div class="fill" style="width: 8%;"></div></div><span class="mono" style="width: 70px; text-align: right;">4.050</span></div>
+     <div style="display: flex; align-items: center; gap: 8px; font-size: 12px;"><span class="hq-dotchip" style="width: 110px;"><i style="background: #b98a6e;"></i>Jason Devine</span><div class="hq-meter grow"><div class="fill" style="width: 2%;"></div></div><span class="mono" style="width: 70px; text-align: right;">1.040</span></div>
+    </div>
+   </section>
+  </div>
+ </main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"density":{"editor":"enum","options":["compact","comfortable"],"default":"compact"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { theme: this.props.theme ?? 'dark', density: this.props.density ?? 'compact' };
+  }
+}
+</script>
+</body>
+</html>

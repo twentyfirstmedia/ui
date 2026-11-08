@@ -1,0 +1,21 @@
+<!-- @dsCard group="Overlays" height=470 width=760 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+
+  function App() {
+    return h('div', { className: 'ha-panel', style: { gap: 12 } },
+      h(H.Alert, { tone: 'info', title: 'Bank feed syncs every 4 hours', onDismiss: function () {} }, 'New transactions show up here and get matched automatically.'),
+      h(H.Alert, { tone: 'success', title: 'Domain verified' }, 'halo.app is ready to send mail.'),
+      h(H.Alert, { tone: 'warning', title: 'halo.dev expires on 04.05.2026', action: h(H.Button, { size: 'sm', variant: 'secondary' }, 'Turn on auto-renew') }, 'Auto-renew is off. If it lapses, mail on this domain stops.'),
+      h(H.Alert, { tone: 'danger', title: 'Payment failed', action: h(H.Button, { size: 'sm', variant: 'secondary' }, 'Update card') }, 'We couldn’t charge the card ending 4242. We retry in 3 days.'),
+      h(H.Alert, { tone: 'highlight', title: '3 agent drafts need your review' }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

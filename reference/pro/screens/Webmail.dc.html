@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>HQ · Webmail</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="hq-tokens.css">
+<link rel="stylesheet" href="ds/hq/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="hq" data-theme="{{theme}}" data-density="{{density}}" style="background: var(--bg-000); color: var(--fg-100); font-family: var(--font-sans); min-height: 900px; display: flex; flex-wrap: wrap; align-items: stretch;">
+
+<aside style="flex: 0 0 52px; background: var(--bg-100); border-right: 1px solid var(--line-200); display: flex; flex-direction: column; align-items: center;">
+ <a href="Main.dc.html" class="hq-glyph" style="margin: 10px 0; text-decoration: none;" aria-label="HQ Übersicht">HQ</a>
+ <nav class="hq-nav" aria-label="Hauptnavigation" style="padding: 6px; align-items: center;">
+  <a href="Stadt.dc.html" aria-label="Stadt" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg></a>
+  <a href="Freigaben.dc.html" aria-label="Freigaben" style="width: 36px; justify-content: center; padding: 0; color: var(--signal);"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg></a>
+  <a href="#" aria-current="page" aria-label="Webmail" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></a>
+  <a href="Domains.dc.html" aria-label="Domains und DNS" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></a>
+  <a href="Finanzen.dc.html" aria-label="Finanzen" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></a>
+ </nav>
+</aside>
+
+<section style="flex: 1 1 248px; max-width: 100%; background: var(--bg-100); border-right: 1px solid var(--line-200); display: flex; flex-direction: column;">
+ <div style="padding: 8px; border-bottom: 1px solid var(--line-200);">
+  <button class="hq-btn" type="button" style="width: 100%; justify-content: flex-start; background: var(--bg-300);"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg><span class="truncate">Alle Postfächer</span><span class="grow"></span><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg></button>
+ </div>
+ <div style="padding: 8px;"><a class="hq-btn hq-btn--primary" href="#" style="width: 100%;"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Neue Mail<span class="hq-kbd">C</span></a></div>
+ <nav class="hq-nav" aria-label="Ordner" style="padding-top: 0;">
+  <a href="#" aria-current="page">Posteingang<span class="hq-count">27</span></a>
+  <a href="#">Entwürfe von Agents<span class="hq-count hq-count--signal">4</span></a>
+  <a href="#">Gesendet</a>
+  <a href="#">Belege erkannt<span class="hq-count">2</span></a>
+  <a href="#">Archiv</a>
+  <span class="eyebrow">jasondevine.de</span>
+  <a href="#"><span class="mono">hello@</span><span class="hq-count">4</span></a>
+  <a href="#"><span class="mono">sales@</span><span class="hq-count">1</span></a>
+  <span class="eyebrow">followerpilot.de</span>
+  <a href="#"><span class="mono">support@</span><span class="hq-count">12</span></a>
+  <a href="#"><span class="mono">business@</span></a>
+  <span class="eyebrow">followerx.de</span>
+  <a href="#"><span class="mono">business@</span><span class="hq-count">6</span></a>
+  <a href="#"><span class="mono">robin@</span><span class="hq-count">2</span></a>
+  <span class="eyebrow">+ 21 Domains</span>
+ </nav>
+</section>
+
+<section style="flex: 1 1 380px; min-width: 0; background: var(--bg-100); border-right: 1px solid var(--line-200); display: flex; flex-direction: column;">
+ <div style="display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 44px; border-bottom: 1px solid var(--line-200);">
+  <div class="hq-inputgroup" style="flex: 1 1 auto;"><span class="affix"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span><input class="hq-input" placeholder="In allen Postfächern suchen" aria-label="Mails suchen"><span class="affix"><span class="hq-kbd">/</span></span></div>
+  <button class="hq-btn hq-btn--icon hq-btn--ghost" type="button" aria-label="Filter"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
+ </div>
+ <ul class="hq-inbox">
+  <li class="is-unread" aria-selected="true"><span class="unread"></span><span class="from">Markus Schmidt</span><time>14:02</time><span class="subj">Erstattung Bestellung #4182 <span class="snip">— Hallo, leider ist das Paket beschädigt angekommen …</span></span><span class="tags"><span class="hq-badge hq-badge--mono">support@followerpilot.de</span><span class="hq-badge hq-badge--signal"><i class="hq-shape hq-shape--diamond is-signal"></i>Entwurf bereit · Support-Agent</span></span></li>
+  <li class="is-unread"><span class="unread"></span><span class="from">Hetzner Online</span><time>11:40</time><span class="subj">Ihre Rechnung 2026-10 <span class="snip">— Anbei Ihre Rechnung für Oktober …</span></span><span class="tags"><span class="hq-badge hq-badge--mono">business@followerx.de</span><span class="hq-badge hq-badge--info">Beleg erkannt</span></span></li>
+  <li class="is-unread"><span class="unread"></span><span class="from">Instagram</span><time>10:12</time><span class="subj">Neue Anmeldung bei deinem Konto <span class="snip">— Wir haben eine Anmeldung von …</span></span><span class="tags"><span class="hq-badge hq-badge--mono">hello@jasondevine.de</span></span></li>
+  <li><span></span><span class="from">Julia Weber</span><time>Mo</time><span class="subj">Kooperation Herbstkollektion <span class="snip">— Hi Robin, wie besprochen sende ich dir …</span></span><span class="tags"><span class="hq-badge hq-badge--mono">hello@jasondevine.de</span><span class="hq-badge hq-badge--ok"><i class="hq-shape hq-shape--dot is-ok"></i>Beantwortet · Sales-Agent</span></span></li>
+  <li><span></span><span class="from">Stripe</span><time>Mo</time><span class="subj">Auszahlung über 4.812,40 € unterwegs <span class="snip">— Deine Auszahlung wird …</span></span><span class="tags"><span class="hq-badge hq-badge--mono">business@followerx.de</span></span></li>
+  <li><span></span><span class="from">Anna Krüger</span><time>So</time><span class="subj">Frage zu Chatteo Enterprise <span class="snip">— Guten Tag, wir sind eine Kanzlei mit …</span></span><span class="tags"><span class="hq-badge hq-badge--mono">sales@chatteo.de</span><span class="hq-badge hq-badge--info"><i class="hq-shape hq-shape--pulse is-info"></i>Lead Researcher arbeitet</span></span></li>
+ </ul>
+</section>
+
+<section style="flex: 2 1 520px; min-width: 0; display: flex; flex-direction: column; background: var(--bg-000);">
+ <div style="display: flex; align-items: center; gap: 8px; padding: 0 16px; height: 44px; border-bottom: 1px solid var(--line-200); background: var(--bg-100); flex-wrap: wrap;">
+  <button class="hq-btn hq-btn--sm" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>Antworten</button>
+  <button class="hq-btn hq-btn--sm" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>An Agent übergeben</button>
+  <span class="grow"></span>
+  <span class="mono muted" style="font-size: 12px;">support@followerpilot.de</span>
+ </div>
+ <div style="padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; max-width: 820px;">
+  <h1 class="t-heading" style="margin: 0;">Erstattung Bestellung #4182</h1>
+  <dl class="hq-kv"><dt>Von</dt><dd>Markus Schmidt <span class="mono muted">&lt;kunde@example.de&gt;</span></dd><dt>An</dt><dd class="mono">support@followerpilot.de</dd><dt>Datum</dt><dd class="mono">13.10.2026 14:02</dd></dl>
+
+  <div class="hq-approval">
+   <header><i class="hq-shape hq-shape--diamond is-signal"></i><span class="t">Entwurf von Support-Agent</span><span class="who">· wartet auf Freigabe</span><time>vor 8 Min.</time></header>
+   <div class="body"><div class="payload" style="white-space: pre-line;">Hallo Herr Schmidt,
+
+wir erstatten Ihnen den vollen Betrag von 79,00 € innerhalb von 3 Werktagen auf das ursprüngliche Zahlungsmittel.
+
+Viele Grüße
+Ihr FollowerPilot-Support</div></div>
+   <div style="display: flex; gap: 8px; padding: 0 16px 16px; flex-wrap: wrap;"><button class="hq-btn hq-btn--primary" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Freigeben &amp; senden<span class="hq-kbd">A</span></button><button class="hq-btn" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>Bearbeiten</button><button class="hq-btn hq-btn--ghost" type="button">Verwerfen</button></div>
+  </div>
+
+  <div class="t-body" style="color: var(--fg-200); white-space: pre-line;">Hallo,
+
+leider ist das Paket mit der Bestellung #4182 beschädigt angekommen, der Inhalt ist nicht mehr nutzbar. Ich hätte gerne mein Geld zurück.
+
+Fotos hänge ich an.
+
+Viele Grüße
+Markus Schmidt</div>
+  <div style="display: flex; gap: 8px; flex-wrap: wrap;"><span class="hq-attach"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>paket_1.jpg<span class="muted">1,2 MB</span></span><span class="hq-attach"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>paket_2.jpg<span class="muted">0,9 MB</span></span></div>
+ </div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"density":{"editor":"enum","options":["compact","comfortable"],"default":"compact"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { theme: this.props.theme ?? 'dark', density: this.props.density ?? 'compact' };
+  }
+}
+</script>
+</body>
+</html>

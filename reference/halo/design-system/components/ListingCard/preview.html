@@ -1,0 +1,22 @@
+<!-- @dsCard group="Real estate" height=720 width=1100 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  var st = [{ value: 'unread', label: 'New', status: 'running' }, { value: 'read', label: 'Seen', status: 'idle' }, { value: 'contacted', label: 'Contacted', status: 'ok' }];
+  var L0 = [{ id: 1, title: 'Bright 3-room flat with balcony near Isebek canal', price: 649000, pricePerSqm: 7726, area: 84, rooms: 3, place: 'Eppendorf, Hamburg', source: 'ImmoScout', seller: 'private', phone: true, photos: 14, isNew: true, age: '2 h', status: 'unread', tint: 'sky' }, { id: 2, title: 'Loft in HafenCity with water view', price: 1190000, pricePerSqm: 10625, area: 112, rooms: 2.5, place: 'HafenCity, Hamburg', source: 'Kleinanzeigen', seller: 'agent', photos: 22, age: '1 d', status: 'contacted', tint: 'lilac', wished: true }, { id: 3, title: '2-room flat, renovated old building', price: 1480, rent: true, area: 58, rooms: 2, place: 'Altona, Hamburg', source: 'Immowelt', seller: 'agent', photos: 9, age: '3 d', status: 'read', tint: 'mint' }];
+  function App() { var sel = useState([1]), list = useState(L0), view = useState('grid'), sort = useState('new');
+    function tog(x) { sel[1](sel[0].indexOf(x.id) > -1 ? sel[0].filter(function (i) { return i !== x.id; }) : sel[0].concat([x.id])); }
+    return h('div', { className: 'ha-col', style: { gap: 16 } },
+      h(H.ResultsToolbar, { title: 'Hamburg · flats to buy', total: 128, meta: 'updated 06:00', selected: sel[0].length, onSelectAll: function (all) { sel[1](all ? list[0].map(function (x) { return x.id; }) : []); }, bulkActions: [{ label: 'Send to CRM', icon: 'send', variant: 'primary' }, { label: 'Mark as seen', icon: 'eye' }], sortOptions: [{ value: 'new', label: 'Newest' }, { value: 'price', label: 'Price' }, { value: 'sqm', label: 'Price per m²' }], sort: sort[0], onSort: sort[1], views: ['grid', 'list', 'map'], view: view[0], onView: view[1] }),
+      h('div', { style: view[0] === 'list' ? { display: 'flex', flexDirection: 'column', gap: 12 } : { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 16 } }, list[0].map(function (x) { return h(H.ListingCard, { key: x.id, listing: x, layout: view[0] === 'list' ? 'row' : 'card', selected: sel[0].indexOf(x.id) > -1, onSelect: tog, onWish: function () {}, statusOptions: st, onStatus: function (l, s) { list[1](list[0].map(function (y) { return y.id === l.id ? Object.assign({}, y, { status: s }) : y; })); } }); })));
+  }
+  render(h(App));
+</script>
+</body>
+</html>

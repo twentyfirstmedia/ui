@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>HQ · Freigaben</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="hq-tokens.css">
+<link rel="stylesheet" href="ds/hq/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="hq" data-theme="{{theme}}" data-density="{{density}}" style="background: var(--bg-000); color: var(--fg-100); font-family: var(--font-sans); min-height: 900px; display: flex; flex-wrap: wrap; align-items: stretch;">
+
+<aside style="flex: 0 0 52px; background: var(--bg-100); border-right: 1px solid var(--line-200); display: flex; flex-direction: column; align-items: center;">
+ <a href="Main.dc.html" class="hq-glyph" style="margin: 10px 0; text-decoration: none;" aria-label="HQ Übersicht">HQ</a>
+ <nav class="hq-nav" aria-label="Hauptnavigation" style="padding: 6px; align-items: center;">
+  <a href="Stadt.dc.html" aria-label="Stadt" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg></a>
+  <a href="#" aria-current="page" aria-label="Freigaben" style="width: 36px; justify-content: center; padding: 0; color: var(--signal);"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg></a>
+  <a href="Webmail.dc.html" aria-label="Webmail" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></a>
+  <a href="Domains.dc.html" aria-label="Domains und DNS" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></a>
+  <a href="#" aria-label="Apps und Server" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg></a>
+  <a href="Finanzen.dc.html" aria-label="Finanzen" style="width: 36px; justify-content: center; padding: 0;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></a>
+ </nav>
+</aside>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column;">
+ <header class="hq-topbar" style="border-bottom: 1px solid var(--line-200); flex-wrap: wrap;">
+  <div class="hq-crumbs"><span class="cur">Freigaben</span></div>
+  <span class="grow"></span>
+  <button class="hq-searchtrigger" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="grow">Suchen …</span><span class="hq-kbd">⌘K</span></button>
+  <span class="hq-avatar hq-avatar--human">RT</span>
+ </header>
+
+ <div style="flex: 1 1 auto; display: flex; flex-wrap: wrap; align-items: stretch;">
+  <section style="flex: 1 1 400px; min-width: 0; background: var(--bg-100); border-right: 1px solid var(--line-200); display: flex; flex-direction: column;">
+   <div style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--line-200); flex-wrap: wrap;">
+    <span class="t-heading">Freigaben</span><span class="hq-count hq-count--signal">3</span><span class="grow"></span>
+    <div class="hq-seg" role="group" aria-label="Status"><button type="button" aria-pressed="true">Offen</button><button type="button">Erledigt</button></div>
+   </div>
+   <div style="display: flex; gap: 6px; padding: 8px 16px; border-bottom: 1px solid var(--line-100); flex-wrap: wrap;">
+    <button class="hq-btn hq-btn--sm" type="button">Projekt: alle</button><button class="hq-btn hq-btn--sm" type="button">Familie: alle</button><button class="hq-btn hq-btn--sm hq-btn--ghost" type="button">Agent</button>
+   </div>
+   <ul class="hq-inbox">
+    <li aria-selected="true"><span><i class="hq-shape hq-shape--diamond is-signal"></i></span><span class="from" style="color: var(--fg-100); font-weight: 600;">Antwort an kunde@example.de senden</span><time style="color: var(--warn);">1:52 h</time><span class="tags"><span class="muted" style="font-size: 12px;">Support-Agent · FollowerPilot</span><span class="hq-badge hq-badge--outline">Kommunikation</span></span></li>
+    <li><span><i class="hq-shape hq-shape--diamond is-signal"></i></span><span class="from" style="color: var(--fg-100);">MX-Record für chatteo.de ändern</span><time>3:10 h</time><span class="tags"><span class="muted" style="font-size: 12px;">Infra · Cloudflare · Global</span><span class="hq-badge hq-badge--outline">Infrastruktur</span></span></li>
+    <li><span><i class="hq-shape hq-shape--diamond is-signal"></i></span><span class="from" style="color: var(--fg-100);">Rechnung RE-2026-0143 über 2.380,00 € versenden</span><time>5:44 h</time><span class="tags"><span class="muted" style="font-size: 12px;">Finanz-Agent · Twentyfirst AI</span><span class="hq-badge hq-badge--outline">Geld</span></span></li>
+   </ul>
+   <span class="eyebrow" style="padding: 16px 16px 6px;">Heute erledigt</span>
+   <ul class="hq-inbox" style="opacity: 1;">
+    <li><span><i class="hq-shape hq-shape--dot is-ok"></i></span><span class="from">Rechnung RE-2026-0142 versenden</span><time>13:52</time><span class="tags"><span class="muted" style="font-size: 12px;">A · freigegeben von Lukas</span></span></li>
+    <li><span><i class="hq-shape hq-shape--square is-danger"></i></span><span class="from">Instagram-Post „Herbstdrop“ veröffentlichen</span><time>11:20</time><span class="tags"><span class="muted" style="font-size: 12px;">C · verworfen von Robin</span></span></li>
+    <li><span><i class="hq-shape hq-shape--dot is-ok"></i></span><span class="from">Deploy jasondevine.de auf hetzner-prod-02</span><time>09:41</time><span class="tags"><span class="muted" style="font-size: 12px;">B · mit Änderung von Robin</span></span></li>
+   </ul>
+  </section>
+
+  <section style="flex: 2 1 560px; min-width: 0; padding: 24px; display: flex; flex-direction: column; gap: 16px; align-items: stretch;">
+   <div class="hq-approval" style="max-width: 760px; width: 100%;">
+    <header><i class="hq-shape hq-shape--diamond is-signal"></i><span class="t">Freigabe nötig</span><span class="who">· Support-Agent · FollowerPilot</span><span class="hq-badge hq-badge--outline">Kommunikation</span><time>vor 8 Min.</time></header>
+    <div class="body">
+     <div class="what">Antwort an kunde@example.de senden</div>
+     <div class="why">Kunde fragt nach Erstattung für Bestellung #4182. Laut Richtlinie ist eine Teilerstattung bis 50 € ohne Rückfrage möglich, hier sind es 79 €.</div>
+     <dl class="hq-kv">
+      <dt>Von</dt><dd class="mono">support@followerpilot.de</dd>
+      <dt>An</dt><dd class="mono">kunde@example.de</dd>
+      <dt>Betreff</dt><dd>Re: Erstattung #4182</dd>
+     </dl>
+     <div class="payload" style="white-space: pre-line;">Hallo Herr Schmidt,
+
+wir erstatten Ihnen den vollen Betrag von 79,00 € innerhalb von 3 Werktagen auf das ursprüngliche Zahlungsmittel. Die Bestätigung erhalten Sie separat per Mail.
+
+Viele Grüße
+Ihr FollowerPilot-Support</div>
+    </div>
+    <div class="hq-options">
+     <button class="hq-option hq-option--primary" type="button"><span class="hq-kbd">A</span>Ja, so ausführen<span class="sub">sendet sofort</span></button>
+     <button class="hq-option" type="button"><span class="hq-kbd">B</span>Ja, mit Änderung<span class="sub">z. B. nur 50 € erstatten</span></button>
+     <button class="hq-option" type="button"><span class="hq-kbd">C</span>Nein, verwerfen</button>
+     <button class="hq-option" type="button"><span class="hq-kbd">D</span>Andere Anweisung …</button>
+    </div>
+    <footer><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Eskaliert an Lukas in 1:52 h<span class="grow"></span><a href="Agent.dc.html" style="color: var(--fg-200);">Agent öffnen</a><a href="#" style="color: var(--fg-200);">Trace öffnen</a></footer>
+   </div>
+   <div style="display: flex; gap: 16px; color: var(--fg-300); font-size: 12px; flex-wrap: wrap;"><span><span class="hq-kbd">J</span> <span class="hq-kbd">K</span> nächste / vorige</span><span><span class="hq-kbd">A</span>–<span class="hq-kbd">D</span> entscheiden</span><span><span class="hq-kbd">O</span> Agent öffnen</span></div>
+  </section>
+ </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"density":{"editor":"enum","options":["compact","comfortable"],"default":"compact"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { theme: this.props.theme ?? 'dark', density: this.props.density ?? 'compact' };
+  }
+}
+</script>
+</body>
+</html>

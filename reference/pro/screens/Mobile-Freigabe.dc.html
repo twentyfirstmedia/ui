@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>HQ Mobile · Freigabe</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="hq-tokens.css">
+<link rel="stylesheet" href="ds/hq/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="hq" data-theme="{{theme}}" data-density="comfortable" style="width: 390px; height: 844px; box-sizing: border-box; background: var(--bg-000); color: var(--fg-100); font-family: var(--font-sans); display: flex; flex-direction: column; overflow: hidden;">
+ <header style="display: flex; align-items: center; gap: 8px; height: 52px; padding: 0 8px 0 4px; background: var(--bg-100); border-bottom: 1px solid var(--line-200);">
+  <a class="hq-btn hq-btn--ghost hq-btn--icon" href="#" aria-label="Zurück" style="width: 44px; height: 44px;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+  <span class="t-title">Freigabe</span><span class="muted" style="font-size: 12px;">1 von 3</span>
+  <span class="grow"></span>
+  <span class="mono" style="font-size: 12px; color: var(--warn);">1:52 h</span>
+ </header>
+
+ <div style="flex: 1 1 auto; overflow: hidden; display: flex; flex-direction: column;">
+  <div style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: var(--signal-bg); border-bottom: 1px solid var(--line-200); flex-wrap: wrap;"><i class="hq-shape hq-shape--diamond is-signal"></i><span style="font-weight: 600; font-size: 12px; color: var(--signal);">Freigabe nötig</span><span class="hq-badge hq-badge--outline">Kommunikation</span></div>
+  <div style="padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+   <div style="display: flex; align-items: center; gap: 8px;"><span class="hq-avatar">SA</span><span style="display: flex; flex-direction: column;"><span class="t-title">Support-Agent</span><span class="t-caption">FollowerPilot · vor 8 Min.</span></span></div>
+   <span class="t-heading">Antwort an kunde@example.de senden</span>
+   <span class="t-body" style="color: var(--fg-200);">Kunde will volle Erstattung für #4182 (79 €). Limit ohne Rückfrage: 50 €.</span>
+   <div class="payload" style="border: 1px solid var(--line-200); background: var(--bg-100); padding: 12px; font-size: 14px; line-height: 20px; color: var(--fg-200); white-space: pre-line;">Hallo Herr Schmidt,
+
+wir erstatten Ihnen den vollen Betrag von 79,00 € innerhalb von 3 Werktagen …</div>
+  </div>
+ </div>
+
+ <div class="hq-options" style="background: var(--bg-100);">
+  <button class="hq-option hq-option--primary" type="button" style="min-height: 52px; font-size: 15px;"><span class="hq-kbd">A</span>Ja, so ausführen</button>
+  <button class="hq-option" type="button" style="min-height: 48px; font-size: 15px;"><span class="hq-kbd">B</span>Ja, mit Änderung</button>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line-100);">
+   <button class="hq-option" type="button" style="min-height: 48px; font-size: 15px; border-bottom: 0;"><span class="hq-kbd">C</span>Verwerfen</button>
+   <button class="hq-option" type="button" style="min-height: 48px; font-size: 15px; border-bottom: 0;"><span class="hq-kbd">D</span>Anders …</button>
+  </div>
+ </div>
+
+ <nav class="hq-tabbar" aria-label="Navigation">
+  <a href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>Stadt</a>
+  <a href="#" aria-current="page"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg>Freigaben<span class="hq-count hq-count--signal">3</span></a>
+  <a href="Mobile-Mail.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Mail<span class="hq-count">27</span></a>
+  <a href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>Finanzen</a>
+  <a href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>Mehr</a>
+ </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { theme: this.props.theme ?? 'dark' };
+  }
+}
+</script>
+</body>
+</html>

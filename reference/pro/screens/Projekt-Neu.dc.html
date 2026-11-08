@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>HQ · Neues Projekt</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="hq-tokens.css">
+<link rel="stylesheet" href="ds/hq/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#09090b}
+a{color:inherit}
+</style>
+</helmet>
+<div class="hq" data-theme="{{theme}}" data-density="{{density}}" style="background: var(--bg-000); color: var(--fg-100); font-family: var(--font-sans); min-height: 1000px; display: flex; flex-wrap: wrap; align-items: stretch;">
+
+<aside style="flex: 1 1 232px; max-width: 100%; background: var(--bg-100); border-right: 1px solid var(--line-200); display: flex; flex-direction: column;">
+ <div style="height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 1px solid var(--line-200);"><a href="Main.dc.html" class="hq-glyph" style="text-decoration: none;" aria-label="HQ Übersicht">HQ</a><span class="hq-wordmark"><b>HQ</b><span>twentyfirst</span></span></div>
+ <nav class="hq-nav" aria-label="Hauptnavigation">
+  <a href="Main.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>Übersicht</a>
+  <a href="Stadt.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>Stadt</a>
+  <a href="Chats.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>Chats<span class="hq-count">3</span></a>
+  <a href="Freigaben.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg>Freigaben<span class="hq-count hq-count--signal">3</span></a>
+  <a href="Webmail.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Webmail<span class="hq-count">27</span></a>
+  <a href="Domains.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>Domains &amp; DNS</a>
+  <a href="MailKonten.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></svg>Mail-Konten</a>
+  <a href="Server.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>Apps &amp; Server</a>
+  <a href="Finanzen.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>Finanzen</a>
+  <a href="Ausloeser.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Auslöser</a>
+  <span class="eyebrow">Module</span>
+  <a href="Brand.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>Brand-Generator</a>
+  <span class="eyebrow">Projekte</span>
+  <a href="#"><span class="hq-dotchip"><i style="background: #cf4646;"></i></span>FollowerPilot</a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #194e9d;"></i></span>Chatteo<span class="pst">Launch</span></a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #6159e1;"></i></span>Twentyfirst AI<span class="pst">Konzept</span></a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #276afc;"></i></span>TravelPilot24<span class="pst">Im Aufbau</span></a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #36a9e1;"></i></span>LicensePilot<span class="pst">Im Aufbau</span></a>
+  <a href="city/Main.dc.html" title="Jason Devine, FlightPilot24, Mein Handelsregister, Reblogger"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>Standby<span class="hq-count">4</span></a>
+  <a href="#" aria-current="page"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Neues Projekt</a>
+ </nav>
+ <nav class="hq-nav" aria-label="Einstellungen" style="margin-top: auto; border-top: 1px solid var(--line-200);">
+  <a href="Einstellungen.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>Einstellungen</a>
+ </nav>
+</aside>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column;">
+ <header class="hq-topbar" style="border-bottom: 1px solid var(--line-200); flex-wrap: wrap;">
+  <div class="hq-crumbs"><span>Projekte</span><span class="sep">/</span><span class="cur">Neues Projekt</span></div>
+  <span class="grow"></span>
+  <button class="hq-searchtrigger" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="grow">Suchen oder Main Brain fragen …</span><span class="hq-kbd">⌘K</span></button>
+  
+  <span class="hq-avatar hq-avatar--human">RT</span>
+ </header>
+
+<main style="padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+ <div style="display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap;">
+  <div style="display: flex; flex-direction: column; gap: 4px; flex: 1 1 320px;"><span class="eyebrow">Projekt anlegen</span><h1 class="t-display" style="margin: 0;">Neues Projekt</h1></div>
+  <a class="hq-btn" href="Chats.dc.html"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>Lieber dem Main Brain sagen</a>
+ </div>
+
+ <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;">
+  <section style="flex: 999 1 600px; min-width: 0; border: 1px solid var(--line-200); background: var(--bg-100); display: flex; flex-direction: column;">
+   <ol class="hq-steps" style="border-width: 0 0 1px 0;"><li class="{{st1.cls}}"><span class="n">{{st1.n}}</span>Grunddaten</li><li class="{{st2.cls}}"><span class="n">{{st2.n}}</span>Marke</li><li class="{{st3.cls}}"><span class="n">{{st3.n}}</span>Teams</li><li class="{{st4.cls}}"><span class="n">{{st4.n}}</span>Freigaben</li><li class="{{st5.cls}}"><span class="n">{{st5.n}}</span>Gebäude</li><li class="{{st6.cls}}"><span class="n">{{st6.n}}</span>Prüfen</li></ol>
+   <div style="padding: 24px; display: flex; flex-direction: column; gap: 16px; min-height: 460px;">
+
+    <sc-if value="{{s1}}" hint-placeholder-val="{{ true }}">
+     <span class="t-heading">Worum geht es?</span>
+     <span class="soft">Name und Firma bestimmen Gebäude, Ordner im Repo und die Zuordnung in Finanzen.</span>
+     <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+      <div class="hq-field"><label class="hq-label" for="w-name">Projektname</label><input id="w-name" class="hq-input" value="{{name}}" onChange="{{onName}}"></div>
+      <div class="hq-field"><label class="hq-label" for="w-slug">Ordner</label><input id="w-slug" class="hq-input mono" readonly value="{{slugPath}}"></div>
+      <div class="hq-field"><label class="hq-label" for="w-firm">Firma</label><span class="hq-selectwrap"><select id="w-firm" class="hq-select" value="{{firm}}" onChange="{{onFirm}}"><option>Trepte Ventures UG</option><option>FollowerX GmbH</option></select><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span></div>
+      <div class="hq-field"><label class="hq-label" for="w-dom">Domain</label><input id="w-dom" class="hq-input mono" value="{{domain}}" onChange="{{onDomain}}"></div>
+      <div class="hq-field"><label class="hq-label" for="w-bud">Budget pro Monat</label><input id="w-bud" class="hq-input mono" value="{{budget}}" onChange="{{onBudget}}"><span class="hq-hint">Warnung bei 80 %, Stopp bei 100 %</span></div>
+      <div class="hq-field"><span class="hq-label">Sprache der Agents</span><div class="hq-seg" role="group" aria-label="Sprache"><button type="button" aria-pressed="{{lDe}}" onClick="{{setDe}}">Deutsch</button><button type="button" aria-pressed="{{lEn}}" onClick="{{setEn}}">English</button></div></div>
+     </div>
+    </sc-if>
+
+    <sc-if value="{{s2}}" hint-placeholder-val="{{ false }}">
+     <span class="t-heading">Marke</span>
+     <span class="soft">Farbe und Logo landen am Gebäude, im Empfang und bei den Content-Agents.</span>
+     <div class="hq-seg" role="group" aria-label="Quelle" style="align-self: flex-start;"><button type="button" aria-pressed="{{srcGen}}" onClick="{{setGen}}">Aus dem Brand-Generator</button><button type="button" aria-pressed="{{srcUp}}" onClick="{{setUp}}">Logo hochladen</button><button type="button" aria-pressed="{{srcNone}}" onClick="{{setNone}}">Später</button></div>
+     <sc-if value="{{isUp}}" hint-placeholder-val="{{ false }}"><div class="hq-dropzone"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg><span class="t-title" style="color: var(--fg-100);">Logo hierher ziehen</span><span class="t-caption">SVG bevorzugt, dazu optional eine helle Variante</span></div></sc-if>
+     <sc-if value="{{isGen}}" hint-placeholder-val="{{ true }}"><div class="hq-banner hq-banner--info"><i class="hq-shape hq-shape--pulse is-info"></i><div class="txt"><b>Der Brand-Generator erstellt Logo und Farben.</b> <span>Bis dahin steht ein neutrales Gebäude mit Kürzel in der Stadt.</span></div></div></sc-if>
+     <div class="hq-field"><span class="hq-label">Hauptfarbe</span>
+      <div class="row" style="gap: 8px;">
+       <sc-for list="{{swatches}}" as="c" hint-placeholder-count="6"><button type="button" aria-label="{{c.hex}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}"></button></sc-for>
+       <span class="mono muted" style="font-size: 12px;">{{color}}</span>
+      </div>
+     </div>
+     <div class="hq-field" style="width: 160px;"><label class="hq-label" for="w-glyph">Kürzel</label><input id="w-glyph" class="hq-input mono" value="{{glyph}}" onChange="{{onGlyph}}"><span class="hq-hint">Ersatz, solange es kein Logo gibt</span></div>
+    </sc-if>
+
+    <sc-if value="{{s3}}" hint-placeholder-val="{{ false }}">
+     <span class="t-heading">Teams</span>
+     <span class="soft">Jedes Team wird ein Raum im Gebäude. Agents und Modelle kannst du später pro Agent ändern.</span>
+     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+      <sc-for list="{{teams}}" as="t" hint-placeholder-count="5">
+       <button type="button" aria-pressed="{{t.on}}" onClick="{{t.toggle}}" style="{{t.style}}">
+        <span class="row" style="gap: 8px;"><i class="{{t.mark}}"></i><b style="font-weight: 600;">{{t.name}}</b><span class="grow"></span><span class="mono muted" style="font-size: 12px;">{{t.count}} Agents</span></span>
+        <span class="soft" style="font-size: 12px; text-align: left;">{{t.agents}}</span>
+       </button>
+      </sc-for>
+     </div>
+    </sc-if>
+
+    <sc-if value="{{s4}}" hint-placeholder-val="{{ false }}">
+     <span class="t-heading">Freigaben</span>
+     <span class="soft">Vorgaben aus der Tool-Registry. Alles, was nach außen geht oder Geld bewegt, fragt vorher.</span>
+     <div class="hq-tablewrap"><table class="hq-matrix">
+      <thead><tr><th style="text-align: left;">Agent</th><th>mail.send</th><th>social.publish</th><th>image.generate</th><th>stripe.refund</th><th>code.pr</th><th>deploy</th></tr></thead>
+      <tbody>
+       <sc-for list="{{matrix}}" as="m" hint-placeholder-count="6">
+        <tr><th>{{m.agent}}</th>
+         <sc-for list="{{m.cells}}" as="c" hint-placeholder-count="6">
+          <td class="{{c.cls}}"><sc-if value="{{c.isOn}}" hint-placeholder-val="{{ false }}"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></sc-if><sc-if value="{{c.isAsk}}" hint-placeholder-val="{{ false }}"><i class="hq-shape hq-shape--diamond is-signal"></i></sc-if><sc-if value="{{c.isOff}}" hint-placeholder-val="{{ true }}">–</sc-if></td>
+         </sc-for>
+        </tr>
+       </sc-for>
+      </tbody>
+     </table></div>
+     <div class="row muted" style="font-size: 12px; gap: 16px;"><span class="row" style="gap: 6px;"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>erlaubt</span><span class="row" style="gap: 6px;"><i class="hq-shape hq-shape--diamond is-signal"></i>fragt vorher</span><span>– kein Zugriff</span></div>
+    </sc-if>
+
+    <sc-if value="{{s5}}" hint-placeholder-val="{{ false }}">
+     <span class="t-heading">Gebäude</span>
+     <span class="soft">Stil aus der Gebäude-Bibliothek. Die Grundfläche wächst mit der Zahl der Teams.</span>
+     <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+      <sc-for list="{{styles}}" as="b" hint-placeholder-count="4">
+       <button type="button" aria-pressed="{{b.on}}" onClick="{{b.pick}}" style="{{b.style}}"><b style="font-weight: 600;">{{b.name}}</b><span class="muted" style="font-size: 12px;">{{b.sub}}</span></button>
+      </sc-for>
+     </div>
+     <div class="hq-field"><span class="hq-label">Deko pro Raum</span><div class="row" style="gap: 6px;"><sc-for list="{{deco}}" as="d" hint-placeholder-count="3"><span class="hq-badge">{{d}}</span></sc-for></div></div>
+    </sc-if>
+
+    <sc-if value="{{s6}}" hint-placeholder-val="{{ false }}">
+     <sc-if value="{{notCreated}}" hint-placeholder-val="{{ true }}">
+      <span class="t-heading">Prüfen und anlegen</span>
+      <span class="soft">Das Main Brain öffnet daraus einen Config-PR. Er ändert nur Dateien unter <span class="mono">projects/</span>. Nach dem Merge steht das Gebäude in der Stadt.</span>
+      <div style="border: 1px solid var(--line-200);">
+       <div class="row" style="padding: 10px 14px; border-bottom: 1px solid var(--line-200);"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" x2="6" y1="9" y2="21"/></svg><span class="t-title">Neues Projekt: {{name}}</span><span class="grow"></span><span class="mono muted" style="font-size: 12px;">{{agentCount}} Agents · {{teamCount}} Teams</span></div>
+       <pre class="hq-log" style="margin: 0; border-bottom: 1px solid var(--line-200);"><sc-for list="{{files}}" as="f" hint-placeholder-count="5"><span><span class="ok">+</span> {{f}}</span></sc-for></pre>
+       <div style="padding: 10px 14px;" class="row"><i class="hq-shape hq-shape--tri is-warn"></i><span class="soft" style="font-size: 13px;">{{askCount}} Werkzeuge fragen vor jeder Ausführung nach Freigabe.</span></div>
+      </div>
+     </sc-if>
+     <sc-if value="{{created}}" hint-placeholder-val="{{ false }}">
+      <div class="hq-banner hq-banner--ok"><i class="hq-shape hq-shape--dot is-ok"></i><div class="txt"><b>Config-PR #88 ist offen.</b> <span>Wartet auf deinen Review. Nach dem Merge und Deploy steht {{name}} in der Stadt.</span></div></div>
+      <div class="row"><a class="hq-btn" href="Stadt.dc.html"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>Zur Stadt</a><a class="hq-btn hq-btn--ghost" href="Chats.dc.html"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>Im Chat mit dem Main Brain</a></div>
+     </sc-if>
+    </sc-if>
+   </div>
+   <div class="row" style="padding: 10px 24px; border-top: 1px solid var(--line-200); background: var(--bg-000);">
+    <span class="mono muted" style="font-size: 12px;">Schritt {{step}} von 6</span><span class="grow"></span>
+    <sc-if value="{{canBack}}" hint-placeholder-val="{{ false }}"><button class="hq-btn" type="button" onClick="{{back}}">Zurück</button></sc-if>
+    <sc-if value="{{canNext}}" hint-placeholder-val="{{ true }}"><button class="hq-btn hq-btn--primary" type="button" onClick="{{next}}">Weiter</button></sc-if>
+    <sc-if value="{{canCreate}}" hint-placeholder-val="{{ false }}"><button class="hq-btn hq-btn--primary" type="button" onClick="{{create}}"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" x2="6" y1="9" y2="21"/></svg>Config-PR erstellen</button></sc-if>
+   </div>
+  </section>
+
+  <aside style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 20px;">
+   <section style="border: 1px solid var(--line-200); background: var(--bg-100);">
+    <div class="row" style="padding: 10px 14px; border-bottom: 1px solid var(--line-200);"><span class="t-title">Vorschau</span><span class="grow"></span><span class="mono muted" style="font-size: 12px;">Block C1 · freier Bauplatz</span></div>
+    <div style="background: var(--bg-000); display: flex; justify-content: center; padding: 12px 0;">
+     <svg viewBox="0 0 240 200" style="width: 100%; max-width: 320px; height: auto; display: block;" role="img" aria-label="Vorschau des Gebäudes">
+      <polygon points="{{bx.ground}}" fill="var(--bg-200)"/>
+      <polygon points="{{bx.left}}" fill="{{bx.cLeft}}"/>
+      <polygon points="{{bx.right}}" fill="{{bx.cRight}}"/>
+      <path d="{{bx.floors}}" stroke="rgba(255,255,255,0.28)" stroke-width="1" fill="none"/>
+      <polygon points="{{bx.top}}" fill="{{bx.cTop}}"/>
+      <polygon points="{{bx.fascia}}" fill="{{bx.cAccent}}"/>
+     </svg>
+    </div>
+    <div style="padding: 12px 14px; display: flex; flex-direction: column; gap: 10px;">
+     <div class="row"><span class="hq-plate" style="position: static;"><b>{{glyph}}</b> {{name}}</span></div>
+     <dl class="hq-kv" style="margin: 0;"><dt>Firma</dt><dd>{{firm}}</dd><dt>Domain</dt><dd class="mono">{{domain}}</dd><dt>Teams</dt><dd>{{teamCount}} · {{agentCount}} Agents</dd><dt>Budget</dt><dd class="mono">{{budget}}</dd><dt>Gebäude</dt><dd>{{styleName}}</dd></dl>
+    </div>
+   </section>
+   <section style="border: 1px solid var(--line-200); background: var(--bg-100); padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+    <div class="row" style="gap: 8px;"><span class="hq-avatar hq-avatar--brain">MB</span><span class="t-title">Geht auch per Chat</span></div>
+    <span class="soft" style="font-size: 13px;">„Wir starten {{name}} mit Content und Support, Content bekommt einen Artist mit Bild- und Videogenerierung.“ Das Main Brain füllt denselben Config-PR.</span>
+   </section>
+  </aside>
+ </div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"density":{"editor":"enum","options":["compact","comfortable"],"default":"compact"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { step: 1, name: 'Trepte Golf Academy', firm: 'Trepte Ventures UG', domain: 'trepte-golf.de', budget: '150 €', lang: 'de', src: 'gen', color: '#2f7d5b', glyph: 'TG',
+      teams: { content: true, support: true, sales: false, coding: false, finance: false }, style: 'lowrise', created: false };
+    this.T = [
+      { id: 'content', name: 'Content', agents: [['Head Content', 'sonnet'], ['Texter', 'haiku'], ['Artist', 'sonnet']] },
+      { id: 'support', name: 'Support', agents: [['Support-Agent', 'haiku'], ['Eskalation', 'sonnet']] },
+      { id: 'sales', name: 'Sales', agents: [['Head Sales', 'sonnet'], ['Lead Researcher', 'haiku'], ['Outreach', 'haiku']] },
+      { id: 'coding', name: 'Coding', agents: [['Coding-Agent', 'sonnet']] },
+      { id: 'finance', name: 'Finanzen', agents: [['Finanz-Agent', 'haiku']] }
+    ];
+    this.P = { 'Head Content': 'oaoooo', 'Texter': 'oooooo', 'Artist': 'ooyooo', 'Support-Agent': 'aooooo', 'Eskalation': 'aooaoo', 'Head Sales': 'aooooo', 'Lead Researcher': 'oooooo', 'Outreach': 'aooooo', 'Coding-Agent': 'ooooya', 'Finanz-Agent': 'oooaoo' };
+    this.S = [{ id: 'tower', name: 'Turm', sub: 'schmal, hoch', w: 3, d: 3, h: 7 }, { id: 'block', name: 'Block', sub: 'breit, mittel', w: 5, d: 3.4, h: 4.2 }, { id: 'lowrise', name: 'Flachbau', sub: 'breit, niedrig', w: 5.6, d: 3.8, h: 2.4 }, { id: 'cube', name: 'Würfel', sub: 'kompakt, Glas', w: 3.8, d: 3.8, h: 3.8 }];
+  }
+  shade(hex, f) { var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255; var m = function (c) { return Math.max(0, Math.min(255, Math.round(c * f))); }; return 'rgb(' + m(r) + ',' + m(g) + ',' + m(b) + ')'; }
+  box(st, teamCount, color) {
+    var w = st.w + Math.max(0, teamCount - 2) * 0.6, d = st.d, h = st.h, s = 13, cx = 120 + (d - w) * 0.866 * s / 2, cy = 184 - (w + d) * 0.5 * s;
+    var P = function (x, y, z) { return [(cx + (x - y) * 0.866 * s).toFixed(1), (cy + (x + y) * 0.5 * s - z * s).toFixed(1)]; };
+    var poly = function (pts) { return pts.map(function (p) { return P(p[0], p[1], p[2]).join(','); }).join(' '); };
+    var floors = '', n = Math.max(1, Math.round(h / 0.8));
+    for (var i = 1; i < n; i++) { var z = h * i / n, a = P(0, d, z), b = P(w, d, z), c = P(w, 0, z); floors += 'M' + a.join(',') + 'L' + b.join(',') + 'L' + c.join(','); }
+    var g = 0.6;
+    return { ground: poly([[-g, -g, 0], [w + g, -g, 0], [w + g, d + g, 0], [-g, d + g, 0]]), top: poly([[0, 0, h], [w, 0, h], [w, d, h], [0, d, h]]),
+      left: poly([[0, d, 0], [w, d, 0], [w, d, h], [0, d, h]]), right: poly([[w, 0, 0], [w, d, 0], [w, d, h], [w, 0, h]]),
+      fascia: poly([[0, d, h - 0.35], [w, d, h - 0.35], [w, d, h], [0, d, h]]), floors: floors,
+      cTop: this.shade('#d9dde3', 1), cLeft: this.shade('#9fb4c8', 0.86), cRight: this.shade('#9fb4c8', 0.7), cAccent: color };
+  }
+  set(k) { var self = this; return function (e) { var o = {}; o[k] = e.target.value; self.setState(o); }; }
+  renderVals() {
+    var self = this, s = this.state, on = this.T.filter(function (t) { return s.teams[t.id]; });
+    var agents = []; on.forEach(function (t) { t.agents.forEach(function (a) { agents.push(a[0]); }); });
+    var steps = {}; for (var i = 1; i <= 6; i++) steps['st' + i] = { cls: i < s.step ? 'done' : i === s.step ? 'cur' : '', n: i < s.step ? '✓' : String(i) };
+    var slug = s.name.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    var cols = ['#2f7d5b', '#cf4646', '#194e9d', '#b98a6e', '#6159e1', '#e89842'];
+    var cell = { o: 'off', a: 'ask', y: 'on' };
+    var matrix = agents.map(function (a) { var p = self.P[a] || 'oooooo'; return { agent: a, cells: p.split('').map(function (ch) { var c = cell[ch] || 'off'; return { cls: c, isOn: c === 'on', isAsk: c === 'ask', isOff: c === 'off' }; }) }; });
+    var askCount = 0; matrix.forEach(function (m) { m.cells.forEach(function (c) { if (c.isAsk) askCount++; }); });
+    var st = this.S.filter(function (x) { return x.id === s.style; })[0];
+    var card = 'display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; min-height: 64px; background: var(--bg-000); color: var(--fg-100); font: inherit; text-align: left; cursor: pointer; border: 1px solid ';
+    var files = ['projects/' + slug + '/project.config.ts'].concat(on.map(function (t) { return 'projects/' + slug + '/teams/' + t.id + '.ts'; })).concat(['projects/' + slug + '/assets/logo.svg', 'projects/' + slug + '/assets/deco.ts']);
+    var v = Object.assign({ theme: this.props.theme ?? 'dark', density: this.props.density ?? 'compact', step: s.step,
+      s1: s.step === 1, s2: s.step === 2, s3: s.step === 3, s4: s.step === 4, s5: s.step === 5, s6: s.step === 6,
+      canBack: s.step > 1 && !s.created, canNext: s.step < 6, canCreate: s.step === 6 && !s.created, created: s.created, notCreated: !s.created,
+      back: function () { self.setState({ step: s.step - 1 }); }, next: function () { self.setState({ step: s.step + 1 }); }, create: function () { self.setState({ created: true }); },
+      name: s.name, onName: function (e) { var nm = e.target.value; var gl = nm.split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0].toUpperCase(); }).join(''); self.setState({ name: nm, glyph: gl || s.glyph }); },
+      slugPath: 'projects/' + slug + '/', firm: s.firm, onFirm: this.set('firm'), domain: s.domain, onDomain: this.set('domain'), budget: s.budget, onBudget: this.set('budget'),
+      lDe: String(s.lang === 'de'), lEn: String(s.lang === 'en'), setDe: function () { self.setState({ lang: 'de' }); }, setEn: function () { self.setState({ lang: 'en' }); },
+      srcGen: String(s.src === 'gen'), srcUp: String(s.src === 'up'), srcNone: String(s.src === 'none'), isGen: s.src === 'gen', isUp: s.src === 'up',
+      setGen: function () { self.setState({ src: 'gen' }); }, setUp: function () { self.setState({ src: 'up' }); }, setNone: function () { self.setState({ src: 'none' }); },
+      color: s.color, glyph: s.glyph, onGlyph: function (e) { self.setState({ glyph: e.target.value.toUpperCase().slice(0, 3) }); },
+      swatches: cols.map(function (c) { var sel = c === s.color; return { hex: c, on: String(sel), pick: function () { self.setState({ color: c }); }, style: 'width: 44px; height: 44px; cursor: pointer; background: ' + c + '; border: ' + (sel ? '2px solid var(--fg-100)' : '1px solid var(--line-200)') + ';' }; }),
+      teams: this.T.map(function (t) { var o = !!s.teams[t.id]; return { name: t.name, count: t.agents.length, agents: t.agents.map(function (a) { return a[0] + ' · ' + a[1]; }).join(', '), on: String(o), mark: o ? 'hq-shape hq-shape--dot is-ok' : 'hq-shape hq-shape--ring is-idle',
+        style: card + (o ? 'var(--fg-200)' : 'var(--line-200)') + ';', toggle: function () { var tt = Object.assign({}, s.teams); tt[t.id] = !tt[t.id]; self.setState({ teams: tt }); } }; }),
+      matrix: matrix, askCount: askCount,
+      styles: this.S.map(function (b) { var o = b.id === s.style; return { name: b.name, sub: b.sub, on: String(o), style: card + (o ? 'var(--fg-200)' : 'var(--line-200)') + ';', pick: function () { self.setState({ style: b.id }); } }; }),
+      styleName: st.name, deco: on.map(function (t) { return t.name + ': ' + ({ content: 'Moodboard-Wand', support: 'KPI-Screen', sales: 'Lead-Board', coding: 'Monitore', finance: 'Belegablage' })[t.id]; }),
+      teamCount: on.length, agentCount: agents.length, files: files, bx: this.box(st, on.length, s.color) }, steps);
+    return v;
+  }
+}
+</script>
+</body>
+</html>

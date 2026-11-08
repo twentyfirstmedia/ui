@@ -1,0 +1,21 @@
+<!-- @dsCard group="AI" height=640 width=1100 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  var groups = [{ title: 'Pinned', items: [{ id: 'mb', name: 'Main Brain', sub: 'Morning briefing is ready', time: '08:00', tint: 'lilac', status: 'ok', pinned: true }] }, { title: 'FollowerPilot', mark: 'sky', items: [{ id: 'atlas', name: 'Atlas', sub: 'Waiting for your approval', time: '09:41', tint: 'sky', status: 'signal', unread: 1 }, { id: 'ads', name: 'Ads', sub: 'Budget at 82 %', time: '09:12', tint: 'mint', status: 'warn' }] }, { title: 'People', items: [{ id: 'lukas', name: 'Lukas Weber', sub: 'Sounds good', time: 'Mon', avatar: true }] }];
+  function App() { var s = useState('atlas');
+    return h('div', { style: { height: 580 } }, h(H.ChatWorkspace, { className: 'demo-fill',
+      list: h(H.ChatList, { groups: groups, selected: s[0], onSelect: s[1] }),
+      thread: h('div', { className: 'ha-col', style: { gap: 20 } }, h(H.ChatMessage, { role: 'user', text: 'Draft a reply to Northwind' }), h(H.ChatMessage, { role: 'assistant', name: 'Atlas', tint: 'sky', time: '09:41', text: 'Drafted. It quotes **40 seats at €24** prorated to 1 May.' }), h(H.ThinkingLine, { text: 'Reading 3 messages…' }), h(H.FeedbackRating, { label: 'Was this useful?' })),
+      details: h(H.SearchHits, { query: 'seats', items: [{ id: 1, chat: 'Atlas', time: '09:41', who: 'Atlas', text: 'It quotes 40 seats at €24 prorated to 1 May.' }, { id: 2, chat: 'Main Brain', time: 'Mon', text: 'Northwind asked about seats twice this quarter.' }] }) }));
+  }
+  render(h(App));
+</script>
+</body>
+</html>

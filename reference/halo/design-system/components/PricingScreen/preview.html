@@ -1,0 +1,29 @@
+<!-- @dsCard group="Pages" height=900 width=1280 page subtitle="Plan & billing: three plans with a yearly switch, seats and usage" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>PricingScreen</title></head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+    var AREAS = [['Workspace', 'home'], ['Customers', 'users'], ['Shop', 'cart'], ['Agents', 'bot'], ['Mail', 'mail'], ['Code', 'code'], ['Domains', 'globe'], ['Finance', 'card'], ['Files', 'folder'], ['Account', 'settings']];
+  function Shell(p) {
+    return h('div', { className: 'ha-shell', style: { position: 'relative' } },
+      h(H.TopBar, { brand: 'Halo', tag: 'Admin', active: p.area, items: AREAS.map(function (a) { return { label: a[0], icon: a[1], count: a[0] === 'Mail' ? 2 : null }; }), user: { name: 'Mara Ellis', email: 'mara@halo.app' },
+        extra: [h('button', { key: 's', type: 'button', className: 'ha-topbtn', 'aria-label': 'Search' }, h(H.Icon, { name: 'search', size: 15 }), 'Search', h('kbd', null, '⌘K')), h('button', { key: 'b', type: 'button', className: 'ha-topbtn icon', 'aria-label': 'Notifications' }, h(H.Icon, { name: 'bell', size: 17 }), h('span', { className: 'ha-nav-count' }, 4))] }),
+      h('div', { className: 'ha-sheet', style: { gridTemplateColumns: '208px minmax(0, 1fr)' + (p.side ? ' 304px' : ''), alignItems: 'start' } },
+        h(H.SubNav, { eyebrow: p.area, action: p.action, current: p.current, items: p.pages }),
+        h('main', { className: 'ha-main' }, p.children), p.side || null),
+      p.overlay || null);
+  }
+
+  function App() {
+    return h(Shell, { area: 'Account', current: 'Plan & billing', pages: [{ id: 'Profile', label: 'Profile & theme', icon: 'user' }, { id: 'Roles', label: 'Roles & access', icon: 'lock' }, { id: 'Plan & billing', label: 'Plan & billing', icon: 'card' }] },
+      h(H.PageHeader, { title: 'Plan & billing', subtitle: 'You’re on Team · renews on 1 May 2026', actions: [h(H.Segmented, { key: 'y', defaultValue: 'Yearly', options: ['Monthly', { value: 'Yearly', label: 'Yearly · save 17%' }] })] }),
+      h('div', { className: 'ha-plans' }, h(H.PlanCard, { name: 'Starter', price: 9, was: 12, text: 'For small teams', features: ['3 projects', '1 agent', '-Audit log'] }), h(H.PlanCard, { name: 'Team', price: 24, was: 29, featured: true, current: true, text: 'For growing companies', features: ['Unlimited projects', '10 agents', 'Audit log'] }), h(H.PlanCard, { name: 'Business', price: null, cta: 'Talk to sales', text: 'Security and an SLA', features: ['Everything in Team', 'SSO and SCIM', 'SLA'] })),
+      h(H.Panel, { title: 'Usage this month' }, h(H.UsageMeter, { label: 'Agent usage', used: 84, limit: 120, format: function (v) { return '€' + v; }, caption: 'Included up to €120' })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

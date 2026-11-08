@@ -1,0 +1,44 @@
+<!-- @dsCard group="Pages" height=880 width=1280 page subtitle="Projects overview: stats, filters, card grid, schedule panel and dock" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Dashboard — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  function App() {
+    var f = React.useState('All');
+    return h(H.AppShell, { active: 'Projects',
+      side: h(H.Panel, { side: true, title: 'Schedule', subtitle: '5 items waiting · 2 today', action: h(H.IconButton, { icon: 'plus', label: 'Add event' }) },
+        h(H.Tabs, { block: true, items: ['Events', 'Approvals', 'History'] }),
+        h(H.Stagger, { className: 'ha-col', delay: 300 },
+          h(H.EventCard, { kind: 'meeting', label: 'Team sync', date: 'Tue, 14.04', time: '10:30' }, 'Roadmap check-in with design and growth; bring last sprint numbers.'),
+          h(H.EventCard, { kind: 'review', label: 'Design review', date: 'Wed, 15.04', time: '14:00' }, 'Walk through the new billing settings flow.'),
+          h(H.EventCard, { kind: 'deadline', label: 'Deadline', date: 'Fri, 17.04', time: '17:00' }, 'Send Q2 invoices to all annual customers.'))) },
+      h('div', { className: 'ha-in' }, h(H.PageHeader, { title: 'Projects', subtitle: 'Plan, ship and retire work across the workspace', actions: [h(H.SearchField, { key: 's', placeholder: 'Search people, projects, invoices', shortcut: '⌘K' })] })),
+      h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(4, 1fr)' }, delay: 80 },
+        h(H.StatTile, { tint: 'sky', value: '18', label: 'All projects' }),
+        h(H.StatTile, { tint: 'mint', value: '11', label: 'Live', delta: '+2 this week' }),
+        h(H.StatTile, { tint: 'placeholder', value: '4', label: 'Drafts' }),
+        h(H.StatTile, { tint: 'butter', value: '$48,210', label: 'Revenue (MTD)' })),
+      h('div', { className: 'ha-in', style: { '--d': '260ms', display: 'flex', alignItems: 'center', justifyContent: 'space-between' } },
+        h('div', { className: 'ha-row' }, ['All', 'Live', 'Draft', 'Archived'].map(function (t) { return h(H.Chip, { key: t, selected: f[0] === t, onClick: function () { f[1](t); } }, t); })),
+        h(H.Button, { icon: 'plus' }, 'New project')),
+      h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(3, 1fr)' }, delay: 320 },
+        h(H.Card, { onClick: function () {}, title: 'Quarterly onboarding', description: 'Welcome flow for new workspace admins.', meta: ['Mara Ellis', '12 steps', '348 users'], corner: h(H.TintIcon, { icon: 'book', tint: 'mint' }), status: h(H.Badge, { tone: 'success' }, 'Live'), actions: cardActs() }),
+        h(H.Card, { onClick: function () {}, tint: 'lilac', title: 'Pricing page refresh', description: 'New tiers and a comparison table for annual plans.', meta: ['Jonah Petit', '6 sections'], corner: h(H.IconButton, { icon: 'play', label: 'Preview', size: 'sm', variant: 'outline' }), status: h(H.Badge, { tone: 'neutral' }, '86 viewing'), actions: [h(H.IconButton, { key: 1, icon: 'edit', label: 'Edit', size: 'sm', variant: 'solid' })] }),
+        h(H.Card, { onClick: function () {}, title: 'Partner referral program', description: 'Track invites, payouts and partner tiers.', meta: ['Sun Lee', '4 steps', '57 partners'], corner: h(H.TintIcon, { icon: 'users', tint: 'sky' }), status: h(H.Badge, { tone: 'success' }, 'Live'), actions: cardActs() }),
+        h(H.Card, { onClick: function () {}, title: 'Invoice #2041 is overdue', description: 'Net-30 passed four days ago; the reminder bounced.', meta: ['Rui Costa', 'High priority'], corner: h(H.TintIcon, { icon: 'mail', tint: 'blush' }), status: h(H.Badge, { tone: 'warning' }, 'Open'), actions: [h(H.Button, { key: 1, size: 'sm', variant: 'soft' }, 'Reply')] }),
+        h(H.Card, { onClick: function () {}, title: 'Help center migration', description: 'Move 140 articles to the new docs layout.', meta: ['Ava Brandt', '0 published'], corner: h(H.TintIcon, { icon: 'file', tint: 'mint' }), status: h(H.Badge, null, 'Draft'), actions: cardActs() }),
+        h(H.Card, { onClick: function () {}, title: 'Annual plan upgrade request', description: 'Northwind wants 40 more seats before renewal.', meta: ['Ida Nolan', 'Normal priority'], corner: h(H.TintIcon, { icon: 'card', tint: 'butter' }), status: h(H.Badge, { tone: 'info' }, 'Pending'), actions: cardActs() })));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

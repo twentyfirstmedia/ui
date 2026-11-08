@@ -1,0 +1,36 @@
+<!-- @dsCard group="Pages" height=760 width=1280 page subtitle="File grid by folder with the ⌘K command palette open" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>FilesScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  var AREAS = [['Workspace', 'home'], ['Customers', 'users'], ['Agents', 'bot'], ['Mail', 'mail'], ['Code', 'code'], ['Domains', 'globe'], ['Finance', 'card'], ['Files', 'folder'], ['Account', 'settings']];
+  function Shell(p) {
+    return h('div', { className: 'ha-shell', style: { position: 'relative' } },
+      h(H.TopBar, { brand: 'Halo', tag: 'Admin', active: p.area, items: AREAS.map(function (a) { return { label: a[0], icon: a[1], count: a[0] === 'Mail' ? 2 : null }; }), user: { name: 'Mara Ellis', email: 'mara@halo.app' },
+        extra: [h('button', { key: 's', type: 'button', className: 'ha-topbtn', 'aria-label': 'Search' }, h(H.Icon, { name: 'search', size: 15 }), 'Search', h('kbd', null, '⌘K')), h('button', { key: 'b', type: 'button', className: 'ha-topbtn icon', 'aria-label': 'Notifications' }, h(H.Icon, { name: 'bell', size: 17 }), h('span', { className: 'ha-nav-count' }, 4))] }),
+      h('div', { className: 'ha-sheet', style: { gridTemplateColumns: '200px minmax(0, 1fr)' + (p.side ? ' 300px' : ''), alignItems: 'start' } },
+        h(H.SubNav, { eyebrow: p.area, action: p.action, current: p.current, items: p.pages }),
+        h('main', { className: 'ha-main' }, p.children), p.side || null),
+      p.overlay || null);
+  }
+  var F = [['Northwind – master agreement.pdf', 'pdf', '412 KB', 'Today', true], ['Kestrel Bank – proposal v3.pdf', 'pdf', '1.8 MB', 'Yesterday', true], ['DPA template (DSGVO).doc', 'doc', '96 KB', 'Mon'], ['pricing-tiers.fig', 'fig', '18 MB', 'Today', true], ['dashboard-shots.png', 'img', '2.4 MB', 'Yesterday'], ['brand-assets.zip', 'zip', '36 MB', 'Apr 2'], ['support-macros.sheet', 'sheet', '58 KB', 'Yesterday'], ['pnl-q1-2026.sheet', 'sheet', '92 KB', 'Apr 1', true]];
+  function App() {
+    return h(Shell, { area: 'Files', current: 'files', action: { label: 'Upload', icon: 'paperclip' }, pages: [{ id: 'files', label: 'All files', icon: 'folder' }],
+      overlay: h(H.CommandPalette, { inline: true, onClose: function () {}, items: [{ id: 1, group: 'Pages', label: 'All files', hint: 'Files', icon: 'folder' }, { id: 2, group: 'Actions', label: 'Upload files', icon: 'paperclip', tint: 'butter' }, { id: 3, group: 'Actions', label: 'New invoice', icon: 'card', tint: 'butter' }, { id: 4, group: 'Actions', label: 'Compose mail', icon: 'edit', tint: 'sky' }, { id: 5, group: 'Actions', label: 'New agent', icon: 'bot', tint: 'lilac' }] }) },
+      h('div', { className: 'ha-in' }, h(H.PageHeader, { title: 'Files', subtitle: '15 files · drop files anywhere to upload', actions: [h(H.SearchField, { key: 's', placeholder: 'Search files' }), h(H.Tabs, { key: 't', items: ['Grid', 'List'] })] })),
+      h('div', { className: 'ha-row ha-in', style: { '--d': '80ms' } }, ['All', 'Contracts', 'Receipts', 'Design', 'Agent knowledge', 'Exports'].map(function (t, i) { return h(H.Chip, { key: t, icon: i ? 'folder' : null, selected: i === 0 }, t); })),
+      h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))' }, delay: 140 }, F.map(function (f) { return h(H.FileCard, { key: f[0], name: f[0], kind: f[1], size: f[2], meta: f[3], shared: f[4] }); })));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

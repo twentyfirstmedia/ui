@@ -1,0 +1,18 @@
+<!-- @dsCard group="Data" height=300 width=1000 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  render(h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 16 } },
+    h(H.StatCell, { label: 'Revenue today', value: '€4,812', delta: 12.4, compare: 'vs last Friday', spark: [3, 4, 4, 6, 5, 7, 8], icon: 'card', iconTint: 'butter' }),
+    h(H.StatCell, { label: 'Orders', value: '128', delta: 4.1, compare: 'vs last Friday', spark: [5, 6, 5, 7, 6, 8, 8] }),
+    h(H.StatCell, { label: 'Refund rate', value: '1.2%', delta: -0.4, compare: 'vs last week', invert: true, spark: [4, 4, 3, 3, 2, 2, 2] }),
+    h(H.StatCell, { label: 'Failed orders', value: '7', delta: 40, compare: 'vs yesterday', invert: true, spark: [1, 2, 1, 3, 2, 4, 5], tint: 'blush' })));
+</script>
+</body>
+</html>

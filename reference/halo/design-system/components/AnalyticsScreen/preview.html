@@ -1,0 +1,49 @@
+<!-- @dsCard group="Pages" height=940 width=1280 page subtitle="KPIs with sparklines, revenue lines, plan mix donut, sign-up bars, channels table" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>AnalyticsScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  function Kpi(p) {
+    return h('div', { className: 'ha-card', style: { minHeight: 0, gap: 8 } },
+      h('div', { className: 'ha-row', style: { justifyContent: 'space-between' } }, h('span', { className: 'ha-card-desc' }, p.label), h(H.TintIcon, { icon: p.icon, tint: p.tint })),
+      h('div', { className: 'ha-row', style: { justifyContent: 'space-between', alignItems: 'flex-end' } },
+        h('div', null, h(H.CountUp, { className: 'ha-stat-value', value: p.value }), h('div', { style: { font: '600 12px/16px var(--font-sans)', color: 'var(--' + (p.up ? 'mint' : 'blush') + '-ink)', marginTop: 2 } }, p.delta)),
+        h(H.Sparkline, { values: p.spark, tint: p.up ? 'mint' : 'blush', width: 96, height: 34 })));
+  }
+  function App() {
+    return h(H.AppShell, { active: 'Reports', dock: false },
+      h('div', { className: 'ha-in' }, h(H.PageHeader, { title: 'Analytics', subtitle: 'How the workspace is growing, week over week', actions: [h(H.Tabs, { key: 't', items: ['7 days', '30 days', 'Quarter', 'Year'], defaultValue: '30 days' }), h(H.Button, { key: 'e', variant: 'secondary', icon: 'download' }, 'Export')] })),
+      h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(4, 1fr)' }, delay: 80 },
+        h(Kpi, { label: 'Revenue', value: '$41,280', delta: '+18.2% vs last month', up: true, icon: 'card', tint: 'butter', spark: [18, 22, 21, 29, 34, 38, 41] }),
+        h(Kpi, { label: 'Active members', value: '1,284', delta: '+6.4%', up: true, icon: 'users', tint: 'sky', spark: [9, 10, 10, 11, 12, 12, 13] }),
+        h(Kpi, { label: 'Conversion', value: '4.8%', delta: '+0.6 pts', up: true, icon: 'trend', tint: 'mint', spark: [3.9, 4.1, 4.0, 4.4, 4.5, 4.6, 4.8] }),
+        h(Kpi, { label: 'Churn', value: '1.9%', delta: '+0.3 pts', up: false, icon: 'flag', tint: 'blush', spark: [1.4, 1.5, 1.5, 1.6, 1.8, 1.7, 1.9] })),
+      h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: '1.6fr 1fr' }, delay: 300 },
+        h(H.Panel, { title: 'Revenue', subtitle: 'Subscriptions vs. services', action: h('div', { className: 'ha-legend' }, h('span', null, h('i', { style: { background: 'var(--mint-ink)' } }), 'Subscriptions'), h('span', null, h('i', { style: { background: 'var(--sky-ink)' } }), 'Services')) },
+          h(H.LineChart, { height: 190, labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'], format: function (v) { return '$' + Math.round(v / 1000) + 'k'; }, series: [{ values: [18000, 22000, 21000, 29000, 34000, 38000, 41000], tint: 'mint', area: true }, { values: [9000, 11000, 14000, 13000, 17000, 19000, 23000], tint: 'sky' }] })),
+        h(H.Panel, { title: 'Plan mix', subtitle: '1,284 paying members' },
+          h(H.Donut, { size: 150, stroke: 20, center: '1,284', caption: 'members', data: [{ label: 'Team', value: 54, tint: 'sky' }, { label: 'Starter', value: 26, tint: 'mint' }, { label: 'Business', value: 14, tint: 'lilac' }, { label: 'Trial', value: 6, tint: 'butter' }] }))),
+      h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: '1fr 1.2fr' }, delay: 480 },
+        h(H.Panel, { title: 'Sign-ups this week', subtitle: 'Thursday was the launch email' },
+          h(H.BarChart, { height: 150, data: [{ label: 'Mon', value: 32 }, { label: 'Tue', value: 48 }, { label: 'Wed', value: 41 }, { label: 'Thu', value: 86, tint: 'lilac' }, { label: 'Fri', value: 58 }, { label: 'Sat', value: 22 }, { label: 'Sun', value: 18 }] })),
+        h(H.Panel, { title: 'Top channels' },
+          h(H.Table, { columns: [
+            { key: 'ch', label: 'Channel', render: function (r) { return h('span', { className: 'ha-row' }, h(H.TintIcon, { icon: r.icon, tint: r.tint }), r.ch); } },
+            { key: 'v', label: 'Visits', align: 'right' },
+            { key: 'c', label: 'Conv.', align: 'right' },
+            { key: 't', label: 'Trend', align: 'right', render: function (r) { return h(H.Sparkline, { values: r.s, tint: r.up ? 'mint' : 'blush', width: 70, height: 22 }); } }],
+            rows: [{ ch: 'Organic search', icon: 'search', tint: 'sky', v: '24,180', c: '5.2%', s: [3, 4, 4, 5, 6, 6, 7], up: true }, { ch: 'Newsletter', icon: 'mail', tint: 'butter', v: '9,402', c: '7.9%', s: [2, 2, 3, 5, 4, 6, 7], up: true }, { ch: 'Partners', icon: 'users', tint: 'mint', v: '6,115', c: '6.1%', s: [5, 5, 4, 5, 6, 6, 6], up: true }, { ch: 'Paid social', icon: 'globe', tint: 'blush', v: '5,870', c: '2.3%', s: [6, 5, 5, 4, 4, 3, 3], up: false }] }))));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

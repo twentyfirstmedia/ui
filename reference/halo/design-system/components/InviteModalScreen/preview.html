@@ -1,0 +1,32 @@
+<!-- @dsCard group="Pages" height=780 width=1280 page subtitle="Invite dialog over the People page, with a toast" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>InviteModalScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  function App() {
+    return h('div', { style: { position: 'relative' } },
+      h(H.AppShell, { active: 'People', dock: false },
+        h(H.PageHeader, { title: 'People', subtitle: 'Everyone with access to this workspace', actions: [h(H.Button, { key: 'b', icon: 'users' }, 'Invite')] }),
+        h('div', { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(4, 1fr)' } }, h(H.StatTile, { tint: 'sky', value: '38', label: 'Members' }), h(H.StatTile, { tint: 'mint', value: '31', label: 'Active today' }), h(H.StatTile, { tint: 'placeholder', value: '3', label: 'Pending invites' }), h(H.StatTile, { tint: 'lilac', value: '6', label: 'Admins' })),
+        h('div', { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(3, 1fr)' } }, ['Mara Ellis', 'Jonah Petit', 'Sun Lee', 'Rui Costa', 'Ida Nolan', 'Ava Brandt'].map(function (n) { return h(H.Card, { key: n, title: n, description: 'Member', corner: h(H.Avatar, { name: n, size: 32 }), status: h(H.Badge, { tone: 'success' }, 'Active') }); }))),
+      h('div', { style: { position: 'absolute', inset: 0, borderRadius: 30, overflow: 'hidden' } },
+        h(H.Modal, { style: { position: 'absolute', inset: 0 }, icon: 'users', tint: 'sky', title: 'Invite teammates', text: 'They get access to every project in this workspace.',
+          actions: [h(H.Button, { key: 1, variant: 'ghost' }, 'Cancel'), h(H.Button, { key: 2, icon: 'send' }, 'Send 3 invites')] },
+          h(H.Input, { label: 'Email addresses', defaultValue: 'leo@bluefern.io, nina@bluefern.io, ops@bluefern.io' }),
+          h(H.Select, { label: 'Role', options: ['Editor', 'Viewer', 'Admin'] }),
+          h('div', { className: 'ha-row' }, h(H.Badge, { tone: 'info' }, '3 seats left after this'), h(H.Badge, null, 'Expires in 7 days')))),
+      h('div', { style: { position: 'absolute', right: 40, bottom: 40 } }, h(H.Toast, { action: 'Undo' }, 'Ava Brandt was removed')));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!-- @dsCard group="Pages" height=920 width=1280 page subtitle="Member directory with filters, status badges, pagination, team donut and activity" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>PeopleScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  var MEMBERS = [
+    { n: 'Mara Ellis', e: 'mara@halo.app', r: 'Owner', t: 'Leadership', s: 'Active', tone: 'success', a: 'Now' },
+    { n: 'Jonah Petit', e: 'jonah@halo.app', r: 'Admin', t: 'Design', s: 'Active', tone: 'success', a: '5 min ago' },
+    { n: 'Sun Lee', e: 'sun@halo.app', r: 'Editor', t: 'Growth', s: 'Active', tone: 'success', a: '1 h ago' },
+    { n: 'Rui Costa', e: 'rui@halo.app', r: 'Editor', t: 'Finance', s: 'Away', tone: 'warning', a: 'Yesterday' },
+    { n: 'Ava Brandt', e: 'ava@halo.app', r: 'Viewer', t: 'Support', s: 'Invited', tone: 'info', a: '—' },
+    { n: 'Ida Nolan', e: 'ida@halo.app', r: 'Editor', t: 'Sales', s: 'Active', tone: 'success', a: '3 h ago' },
+    { n: 'Theo Marsh', e: 'theo@halo.app', r: 'Viewer', t: 'Design', s: 'Suspended', tone: 'danger', a: '12 days ago' }];
+  function App() {
+    var f = React.useState('Everyone');
+    return h(H.AppShell, { active: 'People',
+      side: h(H.Panel, { side: true, title: 'Team', subtitle: '42 seats · 38 used' },
+        h(H.Donut, { size: 120, stroke: 16, legend: false, center: '38', caption: 'of 42', data: [{ label: 'Design', value: 9, tint: 'lilac' }, { label: 'Growth', value: 11, tint: 'mint' }, { label: 'Support', value: 8, tint: 'sky' }, { label: 'Finance', value: 4, tint: 'butter' }, { label: 'Sales', value: 6, tint: 'blush' }] }),
+        h('div', { className: 'ha-legend' }, [['Design', 'lilac'], ['Growth', 'mint'], ['Support', 'sky'], ['Finance', 'butter'], ['Sales', 'blush']].map(function (x) { return h('span', { key: x[0] }, h('i', { style: { background: 'var(--' + x[1] + '-ink)' } }), x[0]); })),
+        h('h3', { className: 'ha-card-title', style: { fontSize: 16, marginTop: 8 } }, 'Recent activity'),
+        h(H.Timeline, { delay: 400, items: [{ avatar: 'Jonah Petit', text: h('span', null, h('b', null, 'Jonah'), ' changed Ava to Viewer'), time: '10 min ago' }, { icon: 'send', tint: 'sky', text: '3 invites sent to support@', time: '1 h ago' }, { avatar: 'Mara Ellis', text: h('span', null, h('b', null, 'Mara'), ' suspended Theo Marsh'), time: 'Mon' }] })) },
+      h('div', { className: 'ha-in' }, h(H.PageHeader, { title: 'People', subtitle: 'Everyone with access to this workspace', actions: [h(H.SearchField, { key: 's', placeholder: 'Search by name or email' }), h(H.Button, { key: 'b', icon: 'users' }, 'Invite')] })),
+      h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(4, 1fr)' }, delay: 80 },
+        h(H.StatTile, { tint: 'sky', value: '38', label: 'Members' }), h(H.StatTile, { tint: 'mint', value: '31', label: 'Active today' }), h(H.StatTile, { tint: 'placeholder', value: '3', label: 'Pending invites' }), h(H.StatTile, { tint: 'lilac', value: '6', label: 'Admins' })),
+      h('div', { className: 'ha-in ha-row', style: { '--d': '240ms' } }, ['Everyone', 'Admins', 'Editors', 'Viewers', 'Invited'].map(function (t) { return h(H.Chip, { key: t, selected: f[0] === t, onClick: function () { f[1](t); } }, t); })),
+      h('div', { className: 'ha-panel ha-panel-flush ha-in', style: { '--d': '300ms' } },
+        h(H.Table, { columns: [
+          { key: 'n', label: 'Name', render: function (r) { return h('span', { className: 'ha-row', style: { flexWrap: 'nowrap' } }, h(H.Avatar, { name: r.n, size: 32 }), h('span', null, h('div', { style: { fontWeight: 700 } }, r.n), h('div', { style: { fontSize: 12, color: 'var(--ink-muted)' } }, r.e))); } },
+          { key: 'r', label: 'Role' }, { key: 't', label: 'Team' },
+          { key: 's', label: 'Status', render: function (r) { return h(H.Badge, { tone: r.tone }, r.s); } },
+          { key: 'a', label: 'Last active' },
+          { key: 'x', label: '', align: 'right', render: function () { return h(H.IconButton, { icon: 'more', label: 'Member options', size: 'sm' }); } }], rows: MEMBERS }),
+        h('div', { className: 'ha-row', style: { justifyContent: 'space-between', padding: '8px 16px' } }, h('span', { className: 'ha-card-desc' }, 'Showing 7 of 38'), h(H.Pagination, { total: 6, page: 1 }))));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

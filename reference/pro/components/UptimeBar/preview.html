@@ -1,0 +1,17 @@
+<!-- @dsCard group="Data" height=140 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>UptimeBar — preview</title></head>
+<body>
+<div class="hq" data-density="compact"><div class="pv" style="">
+<div class="stack" style="gap:14px;max-width:560px">
+ <div class="stack" style="gap:6px"><div class="row"><span class="t-label">jasondevine.de</span><span class="grow"></span><span class="mono" style="font-size:12px">99,97 %</span></div><div class="hq-uptime" id="u1" aria-label="Uptime 90 Tage"></div><div class="row mono muted" style="font-size:11px"><span>vor 90 Tagen</span><span class="grow"></span><span>heute</span></div></div>
+ <div class="stack" style="gap:6px"><div class="row"><span class="t-label">mail-01</span><span class="grow"></span><span class="mono" style="font-size:12px;color:var(--warn)">99,12 %</span></div><div class="hq-uptime" id="u2" aria-label="Uptime 90 Tage"></div></div>
+</div></div></div>
+<script>
+
+function fill(id, bad){var el=document.getElementById(id);for(var i=0;i<90;i++){var x=document.createElement('i');if(i<6)x.className='none';else if(bad[i]==='w')x.className='warn';else if(bad[i]==='d')x.className='down';el.appendChild(x);}}
+fill('u1',{41:'w'}); fill('u2',{22:'w',23:'d',60:'w',88:'w'});
+</script>
+</body>
+</html>

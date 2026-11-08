@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>HQ · Mail-Konten</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="hq-tokens.css">
+<link rel="stylesheet" href="ds/hq/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#09090b}
+a{color:inherit}
+</style>
+</helmet>
+<div class="hq" data-theme="{{theme}}" data-density="{{density}}" style="background: var(--bg-000); color: var(--fg-100); font-family: var(--font-sans); min-height: 1000px; display: flex; flex-wrap: wrap; align-items: stretch;">
+
+<aside style="flex: 1 1 232px; max-width: 100%; background: var(--bg-100); border-right: 1px solid var(--line-200); display: flex; flex-direction: column;">
+ <div style="height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 1px solid var(--line-200);"><a href="Main.dc.html" class="hq-glyph" style="text-decoration: none;" aria-label="HQ Übersicht">HQ</a><span class="hq-wordmark"><b>HQ</b><span>twentyfirst</span></span></div>
+ <nav class="hq-nav" aria-label="Hauptnavigation">
+  <a href="Main.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>Übersicht</a>
+  <a href="Stadt.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>Stadt</a>
+  <a href="Chats.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>Chats<span class="hq-count">3</span></a>
+  <a href="Freigaben.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg>Freigaben<span class="hq-count hq-count--signal">3</span></a>
+  <a href="Webmail.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Webmail<span class="hq-count">27</span></a>
+  <a href="Domains.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>Domains &amp; DNS</a>
+  <a href="#" aria-current="page"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></svg>Mail-Konten</a>
+  <a href="Server.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>Apps &amp; Server</a>
+  <a href="Finanzen.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>Finanzen</a>
+  <a href="Ausloeser.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Auslöser</a>
+  <span class="eyebrow">Module</span>
+  <a href="Brand.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>Brand-Generator</a>
+  <span class="eyebrow">Projekte</span>
+  <a href="#"><span class="hq-dotchip"><i style="background: #cf4646;"></i></span>FollowerPilot</a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #194e9d;"></i></span>Chatteo<span class="pst">Launch</span></a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #6159e1;"></i></span>Twentyfirst AI<span class="pst">Konzept</span></a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #276afc;"></i></span>TravelPilot24<span class="pst">Im Aufbau</span></a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #36a9e1;"></i></span>LicensePilot<span class="pst">Im Aufbau</span></a>
+  <a href="city/Main.dc.html" title="Jason Devine, FlightPilot24, Mein Handelsregister, Reblogger"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>Standby<span class="hq-count">4</span></a>
+  <a href="Projekt-Neu.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Neues Projekt</a>
+ </nav>
+ <nav class="hq-nav" aria-label="Einstellungen" style="margin-top: auto; border-top: 1px solid var(--line-200);">
+  <a href="Einstellungen.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>Einstellungen</a>
+ </nav>
+</aside>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column;">
+ <header class="hq-topbar" style="border-bottom: 1px solid var(--line-200); flex-wrap: wrap;">
+  <div class="hq-crumbs"><span class="cur">Mail-Konten</span></div>
+  <span class="grow"></span>
+  <button class="hq-searchtrigger" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="grow">Suchen oder Main Brain fragen …</span><span class="hq-kbd">⌘K</span></button>
+  <span class="hq-badge hq-badge--outline">One.com · Mailcow</span>
+  <span class="hq-avatar hq-avatar--human">RT</span>
+ </header>
+
+<main style="padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+ <div style="display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap;">
+  <div style="display: flex; flex-direction: column; gap: 4px; flex: 1 1 320px;"><span class="eyebrow">25 Domains · 2 Anbieter</span><h1 class="t-display" style="margin: 0;">Mail-Konten</h1></div>
+  <div class="hq-seg" role="group" aria-label="Anbieter"><button type="button" aria-pressed="{{fAll}}" onClick="{{setAll}}">Alle</button><button type="button" aria-pressed="{{fOne}}" onClick="{{setOne}}">One.com</button><button type="button" aria-pressed="{{fMc}}" onClick="{{setMc}}">Mailcow</button><button type="button" aria-pressed="{{fPr}}" onClick="{{setPr}}">Probleme<span class="hq-count hq-count--signal" style="margin-left: 6px;">3</span></button></div>
+  <button class="hq-btn hq-btn--primary" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Postfach anlegen</button>
+ </div>
+
+ <div class="hq-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+  <div class="hq-cell"><span class="eyebrow">Postfächer</span><span class="t-numeric">61</span><span class="t-caption">auf 25 Domains</span></div>
+  <div class="hq-cell"><span class="eyebrow">Bei Mailcow</span><span class="t-numeric">13<span class="muted" style="font-size: 16px;"> / 61</span></span><div class="hq-meter"><div class="fill" style="width: 21%;"></div></div></div>
+  <div class="hq-cell"><span class="eyebrow">Agents mit Postfach</span><span class="t-numeric">9</span><span class="t-caption">lesen per IMAP IDLE, senden per SMTP</span></div>
+  <div class="hq-cell"><span class="eyebrow">Probleme</span><span class="t-numeric" style="color: var(--warn);">3</span><span class="t-caption">1 Login, 1 DKIM, 1 Speicher</span></div>
+ </div>
+
+ <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;">
+  <section style="flex: 2 1 640px; min-width: 0; border: 1px solid var(--line-200); background: var(--bg-100);">
+   <div style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line-200); flex-wrap: wrap;">
+    <span class="t-title">Postfächer</span><span class="hq-count">{{count}}</span><span class="grow"></span>
+    <div class="hq-inputgroup" style="width: 260px; max-width: 100%;"><span class="affix"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span><input class="hq-input" placeholder="Adresse oder Domain" aria-label="Postfach suchen" value="{{q}}" onChange="{{onQ}}"></div>
+   </div>
+   <div class="hq-tablewrap">
+    <table class="hq-table">
+     <thead><tr><th>Adresse</th><th>Projekt</th><th>Anbieter</th><th>Agent</th><th>Speicher</th><th>Status</th></tr></thead>
+     <tbody>
+      <sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+       <tr style="{{r.rowStyle}}">
+        <td class="key"><button type="button" onClick="{{r.pick}}" aria-pressed="{{r.sel}}" style="background: none; border: 0; padding: 0; color: var(--fg-100); font: 500 13px var(--font-mono); cursor: pointer; text-align: left;">{{r.addr}}</button></td>
+        <td><span class="row" style="gap: 6px;"><span class="hq-dotchip"><i style="{{r.dot}}"></i></span>{{r.project}}</span></td>
+        <td class="{{r.provCls}}">{{r.provider}}</td>
+        <td class="{{r.agentCls}}">{{r.agent}}</td>
+        <td><div class="row" style="gap: 8px; flex-wrap: nowrap;"><div class="{{r.meterCls}}" style="width: 72px;"><div class="fill" style="{{r.fill}}"></div></div><span class="mono muted" style="font-size: 12px;">{{r.store}}</span></div></td>
+        <td><span class="hq-status"><i class="{{r.shape}}"></i><span class="txt">{{r.statusTxt}}</span></span></td>
+       </tr>
+      </sc-for>
+     </tbody>
+    </table>
+   </div>
+  </section>
+
+  <aside style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 20px;">
+   <section style="border: 1px solid var(--line-200); background: var(--bg-100);">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--line-200);"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><span class="t-title mono">{{cur.addr}}</span></div>
+    <sc-if value="{{cur.hasProblem}}" hint-placeholder-val="{{ false }}">
+     <div class="{{cur.bannerCls}}" style="margin: 12px 14px 0;"><i class="{{cur.shape}}"></i><div class="txt"><b>{{cur.problem}}</b> <span>{{cur.fix}}</span></div></div>
+    </sc-if>
+    <dl class="hq-kv" style="padding: 12px 14px; margin: 0;">
+     <dt>Projekt</dt><dd>{{cur.project}}</dd>
+     <dt>Anbieter</dt><dd>{{cur.provider}}</dd>
+     <dt>IMAP</dt><dd class="mono">{{cur.imap}}</dd>
+     <dt>SMTP</dt><dd class="mono">{{cur.smtp}}</dd>
+     <dt>Agent</dt><dd>{{cur.agent}}</dd>
+     <dt>Sync</dt><dd>{{cur.sync}}</dd>
+     <dt>Speicher</dt><dd class="mono">{{cur.store}}</dd>
+    </dl>
+    <div class="hq-field" style="padding: 0 14px 12px;">
+     <label class="hq-label" for="mk-pw">Passwort</label>
+     <div class="hq-inputgroup"><input id="mk-pw" class="hq-input hq-secret" readonly value="••••••••••••••••"><span class="affix affix--sep"><button class="hq-btn hq-btn--sm hq-btn--ghost hq-btn--icon" type="button" aria-label="Anzeigen"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg></button><button class="hq-btn hq-btn--sm hq-btn--ghost hq-btn--icon" type="button" aria-label="Kopieren"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button></span></div>
+     <span class="hq-hint">Verschlüsselt gespeichert · Anzeigen erfordert Passkey</span>
+    </div>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; padding: 12px 14px; border-top: 1px solid var(--line-200);">
+     <a class="hq-btn hq-btn--sm" href="Webmail.dc.html"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Im Webmail öffnen</a>
+     <button class="hq-btn hq-btn--sm" type="button">Agent zuweisen</button>
+     <sc-if value="{{cur.canMove}}" hint-placeholder-val="{{ true }}"><button class="hq-btn hq-btn--sm hq-btn--ghost" type="button">Zu Mailcow umziehen</button></sc-if>
+    </div>
+   </section>
+
+   <section style="border: 1px solid var(--line-200); background: var(--bg-100);">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 12px 14px;"><span class="t-title">Umzug zu Mailcow</span><span class="grow"></span><span class="mono muted" style="font-size: 12px;">chatteo.de</span></div>
+    <ol class="hq-steps" style="border-width: 1px 0;"><li class="done"><span class="n"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>Domain</li><li class="done"><span class="n"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>DNS</li><li class="cur"><span class="n">3</span>Postfächer</li><li><span class="n">4</span>Umzug</li></ol>
+    <div style="padding: 12px 14px; display: flex; flex-direction: column; gap: 10px;">
+     <span class="soft" style="font-size: 13px;">3 Postfächer werden auf mail-01 angelegt. Danach kopiert der Umzug alle Mails per IMAP und schaltet MX um. Die MX-Änderung braucht eine Freigabe.</span>
+     <div class="row" style="gap: 6px;"><span class="hq-badge hq-badge--mono">sales@</span><span class="hq-badge hq-badge--mono">support@</span><span class="hq-badge hq-badge--mono">hello@</span></div>
+     <div class="row"><span class="grow"></span><button class="hq-btn hq-btn--sm hq-btn--primary" type="button">Weiter</button></div>
+    </div>
+   </section>
+  </aside>
+ </div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"density":{"editor":"enum","options":["compact","comfortable"],"default":"compact"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'support@followerpilot.de', filter: 'all', q: '' };
+    var FP = '#cf4646', CH = '#194e9d', JD = '#b98a6e', AI = '#6159e1', FX = '#8a8a93';
+    var one = { imap: 'imap.one.com:993 · IDLE', smtp: 'send.one.com:587' }, mc = { imap: 'mail-01.twentyfirst.media:993 · IDLE', smtp: 'mail-01 → Amazon SES:587' };
+    this.data = [
+      { addr: 'support@followerpilot.de', project: 'FollowerPilot', color: FP, provider: 'Mailcow', srv: mc, agent: 'Support-Agent', used: 2.1, quota: 10, status: 'ok', sync: 'vor 12 Sek.' },
+      { addr: 'hello@followerpilot.de', project: 'FollowerPilot', color: FP, provider: 'Mailcow', srv: mc, agent: '', used: 0.4, quota: 5, status: 'ok', sync: 'vor 40 Sek.' },
+      { addr: 'robin@followerpilot.de', project: 'FollowerPilot', color: FP, provider: 'Mailcow', srv: mc, agent: '', used: 3.8, quota: 10, status: 'ok', sync: 'vor 1 Min.' },
+      { addr: 'sales@chatteo.de', project: 'Chatteo', color: CH, provider: 'One.com', srv: one, agent: 'Outreach', used: 1.2, quota: 5, status: 'warn', statusTxt: 'DKIM fehlt', problem: 'DKIM fehlt für chatteo.de.', fix: 'Ausgehende Mails landen öfter im Spam. Wird beim Umzug zu Mailcow gesetzt.', sync: 'vor 20 Sek.' },
+      { addr: 'support@chatteo.de', project: 'Chatteo', color: CH, provider: 'One.com', srv: one, agent: 'Support', used: 0.9, quota: 5, status: 'ok', sync: 'vor 30 Sek.' },
+      { addr: 'hello@jasondevine.de', project: 'Jason Devine', color: JD, provider: 'One.com', srv: one, agent: '', used: 0.6, quota: 5, status: 'ok', sync: 'vor 2 Min.' },
+      { addr: 'orders@jasondevine.de', project: 'Jason Devine', color: JD, provider: 'One.com', srv: one, agent: '', used: 4.6, quota: 5, status: 'warn', statusTxt: 'Speicher 92 %', problem: 'Postfach fast voll.', fix: 'Ab 100 % werden neue Mails abgelehnt. Archivieren oder Speicher erhöhen.', sync: 'vor 1 Min.' },
+      { addr: 'robin@twentyfirst.ai', project: 'Twentyfirst AI', color: AI, provider: 'One.com', srv: one, agent: '', used: 1.1, quota: 5, status: 'ok', sync: 'vor 3 Min.' },
+      { addr: 'rechnungen@followerx.de', project: 'FollowerX GmbH', color: FX, provider: 'One.com', srv: one, agent: 'Finanz-Agent', used: 0.3, quota: 5, status: 'danger', statusTxt: 'Login fehlgeschlagen', problem: 'IMAP-Login fehlgeschlagen.', fix: 'Das Passwort wurde bei One.com geändert. Neues Passwort hinterlegen.', sync: 'seit 3 Std. keine' }
+    ];
+  }
+  row(d) {
+    var pct = Math.round(d.used / d.quota * 100);
+    var st = { ok: ['hq-shape hq-shape--dot is-ok', 'ok'], warn: ['hq-shape hq-shape--tri is-warn', d.statusTxt], danger: ['hq-shape hq-shape--square is-danger', d.statusTxt] }[d.status];
+    return { addr: d.addr, project: d.project, dot: 'background: ' + d.color, provider: d.provider, provCls: d.provider === 'Mailcow' ? '' : 'muted',
+      agent: d.agent || '—', agentCls: d.agent ? '' : 'muted', store: String(d.used).replace('.', ',') + ' / ' + d.quota + ' GB',
+      meterCls: 'hq-meter' + (pct >= 80 ? ' is-warn' : ''), fill: 'width: ' + pct + '%', shape: st[0], statusTxt: st[1] };
+  }
+  renderVals() {
+    var self = this, s = this.state, q = (s.q || '').toLowerCase();
+    var list = this.data.filter(function (d) {
+      if (s.filter === 'one' && d.provider !== 'One.com') return false;
+      if (s.filter === 'mc' && d.provider !== 'Mailcow') return false;
+      if (s.filter === 'pr' && d.status === 'ok') return false;
+      return !q || d.addr.indexOf(q) >= 0 || d.project.toLowerCase().indexOf(q) >= 0;
+    });
+    var rows = list.map(function (d) { var r = self.row(d), on = d.addr === s.sel; return Object.assign(r, { sel: String(on), rowStyle: on ? 'background: var(--bg-200);' : '', pick: function () { self.setState({ sel: d.addr }); } }); });
+    var d = this.data.filter(function (x) { return x.addr === s.sel; })[0] || this.data[0], r = this.row(d);
+    var cur = Object.assign({}, r, { imap: d.srv.imap, smtp: d.srv.smtp, sync: d.sync, canMove: d.provider === 'One.com', hasProblem: d.status !== 'ok', problem: d.problem || '', fix: d.fix || '',
+      bannerCls: 'hq-banner hq-banner--' + (d.status === 'danger' ? 'danger' : 'warn') });
+    var f = function (k) { return function () { self.setState({ filter: k }); }; };
+    return { theme: this.props.theme ?? 'dark', density: this.props.density ?? 'compact', rows: rows, count: rows.length, cur: cur, q: s.q, onQ: function (e) { self.setState({ q: e.target.value }); },
+      fAll: String(s.filter === 'all'), fOne: String(s.filter === 'one'), fMc: String(s.filter === 'mc'), fPr: String(s.filter === 'pr'), setAll: f('all'), setOne: f('one'), setMc: f('mc'), setPr: f('pr') };
+  }
+}
+</script>
+</body>
+</html>

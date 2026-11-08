@@ -1,0 +1,23 @@
+<!-- @dsCard group="Forms" height=330 width=760 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+
+  function App() {
+    var e = useState('mara@'), n = useState('Mara Ellis');
+    var bad = !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(e[0]);
+    return h('div', { className: 'ha-panel', style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 } },
+      h(H.TextField, { label: 'Full name', required: true, value: n[0], onChange: function (x) { n[1](x.target.value); }, success: n[0].length > 1 ? 'Looks good' : null }),
+      h(H.TextField, { label: 'Email', required: true, icon: 'mail', value: e[0], onChange: function (x) { e[1](x.target.value); }, error: bad ? 'That doesn’t look like an email address' : null }),
+      h(H.TextField, { label: 'Company', optional: true, placeholder: 'Acme GmbH', hint: 'Shown on invoices' }),
+      h(H.TextField, { label: 'Monthly budget', suffix: 'EUR', defaultValue: '1,200' }),
+      h(H.TextField, { label: 'Workspace URL', defaultValue: 'halo.app/acme', disabled: true, hint: 'Ask an owner to change it' }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

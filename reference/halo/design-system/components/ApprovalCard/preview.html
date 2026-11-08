@@ -1,0 +1,22 @@
+<!-- @dsCard group="AI" height=820 width=820 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  function App() {
+    var d = useState(null);
+    return h('div', { className: 'ha-col', style: { gap: 16 } },
+      h(H.ApprovalCard, { agent: 'Atlas', project: 'Support', family: 'comms', age: '4 min', title: 'Send this email to ida@northwind.io', text: 'Atlas is set to drafts only, so it needs your OK.', escalation: 'Escalates to the owner in 1:52 h', trace: h('a', { href: '#' }, 'Open trace'), decision: d[0], onDecide: function (k, t) { d[1]({ key: k, by: 'Mara Ellis', at: '09:41', text: t }); } },
+        h('div', { className: 'ha-approval-mail' }, 'Hi Ida,\n\nhappy to add 40 seats before your renewal on 1 May. The quote is attached.\n\nBest,\nMara')),
+      h(H.ApprovalCard, { agent: 'Ledger', project: 'Finance', family: 'money', title: 'Refund €10.00 to the card ending 4242', decision: { key: 'C', by: 'Lukas', at: 'Yesterday 18:02' } }),
+      h(H.ApprovalCard, { agent: 'Scout', project: 'Domains', family: 'infra', title: 'Add TXT record hq-test', decision: { key: 'B', by: 'Mara Ellis', at: '08:10', text: 'Use TTL 300 instead' } }));
+  }
+  render(h(App));
+</script>
+</body>
+</html>

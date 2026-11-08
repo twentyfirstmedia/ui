@@ -1,0 +1,19 @@
+<!-- @dsCard group="Admin" height=560 width=1000 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  function App() { var hl = useState(['Real Instagram Followers', 'Delivery in 1 Hour', 'Trusted by 50,000 Creators']), ds = useState(['Grow your account with real followers. Secure payment, 30-day refill guarantee, German support.', 'Start from €2.90. No password needed.']);
+    return h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'start' } },
+      h('div', { className: 'ha-panel', style: { gap: 12 } }, hl[0].map(function (v, i) { return h(H.TextField, { key: i, label: 'Headline ' + (i + 1), value: v, onChange: function (e) { var n = hl[0].slice(); n[i] = e.target.value; hl[1](n); }, hint: v.length + ' / 30' }); }), ds[0].map(function (v, i) { return h(H.TextField, { key: 'd' + i, label: 'Description ' + (i + 1), value: v, onChange: function (e) { var n = ds[0].slice(); n[i] = e.target.value; ds[1](n); }, hint: v.length + ' / 90' }); })),
+      h('div', { className: 'ha-panel' }, h(H.SearchAdPreview, { name: 'FollowerPilot', domain: 'followerpilot.de', paths: ['instagram', 'followers'], headlines: hl[0], descriptions: ds[0], sitelinks: ['Buy likes', 'Pricing', 'Refill guarantee', 'Support'] })));
+  }
+  render(h(App));
+</script>
+</body>
+</html>

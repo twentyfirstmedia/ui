@@ -1,0 +1,36 @@
+<!-- @dsCard group="Pages" height=920 width=1280 page subtitle="Project detail: breadcrumb, progress ring, tasks, files and activity timeline" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>ProjectScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  function App() {
+    var tasks = [['Draft new tier names', true], ['Comparison table component', true], ['Localise tiers for DE and FR', false], ['Checkout seat selector', false], ['Write FAQ for annual plans', false]];
+    return h(H.AppShell, { active: 'Projects',
+      side: h(H.Panel, { side: true, title: 'Activity', subtitle: 'Last 7 days' },
+        h(H.Timeline, { delay: 300, items: [{ avatar: 'Mara Ellis', text: h('span', null, h('b', null, 'Mara'), ' approved the tier names'), time: '2 min ago' }, { avatar: 'Jonah Petit', text: h('span', null, h('b', null, 'Jonah'), ' moved Comparison table to review'), time: '1 h ago' }, { icon: 'sparkle', tint: 'mint', text: 'Preview deployed to staging', time: 'Yesterday' }, { avatar: 'Rui Costa', text: h('span', null, h('b', null, 'Rui'), ' flagged the seat selector as blocked'), time: 'Mon' }, { icon: 'flag', tint: 'blush', text: 'Deadline set to Fri, 17.04', time: 'Mon' }] })) },
+      h('div', { className: 'ha-in' }, h(H.PageHeader, { crumbs: ['Projects', 'Pricing page refresh'], title: 'Pricing page refresh', subtitle: 'New tiers and a comparison table for annual plans', actions: [h(H.AvatarStack, { key: 'a', names: ['Mara Ellis', 'Jonah Petit', 'Sun Lee', 'Rui Costa'] }), h(H.Button, { key: 's', variant: 'secondary', icon: 'share' }, 'Share'), h(H.Button, { key: 'p', icon: 'play' }, 'Preview')] })),
+      h('div', { className: 'ha-in', style: { '--d': '100ms' } }, h(H.Tabs, { items: ['Overview', 'Tasks', 'Files', 'Settings'] })),
+      h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: '1.3fr 1fr' }, delay: 160 },
+        h('div', { className: 'ha-card ha-bg-lilac', style: { minHeight: 0, flexDirection: 'row', alignItems: 'center', gap: 24 } },
+          h(H.ProgressRing, { value: 64, size: 104, stroke: 11, caption: 'done' }),
+          h('div', { className: 'ha-col', style: { gap: 8 } }, h('span', { className: 'ha-card-title', style: { padding: 0 } }, 'On track for Friday'), h('span', { className: 'ha-card-desc' }, '11 of 18 tasks done. One blocker on checkout needs a decision from billing.'), h('div', { className: 'ha-row' }, h(H.Badge, { tone: 'success' }, 'On track'), h(H.Badge, { tone: 'warning' }, '1 blocker')))),
+        h('div', { className: 'ha-grid', style: { gridTemplateColumns: '1fr 1fr', gap: 12 } }, h(H.StatTile, { tint: 'sky', value: '18', label: 'Tasks' }), h(H.StatTile, { tint: 'butter', value: '3', label: 'Days left' }), h(H.StatTile, { tint: 'mint', value: '24', label: 'Comments' }), h(H.StatTile, { tint: 'placeholder', value: '2', label: 'In review' }))),
+      h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: '1.3fr 1fr' }, delay: 320 },
+        h(H.Panel, { title: 'Milestone tasks', action: h(H.Button, { size: 'sm', variant: 'soft', icon: 'plus' }, 'Add') },
+          h(H.Stagger, { className: 'ha-col', style: { gap: 4 }, delay: 420 }, tasks.map(function (t) { return h('div', { key: t[0], className: 'ha-row-item', style: { gridTemplateColumns: 'auto 1fr auto', cursor: 'default' } }, h(H.Checkbox, { defaultChecked: t[1] }), h('span', { style: { fontWeight: 600, fontSize: 14, textDecoration: t[1] ? 'line-through' : 'none', color: t[1] ? 'var(--ink-muted)' : 'var(--ink)' } }, t[0]), h(H.Avatar, { name: t[0], size: 24 })); }))),
+        h(H.Panel, { title: 'Files', subtitle: '4 attachments' },
+          h(H.Stagger, { className: 'ha-col', style: { gap: 8 }, delay: 480 }, h(H.FileRow, { name: 'brief-v4.pdf', meta: '2.4 MB · PDF', kind: 'pdf' }), h(H.FileRow, { name: 'pricing-tiers.fig', meta: '18 MB · Design', kind: 'fig' }), h(H.FileRow, { name: 'q2-forecast.xlsx', meta: '640 KB · Sheet', kind: 'sheet' })))));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

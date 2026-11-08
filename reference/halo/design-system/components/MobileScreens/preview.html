@@ -1,0 +1,48 @@
+<!-- @dsCard group="Pages" height=820 width=1280 page subtitle="Three phone screens: home, projects and inbox" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>MobileScreens — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  function Phone(p) {
+    return h('div', { className: 'ha-in', style: { '--d': p.d + 'ms', width: 360, height: 760, borderRadius: 44, background: 'var(--frame)', padding: 10, boxSizing: 'border-box', boxShadow: 'var(--shadow-float)', flex: 'none' } },
+      h('div', { style: { height: '100%', borderRadius: 36, background: 'var(--canvas)', overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative' } },
+        h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px 8px', font: '700 13px var(--font-sans)' } }, h('span', null, '9:41'), h('span', { style: { width: 90, height: 24, borderRadius: 999, background: 'var(--frame)' } }), h('span', null, '•••')),
+        h('div', { style: { flex: 1, overflow: 'hidden', padding: '8px 16px 90px', display: 'flex', flexDirection: 'column', gap: 16 } }, p.children),
+        h('div', { style: { position: 'absolute', left: 0, right: 0, bottom: 16, display: 'flex', justifyContent: 'center' } }, h(H.Dock, { items: [{ label: 'Home', icon: 'home', tint: p.tab === 0 ? 'sky' : 'plain' }, { label: 'Projects', icon: 'grid', tint: p.tab === 1 ? 'mint' : 'plain' }, { label: 'Inbox', icon: 'mail', tint: p.tab === 2 ? 'lilac' : 'plain' }, { label: 'New', icon: 'plus' }] }))));
+  }
+  function App() {
+    return h('div', { style: { display: 'flex', gap: 28, justifyContent: 'center', padding: '20px 0', background: 'var(--canvas)', borderRadius: 30 } },
+      h(Phone, { d: 0, tab: 0 },
+        h('div', { className: 'ha-row', style: { justifyContent: 'space-between' } }, h('div', null, h('div', { className: 'ha-card-desc' }, 'Good morning'), h('div', { className: 'ha-header-title', style: { fontSize: 24 } }, 'Mara')), h(H.Avatar, { name: 'Mara Ellis', size: 40 })),
+        h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: '1fr 1fr', gap: 12 }, delay: 150 }, h(H.StatTile, { tint: 'sky', value: '18', label: 'Projects' }), h(H.StatTile, { tint: 'butter', value: '$48k', label: 'Revenue' }), h(H.StatTile, { tint: 'mint', value: '11', label: 'Live' }), h(H.StatTile, { tint: 'placeholder', value: '4', label: 'Review' })),
+        h('div', { className: 'ha-in', style: { '--d': '400ms' } }, h(H.EventCard, { kind: 'meeting', label: 'Team sync', date: 'Today', time: '10:30', actions: false }, 'Roadmap check-in with design and growth.'))),
+      h(Phone, { d: 120, tab: 1 },
+        h('div', { className: 'ha-header-title', style: { fontSize: 24 } }, 'Projects'),
+        h('div', { className: 'ha-row', style: { flexWrap: 'nowrap' } }, h(H.Chip, { selected: true }, 'All'), h(H.Chip, null, 'Live'), h(H.Chip, null, 'Draft')),
+        h(H.Stagger, { className: 'ha-col', delay: 250 },
+          h(H.Card, { tint: 'lilac', title: 'Pricing page refresh', description: 'New tiers and a comparison table.', status: h(H.Badge, null, '86 viewing'), actions: [h(H.IconButton, { key: 1, icon: 'edit', label: 'Edit', size: 'sm', variant: 'solid' })], style: { minHeight: 0 } }),
+          h(H.Card, { title: 'Quarterly onboarding', description: 'Welcome flow for new admins.', status: h(H.Badge, { tone: 'success' }, 'Live'), actions: cardActs(), style: { minHeight: 0 } }),
+          h(H.Card, { title: 'Partner referrals', description: 'Invites, payouts, tiers.', status: h(H.Badge, { tone: 'success' }, 'Live'), style: { minHeight: 0 } }))),
+      h(Phone, { d: 240, tab: 2 },
+        h('div', { className: 'ha-header-title', style: { fontSize: 24 } }, 'Inbox'),
+        h(H.SearchField, { placeholder: 'Search messages', style: { minWidth: 0 } }),
+        h(H.Stagger, { className: 'ha-list', delay: 350 },
+          h(H.ListRow, { avatar: 'Jonah Petit', title: 'Jonah Petit', subtitle: 'Move the review to Thursday?', meta: '09:12', unread: true }),
+          h(H.ListRow, { avatar: 'Northwind', title: 'Northwind', subtitle: 'Seat upgrade before renewal', meta: '08:40', unread: true }),
+          h(H.ListRow, { icon: 'bell', tint: 'butter', title: 'Billing', subtitle: 'Card ending 4417 expires', meta: 'Yest.' }),
+          h(H.ListRow, { avatar: 'Sun Lee', title: 'Sun Lee', subtitle: 'Payout file attached', meta: 'Yest.' }),
+          h(H.ListRow, { icon: 'flag', tint: 'blush', title: 'Incident #88', subtitle: 'Webhooks delayed in EU', meta: 'Sun' }))));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

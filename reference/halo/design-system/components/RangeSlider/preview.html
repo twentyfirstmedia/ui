@@ -1,0 +1,22 @@
+<!-- @dsCard group="Forms" height=560 width=960 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  function App() { var r = useState([300000, 650000]), t = useState('scandi'), s = useState('read');
+    return h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'start' } },
+      h('div', { className: 'ha-panel', style: { gap: 20 } },
+        h(H.RangeSlider, { label: 'Price', min: 0, max: 1500000, step: 10000, value: r[0], onChange: r[1], unit: '€' }),
+        h(H.RangeSlider, { label: 'Living area', min: 20, max: 300, defaultValue: [60, 140], inputs: false, openEnd: true, format: function (v) { return v + ' m²'; } }),
+        h('div', { className: 'ha-row' }, h(H.StatusSelect, { value: s[0], onChange: s[1], label: 'Status', options: [{ value: 'unread', label: 'Unread', status: 'running' }, { value: 'read', label: 'Read', status: 'idle' }, { value: 'contacted', label: 'Contacted', status: 'ok' }, { value: 'rejected', label: 'Not a fit', status: 'danger' }] }), h(H.ColorField, { value: '#2f6fe0', against: '#ffffff' }))),
+      h('div', { className: 'ha-panel', style: { gap: 12 } }, h('b', null, 'Room style'), h(H.TilePicker, { value: t[0], onChange: t[1], label: 'Room style', min: 120, options: [{ value: 'scandi', label: 'Scandinavian', tint: 'sky', icon: 'home' }, { value: 'modern', label: 'Modern', tint: 'mint', icon: 'grid' }, { value: 'industrial', label: 'Industrial', tint: 'butter', icon: 'layers' }, { value: 'classic', label: 'Classic', tint: 'blush', icon: 'star', meta: 'Pro' }, { value: 'japandi', label: 'Japandi', tint: 'lilac', icon: 'sun' }, { value: 'boho', label: 'Boho', disabled: true, icon: 'sparkle', meta: 'Soon' }] })));
+  }
+  render(h(App));
+</script>
+</body>
+</html>

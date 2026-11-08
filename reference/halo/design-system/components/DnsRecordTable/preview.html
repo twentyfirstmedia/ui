@@ -1,0 +1,18 @@
+<!-- @dsCard group="Data" height=760 width=1000 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  var recs = [{ id: 1, type: 'A', name: '@', content: '95.217.14.80', ttl: 'Auto', proxy: true }, { id: 2, type: 'CNAME', name: 'www', content: 'followerpilot.de', ttl: 'Auto', proxy: true }, { id: 3, type: 'MX', name: '@', content: '10 mx.halo-mail.net', ttl: '3600', proxy: null }, { id: 4, type: 'TXT', name: '@', content: 'v=spf1 include:_spf.halo-mail.net ~all', ttl: '3600', proxy: null }];
+  render(h('div', { className: 'ha-col', style: { gap: 16 } },
+    h('div', { className: 'ha-panel ha-panel-flush' }, h(H.DnsRecordTable, { records: recs, rowMenu: function () { return [{ label: 'Edit', icon: 'edit' }, '-', { label: 'Delete', icon: 'trash', danger: true }]; } })),
+    h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 } }, h('div', { className: 'ha-panel ha-panel-flush ha-panel-list' }, h(H.DomainList, { items: [{ name: 'halo.dev', registrar: 'Cloudflare', dns: 'Cloudflare', days: 18, ssl: 'ok', sslLabel: 'Valid' }, { name: 'followerpilot.de', registrar: 'one.com', dns: 'Cloudflare', days: 210, ssl: 'ok', sslLabel: 'Valid' }, { name: 'chatteo.de', registrar: 'one.com', dns: 'one.com', days: 5, ssl: 'warn', sslLabel: 'Renewing' }] })),
+      h('div', { className: 'ha-panel' }, h(H.MailAuthStatus, { rows: [{ domain: 'followerpilot.de', mx: { status: 'ok', label: 'ok' }, spf: { status: 'ok', label: 'ok' }, dkim: { status: 'ok', label: 'ok' }, dmarc: { status: 'warn', label: 'soft' } }, { domain: 'chatteo.de', mx: { status: 'ok', label: 'ok' }, spf: { status: 'danger', label: 'missing' }, dkim: { status: 'idle', label: '—' }, dmarc: { status: 'danger', label: 'missing' } }] })))));
+</script>
+</body>
+</html>

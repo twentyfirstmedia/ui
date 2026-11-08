@@ -1,0 +1,22 @@
+<!-- @dsCard group="Forms" height=520 width=760 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+
+  function App() {
+    var d = useState(new Date(2026, 3, 16)), r = useState({ from: new Date(2026, 3, 6), to: new Date(2026, 3, 16) });
+    return h('div', { className: 'ha-panel', style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignContent: 'start' } },
+      h(H.DatePicker, { label: 'Due date', value: d[0], onChange: d[1], today: new Date(2026, 3, 16) }),
+      h(H.DatePicker, { label: 'Report range', range: true, value: r[0], onChange: r[1], today: new Date(2026, 3, 16), hint: 'Presets on the left' }),
+      h('div', { style: { gridColumn: '1 / -1' } }, h('div', { className: 'ha-popover', style: { position: 'static', width: 476, animation: 'none' } }, h('div', { className: 'ha-dp with-presets' },
+        h('div', { className: 'ha-dp-presets' }, ['Last 7 days', 'Last 30 days', 'Last 90 days', 'This year'].map(function (x, i) { return h('button', { key: x, type: 'button', className: 'ha-dp-preset' + (i === 0 ? ' on' : '') }, x); })),
+        h(H.Calendar, { range: true, value: r[0], today: new Date(2026, 3, 16), onChange: r[1] })))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

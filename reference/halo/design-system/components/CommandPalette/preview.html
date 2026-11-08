@@ -1,0 +1,12 @@
+<!-- @dsCard group="Overlays" height=470 width=760 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  H.mountPage(function () { return h('div', { style: { position: 'relative', height: 430, borderRadius: 24, overflow: 'hidden', background: 'var(--canvas)' } }, h(H.CommandPalette, { inline: true, onClose: function () {}, items: [{ id: 1, group: 'Pages', label: 'Invoices', hint: 'Finance', icon: 'card' }, { id: 2, group: 'Pages', label: 'Pipeline', hint: 'Customers', icon: 'trend' }, { id: 3, group: 'Actions', label: 'New invoice', icon: 'card', tint: 'butter' }, { id: 4, group: 'Actions', label: 'Compose mail', icon: 'edit', tint: 'sky' }, { id: 5, group: 'Actions', label: 'New agent', icon: 'bot', tint: 'lilac' }, { id: 6, group: 'Records', label: 'Northwind', hint: 'Customer · Team', icon: 'users', tint: 'sky', searchOnly: true }] })); });
+</script>
+</body>
+</html>

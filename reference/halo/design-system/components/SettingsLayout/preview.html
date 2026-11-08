@@ -1,0 +1,18 @@
+<!-- @dsCard group="Foundations" height=520 width=960 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  render(h('div', { className: 'ha-panel' }, h(H.SettingsLayout, { sections: [
+    { title: 'Appearance', text: 'Theme and density for this browser.', children: h(H.Segmented, { defaultValue: 'System', options: ['System', 'Light', 'Dark'] }) },
+    { title: 'Notifications', text: 'What reaches your phone.', children: [h(H.Switch, { key: 1, spread: true, defaultChecked: true }, 'Approvals waiting on me'), h(H.Switch, { key: 2, spread: true }, 'Weekly digest')] },
+    { title: 'API key', text: 'Used by the CLI.', children: h(H.SecretField, { prefix: 'hq_', last4: '9c1e', onCopy: function () {} }) }],
+    footer: h(H.Button, { icon: 'check' }, 'Save changes') })));
+</script>
+</body>
+</html>

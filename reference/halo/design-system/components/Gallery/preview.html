@@ -1,0 +1,20 @@
+<!-- @dsCard group="Media" height=900 width=1000 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  var art = function (t, s) { return h('div', { style: { position: 'absolute', inset: 0, background: 'linear-gradient(160deg, var(--' + t + ') 0%, var(--surface) 120%)', display: 'grid', placeItems: 'center', color: 'var(--' + t + '-ink)', font: '700 14px/1 var(--font-sans)' } }, s); };
+  var before = { art: h('div', { style: { position: 'absolute', inset: 0, background: 'linear-gradient(180deg, #ddd8cf 0 62%, #b9ad9c 62%)' } }) };
+  var after = { art: h('div', { style: { position: 'absolute', inset: 0, background: 'linear-gradient(180deg, #e9e2d6 0 62%, #a68b6a 62%)' } }, h('div', { style: { position: 'absolute', left: '18%', bottom: '22%', width: '38%', height: '22%', borderRadius: 18, background: '#5b6b5a' } }), h('div', { style: { position: 'absolute', right: '16%', bottom: '38%', width: '14%', height: '30%', borderRadius: 8, background: '#3d3a36' } })) };
+  render(h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'start' } },
+    h('div', { className: 'ha-panel', style: { gap: 12 } }, h(H.Gallery, { badge: 'Virtual staging', items: [{ art: art('sky', 'Living room'), caption: 'Living room' }, { art: art('mint', 'Kitchen') }, { art: art('butter', 'Bedroom') }, { art: art('lilac', 'Balcony') }, { art: art('blush', 'Bathroom') }] })),
+    h('div', { className: 'ha-col', style: { gap: 16 } }, h('div', { className: 'ha-panel', style: { gap: 12 } }, h('b', null, 'Virtual staging'), h(H.BeforeAfter, { before: before, after: after, afterLabel: 'Staged · Scandinavian' })),
+      h('div', { className: 'ha-panel' }, h(H.ImageVariants, { tint: 'sky', variants: [{ id: 1, label: 'Original', size: '4032 × 3024', format: 'JPEG', weight: '3.8 MB', ratio: '4 / 3' }, { id: 2, label: 'Listing', size: '1600 × 1200', format: 'WebP', weight: '214 KB', ratio: '4 / 3', status: 'ok' }, { id: 3, label: 'Square', size: '1080 × 1080', format: 'WebP', weight: '168 KB', ratio: '1 / 1', status: 'ok' }, { id: 4, label: 'Upscaled 2×', size: '8064 × 6048', format: 'PNG', status: 'running', ratio: '4 / 3' }] })))));
+</script>
+</body>
+</html>

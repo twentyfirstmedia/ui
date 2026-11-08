@@ -1,0 +1,19 @@
+<!-- @dsCard group="Data" height=1000 width=1100 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  var rows = [{ id: 1, date: '02.04.', ref: 'RE-0412', text: 'Hetzner Online GmbH', category: 'Hosting', project: 'FollowerPilot', projectTint: 'sky', net: 84.03, vat: 15.97, gross: 100.0, status: 'ok', statusLabel: 'Booked' }, { id: 2, date: '03.04.', ref: 'ST-2231', text: 'Stripe payout', category: 'Revenue', project: 'Chatteo', projectTint: 'mint', net: 4210.0, vat: 0, gross: 4210.0, status: 'ok', statusLabel: 'Booked' }, { id: 3, date: '04.04.', ref: 'MAIL-88', text: 'Google Ireland Ltd.', category: 'Marketing', project: 'FollowerPilot', projectTint: 'sky', net: -320.0, vat: 0, gross: -320.0, suggested: 'Ledger', status: 'signal', statusLabel: 'Suggested' }];
+  render(h('div', { className: 'ha-col', style: { gap: 16 } },
+    h('div', { className: 'ha-panel ha-panel-flush' }, h(H.LedgerTable, { rows: rows, selectable: true, categories: ['Hosting', 'Revenue', 'Marketing', 'Software'], bulkActions: [{ label: 'Confirm', icon: 'check', onClick: function (r, c) { c(); } }] })),
+    h('div', { style: { display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 16 } },
+      h('div', { className: 'ha-panel' }, h(H.PnLStatement, { columns: ['Jan', 'Feb', 'Mar'], rows: [{ kind: 'section', label: 'Revenue' }, { label: 'Subscriptions', values: [18200, 19400, 21100] }, { label: 'One-off', values: [2100, 1800, 2600] }, { kind: 'section', label: 'Costs' }, { label: 'Hosting', values: [-820, -840, -910] }, { label: 'Marketing', values: [-4200, -3900, -5100] }, { kind: 'total', label: 'Result', values: [15280, 16460, 17690] }] })),
+      h(H.ReceiptSuggestion, { file: 'Rechnung_2026-0412.pdf', source: 'From billing@hetzner.com · 2 Apr', fields: [{ label: 'Vendor', value: 'Hetzner Online GmbH', confidence: 0.99 }, { label: 'Date', value: '02.04.2026', mono: true, confidence: 0.98 }, { label: 'Gross', value: '€100.00', mono: true, confidence: 0.97 }, { label: 'VAT', value: '19 %', confidence: 0.72 }], suggestion: 'Hosting · FollowerPilot · as every month', onConfirm: function () {}, onDiscard: function () {} }))));
+</script>
+</body>
+</html>

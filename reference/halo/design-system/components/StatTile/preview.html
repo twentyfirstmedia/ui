@@ -1,0 +1,12 @@
+<!-- @dsCard group="Data" height=130 width=800 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  H.mountPage(function () { return h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(4, 1fr)' } }, h(H.StatTile, { tint: 'sky', value: '128', label: 'Active members' }), h(H.StatTile, { tint: 'mint', value: '24', label: 'Live projects', delta: '+3 this week' }), h(H.StatTile, { tint: 'placeholder', value: '9', label: 'Needs review' }), h(H.StatTile, { tint: 'butter', value: '$48,210', label: 'Revenue (MTD)' })); });
+</script>
+</body>
+</html>

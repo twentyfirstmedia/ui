@@ -1,0 +1,16 @@
+<!-- @dsCard group="Foundations" height=340 width=900 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  render(h('div', { className: 'ha-panel ha-panel-flush', style: { height: 280, padding: 0, overflow: 'hidden' } }, h(H.SplitPane, { defaultSize: 320, min: 220, max: 600, storageKey: 'demo',
+    left: h('div', { style: { padding: 16 } }, h(H.InboxList, { selected: 1, items: [{ id: 1, from: 'Ida Nolan', time: '08:40', subject: 'Seat upgrade before renewal', snippet: 'We are growing faster than planned…', unread: true }, { id: 2, from: 'Jonas Petit', time: 'Yesterday', subject: 'Pricing review → Thursday?', snippet: 'Growth wants to join…' }] })),
+    right: h('div', { style: { padding: 24 } }, h('b', null, 'Drag the divider'), h('p', { className: 'ha-card-desc' }, 'Double-click resets. ← → move it when focused. The width is remembered per storageKey.')) })));
+</script>
+</body>
+</html>

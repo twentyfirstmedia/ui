@@ -1,0 +1,15 @@
+<!-- @dsCard group="Data" height=260 width=960 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  H.mountPage(function () { return h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(3, 1fr)' } },
+  h(H.Card, { title: 'Quarterly onboarding', description: 'Welcome flow for new workspace admins.', meta: ['Mara Ellis', '12 steps', '348 users'], corner: h(H.TintIcon, { icon: 'book', tint: 'mint' }), status: h(H.Badge, { tone: 'success' }, 'Live'), actions: [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Archive', size: 'sm' }), h(H.IconButton, { key: 3, icon: 'check', label: 'Approve', size: 'sm', variant: 'solid' })] }),
+  h(H.Card, { tint: 'lilac', title: 'Pricing page refresh', description: 'New tiers and a comparison table for annual plans.', corner: h(H.IconButton, { icon: 'play', label: 'Preview', size: 'sm', variant: 'outline' }), status: h(H.Badge, { tone: 'neutral' }, '86 viewing'), actions: [h(H.IconButton, { key: 1, icon: 'edit', label: 'Edit', size: 'sm', variant: 'solid' })] }),
+  h(H.Card, { title: 'Invoice #2041 is overdue', description: 'Net-30 passed four days ago; reminder bounced.', meta: ['Rui Costa', 'High priority'], corner: h(H.TintIcon, { icon: 'mail', tint: 'blush' }), status: h(H.Badge, { tone: 'warning' }, 'Open'), actions: [h(H.Button, { key: 1, size: 'sm', variant: 'soft' }, 'Reply')] })); });
+</script>
+</body>
+</html>

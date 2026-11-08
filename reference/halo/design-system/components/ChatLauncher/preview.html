@@ -1,0 +1,23 @@
+<!-- @dsCard group="Overlays" height=800 width=1000 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  function App() { var o = useState(true);
+    return h('div', { className: 'ha-col', style: { gap: 16 } },
+      h(H.AnnouncementBar, { tint: 'butter', action: h('a', { href: '#' }, 'See plans') }, 'Free plan: 3 stagings left this month.'),
+      h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'end' } },
+        h(H.CookieConsent, { inline: true, policy: h('a', { href: '#' }, 'Privacy policy'), categories: [{ id: 'necessary', label: 'Necessary', text: 'Sign-in, security, cart', required: true }, { id: 'stats', label: 'Statistics', text: 'Anonymous usage numbers' }, { id: 'marketing', label: 'Marketing', text: 'Ads and remarketing' }], onSave: function () {} }),
+        h('div', { style: { display: 'flex', justifyContent: 'flex-end' } }, h(H.ChatLauncher, { inline: true, open: o[0], onOpenChange: o[1], title: 'Capitaso assistant', context: 'Looking at: Loft in HafenCity', composer: h(H.Composer, { placeholder: 'Ask about this listing…' }) },
+          h(H.ChatMessage, { role: 'assistant', name: 'Assistant', text: 'This loft is about **4 % above** the estimated value. Want me to draft a first message to the agent?' }),
+          h(H.PromptStarters, { items: [{ title: 'Draft a message', icon: 'mail' }, { title: 'Compare with similar', icon: 'chart' }] })))));
+  }
+  render(h(App));
+</script>
+</body>
+</html>

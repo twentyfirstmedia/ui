@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>HQ · Auslöser</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="hq-tokens.css">
+<link rel="stylesheet" href="ds/hq/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#09090b}
+a{color:inherit}
+</style>
+</helmet>
+<div class="hq" data-theme="{{theme}}" data-density="{{density}}" style="background: var(--bg-000); color: var(--fg-100); font-family: var(--font-sans); min-height: 1100px; display: flex; flex-wrap: wrap; align-items: stretch;">
+
+<aside style="flex: 1 1 232px; max-width: 100%; background: var(--bg-100); border-right: 1px solid var(--line-200); display: flex; flex-direction: column;">
+ <div style="height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 1px solid var(--line-200);"><a href="Main.dc.html" class="hq-glyph" style="text-decoration: none;" aria-label="HQ Übersicht">HQ</a><span class="hq-wordmark"><b>HQ</b><span>twentyfirst</span></span></div>
+ <nav class="hq-nav" aria-label="Hauptnavigation">
+  <a href="Main.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>Übersicht</a>
+  <a href="Stadt.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>Stadt</a>
+  <a href="Chats.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>Chats<span class="hq-count">3</span></a>
+  <a href="Freigaben.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg>Freigaben<span class="hq-count hq-count--signal">3</span></a>
+  <a href="Webmail.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Webmail<span class="hq-count">27</span></a>
+  <a href="Domains.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>Domains &amp; DNS</a>
+  <a href="MailKonten.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></svg>Mail-Konten</a>
+  <a href="Server.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>Apps &amp; Server</a>
+  <a href="Finanzen.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>Finanzen</a>
+  <a href="#" aria-current="page"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Auslöser</a>
+  <span class="eyebrow">Module</span>
+  <a href="Brand.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>Brand-Generator</a>
+  <span class="eyebrow">Projekte</span>
+  <a href="#"><span class="hq-dotchip"><i style="background: #cf4646;"></i></span>FollowerPilot</a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #194e9d;"></i></span>Chatteo<span class="pst">Launch</span></a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #6159e1;"></i></span>Twentyfirst AI<span class="pst">Konzept</span></a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #276afc;"></i></span>TravelPilot24<span class="pst">Im Aufbau</span></a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #36a9e1;"></i></span>LicensePilot<span class="pst">Im Aufbau</span></a>
+  <a href="city/Main.dc.html" title="Jason Devine, FlightPilot24, Mein Handelsregister, Reblogger"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>Standby<span class="hq-count">4</span></a>
+  <a href="Projekt-Neu.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Neues Projekt</a>
+ </nav>
+ <nav class="hq-nav" aria-label="Einstellungen" style="margin-top: auto; border-top: 1px solid var(--line-200);">
+  <a href="Einstellungen.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>Einstellungen</a>
+ </nav>
+</aside>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column;">
+ <header class="hq-topbar" style="border-bottom: 1px solid var(--line-200); flex-wrap: wrap;">
+  <div class="hq-crumbs"><span class="cur">Auslöser</span></div>
+  <span class="grow"></span>
+  <button class="hq-searchtrigger" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="grow">Suchen oder Main Brain fragen …</span><span class="hq-kbd">⌘K</span></button>
+  
+  <span class="hq-avatar hq-avatar--human">RT</span>
+ </header>
+
+<main style="padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+ <div style="display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap;">
+  <div style="display: flex; flex-direction: column; gap: 4px; flex: 1 1 320px;"><span class="eyebrow">Zeitpläne, Ereignisse, Webhooks</span><h1 class="t-display" style="margin: 0;">Auslöser</h1></div>
+  <div class="hq-seg" role="group" aria-label="Filter"><button type="button" aria-pressed="{{fAll}}" onClick="{{fa}}">Alle</button><button type="button" aria-pressed="{{fSch}}" onClick="{{fs}}">Zeitpläne</button><button type="button" aria-pressed="{{fEv}}" onClick="{{fe}}">Ereignisse</button><button type="button" aria-pressed="{{fWh}}" onClick="{{fw}}">Webhooks</button><button type="button" aria-pressed="{{fAg}}" onClick="{{fg}}">Von Agents</button></div>
+  <button class="hq-btn hq-btn--primary" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Auslöser anlegen</button>
+ </div>
+
+ <div class="hq-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+  <div class="hq-cell"><span class="eyebrow">Aktiv</span><span class="t-numeric">{{activeCount}}</span><span class="t-caption">von {{total}} Auslösern</span></div>
+  <div class="hq-cell"><span class="eyebrow">Heute gelaufen</span><span class="t-numeric">41</span><span class="t-caption">39 ok · 1 Fehler · 1 übersprungen</span></div>
+  <div class="hq-cell"><span class="eyebrow">Von Agents angelegt</span><span class="t-numeric">3</span><span class="t-caption">Limit 10 pro Agent · nur eigene Aufgaben</span></div>
+  <div class="hq-cell"><span class="eyebrow">Nächster Lauf</span><span class="t-numeric mono" style="font-size: 28px;">14:00</span><span class="t-caption">Finanz-Agent · Belege abgleichen</span></div>
+ </div>
+
+ <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;">
+  <section style="flex: 2 1 640px; min-width: 0; border: 1px solid var(--line-200); background: var(--bg-100);">
+   <div class="hq-tablewrap">
+    <table class="hq-table">
+     <thead><tr><th>Auslöser</th><th>Agent</th><th>Angelegt von</th><th>Nächster Lauf</th><th>Letzter Lauf</th><th class="num">Aktiv</th></tr></thead>
+     <tbody>
+      <sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+       <tr style="{{r.rowStyle}}">
+        <td class="key"><button type="button" onClick="{{r.pick}}" aria-pressed="{{r.sel}}" style="background: none; border: 0; padding: 0; color: var(--fg-100); font: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 8px;">
+         <sc-if value="{{r.isSch}}" hint-placeholder-val="{{ true }}"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></sc-if><sc-if value="{{r.isEv}}" hint-placeholder-val="{{ false }}"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></sc-if><sc-if value="{{r.isWh}}" hint-placeholder-val="{{ false }}"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 16.98h-5.99c-1.1 0-1.95.94-2.48 1.9A4 4 0 0 1 2 17c.01-.7.2-1.4.57-2"/><path d="m6 17 3.13-5.78c.53-.97.1-2.18-.5-3.1a4 4 0 1 1 6.89-4.06"/><path d="m12 6 3.13 5.73C15.66 12.7 16.9 13 18 13a4 4 0 0 1 0 8"/></svg></sc-if>{{r.title}}</button></td>
+        <td>{{r.agent}}</td>
+        <td><span class="row" style="gap: 6px;"><span class="{{r.byCls}}" style="width: 16px; height: 16px; font-size: 8px;">{{r.byInit}}</span>{{r.by}}</span></td>
+        <td class="mono">{{r.next}}</td>
+        <td><span class="hq-status"><i class="{{r.lastShape}}"></i><span class="txt">{{r.last}}</span></span></td>
+        <td class="num"><input type="checkbox" class="hq-switch" aria-label="Aktiv" checked="{{r.active}}" onChange="{{r.toggle}}"></td>
+       </tr>
+      </sc-for>
+     </tbody>
+    </table>
+   </div>
+  </section>
+
+  <aside style="flex: 1 1 340px; min-width: 0; border: 1px solid var(--line-200); background: var(--bg-100);">
+   <div class="row" style="padding: 12px 14px; border-bottom: 1px solid var(--line-200);"><span class="t-title">{{cur.title}}</span></div>
+   <dl class="hq-kv" style="padding: 12px 14px; margin: 0;">
+    <dt>Typ</dt><dd>{{cur.type}}</dd>
+    <dt>Regel</dt><dd class="mono">{{cur.rule}}</dd>
+    <dt>Agent</dt><dd>{{cur.agent}}</dd>
+    <dt>Aufgabe</dt><dd>{{cur.task}}</dd>
+    <dt>Angelegt von</dt><dd>{{cur.by}}</dd>
+    <dt>Leitplanken</dt><dd>{{cur.guard}}</dd>
+   </dl>
+   <div class="eyebrow" style="padding: 4px 14px;">Letzte Läufe</div>
+   <ul class="hq-feed" style="padding: 0 14px 12px; margin: 0;">
+    <sc-for list="{{cur.runs}}" as="x" hint-placeholder-count="3"><li><time>{{x.t}}</time><span class="pin"><i class="{{x.shape}}"></i></span><span class="msg">{{x.msg}}</span></li></sc-for>
+   </ul>
+   <div class="row" style="padding: 12px 14px; border-top: 1px solid var(--line-200);">
+    <button class="hq-btn hq-btn--sm" type="button" onClick="{{runNow}}"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg>Jetzt ausführen</button>
+    <button class="hq-btn hq-btn--sm hq-btn--ghost" type="button">Bearbeiten</button>
+    <span class="grow"></span>
+    <button class="hq-btn hq-btn--sm hq-btn--ghost hq-btn--danger" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>Löschen</button>
+   </div>
+  </aside>
+ </div>
+
+ <section style="border: 1px solid var(--line-200); background: var(--bg-100);">
+  <div class="row" style="padding: 10px 14px; border-bottom: 1px solid var(--line-200);"><span class="t-title">Diese Woche</span><span class="grow"></span><span class="t-caption">Zeiten in Asia/Dubai</span></div>
+  <div class="hq-sched" style="margin: 12px 14px;"><span class="h"></span><span class="h">Mo 19.</span><span class="h" style="color: var(--fg-100);">Di 20.</span><span class="h">Mi 21.</span><span class="h">Do 22.</span><span class="h">Fr 23.</span><span class="h">Sa 24.</span><span class="h">So 25.</span><span class="t">08:00</span><span><i class="ev">Main Brain · Briefing</i></span><span><i class="ev">Main Brain · Briefing</i></span><span><i class="ev">Main Brain · Briefing</i></span><span><i class="ev">Main Brain · Briefing</i></span><span><i class="ev">Main Brain · Briefing</i></span><span></span><span></span><span class="t">09:00</span><span><i class="ev">Head Content · Wochenplan</i></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="t">10:30</span><span></span><span></span><span></span><span><i class="ev self">Lead Researcher · nachfassen</i></span><span></span><span></span><span></span><span class="t">14:00</span><span></span><span><i class="ev now">Finanz-Agent · Belege</i></span><span></span><span></span><span><i class="ev">Finanz-Agent · Belege</i></span><span></span><span></span><span class="t">18:00</span><span><i class="ev">Social · Posting</i></span><span><i class="ev">Social · Posting</i></span><span><i class="ev">Social · Posting</i></span><span><i class="ev">Social · Posting</i></span><span><i class="ev">Social · Posting</i></span><span><i class="ev">Social · Posting</i></span><span></span></div>
+ </section>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"density":{"editor":"enum","options":["compact","comfortable"],"default":"compact"},"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'brief', filter: 'all', off: { 'stripe': true }, extra: {} };
+    this.data = [
+      { id: 'brief', kind: 'sch', title: 'Täglich 08:00 · Tagesbriefing', agent: 'Main Brain', by: 'Config', byKind: 'cfg', next: 'Mi 21.10. 08:00', last: 'ok · 08:00', lastOk: 'ok', rule: '0 8 * * 1-5', task: 'Briefing mit Freigaben, Kosten, Warnungen und Vorschlägen an Robin und Lukas.', guard: 'max. 1 Lauf pro Tag', runs: [['Heute 08:00', 'ok', 'Briefing gesendet · 0,12 €'], ['Mo 08:00', 'ok', 'Briefing gesendet · 0,11 €'], ['Fr 08:00', 'ok', 'Briefing gesendet · 0,14 €']] },
+      { id: 'week', kind: 'sch', title: 'Mo 09:00 · Wochenplan Social', agent: 'Social · Chatteo', by: 'Config', byKind: 'cfg', next: 'Mo 26.10. 09:00', last: 'ok · Mo', lastOk: 'ok', rule: '0 9 * * 1', task: 'Social-Plan der Woche erstellen (Posts auf Englisch) und als Entwürfe vorlegen.', guard: 'nur Entwürfe · Veröffentlichen braucht Freigabe', runs: [['Mo 09:00', 'ok', '5 Entwürfe angelegt · 0,38 €']] },
+      { id: 'support', kind: 'ev', title: 'Neue Mail an support@followerpilot.de', agent: 'Support-Agent · FollowerPilot', by: 'Config', byKind: 'cfg', next: 'bei Ereignis', last: 'ok · 13:58', lastOk: 'ok', rule: 'mail.received · support@followerpilot.de', task: 'Anfrage lesen, Antwort entwerfen, über 50 € Erstattung Freigabe holen.', guard: 'max. 200 Läufe pro Tag · 0,50 € pro Lauf', runs: [['13:58', 'ok', 'Antwort entworfen'], ['13:41', 'ok', 'Freigabe angefragt'], ['12:20', 'ok', 'Antwort gesendet']] },
+      { id: 'lead', kind: 'sch', title: 'Einmalig · Lead nachfassen', agent: 'Lead Researcher · Chatteo', by: 'selbst', byKind: 'self', byInit: 'LR', next: 'Do 22.10. 10:30', last: '—', lastOk: 'none', rule: 'einmalig · 2026-10-22 10:30', task: 'Bei Kanzlei Berger nachfassen, falls bis dahin keine Antwort kam.', guard: 'von Agent angelegt · nur eigene Aufgaben', runs: [] },
+      { id: 'belege', kind: 'sch', title: 'Di und Fr 14:00 · Belege abgleichen', agent: 'Finanz-Agent · Twentyfirst AI', by: 'Main Brain', byKind: 'mb', next: 'Heute 14:00', last: 'Fehler · Fr', lastOk: 'err', rule: '0 14 * * 2,5', task: 'Belege aus Webmail den Buchungen zuordnen, Vorschläge zur Freigabe.', guard: 'nur Vorschläge · Buchen braucht Freigabe', runs: [['Fr 14:00', 'err', 'Stripe-Sync fehlgeschlagen, Head Agent informiert'], ['Di 14:00', 'ok', '12 Belege zugeordnet']] },
+      { id: 'stripe', kind: 'wh', title: 'Webhook · stripe.invoice.paid', agent: 'Finanz-Agent', by: 'Main Brain', byKind: 'mb', next: 'bei Ereignis', last: 'pausiert', lastOk: 'none', rule: 'hooks.twentyfirst.media/stripe · Signatur geprüft', task: 'Zahlung der Rechnung zuordnen und Beleg ablegen.', guard: 'Signaturprüfung · Rate-Limit 60/min', runs: [] },
+      { id: 'post', kind: 'sch', title: 'Mo bis Sa 18:00 · Posting', agent: 'Social-Agent · FollowerPilot', by: 'Head Agent', byKind: 'self', byInit: 'HA', next: 'Heute 18:00', last: 'ok · Mo', lastOk: 'ok', rule: '0 18 * * 1-6', task: 'Freigegebenen Post des Tages veröffentlichen.', guard: 'nur bereits freigegebene Posts', runs: [['Mo 18:00', 'ok', 'Post veröffentlicht']] }
+    ];
+  }
+  renderVals() {
+    var self = this, s = this.state;
+    var shp = { ok: 'hq-shape hq-shape--dot is-ok', err: 'hq-shape hq-shape--square is-danger', none: 'hq-shape hq-shape--ring is-idle' };
+    var by = { cfg: ['hq-avatar', 'CF'], mb: ['hq-avatar hq-avatar--brain', 'MB'], self: ['hq-avatar', ''] };
+    var list = this.data.filter(function (d) { return s.filter === 'all' || (s.filter === 'ag' ? d.byKind !== 'cfg' : d.kind === s.filter); });
+    var rows = list.map(function (d) {
+      var on = d.id === s.sel, act = !s.off[d.id], b = by[d.byKind];
+      return { title: d.title, agent: d.agent, by: d.by, byCls: b[0], byInit: d.byInit || b[1], next: act ? d.next : 'pausiert', last: d.last, lastShape: shp[d.lastOk],
+        isSch: d.kind === 'sch', isEv: d.kind === 'ev', isWh: d.kind === 'wh', sel: String(on), rowStyle: on ? 'background: var(--bg-200);' : '', active: act,
+        pick: function () { self.setState({ sel: d.id }); },
+        toggle: function () { var o = Object.assign({}, s.off); o[d.id] = !o[d.id]; self.setState({ off: o, sel: d.id }); } };
+    });
+    var d = this.data.filter(function (x) { return x.id === s.sel; })[0];
+    var runs = (s.extra[d.id] || []).concat(d.runs).map(function (r) { return { t: r[0], shape: shp[r[1]], msg: r[2] }; });
+    var types = { sch: 'Zeitplan', ev: 'Ereignis', wh: 'Webhook' };
+    var cur = { title: d.title, type: types[d.kind] + (s.off[d.id] ? ' · pausiert' : ''), rule: d.rule, agent: d.agent, task: d.task, by: d.by, guard: d.guard, runs: runs };
+    var f = function (k) { return function () { self.setState({ filter: k }); }; };
+    return { theme: this.props.theme ?? 'dark', density: this.props.density ?? 'compact', rows: rows, cur: cur,
+      total: this.data.length, activeCount: this.data.filter(function (x) { return !s.off[x.id]; }).length,
+      fAll: String(s.filter === 'all'), fSch: String(s.filter === 'sch'), fEv: String(s.filter === 'ev'), fWh: String(s.filter === 'wh'), fAg: String(s.filter === 'ag'),
+      fa: f('all'), fs: f('sch'), fe: f('ev'), fw: f('wh'), fg: f('ag'),
+      runNow: function () { var dt = new Date(), t = String(dt.getHours()).padStart(2, '0') + ':' + String(dt.getMinutes()).padStart(2, '0'); var e = Object.assign({}, s.extra); e[d.id] = [[t, 'ok', 'Manuell gestartet von Robin']].concat(e[d.id] || []); self.setState({ extra: e }); } };
+  }
+}
+</script>
+</body>
+</html>

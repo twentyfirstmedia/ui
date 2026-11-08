@@ -1,0 +1,19 @@
+<!-- @dsCard group="Data" height=440 width=900 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  render(h('div', { className: 'ha-col', style: { gap: 8 } },
+    h(H.ConnectionBanner, { state: 'reconnecting', seconds: 4, onRetry: function () {} }),
+    h(H.ConnectionCard, { name: 'Stripe · FollowerX GmbH', icon: 'card', text: 'Payments and refunds · 3 agents', status: 'connected', statusLabel: 'Connected', action: h(H.Button, { size: 'sm', variant: 'soft' }, 'Manage') }),
+    h(H.ConnectionCard, { name: 'Google Ads', icon: 'trend', text: 'Budgets and campaigns · 1 agent', status: 'expiring', statusLabel: 'Expires in 5 days', action: h(H.Button, { size: 'sm' }, 'Renew') }),
+    h(H.ConnectionCard, { name: 'Docs workspace', icon: 'book', text: 'Release notes · Echo', status: 'error', statusLabel: 'Error', action: h(H.Button, { size: 'sm' }, 'Reconnect') }),
+    h(H.ConnectionBanner, { state: 'offline' })));
+</script>
+</body>
+</html>

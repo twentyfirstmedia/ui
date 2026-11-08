@@ -1,0 +1,34 @@
+<!-- @dsCard group="Pages" height=1120 width=1280 page subtitle="Agent builder: instructions, model, tools, guardrails and a live test chat" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>AgentBuilderScreen</title></head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+    var AREAS = [['Workspace', 'home'], ['Customers', 'users'], ['Shop', 'cart'], ['Agents', 'bot'], ['Mail', 'mail'], ['Code', 'code'], ['Domains', 'globe'], ['Finance', 'card'], ['Files', 'folder'], ['Account', 'settings']];
+  function Shell(p) {
+    return h('div', { className: 'ha-shell', style: { position: 'relative' } },
+      h(H.TopBar, { brand: 'Halo', tag: 'Admin', active: p.area, items: AREAS.map(function (a) { return { label: a[0], icon: a[1], count: a[0] === 'Mail' ? 2 : null }; }), user: { name: 'Mara Ellis', email: 'mara@halo.app' },
+        extra: [h('button', { key: 's', type: 'button', className: 'ha-topbtn', 'aria-label': 'Search' }, h(H.Icon, { name: 'search', size: 15 }), 'Search', h('kbd', null, '⌘K')), h('button', { key: 'b', type: 'button', className: 'ha-topbtn icon', 'aria-label': 'Notifications' }, h(H.Icon, { name: 'bell', size: 17 }), h('span', { className: 'ha-nav-count' }, 4))] }),
+      h('div', { className: 'ha-sheet', style: { gridTemplateColumns: '208px minmax(0, 1fr)' + (p.side ? ' 304px' : ''), alignItems: 'start' } },
+        h(H.SubNav, { eyebrow: p.area, action: p.action, current: p.current, items: p.pages }),
+        h('main', { className: 'ha-main' }, p.children), p.side || null),
+      p.overlay || null);
+  }
+
+  function App() {
+    return h(Shell, { area: 'Agents', current: 'Builder', action: { label: 'New agent', icon: 'plus' }, pages: [{ id: 'Fleet', label: 'Fleet', icon: 'bot' }, { id: 'Chat', label: 'Chat', icon: 'mail' }, { id: 'Builder', label: 'Builder', icon: 'settings' }, { id: 'Runs', label: 'Runs', icon: 'refresh' }] },
+      h(H.PageHeader, { crumbs: ['Agents', 'Atlas'], title: 'Configure Atlas', subtitle: 'Support triage · changes apply to new runs', actions: [h(H.Button, { key: 's', icon: 'check' }, 'Save changes')] }),
+      h('div', { style: { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: 16, alignItems: 'start' } },
+        h('div', { className: 'ha-col', style: { gap: 16 } },
+          h(H.Panel, { title: 'Instructions', subtitle: 'What it does, how it talks, what it must never do' }, h('textarea', { className: 'ha-input', rows: 5, style: { fontFamily: 'var(--font-mono)', fontSize: 13 }, defaultValue: 'You are Atlas, the support triage agent for Halo.\n- Tag new mail and draft replies.\n- Never promise refunds; hand those to a person.' })),
+          h(H.Panel, { title: 'Model' }, h(H.RadioGroup, { cards: true, defaultValue: 'Sonnet', options: [{ value: 'Opus', label: 'Opus 5.5', hint: 'Deepest · €15 / M' }, { value: 'Sonnet', label: 'Sonnet 5.5', hint: 'Balanced · €3 / M' }, { value: 'Haiku', label: 'Haiku 5.5', hint: 'Fast · €1 / M' }] })),
+          h(H.Panel, { title: 'Guardrails' }, h(H.Segmented, { defaultValue: 'Drafts only', options: ['Drafts only', 'Acts, then reports', 'Fully autonomous'] }), h(H.Combobox, { label: 'Always ask before', multiple: true, defaultValue: ['Sending email', 'Spending money'], options: ['Sending email', 'Spending money', 'Deleting anything'] }), h(H.Slider, { label: 'Monthly budget', min: 0, max: 500, defaultValue: 120, format: function (v) { return '€' + v; } }))),
+        h('div', { className: 'ha-panel', style: { gap: 16 } }, h('div', null, h('h3', { className: 'ha-panel-title' }, 'Test'), h('p', { className: 'ha-panel-sub' }, 'Uses your unsaved setup')),
+          h(H.ChatMessage, { role: 'user', text: 'Can I get a refund?' }), h(H.ChatMessage, { role: 'assistant', name: 'Atlas', tint: 'sky', actions: false, text: 'I’ll pass this to a person, since refunds need a human. You’ll hear back today.' }), h(H.Composer, { placeholder: 'Test a message…', hint: '' }))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

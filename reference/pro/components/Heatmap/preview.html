@@ -1,0 +1,16 @@
+<!-- @dsCard group="Data" height=220 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Heatmap — preview</title></head>
+<body>
+<div class="hq" data-density="compact"><div class="pv" style="">
+<div class="stack" style="gap:8px;max-width:720px"><div class="row"><span class="eyebrow">Agent-Läufe nach Stunde · letzte 4 Wochen</span><span class="grow"></span><span class="row mono muted" style="font-size:11px;gap:4px">wenig <i style="width:10px;height:10px;background:var(--bg-300);display:inline-block"></i><i style="width:10px;height:10px;background:var(--fg-100);opacity:.45;display:inline-block"></i><i style="width:10px;height:10px;background:var(--fg-100);display:inline-block"></i> viel</span></div>
+<div class="hq-heat" id="hm"></div></div></div></div>
+<script>
+
+var hm=document.getElementById('hm'),days=['Mo','Di','Mi','Do','Fr','Sa','So'];
+days.forEach(function(d,di){var l=document.createElement('span');l.textContent=d;hm.appendChild(l);for(var h=0;h<24;h++){var v=(h>=8&&h<=19)?(di<5?2+((h*7+di)%3):1):((h+di)%5===0?1:0);if(h===8||h===9)v=4;var c=document.createElement('i');c.className='l'+v;hm.appendChild(c);}});
+var e=document.createElement('span');hm.appendChild(e);for(var h=0;h<24;h++){var s=document.createElement('span');s.textContent=(h%6===0)?h+'h':'';hm.appendChild(s);}
+</script>
+</body>
+</html>

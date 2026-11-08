@@ -1,0 +1,34 @@
+<!-- @dsCard group="Pages" height=1180 width=1280 page subtitle="Agent chat: reasoning, tool calls, code answer, approval card and the composer" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>AIChatScreen</title></head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+    var AREAS = [['Workspace', 'home'], ['Customers', 'users'], ['Shop', 'cart'], ['Agents', 'bot'], ['Mail', 'mail'], ['Code', 'code'], ['Domains', 'globe'], ['Finance', 'card'], ['Files', 'folder'], ['Account', 'settings']];
+  function Shell(p) {
+    return h('div', { className: 'ha-shell', style: { position: 'relative' } },
+      h(H.TopBar, { brand: 'Halo', tag: 'Admin', active: p.area, items: AREAS.map(function (a) { return { label: a[0], icon: a[1], count: a[0] === 'Mail' ? 2 : null }; }), user: { name: 'Mara Ellis', email: 'mara@halo.app' },
+        extra: [h('button', { key: 's', type: 'button', className: 'ha-topbtn', 'aria-label': 'Search' }, h(H.Icon, { name: 'search', size: 15 }), 'Search', h('kbd', null, '⌘K')), h('button', { key: 'b', type: 'button', className: 'ha-topbtn icon', 'aria-label': 'Notifications' }, h(H.Icon, { name: 'bell', size: 17 }), h('span', { className: 'ha-nav-count' }, 4))] }),
+      h('div', { className: 'ha-sheet', style: { gridTemplateColumns: '208px minmax(0, 1fr)' + (p.side ? ' 304px' : ''), alignItems: 'start' } },
+        h(H.SubNav, { eyebrow: p.area, action: p.action, current: p.current, items: p.pages }),
+        h('main', { className: 'ha-main' }, p.children), p.side || null),
+      p.overlay || null);
+  }
+
+  var md = 'I drafted a reply to **Ida Nolan**. It quotes **40 seats at €24** prorated to 1 May.';
+  function App() {
+    return h(Shell, { area: 'Agents', current: 'Chat', action: { label: 'New agent', icon: 'plus' }, pages: [{ id: 'Fleet', label: 'Fleet', icon: 'bot' }, { id: 'Chat', label: 'Chat', icon: 'mail' }, { id: 'Builder', label: 'Builder', icon: 'settings' }, { id: 'Runs', label: 'Runs', icon: 'refresh', count: 2 }, { id: 'Knowledge', label: 'Knowledge', icon: 'book' }] },
+      h('div', { className: 'ha-panel', style: { gap: 16 } },
+        h('div', { className: 'ha-row', style: { flexWrap: 'nowrap', paddingBottom: 16, borderBottom: '1px solid var(--line)' } }, h(H.AgentMark, { tint: 'sky', live: true, size: 40 }), h('div', { style: { flex: 1 } }, h('div', { className: 'ha-card-title', style: { padding: 0 } }, 'Atlas'), h(H.AgentStatus, { status: 'Waiting for approval', step: 'Drafts only' })), h('div', { style: { width: 160 } }, h(H.UsageMeter, { label: 'Context', used: 19, limit: 200, format: function (v) { return v + 'k'; } }))),
+        h(H.ChatMessage, { role: 'user', text: 'Draft a reply to Northwind about the seat upgrade' }),
+        h(H.ChatMessage, { role: 'assistant', name: 'Atlas', tint: 'sky', time: '09:41', model: 'Claude Sonnet 5.5', text: md, sources: [{ title: 'Seat upgrades · pricing v4' }, { title: 'Thread: Seat upgrade', icon: 'mail' }], usage: '1,527 tokens · €0.06',
+          before: h('div', { className: 'ha-col', style: { gap: 8 } }, h(H.Reasoning, { duration: '1.4 s', steps: ['Find the thread', 'Check pricing', 'Draft, then ask'] }), h(H.ToolCall, { name: 'Mailbox', icon: 'mail', summary: 'Read 3 messages', duration: '0.8 s' }), h(H.ToolCall, { name: 'Knowledge base', icon: 'book', summary: 'Found “Seat upgrades”', duration: '0.6 s' })),
+          after: h(H.ApprovalCard, { title: 'Send this email to ida@northwind.io?', text: 'Atlas is set to “Drafts only”.', icon: 'send', approveLabel: 'Send email', onEdit: function () {} }, 'Hi Ida,\n\nhappy to add 40 seats before your renewal on 1 May. The quote is attached.\n\nBest, Mara') }),
+        h(H.Composer, { placeholder: 'Ask Atlas something, or type / for commands', models: [{ id: 's', label: 'Claude Sonnet 5.5' }], model: 's', onAttach: function () {}, commands: [{ name: 'clear' }] })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

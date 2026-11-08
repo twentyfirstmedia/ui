@@ -1,0 +1,21 @@
+<!-- @dsCard group="AI" height=520 width=820 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Composer</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+
+  var MODELS = [{ id: 'opus', label: 'Claude Opus 5.5', hint: 'Deepest reasoning' }, { id: 'sonnet', label: 'Claude Sonnet 5.5', hint: 'Balanced default' }, { id: 'haiku', label: 'Claude Haiku 5.5', hint: 'Fast and cheap' }];
+  function App() {
+    var m = useState('sonnet'), f = useState([{ name: 'Q1-report.pdf' }]), busy = useState(false);
+    return h('div', { className: 'ha-panel', style: { gap: 24 } },
+      h(H.PromptStarters, { items: [{ icon: 'edit', tint: 'sky', title: 'Draft a reply', text: 'To the latest customer email' }, { icon: 'file', tint: 'mint', title: 'Summarize today', text: 'Runs, approvals, costs' }, { icon: 'search', tint: 'butter', title: 'Ask the docs', text: 'Search the knowledge base' }] }),
+      h(H.Composer, { placeholder: 'Ask Atlas something, or type / for commands', models: MODELS, model: m[0], onModel: m[1], attachments: f[0], onAttach: function (fl) { f[1](f[0].concat(Array.prototype.slice.call(fl))); }, onRemoveAttachment: function (i) { f[1](f[0].filter(function (_, k) { return k !== i; })); }, commands: [{ name: 'summarize', hint: 'Summarize today', icon: 'file' }, { name: 'draft', hint: 'Draft a reply', icon: 'edit' }, { name: 'clear', hint: 'New conversation', icon: 'trash' }], busy: busy[0], onSend: function () { busy[1](true); setTimeout(function () { busy[1](false); }, 2500); }, onStop: function () { busy[1](false); } }),
+      h('div', { className: 'ha-row', style: { justifyContent: 'space-between' } }, h(H.AgentStatus, { status: busy[0] ? 'Thinking' : 'Idle', step: busy[0] ? 'Reading 3 messages' : 'Drafts only' }), h('div', { style: { width: 200 } }, h(H.UsageMeter, { label: 'Context', used: 21, limit: 200, format: function (v) { return v + 'k'; } }))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

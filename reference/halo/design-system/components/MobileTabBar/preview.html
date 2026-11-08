@@ -1,0 +1,19 @@
+<!-- @dsCard group="Overlays" height=360 width=760 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  function App() { var a = useState('approvals');
+    return h('div', { className: 'ha-col', style: { gap: 16, alignItems: 'center' } },
+      h(H.PushNotification, { app: 'Halo', time: 'now', title: 'Approval needed · Atlas', text: 'Send this email to ida@northwind.io?', actions: [{ label: 'A · Run it' }, { label: 'Open' }] }),
+      h('div', { style: { width: 390 } }, h(H.MobileTabBar, { active: a[0], onPick: a[1], items: [{ id: 'home', label: 'Home', icon: 'home' }, { id: 'approvals', label: 'Approvals', icon: 'check', count: 3 }, { id: 'mail', label: 'Mail', icon: 'mail' }, { id: 'more', label: 'More', icon: 'menu' }] })));
+  }
+  render(h(App));
+</script>
+</body>
+</html>

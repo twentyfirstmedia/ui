@@ -1,0 +1,16 @@
+<!-- @dsCard group="Admin" height=560 width=1000 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  render(h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'start' } },
+    h('div', { className: 'ha-panel ha-panel-flush ha-panel-list' }, h(H.BackupList, { onDownload: function () {}, onRestore: function () {}, footer: 'Kept for 30 days · restore test passed 2 Nov', items: [{ id: 1, name: 'Today 03:00', kind: 'Database', where: 'R2 Frankfurt', size: '1.84 GB', status: 'ok' }, { id: 2, name: 'Yesterday 03:00', kind: 'Database', where: 'R2 Frankfurt', size: '1.83 GB', status: 'ok' }, { id: 3, name: 'Sun 03:00', kind: 'Files', where: 'R2 Frankfurt', size: '12.4 GB', status: 'warn' }] })),
+    h('div', { className: 'ha-panel' }, h(H.BlockList, { onAdd: function () {}, onRemove: function () {}, items: [{ id: 1, value: '185.220.101.4', kind: 'IP', reason: 'Card testing', by: 'Fraud rule', until: '15 Nov' }, { id: 2, value: 'spam@mailinator.com', kind: 'Email', reason: 'Chargeback', by: 'Lukas' }, { id: 3, value: '@growthhacker_xx', kind: 'Account', reason: 'Abuse', by: 'Mara Ellis', until: '1 Dec' }] }))));
+</script>
+</body>
+</html>

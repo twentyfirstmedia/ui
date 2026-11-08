@@ -1,0 +1,22 @@
+<!-- @dsCard group="Forms" height=300 width=760 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+
+  function App() {
+    var s = useState(12), b = useState(120);
+    return h('div', { className: 'ha-panel', style: { gap: 24 } },
+      h('div', { style: { display: 'flex', gap: 32, flexWrap: 'wrap', alignItems: 'flex-start' } },
+        h(H.NumberInput, { label: 'Seats', value: s[0], onChange: s[1], min: 1, max: 200, hint: '€24 per seat' }),
+        h(H.NumberInput, { label: 'VAT', defaultValue: 19, min: 0, max: 25, unit: '%' }),
+        h('div', { className: 'ha-field' }, h('span', { className: 'ha-field-label' }, 'Verification code'), h(H.OtpInput, { onComplete: function () {} }), h('span', { className: 'ha-field-hint' }, 'Paste works too'))),
+      h(H.Slider, { label: 'Monthly agent budget', min: 0, max: 500, step: 10, value: b[0], onChange: b[1], format: function (v) { return '€' + v; }, hint: 'Agents pause and ask you once they reach it' }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

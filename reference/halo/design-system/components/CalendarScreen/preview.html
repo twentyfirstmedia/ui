@@ -1,0 +1,51 @@
+<!-- @dsCard group="Pages" height=880 width=1280 page subtitle="Week grid with tinted events, mini month and up-next panel" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>CalendarScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  var DAYS = ['Mon 13', 'Tue 14', 'Wed 15', 'Thu 16', 'Fri 17'];
+  var EV = [
+    { d: 0, s: 9, e: 10, t: 'Standup', tint: 'sky', who: 'Team' }, { d: 0, s: 13, e: 14.5, t: 'Hiring panel', tint: 'lilac', who: 'Design' },
+    { d: 1, s: 10.5, e: 12, t: 'Team sync', tint: 'sky', who: 'Growth + Design' }, { d: 1, s: 15, e: 16, t: 'Partner call', tint: 'mint', who: 'Northwind' },
+    { d: 2, s: 9, e: 10, t: 'Standup', tint: 'sky', who: 'Team' }, { d: 2, s: 14, e: 15.5, t: 'Design review', tint: 'lilac', who: 'Billing flow' },
+    { d: 3, s: 11, e: 12.5, t: 'Pricing review', tint: 'butter', who: 'Moved from Wed' }, { d: 3, s: 16, e: 17, t: 'Incident retro', tint: 'blush', who: 'Webhooks #88' },
+    { d: 4, s: 9, e: 10, t: 'Standup', tint: 'sky', who: 'Team' }, { d: 4, s: 15.5, e: 17, t: 'Q2 invoices due', tint: 'butter', who: 'Finance' }];
+  var START = 8, END = 18, ROW = 48;
+  function App() {
+    var hours = []; for (var i = START; i <= END; i++) hours.push(i);
+    return h(H.AppShell, { active: 'Calendar', dock: false,
+      side: h(H.Panel, { side: true, title: 'Up next', subtitle: 'Thursday, 16 April' },
+        h('div', { className: 'ha-card ha-in', style: { minHeight: 0, gap: 12, padding: 16, '--d': '200ms' } },
+          h('div', { className: 'ha-row', style: { justifyContent: 'space-between' } }, h('span', { style: { fontWeight: 700 } }, 'April 2026'), h('span', { className: 'ha-row', style: { gap: 4 } }, h(H.IconButton, { icon: 'chevronLeft', label: 'Previous month', size: 'sm' }), h(H.IconButton, { icon: 'chevronRight', label: 'Next month', size: 'sm' }))),
+          h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, textAlign: 'center', font: '600 11.5px/28px var(--font-sans)' } },
+            ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(function (d, i) { return h('span', { key: 'h' + i, style: { color: 'var(--ink-muted)' } }, d); }),
+            [null, null].concat(Array.from({ length: 30 }, function (_, i) { return i + 1; })).map(function (n, i) { var on = n >= 13 && n <= 17, today = n === 16; return h('span', { key: i, style: { borderRadius: 999, background: today ? 'var(--accent)' : on ? 'var(--sky)' : 'transparent', color: today ? 'var(--on-accent)' : 'var(--ink)' } }, n || ''); }))),
+        h(H.Stagger, { className: 'ha-col', delay: 320 },
+          h(H.EventCard, { kind: 'review', label: 'Pricing review', date: 'Thu, 16.04', time: '11:00', tint: 'butter', icon: 'card' }, 'Moved from Wednesday so Growth can join.'),
+          h(H.EventCard, { kind: 'incident', label: 'Incident retro', date: 'Thu, 16.04', time: '16:00' }, 'What delayed EU webhooks and how we stop it.'))) },
+      h('div', { className: 'ha-in' }, h(H.PageHeader, { title: 'Calendar', subtitle: 'Week 16 · 10 events', actions: [h(H.Tabs, { key: 't', items: ['Day', 'Week', 'Month'], defaultValue: 'Week' }), h(H.Button, { key: 'n', icon: 'plus' }, 'New event')] })),
+      h('div', { className: 'ha-panel ha-in', style: { '--d': '120ms', padding: 16, gap: 0 } },
+        h('div', { style: { display: 'grid', gridTemplateColumns: '48px repeat(5, 1fr)', gap: 8, paddingBottom: 12 } }, h('span'), DAYS.map(function (d, i) { return h('div', { key: d, style: { textAlign: 'center', font: '700 13px/18px var(--font-sans)', padding: '8px 0', borderRadius: 999, background: i === 3 ? 'var(--accent)' : 'transparent', color: i === 3 ? 'var(--on-accent)' : 'var(--ink)' } }, d); })),
+        h('div', { style: { display: 'grid', gridTemplateColumns: '48px repeat(5, 1fr)', gap: 8, position: 'relative' } },
+          h('div', null, hours.slice(0, -1).map(function (hr) { return h('div', { key: hr, style: { height: ROW, font: '600 11px/1 var(--font-sans)', color: 'var(--ink-muted)' } }, (hr < 10 ? '0' : '') + hr + ':00'); })),
+          DAYS.map(function (d, di) {
+            return h('div', { key: d, style: { position: 'relative', height: ROW * (END - START), backgroundImage: 'repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px ' + ROW + 'px)', borderRadius: 12 } },
+              EV.filter(function (e) { return e.d === di; }).map(function (e, i) {
+                return h('div', { key: i, className: 'ha-in ha-bg-' + e.tint, style: { '--d': (200 + di * 70 + i * 60) + 'ms', position: 'absolute', left: 4, right: 4, top: (e.s - START) * ROW + 2, height: (e.e - e.s) * ROW - 4, borderRadius: 12, padding: '8px 12px', boxSizing: 'border-box', overflow: 'hidden' } },
+                  h('div', { style: { font: '700 12.5px/16px var(--font-sans)' } }, e.t), h('div', { style: { font: '500 11.5px/15px var(--font-sans)', opacity: .78 } }, e.who));
+              }));
+          }))));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

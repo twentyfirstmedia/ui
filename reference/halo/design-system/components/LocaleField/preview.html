@@ -1,0 +1,21 @@
+<!-- @dsCard group="Forms" height=520 width=1000 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  var langs = [{ code: 'de', label: 'Deutsch', short: 'de', flag: '🇩🇪' }, { code: 'en', label: 'English', short: 'en', flag: '🇬🇧' }, { code: 'fr', label: 'Français', short: 'fr', flag: '🇫🇷' }];
+  render(h('div', { style: { display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 16, alignItems: 'start' } },
+    h('div', { className: 'ha-panel', style: { gap: 20 } },
+      h(H.LocaleField, { label: 'Product name', locales: [{ code: 'de', label: 'DE' }, { code: 'en', label: 'EN' }, { code: 'fr', label: 'FR' }, { code: 'es', label: 'ES' }], defaultValue: { de: 'Instagram Follower kaufen', en: 'Buy Instagram followers' }, onTranslate: function (t, to) { return '[' + to + '] ' + t; } }),
+      h(H.LocaleField, { label: 'Short description', multiline: true, active: 'en', locales: [{ code: 'de', label: 'DE' }, { code: 'en', label: 'EN' }], defaultValue: { de: 'Echte Follower, Lieferung in einer Stunde.' } })),
+    h('div', { className: 'ha-panel', style: { gap: 16, alignItems: 'flex-start' } },
+      h(H.WorkspaceSwitcher, { label: 'Shops', items: [{ id: 'fp', name: 'FollowerPilot', sub: 'followerpilot.de', tint: 'sky' }, { id: 'fm', name: 'FollowerMarket', sub: 'followermarket.com', tint: 'mint' }, { id: 'fr', name: 'FollowerRocket', sub: 'followerrocket.de', tint: 'butter' }] }),
+      h(H.LocaleSwitcher, { languages: langs, currencies: ['EUR', 'CHF', 'USD'] }))));
+</script>
+</body>
+</html>

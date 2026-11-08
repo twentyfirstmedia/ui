@@ -1,0 +1,40 @@
+<!-- @dsCard group="Pages" height=900 width=1280 page subtitle="Invoice editor with live paper preview and a bank transaction to match" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>InvoiceScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  var AREAS = [['Workspace', 'home'], ['Customers', 'users'], ['Agents', 'bot'], ['Mail', 'mail'], ['Code', 'code'], ['Domains', 'globe'], ['Finance', 'card'], ['Files', 'folder'], ['Account', 'settings']];
+  function Shell(p) {
+    return h('div', { className: 'ha-shell', style: { position: 'relative' } },
+      h(H.TopBar, { brand: 'Halo', tag: 'Admin', active: p.area, items: AREAS.map(function (a) { return { label: a[0], icon: a[1], count: a[0] === 'Mail' ? 2 : null }; }), user: { name: 'Mara Ellis', email: 'mara@halo.app' },
+        extra: [h('button', { key: 's', type: 'button', className: 'ha-topbtn', 'aria-label': 'Search' }, h(H.Icon, { name: 'search', size: 15 }), 'Search', h('kbd', null, '⌘K')), h('button', { key: 'b', type: 'button', className: 'ha-topbtn icon', 'aria-label': 'Notifications' }, h(H.Icon, { name: 'bell', size: 17 }), h('span', { className: 'ha-nav-count' }, 4))] }),
+      h('div', { className: 'ha-sheet', style: { gridTemplateColumns: '200px minmax(0, 1fr)' + (p.side ? ' 300px' : ''), alignItems: 'start' } },
+        h(H.SubNav, { eyebrow: p.area, action: p.action, current: p.current, items: p.pages }),
+        h('main', { className: 'ha-main' }, p.children), p.side || null),
+      p.overlay || null);
+  }
+  function App() {
+    var lines = [{ d: 'Halo Team plan · 40 seats · May 2026', q: 40, u: 24, v: 19 }, { d: 'Onboarding workshop (half day)', q: 1, u: 650, v: 19 }];
+    return h(Shell, { area: 'Finance', current: 'invoices', action: { label: 'New invoice', icon: 'plus' }, pages: [{ id: 'overview', label: 'Overview', icon: 'chart' }, { id: 'invoices', label: 'Invoices', icon: 'card', count: 4 }, { id: 'expenses', label: 'Expenses', icon: 'file', count: 4 }, { id: 'bank', label: 'Bank', icon: 'swap', count: 4 }, { id: 'vat', label: 'VAT return', icon: 'flag' }, { id: 'pnl', label: 'Profit & loss', icon: 'trend' }] },
+      h('div', { className: 'ha-in' }, h(H.PageHeader, { crumbs: ['Finance', 'Invoices', 'New'], title: 'Invoice #2097', subtitle: 'Totals update as you type', actions: [h(H.Button, { key: 'd', variant: 'secondary' }, 'Save draft'), h(H.Button, { key: 's', icon: 'send' }, 'Create & send')] })),
+      h('div', { style: { display: 'grid', gridTemplateColumns: 'minmax(0, 1.1fr) minmax(0, 1fr)', gap: 16, alignItems: 'start' } },
+        h('div', { className: 'ha-panel ha-in', style: { '--d': '80ms' } },
+          h('div', { className: 'ha-grid', style: { gridTemplateColumns: '1fr 1fr' } }, h(H.Select, { label: 'Customer', options: ['Northwind', 'Kestrel Bank'] }), h(H.Select, { label: 'Payment terms', options: ['14 days', '30 days'] })),
+          lines.map(function (l, i) { return h('div', { key: i, className: 'ha-file' }, h(H.TintIcon, { icon: 'card', tint: 'butter' }), h('div', { style: { flex: 1, minWidth: 0 } }, h('div', { className: 'ha-file-name' }, l.d), h('div', { className: 'ha-file-meta' }, l.q + ' × €' + l.u + ' · VAT ' + l.v + '%')), h('b', null, '€' + (l.q * l.u).toLocaleString('en-US') + '.00')); }),
+          h(H.Button, { variant: 'soft', icon: 'plus' }, 'Add line')),
+        h('div', { className: 'ha-in', style: { '--d': '160ms' } }, h(H.InvoicePreview, { number: 2097, from: 'Halo Workspace GmbH · Example Street 1 · 20457 Hamburg', to: 'Northwind', issued: '16.04.2026', due: '30.04.2026', lines: lines, note: 'Thank you for your business. Please pay within 14 days.' }))),
+      h('div', { className: 'ha-col ha-in', style: { gap: 8, '--d': '240ms' } }, h('h3', { className: 'ha-card-title', style: { padding: 0 } }, 'Bank: to match'), h(H.TransactionRow, { text: 'STRIPE PAYOUT 0415', date: '15.04.2026', amount: 2318.4, hint: 'Payout for 3 card payments: invoices #2093, #2094, #2095' })));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

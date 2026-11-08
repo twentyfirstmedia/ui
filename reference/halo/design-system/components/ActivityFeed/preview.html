@@ -1,0 +1,16 @@
+<!-- @dsCard group="AI" height=560 width=1000 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  render(h('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'start' } },
+    h('div', { className: 'ha-panel' }, h(H.ActivityFeed, { groups: [{ title: 'Today', items: [{ time: '09:41', status: 'signal', actor: 'Atlas', text: 'asked to send a reply to Northwind' }, { time: '09:12', status: 'warn', actor: 'Ads', text: 'reached 82 % of the monthly budget' }, { time: '08:02', status: 'ok', actor: 'Ledger', text: 'matched 31 payments' }] }, { title: 'Yesterday', items: [{ time: '18:02', status: 'danger', actor: 'Echo', text: 'stopped: the docs connection expired' }] }] })),
+    h('div', { className: 'ha-panel' }, h(H.DailyBriefing, { title: 'Main Brain', time: 'Today, 08:00', summary: '26 runs overnight, 22 succeeded. €4.18 spent, well under budget. Two drafts wait for you and the docs connection needs a new token.', attention: [{ text: 'Approve the reply to Northwind' }, { text: 'Reconnect the docs workspace', status: 'danger' }], suggestions: ['Move the weekly report to Monday 09:00', 'Give Ledger read access to the new bank account'] }))));
+</script>
+</body>
+</html>

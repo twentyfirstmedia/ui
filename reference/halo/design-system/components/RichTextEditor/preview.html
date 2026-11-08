@@ -1,0 +1,14 @@
+<!-- @dsCard group="Forms" height=520 width=900 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  render(h('div', { className: 'ha-panel' }, h(H.RichTextEditor, { label: 'Newsletter text', placeholder: 'Write something…', maxLength: 2000, defaultValue: '<h3>Your boost is live</h3><p>Hi {first_name}, your <b>1,000 followers</b> start arriving within the next hour.</p><ul><li>Delivery spreads over 24 h</li><li>Refill guarantee for 30 days</li></ul>', variables: [{ key: 'first_name', label: 'First name' }, { key: 'order_id', label: 'Order number' }, { key: 'coupon', label: 'Coupon code' }], hint: 'Fields in braces are filled per recipient.' })));
+</script>
+</body>
+</html>

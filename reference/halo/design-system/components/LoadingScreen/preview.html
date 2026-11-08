@@ -1,0 +1,35 @@
+<!-- @dsCard group="Pages" height=780 width=1280 page subtitle="Skeleton loading state that swaps to content after 2s (press Replay to see it again)" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>LoadingScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  function SkelCard() { return h('div', { className: 'ha-card' }, h('div', { className: 'ha-row', style: { justifyContent: 'space-between' } }, h(H.Skeleton, { variant: 'title', width: '55%' }), h(H.Skeleton, { variant: 'circle', width: 30 })), h(H.Skeleton, null), h(H.Skeleton, { width: '70%' }), h('div', { className: 'ha-card-foot' }, h(H.Skeleton, { width: 70, height: 26 }), h('div', { className: 'ha-row' }, h(H.Skeleton, { variant: 'circle', width: 30 }), h(H.Skeleton, { variant: 'circle', width: 30 })))); }
+  function App() {
+    var done = React.useState(false);
+    React.useEffect(function () { var t = setTimeout(function () { done[1](true); }, 2200); return function () { clearTimeout(t); }; }, []);
+    if (done[0]) return h(H.AppShell, { active: 'Projects', dock: false },
+      h('div', { className: 'ha-in' }, h(H.PageHeader, { title: 'Projects', subtitle: 'Loaded — content replaces the skeleton with the normal entrance' })),
+      h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(4, 1fr)' } }, h(H.StatTile, { tint: 'sky', value: '18', label: 'All projects' }), h(H.StatTile, { tint: 'mint', value: '11', label: 'Live' }), h(H.StatTile, { tint: 'placeholder', value: '4', label: 'Drafts' }), h(H.StatTile, { tint: 'butter', value: '$48,210', label: 'Revenue (MTD)' })),
+      h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(3, 1fr)' }, delay: 200 },
+        h(H.Card, { title: 'Quarterly onboarding', description: 'Welcome flow for new workspace admins.', corner: h(H.TintIcon, { icon: 'book', tint: 'mint' }), status: h(H.Badge, { tone: 'success' }, 'Live'), actions: cardActs() }),
+        h(H.Card, { tint: 'lilac', title: 'Pricing page refresh', description: 'New tiers and a comparison table.', status: h(H.Badge, null, '86 viewing') }),
+        h(H.Card, { title: 'Partner referral program', description: 'Track invites, payouts and tiers.', corner: h(H.TintIcon, { icon: 'users', tint: 'sky' }), status: h(H.Badge, { tone: 'success' }, 'Live'), actions: cardActs() }),
+        h(H.EmptyState, { title: 'No archived projects', text: 'Projects you retire land here, with their history kept.', icon: 'folder', tint: 'butter', action: h(H.Button, { variant: 'soft', size: 'sm' }, 'View all') })));
+    return h(H.AppShell, { active: 'Projects', dock: false },
+      h('div', { className: 'ha-col', style: { gap: 8 } }, h(H.Skeleton, { variant: 'title', width: 220, height: 28 }), h(H.Skeleton, { width: 320 })),
+      h('div', { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(4, 1fr)' } }, [0, 1, 2, 3].map(function (i) { return h(H.Skeleton, { key: i, variant: 'block', height: 84 }); })),
+      h('div', { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(3, 1fr)' } }, [0, 1, 2, 3, 4, 5].map(function (i) { return h(SkelCard, { key: i }); })));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

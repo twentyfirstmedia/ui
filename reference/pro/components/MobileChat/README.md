@@ -1,0 +1,2 @@
+# MobileChat
+One conversation on the phone. Back arrow, agent with status, and a details sheet behind the title. Approvals render full width with A–D at thumb height; B and D open the keyboard for the note. The composer sticks above the keyboard: **+** attaches files or photos, the mic dictates on tap and records a voice note while held, the waveform icon in the bar starts a voice conversation (VoiceMode).

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>HQ · Übersicht</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="hq-tokens.css">
+<link rel="stylesheet" href="ds/hq/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#09090b}
+a{color:inherit}
+</style>
+</helmet>
+<div class="hq" data-theme="{{theme}}" data-density="{{density}}" style="background: var(--bg-000); color: var(--fg-100); font-family: var(--font-sans); min-height: 1080px; display: flex; flex-wrap: wrap; align-items: stretch;">
+
+<aside style="flex: 1 1 232px; max-width: 100%; background: var(--bg-100); border-right: 1px solid var(--line-200); display: flex; flex-direction: column;">
+ <div style="height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 1px solid var(--line-200);"><span class="hq-glyph">HQ</span><span class="hq-wordmark"><b>HQ</b><span>twentyfirst</span></span></div>
+ <nav class="hq-nav" aria-label="Hauptnavigation">
+  <a href="#" aria-current="page"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>Übersicht</a>
+  <a href="Stadt.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>Stadt</a>
+  <a href="Chats.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>Chats<span class="hq-count">3</span></a>
+  <a href="Freigaben.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg>Freigaben<span class="hq-count hq-count--signal">3</span></a>
+  <a href="Webmail.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Webmail<span class="hq-count">27</span></a>
+  <a href="Domains.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>Domains &amp; DNS</a>
+  <a href="MailKonten.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></svg>Mail-Konten</a>
+  <a href="Server.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>Apps &amp; Server</a>
+  <a href="Finanzen.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>Finanzen</a>
+  <a href="Ausloeser.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>Auslöser</a>
+  <span class="eyebrow">Module</span>
+  <a href="Brand.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>Brand-Generator</a>
+  <span class="eyebrow">Projekte</span>
+  <a href="#"><span class="hq-dotchip"><i style="background: #cf4646;"></i></span>FollowerPilot</a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #194e9d;"></i></span>Chatteo<span class="pst">Launch</span></a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #6159e1;"></i></span>Twentyfirst AI<span class="pst">Konzept</span></a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #276afc;"></i></span>TravelPilot24<span class="pst">Im Aufbau</span></a>
+  <a href="#"><span class="hq-dotchip"><i style="background: #36a9e1;"></i></span>LicensePilot<span class="pst">Im Aufbau</span></a>
+  <a href="city/Main.dc.html" title="Jason Devine, FlightPilot24, Mein Handelsregister, Reblogger"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>Standby<span class="hq-count">4</span></a>
+  <a href="Projekt-Neu.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Neues Projekt</a>
+ </nav>
+ <nav class="hq-nav" aria-label="Einstellungen" style="margin-top: auto; border-top: 1px solid var(--line-200);">
+  <a href="Einstellungen.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>Einstellungen</a>
+ </nav>
+</aside>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column;">
+ <header class="hq-topbar" style="border-bottom: 1px solid var(--line-200); flex-wrap: wrap;">
+  <div class="hq-crumbs"><span class="cur">Übersicht</span></div>
+  <span class="grow"></span>
+  <button class="hq-searchtrigger" type="button"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span class="grow">Suchen oder Main Brain fragen …</span><span class="hq-kbd">⌘K</span></button>
+  <button class="hq-btn hq-btn--icon hq-btn--ghost" type="button" aria-label="Theme wechseln"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button>
+  <a class="hq-btn hq-btn--sm" href="Freigaben.dc.html"><i class="hq-shape hq-shape--diamond is-signal"></i>Freigaben<span class="hq-count hq-count--signal">3</span></a>
+  <span class="hq-avatar hq-avatar--human">RT</span>
+ </header>
+
+ <main style="padding: 24px; display: flex; flex-direction: column; gap: 24px;">
+  <div style="display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap;">
+   <div style="display: flex; flex-direction: column; gap: 4px; flex: 1 1 320px;">
+    <span class="eyebrow">Dienstag, 13.10.2026</span>
+    <h1 class="t-display" style="margin: 0;">Übersicht</h1>
+   </div>
+   <div class="hq-seg" role="group" aria-label="Zeitraum"><button type="button">Heute</button><button type="button" aria-pressed="true">Oktober</button><button type="button">Quartal</button></div>
+  </div>
+
+  <div class="hq-grid hq-marks" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+   <span class="hq-mark tl"></span><span class="hq-mark tr"></span><span class="hq-mark bl"></span><span class="hq-mark br"></span>
+   <div class="hq-cell hq-cell--lg"><span class="eyebrow">Offene Freigaben</span><span class="t-numeric" style="color: var(--signal);">3</span><span class="t-caption">älteste seit 1:52 h · eskaliert um 16:00</span></div>
+   <div class="hq-cell hq-cell--lg"><span class="eyebrow">Aktive Agents</span><span class="t-numeric">14<span class="muted" style="font-size: 16px;"> / 22</span></span><span class="t-caption">9 arbeiten · 1 Fehler</span></div>
+   <div class="hq-cell hq-cell--lg"><span class="eyebrow">Agent-Kosten Okt.</span><span class="t-numeric">412,30 €</span><span class="t-caption"><span class="mono" style="color: var(--danger);">▲ 8,1 %</span> vs. Sept.</span></div>
+   <div class="hq-cell hq-cell--lg"><span class="eyebrow">Umsatz Okt. · alle Firmen</span><span class="t-numeric">48.210 €</span><span class="t-caption"><span class="mono" style="color: var(--ok);">▲ 12,4 %</span> vs. Sept.</span></div>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start;">
+   <section class="hq-grid" style="flex: 2 1 560px; min-width: 0; grid-template-columns: minmax(0, 1fr);">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 10px 16px;"><span class="t-title">Freigaben</span><span class="hq-count hq-count--signal">3</span><span class="grow"></span><a class="hq-btn hq-btn--sm hq-btn--ghost" href="Freigaben.dc.html">Alle öffnen</a></div>
+    <ul class="hq-inbox">
+     <li><span><i class="hq-shape hq-shape--diamond is-signal"></i></span><span class="from" style="color: var(--fg-100); font-weight: 600;">Antwort an kunde@example.de senden</span><time style="color: var(--warn);">1:52 h</time><span class="tags"><span class="muted" style="font-size: 12px;">Support-Agent · FollowerPilot</span><span class="hq-badge hq-badge--outline">Kommunikation</span></span></li>
+     <li><span><i class="hq-shape hq-shape--diamond is-signal"></i></span><span class="from" style="color: var(--fg-100);">MX-Record für chatteo.de ändern</span><time>3:10 h</time><span class="tags"><span class="muted" style="font-size: 12px;">Infra · Cloudflare · Global</span><span class="hq-badge hq-badge--outline">Infrastruktur</span></span></li>
+     <li><span><i class="hq-shape hq-shape--diamond is-signal"></i></span><span class="from" style="color: var(--fg-100);">Rechnung RE-2026-0143 über 2.380,00 € versenden</span><time>5:44 h</time><span class="tags"><span class="muted" style="font-size: 12px;">Finanz-Agent · Twentyfirst AI</span><span class="hq-badge hq-badge--outline">Geld</span></span></li>
+    </ul>
+   </section>
+   <section class="hq-grid" style="flex: 1 1 320px; min-width: 0; grid-template-columns: minmax(0, 1fr);">
+    <div class="hq-cell" style="gap: 12px;">
+     <div style="display: flex; align-items: center; gap: 8px;"><span class="hq-avatar hq-avatar--brain">MB</span><span class="t-title">Tagesbriefing</span><span class="grow"></span><span class="mono muted" style="font-size: 12px;">08:00</span></div>
+     <p class="t-body" style="margin: 0; color: var(--fg-200);">Gestern liefen 214 Agent-Läufe für 17,90 €. Support hat 38 Anfragen beantwortet, 4 Entwürfe warten auf dich.</p>
+     <ul style="margin: 0; padding-left: 18px; color: var(--fg-200); display: flex; flex-direction: column; gap: 6px; font-size: 13px;">
+      <li>FollowerPilot liegt bei 82 % des Monatsbudgets.</li>
+      <li>followerx.ae läuft in 20 Tagen ab.</li>
+      <li>Vorschlag: Lead-Recherche für Chatteo auf haiku-5-5 umstellen, spart ca. 40 €/Monat.</li>
+     </ul>
+     <div style="display: flex; gap: 8px; flex-wrap: wrap;"><button class="hq-btn hq-btn--sm" type="button">Vorschlag ansehen</button><a class="hq-btn hq-btn--sm hq-btn--ghost" href="Chats.dc.html">Main Brain fragen</a></div>
+    </div>
+   </section>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch;">
+   <section class="hq-grid" style="flex: 2 1 560px; min-width: 0; grid-template-columns: minmax(0, 1fr);">
+    <div class="hq-cell">
+     <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"><span class="eyebrow">Agent-Kosten pro Tag · Okt.</span><span class="grow"></span><span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--fg-200);"><i style="width: 8px; height: 8px; background: var(--chart-1); display: inline-block;"></i>Okt.</span><span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--fg-200);"><i style="width: 10px; height: 2px; background: var(--chart-2); display: inline-block;"></i>Sept.</span><span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--fg-200);"><i style="width: 10px; border-top: 1px dashed var(--warn); display: inline-block;"></i>Budget/Tag</span></div>
+     <svg viewBox="0 0 640 170" style="width: 100%; height: auto; display: block;" role="img" aria-label="Agent-Kosten pro Tag im Oktober, steigend von 14 auf 26 Euro">
+      <line x1="40" x2="640" y1="20" y2="20" stroke="var(--chart-grid)"/><line x1="40" x2="640" y1="70" y2="70" stroke="var(--chart-grid)"/><line x1="40" x2="640" y1="120" y2="120" stroke="var(--chart-grid)"/>
+      <text x="0" y="24" fill="var(--fg-300)" style="font: 400 10px var(--font-mono);">30 €</text><text x="0" y="74" fill="var(--fg-300)" style="font: 400 10px var(--font-mono);">15 €</text><text x="8" y="124" fill="var(--fg-300)" style="font: 400 10px var(--font-mono);">0 €</text>
+      <g fill="var(--chart-1)">
+       <rect x="44" y="73" width="24" height="47"/><rect x="84" y="80" width="24" height="40"/><rect x="124" y="63" width="24" height="57"/><rect x="164" y="77" width="24" height="43"/><rect x="204" y="70" width="24" height="50"/><rect x="244" y="60" width="24" height="60"/><rect x="284" y="67" width="24" height="53"/><rect x="324" y="57" width="24" height="63"/><rect x="364" y="47" width="24" height="73"/><rect x="404" y="60" width="24" height="60"/><rect x="444" y="50" width="24" height="70"/><rect x="484" y="40" width="24" height="80"/><rect x="524" y="53" width="24" height="67"/><rect x="564" y="43" width="24" height="77"/><rect x="604" y="33" width="24" height="87"/>
+      </g>
+      <polyline points="56,96 96,92 136,98 176,88 216,90 256,84 296,86 336,80 376,82 416,78 456,80 496,74 536,76 576,72 616,74" fill="none" stroke="var(--chart-2)" stroke-width="1.25"/>
+      <line x1="40" x2="640" y1="50" y2="50" stroke="var(--warn)" stroke-dasharray="3 3"/>
+      <text x="48" y="140" fill="var(--fg-300)" style="font: 400 10px var(--font-mono);">1.</text><text x="208" y="140" fill="var(--fg-300)" style="font: 400 10px var(--font-mono);">5.</text><text x="368" y="140" fill="var(--fg-300)" style="font: 400 10px var(--font-mono);">9.</text><text x="606" y="140" fill="var(--fg-300)" style="font: 400 10px var(--font-mono);">15.</text>
+     </svg>
+    </div>
+   </section>
+   <section class="hq-grid" style="flex: 1 1 320px; min-width: 0; grid-template-columns: minmax(0, 1fr);">
+    <div class="hq-cell" style="gap: 14px;">
+     <span class="eyebrow">Budgets Oktober</span>
+     <div style="display: flex; flex-direction: column; gap: 6px;"><div style="display: flex; gap: 8px; align-items: center;"><span class="t-label">FollowerPilot</span><span class="grow"></span><span class="mono" style="font-size: 12px; color: var(--warn);">246 / 300 €</span></div><div class="hq-meter is-warn"><div class="fill" style="width: 82%;"></div><div class="tick" style="left: 80%;"></div></div></div>
+     <div style="display: flex; flex-direction: column; gap: 6px;"><div style="display: flex; gap: 8px; align-items: center;"><span class="t-label">Chatteo</span><span class="grow"></span><span class="mono muted" style="font-size: 12px;">48 / 150 €</span></div><div class="hq-meter"><div class="fill" style="width: 32%;"></div><div class="tick" style="left: 80%;"></div></div></div>
+     <div style="display: flex; flex-direction: column; gap: 6px;"><div style="display: flex; gap: 8px; align-items: center;"><span class="t-label">Twentyfirst AI</span><span class="grow"></span><span class="mono muted" style="font-size: 12px;">57 / 120 €</span></div><div class="hq-meter"><div class="fill" style="width: 47%;"></div><div class="tick" style="left: 80%;"></div></div></div>
+     <div style="display: flex; flex-direction: column; gap: 6px;"><div style="display: flex; gap: 8px; align-items: center;"><span class="t-label">TravelPilot24</span><span class="grow"></span><span class="mono muted" style="font-size: 12px;">6 / 150 €</span></div><div class="hq-meter"><div class="fill" style="width: 4%;"></div><div class="tick" style="left: 80%;"></div></div></div>
+     <span class="muted" style="font-size: 12px;">Standby, Budget 0 €: Jason Devine, FlightPilot24, Mein Handelsregister, Reblogger</span>
+    </div>
+   </section>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start;">
+   <section class="hq-grid" style="flex: 2 1 560px; min-width: 0; grid-template-columns: minmax(0, 1fr);">
+    <div class="hq-cell"><span class="eyebrow">Aktivität</span>
+     <ul class="hq-feed">
+      <li><time>14:05</time><span class="pin"><i class="hq-shape hq-shape--diamond is-signal"></i></span><span class="msg"><b>Support-Agent</b> möchte eine Antwort an kunde@example.de senden</span></li>
+      <li><time>13:52</time><span class="pin"><i class="hq-shape hq-shape--dot is-ok"></i></span><span class="msg"><b>Lukas</b> hat „Rechnung RE-2026-0142“ freigegeben</span></li>
+      <li><time>13:40</time><span class="pin"><i class="hq-shape hq-shape--pulse is-info"></i></span><span class="msg"><b>Head Sales</b> hat 12 Leads an <b>Lead Researcher</b> delegiert</span></li>
+      <li><time>12:18</time><span class="pin"><i class="hq-shape hq-shape--square is-danger"></i></span><span class="msg"><b>Infra · Cloudflare</b>: DNS-Abruf fehlgeschlagen (3/3 Versuche)</span></li>
+     </ul>
+    </div>
+   </section>
+   <section class="hq-grid" style="flex: 1 1 320px; min-width: 0; grid-template-columns: minmax(0, 1fr);">
+    <div class="hq-cell"><span class="eyebrow">Server</span>
+     <div style="display: flex; align-items: center; gap: 8px;"><span class="t-title">hq-agents-01</span><span class="grow"></span><span class="hq-badge hq-badge--ok"><i class="hq-shape hq-shape--dot is-ok"></i>Online</span></div>
+     <div style="display: flex; align-items: center; gap: 8px;"><span class="t-title">hetzner-prod-02</span><span class="grow"></span><span class="hq-badge hq-badge--info"><i class="hq-shape hq-shape--pulse is-info"></i>Deploy läuft</span></div>
+     <div style="display: flex; align-items: center; gap: 8px;"><span class="t-title">mail-01</span><span class="grow"></span><span class="hq-badge hq-badge--warn"><i class="hq-shape hq-shape--tri is-warn"></i>Disk 84 %</span></div>
+    </div>
+   </section>
+  </div>
+ </main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"density":{"editor":"enum","options":["compact","comfortable"],"default":"compact"},"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { theme: this.props.theme ?? 'dark', density: this.props.density ?? 'compact' };
+  }
+}
+</script>
+</body>
+</html>

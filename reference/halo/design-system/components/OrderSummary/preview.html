@@ -1,0 +1,20 @@
+<!-- @dsCard group="Commerce" height=680 width=960 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>OrderSummary</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+
+  function App() {
+    var lines = useState([{ key: 'a', name: 'Halo Cotton Tee', variant: 'M · Sky', art: 'tee', tint: 'sky', price: 32, qty: 1 }, { key: 'b', name: 'Studio Mug', art: 'mug', tint: 'butter', price: 18, qty: 2, note: 'Only 6 left' }]), d = useState(null), step = useState(1);
+    return h('div', { className: 'ha-col', style: { gap: 16 } }, h(H.CheckoutSteps, { current: step[0], onPick: step[1] }),
+      h('div', { style: { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: 16, alignItems: 'start' } },
+        h('div', { className: 'ha-panel' }, lines[0].map(function (l) { return h(H.CartLine, Object.assign({ key: l.key, onQty: function (n) { lines[1](lines[0].map(function (z) { return z.key === l.key ? Object.assign({}, z, { qty: n }) : z; })); }, onRemove: function () { lines[1](lines[0].filter(function (z) { return z.key !== l.key; })); } }, l)); })),
+        h('div', { className: 'ha-panel' }, h(H.OrderSummary, { lines: lines[0], showLines: true, discount: d[0], freeShippingFrom: 75, onCoupon: function (c) { if (c === null) return d[1](null); if (c !== 'HALO10') return false; d[1]({ code: 'HALO10', pct: 10, label: '10% off everything' }); }, action: h(H.Button, { icon: 'lock' }, 'Pay now') }))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!-- @dsCard group="Overlays" height=420 width=760 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+
+  function App() {
+    return h('div', { className: 'ha-panel', style: { gap: 40, paddingTop: 56 } },
+      h('div', { className: 'ha-row', style: { gap: 16 } },
+        h(H.Tooltip, { label: 'Archive', shortcut: 'E' }, h('button', { type: 'button', className: 'ha-iconbtn ha-iconbtn-soft', 'aria-label': 'Archive' }, h(H.Icon, { name: 'inbox' }))),
+        h(H.Tooltip, { label: 'Star' }, h('button', { type: 'button', className: 'ha-iconbtn ha-iconbtn-soft', 'aria-label': 'Star' }, h(H.Icon, { name: 'star' }))),
+        h(H.Tooltip, { label: 'Opens in a new tab', side: 'bottom' }, h('button', { type: 'button', className: 'ha-btn ha-btn-secondary' }, 'View invoice')),
+        h('span', { className: 'ha-tip-anchor' }, h('button', { type: 'button', className: 'ha-iconbtn ha-iconbtn-soft', 'aria-label': 'Share' }, h(H.Icon, { name: 'share' })), h('span', { role: 'tooltip', className: 'ha-tooltip ha-tip-top', style: { animation: 'none' } }, 'Copy share link', h('kbd', null, '⌘L')))),
+      h('div', { className: 'ha-row', style: { gap: 16, alignItems: 'flex-start' } },
+        h(H.Popover, { open: true, width: 280, trigger: h('button', { type: 'button', className: 'ha-btn ha-btn-soft' }, h(H.Icon, { name: 'users', size: 15 }), 'Assign') },
+          h('div', { className: 'ha-col', style: { gap: 12 } }, h('b', null, 'Assign to'), h(H.Combobox, { options: ['Ava Vogel', 'Ben Okafor', 'Clara Haddad'], placeholder: 'Search people' }), h('div', { className: 'ha-row', style: { justifyContent: 'flex-end' } }, h(H.Button, { size: 'sm' }, 'Assign'))))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

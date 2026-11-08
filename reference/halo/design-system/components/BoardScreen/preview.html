@@ -1,0 +1,38 @@
+<!-- @dsCard group="Pages" height=820 width=1280 page subtitle="Kanban sprint board with four staggered columns" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>BoardScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  function T(p) { return h(H.Card, { onClick: function () {}, tint: p.tint, title: p.t, meta: p.m, status: p.b, actions: [h(H.AvatarStack, { key: 1, names: p.who, size: 24 })] }, p.p != null && h(H.Progress, { value: p.p, tint: 'mint', label: 'Progress' })); }
+  function App() {
+    return h(H.AppShell, { active: 'Projects', dock: false },
+      h('div', { className: 'ha-in' }, h(H.PageHeader, { crumbs: ['Projects', 'Pricing page refresh'], title: 'Sprint 14 board', subtitle: '18 tasks · ends Friday', actions: [h(H.AvatarStack, { key: 'a', names: ['Mara Ellis', 'Jonah Petit', 'Sun Lee', 'Rui Costa', 'Ida Nolan', 'Ava Brandt'] }), h(H.Tabs, { key: 't', items: ['Board', 'List', 'Timeline'] }), h(H.Button, { key: 'n', icon: 'plus' }, 'New task')] })),
+      h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, alignItems: 'start' } },
+        h(H.KanbanColumn, { title: 'To do', dot: 'sky', delay: 120 },
+          h(T, { t: 'Write FAQ for annual plans', m: ['Docs', 'Due Thu'], b: h(H.Badge, null, 'Copy'), who: ['Ava Brandt'] }),
+          h(T, { t: 'Localise tiers for DE and FR', m: ['Growth'], b: h(H.Badge, { tone: 'info' }, 'i18n'), who: ['Sun Lee', 'Ida Nolan'] }),
+          h(T, { t: 'Plan migration emails', m: ['Lifecycle'], b: h(H.Badge, null, 'Email'), who: ['Rui Costa'] })),
+        h(H.KanbanColumn, { title: 'In progress', dot: 'butter', delay: 220 },
+          h(T, { tint: 'lilac', t: 'Comparison table component', m: ['Design system', '3 of 5 states'], b: h(H.Badge, { tone: 'highlight' }, 'Focus'), who: ['Jonah Petit', 'Mara Ellis'], p: 60 }),
+          h(T, { t: 'Checkout seat selector', m: ['Billing'], b: h(H.Badge, { tone: 'warning' }, 'Blocked'), who: ['Rui Costa'], p: 30 })),
+        h(H.KanbanColumn, { title: 'In review', dot: 'lilac', delay: 320 },
+          h(T, { t: 'Billing settings flow', m: ['Due Fri'], b: h(H.Badge, { tone: 'highlight' }, 'Review'), who: ['Mara Ellis', 'Sun Lee'] }),
+          h(T, { t: 'Empty states for reports', m: ['Due Mon'], b: h(H.Badge, { tone: 'warning' }, 'Changes'), who: ['Jonah Petit'] })),
+        h(H.KanbanColumn, { title: 'Done', dot: 'mint', delay: 420 },
+          h(T, { t: 'Pricing research recap', m: ['Shipped Tue'], b: h(H.Badge, { tone: 'success' }, 'Done'), who: ['Sun Lee'] }),
+          h(T, { t: 'New tier names', m: ['Shipped Mon'], b: h(H.Badge, { tone: 'success' }, 'Done'), who: ['Mara Ellis'] }),
+          h(T, { t: 'Analytics events for upgrade', m: ['Shipped Mon'], b: h(H.Badge, { tone: 'success' }, 'Done'), who: ['Ida Nolan'] }))));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!-- @dsCard group="Pages" height=960 width=1280 page subtitle="Settings with section list, profile form, notification switches and danger zone" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>SettingsScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  function App() {
+    var sec = React.useState(0);
+    var nav = [['Profile', 'user', 'sky'], ['Workspace', 'grid', 'mint'], ['Notifications', 'bell', 'butter'], ['Security', 'lock', 'lilac'], ['Integrations', 'link', 'plain'], ['Billing', 'card', 'blush']];
+    return h(H.AppShell, { active: 'Settings', dock: false },
+      h('div', { className: 'ha-in' }, h(H.PageHeader, { title: 'Settings', subtitle: 'Manage your profile and how Halo works for your team', actions: [h(H.Button, { key: 'c', variant: 'ghost' }, 'Discard'), h(H.Button, { key: 's', icon: 'check' }, 'Save changes')] })),
+      h('div', { style: { display: 'grid', gridTemplateColumns: '240px 1fr', gap: 24, alignItems: 'start' } },
+        h('div', { className: 'ha-panel ha-panel-flush ha-panel-list' }, h(H.Stagger, { className: 'ha-list', delay: 100 }, nav.map(function (n, i) { return h(H.ListRow, { key: n[0], icon: n[1], tint: n[2], title: n[0], active: sec[0] === i, onClick: function () { sec[1](i); } }); }))),
+        h(H.Stagger, { className: 'ha-col', style: { gap: 16 }, delay: 160 },
+          h(H.Panel, { title: 'Profile', subtitle: 'Shown to everyone in the workspace' },
+            h('div', { className: 'ha-row', style: { gap: 16 } }, h(H.Avatar, { name: 'Mara Ellis', size: 64 }), h(H.Button, { variant: 'secondary', size: 'sm' }, 'Upload photo'), h(H.Button, { variant: 'ghost', size: 'sm' }, 'Remove')),
+            h('div', { className: 'ha-grid', style: { gridTemplateColumns: '1fr 1fr', gap: 16 } }, h(H.Input, { label: 'Full name', defaultValue: 'Mara Ellis' }), h(H.Input, { label: 'Email', defaultValue: 'mara@halo.app', hint: 'Used for sign-in and receipts.' }), h(H.Select, { label: 'Role', options: ['Owner', 'Admin', 'Editor', 'Viewer'] }), h(H.Select, { label: 'Time zone', options: ['Europe/Berlin (UTC+2)', 'Asia/Dubai (UTC+4)', 'America/New_York (UTC−4)'] }))),
+          h(H.Panel, { title: 'Notifications', subtitle: 'Choose what reaches your inbox' },
+            h('div', { className: 'ha-col', style: { gap: 16 } }, h(H.Switch, { spread: true, defaultChecked: true }, 'Approvals waiting on me'), h(H.Switch, { spread: true, defaultChecked: true }, 'Invoices paid or overdue'), h(H.Switch, { spread: true }, 'Weekly analytics digest'), h(H.Switch, { spread: true }, 'Product updates from Halo'))),
+          h('div', { className: 'ha-card ha-bg-blush', style: { minHeight: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' } }, h('div', null, h('div', { className: 'ha-card-title', style: { padding: 0 } }, 'Delete workspace'), h('div', { className: 'ha-card-desc' }, 'Removes every project, file and invoice. This cannot be undone.')), h(H.Button, { variant: 'secondary', icon: 'trash' }, 'Delete…')))));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

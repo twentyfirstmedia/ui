@@ -1,0 +1,33 @@
+{
+  "v": 3,
+  "layout": "files",
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-22T04:40:00Z"
+  },
+  "title": "Halo Dashboard UI",
+  "namespace": "Halo",
+  "libraries": [
+    {
+      "name": "react",
+      "version": "18"
+    },
+    {
+      "name": "react-dom",
+      "version": "18"
+    }
+  ],
+  "sections": {},
+  "groups": [],
+  "assetGroups": {},
+  "blobs": {},
+  "docs": {
+    "sections": []
+  },
+  "lastChange": {
+    "by": "Robin Trepte",
+    "at": "2026-11-08T14:30:00Z",
+    "via": "Claude chat",
+    "note": "No hard-coded colours left: fixed-value tokens for frame overlays, media scrims, lightbox, paper text and the search-ad preview. RichTextEditor rebuilt on Selection/Range (no execCommand, no browser prompt), with link popover, own undo history and plain-text paste."
+  }
+}

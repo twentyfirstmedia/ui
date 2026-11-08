@@ -1,0 +1,20 @@
+<!-- @dsCard group="Data" height=640 width=1100 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Preview</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+  function render(el) { ReactDOM.createRoot(document.getElementById('root')).render(el); }
+
+  var accounts = [{ address: 'support@followerpilot.de', domain: 'followerpilot.de', unread: 3 }, { address: 'hello@chatteo.de', domain: 'chatteo.de', unread: 1 }, { address: 'robin@twentyfirst.media', domain: 'twentyfirst.media' }];
+  function App() { var a = useState(null), s = useState(1);
+    return h('div', { style: { display: 'grid', gridTemplateColumns: '360px 1fr', gap: 16, alignItems: 'start' } },
+      h('div', { className: 'ha-panel', style: { gap: 12 } }, h(H.AccountSwitcher, { accounts: accounts, value: a[0], onChange: a[1], unread: 4 }), h(H.InboxList, { selected: s[0], onOpen: function (m) { s[1](m.id); }, items: [{ id: 1, from: 'Ida Nolan', time: '08:40', subject: 'Seat upgrade before renewal', snippet: 'We are growing faster than planned and need 40 more seats.', unread: true, to: 'support@', agent: { label: 'Draft ready', tone: 'highlight' } }, { id: 2, from: 'Hetzner', time: '07:12', subject: 'Invoice 2026-0412', snippet: 'Your invoice is attached.', tags: ['Receipt'] }] })),
+      h('div', { className: 'ha-panel' }, h(H.MailThread, { subject: 'Seat upgrade before renewal', messages: [{ id: 1, from: 'Ida Nolan', to: 'to support@followerpilot.de', time: 'Mon 16:20', snippet: 'Hi! Quick question about seats…', body: 'Hi! Quick question about seats before our renewal.' }, { id: 2, from: 'Atlas', agent: true, tint: 'sky', agentNote: 'sent after approval', to: 'to ida@northwind.io', time: 'Tue 09:41', body: 'Hi Ida,\n\nhappy to add 40 seats before your renewal on 1 May.\n\nBest,\nMara', attachments: [{ name: 'Quote-0412.pdf', size: '84 KB' }] }] })));
+  }
+  render(h(App));
+</script>
+</body>
+</html>

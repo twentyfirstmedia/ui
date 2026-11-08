@@ -1,0 +1,41 @@
+<!-- @dsCard group="Pages" height=820 width=1280 page subtitle="Companies list with the customer drawer open; top bar areas + side nav pages" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>CustomersScreen — page</title>
+<style>
+
+</style>
+</head>
+<body>
+<div id="root" style="padding: 16px;"></div>
+<script>
+  var H = window.Halo, h = React.createElement;
+  function cardActs(confirm) { return [h(H.IconButton, { key: 1, icon: 'more', label: 'More', size: 'sm' }), h(H.IconButton, { key: 2, icon: 'x', label: 'Reject', size: 'sm' }), h(H.IconButton, { key: 3, icon: confirm || 'check', label: 'Approve', size: 'sm', variant: 'solid' })]; }
+  var AREAS = [['Workspace', 'home'], ['Customers', 'users'], ['Agents', 'bot'], ['Mail', 'mail'], ['Code', 'code'], ['Domains', 'globe'], ['Finance', 'card'], ['Files', 'folder'], ['Account', 'settings']];
+  function Shell(p) {
+    return h('div', { className: 'ha-shell', style: { position: 'relative' } },
+      h(H.TopBar, { brand: 'Halo', tag: 'Admin', active: p.area, items: AREAS.map(function (a) { return { label: a[0], icon: a[1], count: a[0] === 'Mail' ? 2 : null }; }), user: { name: 'Mara Ellis', email: 'mara@halo.app' },
+        extra: [h('button', { key: 's', type: 'button', className: 'ha-topbtn', 'aria-label': 'Search' }, h(H.Icon, { name: 'search', size: 15 }), 'Search', h('kbd', null, '⌘K')), h('button', { key: 'b', type: 'button', className: 'ha-topbtn icon', 'aria-label': 'Notifications' }, h(H.Icon, { name: 'bell', size: 17 }), h('span', { className: 'ha-nav-count' }, 4))] }),
+      h('div', { className: 'ha-sheet', style: { gridTemplateColumns: '200px minmax(0, 1fr)' + (p.side ? ' 300px' : ''), alignItems: 'start' } },
+        h(H.SubNav, { eyebrow: p.area, action: p.action, current: p.current, items: p.pages }),
+        h('main', { className: 'ha-main' }, p.children), p.side || null),
+      p.overlay || null);
+  }
+  var CO = [['Northwind', 'Logistics · Hamburg', 'Team', 1240, 'Good'], ['Kestrel Bank', 'Banking · Frankfurt', 'Business', 3880, 'Good'], ['Copperline', 'Manufacturing · Munich', 'Starter', 190, 'Watch'], ['Harbor & Co', 'Retail · Cologne', 'Team', 1468, 'At risk'], ['Lumen Labs', 'Research · Vienna', 'Business', 4076, 'Good'], ['Orbit Foods', 'Food · Zurich', 'Team', 1445, 'Good']];
+  var HT = { Good: 'success', Watch: 'warning', 'At risk': 'danger' };
+  function App() {
+    return h(Shell, { area: 'Customers', current: 'companies', action: { label: 'New deal', icon: 'plus' }, pages: [{ id: 'companies', label: 'Companies', icon: 'grid', count: 1 }, { id: 'pipeline', label: 'Pipeline', icon: 'trend', count: 2 }, { id: 'contacts', label: 'Contacts', icon: 'user' }],
+      overlay: h(H.Drawer, { inline: true, title: 'Northwind', subtitle: 'Logistics · Hamburg · customer since 2021', avatar: 'Northwind', onClose: function () {} },
+        h('div', { className: 'ha-row' }, h(H.Badge, { tone: 'success' }, 'Good'), h(H.Badge, { tone: 'info', dot: false }, 'Team · 24 seats'), h(H.Badge, { dot: false }, 'Owner: Mara Ellis')),
+        h(H.Tabs, { block: true, items: ['Overview', 'Invoices', 'Mail', 'Agent brief'] }),
+        h('div', { className: 'ha-grid', style: { gridTemplateColumns: '1fr 1fr' } }, h(H.StatTile, { tint: 'butter', value: '€1,240', label: 'MRR' }), h(H.StatTile, { tint: 'mint', value: '€14,880', label: 'Paid to date' })),
+        h(H.ListRow, { avatar: 'Ida Nolan', title: 'Ida Nolan', subtitle: 'Head of Ops · ida@northwind.example' }), h(H.ListRow, { avatar: 'Amara Silva', title: 'Amara Silva', subtitle: 'IT admin · amara@northwind.example' })) },
+      h('div', { className: 'ha-in' }, h(H.PageHeader, { title: 'Companies', subtitle: '15 customers · example data', actions: [h(H.SearchField, { key: 's', placeholder: 'Search companies' })] })),
+      h(H.Stagger, { className: 'ha-grid', style: { gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' }, delay: 80 }, h(H.StatTile, { tint: 'butter', value: '€33,067', label: 'Monthly recurring revenue' }), h(H.StatTile, { tint: 'sky', value: '15', label: 'Customers' }), h(H.StatTile, { tint: 'placeholder', value: '5', label: 'Need attention' }), h(H.StatTile, { tint: 'mint', value: '€182,600', label: 'Open pipeline' })),
+      h('div', { className: 'ha-panel ha-in', style: { padding: 12, '--d': '260ms' } }, h(H.Table, { columns: [{ key: 0, label: 'Company', render: function (r) { return h('span', { className: 'ha-row', style: { flexWrap: 'nowrap' } }, h(H.Avatar, { name: r[0], size: 30 }), h('span', null, h('b', null, r[0]), h('div', { className: 'ha-card-desc' }, r[1]))); } }, { key: 2, label: 'Plan', render: function (r) { return h(H.Badge, { tone: r[2] === 'Business' ? 'highlight' : r[2] === 'Team' ? 'info' : 'neutral', dot: false }, r[2]); } }, { key: 3, label: 'MRR', align: 'right', render: function (r) { return '€' + r[3].toLocaleString('en-US'); } }, { key: 4, label: 'Health', render: function (r) { return h(H.Badge, { tone: HT[r[4]] }, r[4]); } }], rows: CO })));
+  }
+
+  H.mountPage(App);
+</script>
+</body>
+</html>

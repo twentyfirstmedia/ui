@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>HQ · Mobile · Chats</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="hq-tokens.css">
+<link rel="stylesheet" href="ds/hq/components/bundle.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="hq hq-mchat" data-theme="{{theme}}" data-density="compact" style="width: 390px; height: 844px; background: var(--bg-000); color: var(--fg-100); font-family: var(--font-sans); overflow: hidden;">
+
+ <sc-if value="{{isList}}" hint-placeholder-val="{{ true }}">
+  <div class="bar"><div class="who"><b style="font-size: 20px;">Chats</b></div><button class="hq-btn hq-btn--ghost hq-btn--icon" type="button" aria-label="Neuer Chat" style="width: 44px; height: 44px;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg></button></div>
+  <div style="padding: 10px 16px; background: var(--bg-100); border-bottom: 1px solid var(--line-100); display: flex; flex-direction: column; gap: 10px;">
+   <div class="hq-inputgroup"><span class="affix"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span><input class="hq-input" style="height: 36px;" placeholder="Chats und Verlauf durchsuchen" aria-label="Chats und Verlauf durchsuchen" value="{{q}}" onChange="{{onQuery}}"></div>
+   <div class="hq-seg" role="group" aria-label="Filter" style="align-self: flex-start;"><button type="button" aria-pressed="{{fAll}}" onClick="{{setAll}}">Alle</button><button type="button" aria-pressed="{{fAps}}" onClick="{{setAps}}">Freigaben<span class="hq-count hq-count--signal" style="margin-left: 6px;">{{totalAps}}</span></button></div>
+  </div>
+  <div class="hq-chatlist" style="flex: 1 1 auto; min-height: 0; background: var(--bg-000);">
+   <div class="scroll">
+    <sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
+     <div class="group">
+      <div class="eyebrow"><i style="background: {{g.color}};"></i>{{g.title}}</div>
+      <sc-for list="{{g.rows}}" as="r" hint-placeholder-count="2">
+       <button type="button" class="{{r.cls}}" onClick="{{r.open}}">
+        <span class="av">
+         <sc-if value="{{r.isPair}}" hint-placeholder-val="{{ false }}"><span class="hq-pair"><span class="{{r.p1.cls}}" style="{{r.p1.style}}">{{r.p1.init}}</span><span class="{{r.p2.cls}}" style="{{r.p2.style}}">{{r.p2.init}}</span></span></sc-if>
+         <sc-if value="{{r.isSingle}}" hint-placeholder-val="{{ true }}"><span class="{{r.avCls}}" style="{{r.avStyle}}">{{r.init}}<i class="{{r.shapeCls}}"></i></span></sc-if>
+        </span>
+        <span class="name"><span>{{r.name}}</span><span class="sub">{{r.sub}}</span></span>
+        <time>{{r.time}}</time>
+        <span class="preview">{{r.preview}}</span>
+        <span class="meta"><sc-if value="{{r.hasAps}}" hint-placeholder-val="{{ false }}"><span class="hq-count hq-count--signal">{{r.aps}}</span></sc-if><sc-if value="{{r.hasUnread}}" hint-placeholder-val="{{ false }}"><span class="hq-count">{{r.unread}}</span></sc-if></span>
+       </button>
+      </sc-for>
+     </div>
+    </sc-for>
+   </div>
+  </div>
+  <nav class="hq-tabbar">
+   <a href="Stadt.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>Stadt</a>
+   <a href="#" aria-current="page"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>Chats<span class="hq-count">{{totalUnread}}</span></a>
+   <a href="Mobile-Freigabe.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg>Freigaben<span class="hq-count hq-count--signal">{{totalAps}}</span></a>
+   <a href="Mobile-Mail.dc.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Mail</a>
+   <a href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>Mehr</a>
+  </nav>
+ </sc-if>
+
+ <sc-if value="{{isChat}}" hint-placeholder-val="{{ false }}">
+  <div class="bar">
+   <button class="hq-btn hq-btn--ghost hq-btn--icon" type="button" aria-label="Zurück zu den Chats" onClick="{{back}}" style="width: 44px; height: 44px;"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+   <sc-if value="{{cur.isPair}}" hint-placeholder-val="{{ false }}"><span class="hq-pair"><span class="{{cur.p1.cls}}" style="{{cur.p1.style}}">{{cur.p1.init}}</span><span class="{{cur.p2.cls}}" style="{{cur.p2.style}}">{{cur.p2.init}}</span></span></sc-if>
+   <sc-if value="{{cur.isSingle}}" hint-placeholder-val="{{ true }}"><span class="{{cur.avCls}}" style="{{cur.avStyle}}">{{cur.init}}<i class="{{cur.shapeCls}}"></i></span></sc-if>
+   <div class="who"><b>{{cur.name}}</b><span>{{cur.subShort}}</span></div>
+   <button class="{{voiceBtnCls}}" type="button" aria-label="Sprachgespräch starten" onClick="{{startVoice}}" style="width: 44px; height: 44px;"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 10v3" /> <path d="M6 6v11" /> <path d="M10 3v18" /> <path d="M14 8v7" /> <path d="M18 5v13" /> <path d="M22 10v3" /> </svg></button>
+  </div>
+<sc-if value="{{notVoice}}" hint-placeholder-val="{{ true }}">
+  <div class="hq-chatbody" style="flex: 1 1 auto; background: var(--bg-000);">
+   <sc-for list="{{thread}}" as="m" hint-placeholder-count="5">
+    <sc-if value="{{m.isVoice}}" hint-placeholder-val="{{ false }}"><details class="hq-voicelog" style="margin: 6px 16px;"><summary><span class="ic"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 10v3" /> <path d="M6 6v11" /> <path d="M10 3v18" /> <path d="M14 8v7" /> <path d="M18 5v13" /> <path d="M22 10v3" /> </svg></span><span><b>Sprachgespräch</b></span><span class="meta">{{m.time}} · {{m.dur}} · Transkript</span></summary><ol><sc-for list="{{m.lines}}" as="l" hint-placeholder-count="2"><li><b>{{l.w}}</b><span>{{l.t}}</span></li></sc-for></ol></details></sc-if>
+    <sc-if value="{{m.isDay}}" hint-placeholder-val="{{ false }}"><div class="{{m.dayCls}}">{{m.label}}</div></sc-if>
+    <sc-if value="{{m.isMsg}}" hint-placeholder-val="{{ true }}"><div class="{{m.msgCls}}"><span class="{{m.avCls}}" style="{{m.avStyle}}">{{m.init}}</span><div><div class="head"><b>{{m.name}}</b><sc-if value="{{m.hasVia}}" hint-placeholder-val="{{ false }}"><span class="via"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /> <path d="M19 10v2a7 7 0 0 1-14 0v-2" /> <line x1="12" x2="12" y1="19" y2="22" /> </svg>diktiert</span></sc-if><time>{{m.time}}</time></div><div class="text">{{m.text}}</div><sc-if value="{{m.hasFiles}}" hint-placeholder-val="{{ false }}"><div class="files"><sc-for list="{{m.files}}" as="f" hint-placeholder-count="1"><a class="hq-file" href="#"><span class="thumb">{{f.ext}}</span><span class="nm"><b>{{f.name}}</b><span>{{f.meta}}</span></span></a></sc-for></div></sc-if></div></div></sc-if>
+    <sc-if value="{{m.isHandoff}}" hint-placeholder-val="{{ false }}"><div class="hq-handoff" style="margin: 6px 16px;"><b>{{m.from}}</b> → <b>{{m.to}}</b> · {{m.text}}</div></sc-if>
+    <sc-if value="{{m.isDecision}}" hint-placeholder-val="{{ false }}"><div class="decision" style="margin-left: 16px;"><i class="{{m.shapeCls}}"></i><b>Robin</b><span>· {{m.text}}</span></div></sc-if>
+    <sc-if value="{{m.isApproval}}" hint-placeholder-val="{{ false }}">
+     <div class="inline-ap"><div class="hq-approval">
+      <header><i class="hq-shape hq-shape--diamond is-signal"></i><span class="t">Freigabe nötig</span><span class="hq-badge hq-badge--outline">{{m.family}}</span><time>{{m.age}}</time></header>
+      <div class="body"><div class="what">{{m.what}}</div><div class="why">{{m.why}}</div><div class="payload">{{m.payload}}</div></div>
+      <sc-if value="{{m.showOptions}}" hint-placeholder-val="{{ true }}">
+       <div class="hq-options">
+        <button class="hq-option hq-option--primary" type="button" onClick="{{m.a}}"><span class="hq-kbd">A</span>Ja, so ausführen</button>
+        <button class="hq-option" type="button" onClick="{{m.b}}"><span class="hq-kbd">B</span>Ja, mit Änderung</button>
+        <button class="hq-option" type="button" onClick="{{m.c}}"><span class="hq-kbd">C</span>Nein, verwerfen</button>
+        <button class="hq-option" type="button" onClick="{{m.d}}"><span class="hq-kbd">D</span>Andere Anweisung …</button>
+       </div>
+      </sc-if>
+      <sc-if value="{{m.noteOpen}}" hint-placeholder-val="{{ false }}">
+       <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px; border-top: 1px solid var(--line-200);">
+        <label class="t-label" for="m-note">{{m.noteLabel}}</label>
+        <textarea id="m-note" class="hq-textarea" rows="3" value="{{noteText}}" onChange="{{onNote}}" placeholder="{{m.bHint}}"></textarea>
+        <div style="display: flex; gap: 8px;"><button class="hq-btn hq-btn--ghost grow" type="button" style="height: 44px;" onClick="{{m.cancel}}">Abbrechen</button><button class="hq-btn hq-btn--primary grow" type="button" style="height: 44px;" onClick="{{m.sendNote}}">{{m.noteLetter}} · Senden</button></div>
+       </div>
+      </sc-if>
+     </div></div>
+    </sc-if>
+   </sc-for>
+   <sc-if value="{{isTyping}}" hint-placeholder-val="{{ false }}"><div class="typing" style="padding-left: 16px;"><span class="hq-thinking"><span class="dots"><i></i><i></i><i></i></span>{{cur.name}} schreibt</span></div></sc-if>
+  </div>
+  <sc-if value="{{showReadonly}}" hint-placeholder-val="{{ false }}">
+   <div class="hq-readonly"><span class="grow">Du liest mit.</span><button class="hq-btn" type="button" style="height: 44px;" onClick="{{intervene}}">Eingreifen</button></div>
+  </sc-if>
+  <sc-if value="{{showComposer}}" hint-placeholder-val="{{ true }}">
+   <div class="{{composerCls}}" style="padding: 10px 12px;">
+    <sc-if value="{{hasFiles}}" hint-placeholder-val="{{ false }}"><div class="files"><sc-for list="{{files}}" as="f" hint-placeholder-count="1"><span class="hq-file"><span class="thumb">{{f.ext}}</span><span class="nm"><b>{{f.name}}</b><span>{{f.meta}}</span></span><button class="x" type="button" aria-label="Entfernen" onClick="{{f.rm}}"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M18 6 6 18" /> <path d="m6 6 12 12" /> </svg></button></span></sc-for></div></sc-if>
+    <sc-if value="{{dictating}}" hint-placeholder-val="{{ false }}"><div class="hq-dictate"><span class="rec"></span><time>{{dictTime}}</time><span class="hq-wave is-live" aria-hidden="true"><i style="--h: 0.35; --d: 0.00;"></i><i style="--h: 0.76; --d: 0.13;"></i><i style="--h: 0.92; --d: 0.26;"></i><i style="--h: 0.53; --d: 0.39;"></i><i style="--h: 0.34; --d: 0.52;"></i><i style="--h: 0.25; --d: 0.65;"></i><i style="--h: 0.48; --d: 0.78;"></i><i style="--h: 0.31; --d: 0.91;"></i><i style="--h: 0.72; --d: 0.04;"></i><i style="--h: 0.99; --d: 0.17;"></i><i style="--h: 0.64; --d: 0.30;"></i><i style="--h: 0.45; --d: 0.43;"></i><i style="--h: 0.62; --d: 0.56;"></i><i style="--h: 0.37; --d: 0.69;"></i><i style="--h: 0.26; --d: 0.82;"></i><i style="--h: 0.53; --d: 0.95;"></i><i style="--h: 0.84; --d: 0.08;"></i><i style="--h: 0.63; --d: 0.21;"></i><i style="--h: 0.51; --d: 0.34;"></i><i style="--h: 0.89; --d: 0.47;"></i><i style="--h: 0.67; --d: 0.60;"></i><i style="--h: 0.27; --d: 0.73;"></i><i style="--h: 0.25; --d: 0.86;"></i><i style="--h: 0.52; --d: 0.99;"></i></span><button class="hq-btn hq-btn--ghost hq-btn--sm" type="button" onClick="{{dictCancel}}"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M18 6 6 18" /> <path d="m6 6 12 12" /> </svg></button><button class="hq-btn hq-btn--sm" type="button" onClick="{{dictDone}}">Fertig</button></div></sc-if>
+    <div style="display: flex; align-items: center; gap: 6px;">
+     <label class="hq-btn hq-btn--ghost hq-btn--icon" aria-label="Datei oder Foto anhängen" style="width: 44px; height: 44px; flex: none;"><input type="file" multiple onChange="{{onFiles}}"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 12h14" /> <path d="M12 5v14" /> </svg></label>
+     <input class="hq-input grow" style="height: 40px; min-width: 0;" placeholder="Nachricht" aria-label="Nachricht" value="{{draft}}" onChange="{{onDraft}}" onKeyDown="{{onKey}}">
+     <button class="hq-btn hq-btn--ghost hq-btn--icon" type="button" aria-label="Diktieren" aria-pressed="{{dictating}}" onClick="{{toggleDictate}}" style="width: 44px; height: 44px; flex: none;"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /> <path d="M19 10v2a7 7 0 0 1-14 0v-2" /> <line x1="12" x2="12" y1="19" y2="22" /> </svg></button>
+     <button class="hq-btn hq-btn--primary hq-btn--icon" type="button" aria-label="Senden" style="width: 44px; height: 44px; flex: none;" onClick="{{send}}"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m5 12 7-7 7 7" /> <path d="M12 19V5" /> </svg></button>
+    </div>
+   </div>
+  </sc-if>
+  </sc-if>
+ <sc-if value="{{vc.on}}" hint-placeholder-val="{{ false }}">
+  <div class="hq-voice is-mobile" data-state="{{vc.state}}" style="--ci: {{vc.ci}};">
+   <div class="stage">
+    <div class="orb"><i class="ring"></i><i class="ring"></i><i class="ring"></i><span class="{{vc.coreCls}}">{{vc.init}}</span></div>
+    <div class="state"><i class="{{vc.shapeCls}}"></i><b>{{vc.label}}</b><span class="mono" style="margin-left: 6px;">{{vc.timer}}</span></div>
+    <sc-if value="{{vc.showWave}}" hint-placeholder-val="{{ true }}"><span class="{{vc.waveCls}}" aria-hidden="true"><i style="--h: 0.51; --d: 0.00;"></i><i style="--h: 0.76; --d: 0.13;"></i><i style="--h: 0.48; --d: 0.26;"></i><i style="--h: 0.65; --d: 0.39;"></i><i style="--h: 0.95; --d: 0.52;"></i><i style="--h: 0.65; --d: 0.65;"></i><i style="--h: 0.29; --d: 0.78;"></i><i style="--h: 0.33; --d: 0.91;"></i><i style="--h: 0.42; --d: 0.04;"></i><i style="--h: 0.39; --d: 0.17;"></i><i style="--h: 0.59; --d: 0.30;"></i><i style="--h: 0.98; --d: 0.43;"></i><i style="--h: 0.76; --d: 0.56;"></i><i style="--h: 0.34; --d: 0.69;"></i><i style="--h: 0.65; --d: 0.82;"></i><i style="--h: 0.46; --d: 0.95;"></i><i style="--h: 0.26; --d: 0.08;"></i><i style="--h: 0.43; --d: 0.21;"></i><i style="--h: 0.79; --d: 0.34;"></i><i style="--h: 0.72; --d: 0.47;"></i><i style="--h: 0.36; --d: 0.60;"></i><i style="--h: 0.86; --d: 0.73;"></i><i style="--h: 0.78; --d: 0.86;"></i><i style="--h: 0.35; --d: 0.99;"></i><i style="--h: 0.30; --d: 0.12;"></i><i style="--h: 0.44; --d: 0.25;"></i><i style="--h: 0.54; --d: 0.38;"></i><i style="--h: 0.35; --d: 0.51;"></i></span></sc-if>
+    <div class="live"><span class="me">{{vc.me}}</span>{{vc.ag}}</div>
+    <sc-if value="{{vc.isAp}}" hint-placeholder-val="{{ false }}">
+     <div class="vap"><div class="hq-approval"><header><i class="hq-shape hq-shape--diamond is-signal"></i><span class="t">Freigabe nötig</span></header>
+      <div class="hq-options"><button class="hq-option hq-option--primary" type="button" onClick="{{vc.a}}"><span class="hq-kbd">A</span>Ja, so ausführen</button><button class="hq-option" type="button" onClick="{{vc.b}}"><span class="hq-kbd">B</span>Ja, mit Änderung</button><button class="hq-option" type="button" onClick="{{vc.c}}"><span class="hq-kbd">C</span>Nein, verwerfen</button><button class="hq-option" type="button" style="border-bottom: 0;" onClick="{{vc.d}}"><span class="hq-kbd">D</span>Andere Anweisung …</button></div>
+      <div class="say">Sag den Buchstaben oder tippe.</div></div></div>
+    </sc-if>
+   </div>
+   <div class="ctrl">
+    <button class="hq-btn" type="button" aria-pressed="{{vc.muted}}" onClick="{{vc.mute}}"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <line x1="2" x2="22" y1="2" y2="22" /> <path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2" /> <path d="M5 10v2a7 7 0 0 0 12 5" /> <path d="M15 9.34V5a3 3 0 0 0-5.68-1.33" /> <path d="M9 9v3a3 3 0 0 0 5.12 2.12" /> <line x1="12" x2="12" y1="19" y2="22" /> </svg>Stumm</button>
+    <button class="hq-btn" type="button"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" /> <path d="M16 9a5 5 0 0 1 0 6" /> <path d="M19.364 18.364a9 9 0 0 0 0-12.728" /> </svg>Lautsprecher</button>
+    <button class="hq-btn" type="button" onClick="{{vc.end}}"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10 8h.01" /> <path d="M12 12h.01" /> <path d="M14 8h.01" /> <path d="M16 12h.01" /> <path d="M18 8h.01" /> <path d="M6 8h.01" /> <path d="M7 16h10" /> <path d="M8 12h.01" /> <rect width="20" height="16" x="2" y="4" rx="2" /> </svg>Tippen</button>
+    <button class="hq-btn hq-btn--end" type="button" onClick="{{vc.end}}"><svg class="ico-sm" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91" /> <line x1="22" x2="2" y1="2" y2="22" /> </svg>Beenden</button>
+   </div>
+  </div>
+ </sc-if>
+ </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"start":{"editor":null,"default":"list"},"voice":{"editor":null,"default":""},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    var start = props.start || 'list';
+    this.state = { files: [], dictating: false, voice: null, dragging: false, view: start === 'list' ? 'list' : 'chat', sel: start === 'list' ? 'mb' : start, q: '', filter: 'all', draft: '', typing: null, intervened: {}, noteFor: null, noteText: '', convs: this.seed() };
+    if (start !== 'list' && this.state.convs[start]) this.state.convs[start].unread = 0;
+  }
+  componentWillUnmount() { (this.timers || []).forEach(clearTimeout); clearInterval(this.dictTimer); clearInterval(this.voiceTick); clearTimeout(this.voiceT); }
+  componentDidMount() { if (this.props.voice) { var self = this; setTimeout(function () { self.startVoice(); }, 300); } }
+  /* ---- attachments, dictation, voice (same behaviour as ChatComposer / VoiceMode in the design system) ---- */
+  kb(n) { return n > 1048576 ? (n / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
+  addFiles(list) { var fs = (this.state.files || []).slice(); for (var i = 0; i < (list ? list.length : 0); i++) fs.push({ name: list[i].name, size: list[i].size }); this.setState({ files: fs.slice(0, 10), dragging: false }); }
+  fileVals(fs, removable) { var self = this; return (fs || []).map(function (f, i) { var ext = (f.name.split('.').pop() || '').slice(0, 4); return { name: f.name, ext: ext, meta: ext.toUpperCase() + ' · ' + self.kb(f.size), rm: function () { var a = self.state.files.slice(); a.splice(i, 1); self.setState({ files: a }); } }; }); }
+  startDictate() {
+    var self = this, phrase = 'Bitte fass mir den Stand bis heute Abend kurz zusammen und schick mir die offenen Punkte.', base = (this.state.draft || '') ? this.state.draft + ' ' : '', i = 0, t0 = Date.now();
+    clearInterval(this.dictTimer);
+    this.dictTimer = setInterval(function () { i = Math.min(phrase.length, i + 3); self.setState({ draft: base + phrase.slice(0, i), dictSec: Math.floor((Date.now() - t0) / 1000) }); }, 110);
+    this.setState({ dictating: true, dictBase: this.state.draft || '', dictSec: 0, viaDictate: true });
+  }
+  stopDictate(keep) { clearInterval(this.dictTimer); this.dictTimer = null; this.setState(keep ? { dictating: false } : { dictating: false, draft: this.state.dictBase || '', viaDictate: false }); }
+  voiceScript(c) {
+    var p = this.people[c.group === 'a2a' ? c.a : c.who] || {}, hasAp = c.msgs.some(function (m) { return m.k === 'approval'; });
+    if (hasAp) return [{ me: 'Was liegt bei dir gerade an?', ag: 'Ich warte auf deine Freigabe: ' + (c.msgs.filter(function (m) { return m.k === 'approval'; })[0].what) + '. Soll ich?', ap: true }, { me: 'Okay, danke.', ag: 'Gern. Ich melde mich im Chat, sobald es erledigt ist.' }];
+    var last = null; c.msgs.forEach(function (m) { if (m.k === 'msg' && m.by !== 'robin') last = m; });
+    return [{ me: 'Wie ist der Stand?', ag: last ? last.text : 'Ich bin dran und melde mich gleich.' }, { me: 'Gut, gib mir Bescheid, wenn es fertig ist.', ag: 'Mach ich, ' + (p.human ? '' : 'ich schreibe dir das Ergebnis in den Chat.') }];
+  }
+  startVoice() {
+    if (this.state.voice) return; this.stopDictate(true); var self = this, c = this.state.convs[this.state.sel];
+    this.voiceSteps = this.voiceScript(c); clearInterval(this.voiceTick); clearTimeout(this.voiceT);
+    this.voiceTick = setInterval(function () { if (self.state.voice) self.setState({ vtick: Date.now() }); }, 1000);
+    this.setState({ voice: { id: c.id, state: 'listening', step: 0, lines: [], me: '', ag: '', t0: Date.now(), muted: false } });
+    this.voiceT = setTimeout(function () { self.voiceNext(); }, 1600);
+  }
+  voiceSet(o) { this.setState(function (s) { return s.voice ? { voice: Object.assign({}, s.voice, o) } : {}; }); }
+  voiceNext() {
+    var self = this, v = this.state.voice; if (!v) return; var st = this.voiceSteps[v.step], who = this.people[(this.state.convs[v.id].group === 'a2a' ? this.state.convs[v.id].a : this.state.convs[v.id].who)] || { name: 'Agent' };
+    clearTimeout(this.voiceT);
+    if (!st) { this.voiceSet({ state: 'listening', me: '', ag: '' }); return; }
+    if (v.state === 'listening') { this.voiceSet({ state: 'thinking', me: st.me, ag: '', lines: v.lines.concat([['Du', st.me]]) }); this.voiceT = setTimeout(function () { self.voiceNext(); }, 1300); }
+    else if (v.state === 'thinking') { this.voiceSet({ state: 'speaking', me: '', ag: st.ag, lines: v.lines.concat([[who.name, st.ag]]) }); this.voiceT = setTimeout(function () { self.voiceNext(); }, 3600); }
+    else if (v.state === 'speaking') { if (st.ap && this.state.convs[v.id].msgs.some(function (m) { return m.k === 'approval'; })) { this.voiceSet({ state: 'approval' }); return; } this.voiceSet({ state: 'listening', step: v.step + 1, ag: '' }); this.voiceT = setTimeout(function () { self.voiceNext(); }, 2400); }
+  }
+  voiceDecide(letter) {
+    var v = this.state.voice; if (!v) return; var c = this.state.convs[v.id], ap = c.msgs.filter(function (m) { return m.k === 'approval'; })[0], self = this;
+    if (ap) this.decide(c.id, ap.id, letter, letter === 'B' ? 'nur 50,00 €' : letter === 'D' ? 'Erst mit Lukas abstimmen' : null);
+    var said = { A: 'A.', B: 'B, aber nur 50 Euro.', C: 'C, verwerfen.', D: 'D: erst mit Lukas abstimmen.' }[letter], reply = { A: 'Erledigt, ist raus.', B: 'Mache ich mit 50 Euro.', C: 'Verworfen.', D: 'Verstanden, ich frage Lukas.' }[letter];
+    var who = this.people[c.who] || { name: 'Agent' };
+    this.voiceSet({ state: 'speaking', me: '', ag: reply, lines: this.state.voice.lines.concat([['Du', said], [who.name, reply]]), step: v.step + 1 });
+    this.voiceT = setTimeout(function () { self.voiceSet({ state: 'listening', ag: '' }); self.voiceT = setTimeout(function () { self.voiceNext(); }, 2400); }, 2600);
+  }
+  endVoice() {
+    var v = this.state.voice; if (!v) return; clearTimeout(this.voiceT); clearInterval(this.voiceTick);
+    var s = Math.max(1, Math.round((Date.now() - v.t0) / 1000));
+    if (v.lines.length) this.push(v.id, { k: 'voice', time: this.now(), dur: Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'), lines: v.lines.slice() });
+    this.setState({ voice: null });
+  }
+  voiceVals() {
+    var self = this, v = this.state.voice; if (!v) return { on: false };
+    var c = this.state.convs[v.id], m = this.meta(c), sec = Math.floor((Date.now() - v.t0) / 1000);
+    var L = { listening: ['hq-shape hq-shape--pulse is-info', 'Hört zu', ''], thinking: ['hq-shape hq-shape--pulse is-info', 'Denkt nach', ''], speaking: ['hq-shape hq-shape--dot is-ok', 'Spricht', ' · zum Unterbrechen einfach reden'], approval: ['hq-shape hq-shape--diamond is-signal', 'Wartet auf deine Entscheidung', ''] }[v.state];
+    var ap = c.msgs.filter(function (x) { return x.k === 'approval'; })[0], ci = (this.people[c.who] || {}).ci || '#ededf0';
+    return { on: true, state: v.state, ci: ci, init: m.isPair ? m.p1.init : m.init, coreCls: 'core' + (c.who === 'mb' ? ' is-brain' : ''), shapeCls: L[0], label: L[1], hint: L[2],
+      waveCls: 'hq-wave' + (v.state === 'listening' || v.state === 'speaking' ? ' is-live' : '') + (v.state === 'speaking' ? ' is-ci' : ''), showWave: v.state !== 'approval',
+      me: v.me ? '„' + v.me + '“' : '', ag: v.ag, tx: v.lines.slice(-4).map(function (l) { return { w: l[0], t: l[1] }; }), hasTx: v.lines.length > 0,
+      isSpeaking: v.state === 'speaking', isAp: v.state === 'approval' && !!ap, apWhat: ap ? ap.what : '', timer: Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'), muted: String(!!v.muted),
+      a: function () { self.voiceDecide('A'); }, b: function () { self.voiceDecide('B'); }, c: function () { self.voiceDecide('C'); }, d: function () { self.voiceDecide('D'); },
+      mute: function () { self.voiceSet({ muted: !self.state.voice.muted }); }, interrupt: function () { clearTimeout(self.voiceT); self.voiceSet({ state: 'listening', ag: '', step: self.state.voice.step + 1 }); self.voiceT = setTimeout(function () { self.voiceNext(); }, 2000); },
+      end: function () { self.endVoice(); } };
+  }
+
+  seed() {
+    var FP = '#cf4646', CH = '#194e9d';
+    this.people = {
+      robin: { name: 'Robin', init: 'RT', human: true },
+      mb: { name: 'Main Brain', init: 'MB', brain: true },
+      'fp-head': { name: 'Head Agent', init: 'HA', ci: FP, project: 'FollowerPilot' },
+      'fp-support': { name: 'Support', init: 'SU', ci: FP, project: 'FollowerPilot' },
+      'fp-text': { name: 'Texter', init: 'TX', ci: FP, project: 'FollowerPilot' },
+      'ch-out': { name: 'Outreach', init: 'OU', ci: CH, project: 'Chatteo' },
+      'ch-social': { name: 'Social', init: 'SO', ci: CH, project: 'Chatteo' }
+    };
+    this.groupDefs = [{ key: 'pin', title: 'Angepinnt', color: 'transparent' }, { key: 'fp', title: 'FollowerPilot', color: FP }, { key: 'ch', title: 'Chatteo', color: CH }, { key: 'a2a', title: 'Agent-Gespräche', color: 'transparent' }];
+    var D = function (l, n) { return { k: 'day', label: l, isNew: !!n }; }, M = function (by, t, x) { return { k: 'msg', by: by, time: t, text: x }; }, HO = function (f, t, x) { return { k: 'handoff', from: f, to: t, text: x }; };
+    return {
+      mb: { id: 'mb', group: 'pin', who: 'mb', status: 'info', unread: 2, msgs: [D('Heute'), M('robin', '08:02', 'Was steht heute an?'), M('mb', '08:02', 'Drei Freigaben warten, die älteste seit 14 Stunden. FollowerPilot liegt bei 82 % des Monatsbudgets.'), M('robin', '08:11', 'Gib Chatteo die drei Launch-Reels frei, Hooks will ich vorher sehen.'), D('Neu', true), M('mb', '08:14', 'Ist raus. Die Hooks kommen bis Freitag 12:00 zu dir.')] },
+      'fp-support': { id: 'fp-support', group: 'fp', who: 'fp-support', status: 'signal', unread: 1, msgs: [D('Heute'), HO('Head Agent', 'Support', 'Ticket #4182 Erstattung'), M('fp-support', '08:02', 'Kunde fragt nach Erstattung für Bestellung #4182.'), D('Neu', true), M('fp-support', '08:09', '79,00 € liegen über meiner Grenze. Ich brauche deine Freigabe.'),
+        { k: 'approval', id: 'ap1', family: 'Kommunikation', age: 'vor 8 Min.', what: 'Antwort an kunde@example.de senden', why: '79,00 € liegen über der Grenze von 50,00 €.', payload: 'Hallo Herr Schmidt,\nwir erstatten Ihnen den vollen Betrag von 79,00 € innerhalb von 3 Werktagen …', bHint: 'z. B. nur 50,00 € erstatten' }] },
+      'fp-head': { id: 'fp-head', group: 'fp', who: 'fp-head', status: 'info', unread: 0, msgs: [D('Heute'), M('fp-head', '07:55', 'Wochenplan steht, Texter ist dran.')] },
+      'ch-out': { id: 'ch-out', group: 'ch', who: 'ch-out', status: 'signal', unread: 0, msgs: [D('Heute'), M('ch-out', '07:31', 'Die Erstkontakt-Mails nach Vorlage B sind bereit.'),
+        { k: 'approval', id: 'ap2', family: 'Kommunikation', age: 'vor 41 Min.', what: '12 Erstkontakt-Mails an Leads senden', why: 'Leads aus der Recherche vom Montag, Vorlage B.', payload: 'Empfänger: 12 Kontakte\nBetreff: Kurze Frage zu Ihrem Kundenservice', bHint: 'z. B. nur 5 senden' }] },
+      'ch-social': { id: 'ch-social', group: 'ch', who: 'ch-social', status: 'info', unread: 0, msgs: [D('Heute'), M('ch-social', '06:58', 'Hook und Caption für „Launch 01“ sind fertig.')] },
+      'a2a-fp': { id: 'a2a-fp', group: 'a2a', a: 'fp-head', b: 'fp-text', sub: 'FollowerPilot', status: 'info', unread: 0, msgs: [D('Heute'), M('fp-head', '07:41', 'Thema ist der Herbst-Drop. Bitte locker, Du-Form, max. 150 Zeichen.'), M('fp-text', '07:48', 'Drei Varianten sind im Doc.'), M('fp-head', '07:52', 'Hooks bitte kürzer, max. 6 Wörter.')] }
+    };
+  }
+  av(id) { var p = this.people[id] || {}; return { init: p.init, cls: 'hq-avatar' + (p.brain ? ' hq-avatar--brain' : '') + (p.human ? ' hq-avatar--human' : ''), style: p.ci ? 'box-shadow: inset 0 -2px 0 ' + p.ci : '' }; }
+  shape(s) { return { info: 'hq-shape hq-shape--pulse is-info', signal: 'hq-shape hq-shape--diamond is-signal', idle: 'hq-shape hq-shape--ring is-idle' }[s] || ''; }
+  meta(c) {
+    var isPair = c.group === 'a2a', p = this.people[c.who] || {}, last = null, time = '';
+    c.msgs.forEach(function (m) { if (m.k !== 'day') last = m; if (m.time) time = m.time; });
+    var preview = !last ? '' : last.k === 'voice' ? 'Sprachgespräch · ' + last.dur : last.k === 'approval' ? 'Freigabe nötig: ' + last.what : last.k === 'decision' ? 'Robin · ' + last.text : (last.by === 'robin' ? 'Du: ' : '') + (last.text || '');
+    var aps = c.msgs.filter(function (m) { return m.k === 'approval'; }).length;
+    var o = { id: c.id, isPair: isPair, isSingle: !isPair, preview: preview, time: time, aps: aps, unread: c.unread, shapeCls: this.shape(c.status) };
+    if (isPair) { o.name = this.people[c.a].name + ' ↔ ' + this.people[c.b].name; o.sub = 'FP'; o.subShort = c.sub + ' · mitlesen'; o.p1 = this.av(c.a); o.p2 = this.av(c.b); }
+    else { var a = this.av(c.who); o.init = a.init; o.avCls = a.cls; o.avStyle = a.style; o.name = p.name; o.sub = ''; o.subShort = c.who === 'mb' ? 'global · alle Projekte' : p.project + (c.status === 'signal' ? ' · wartet' : ' · arbeitet'); }
+    return o;
+  }
+  push(id, msg) { this.setState(function (s) { var cv = Object.assign({}, s.convs); cv[id] = Object.assign({}, cv[id], { msgs: cv[id].msgs.concat([msg]) }); return { convs: cv }; }); }
+  now() { var d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+  send() {
+    var t = (this.state.draft || '').trim(), files = this.state.files || []; if (!t && !files.length) return; if (this.state.dictating) this.stopDictate(true); var id = this.state.sel, self = this, c = this.state.convs[id];
+    this.push(id, { k: 'msg', by: 'robin', time: this.now(), text: t, files: files.slice(), via: !!this.state.viaDictate }); this.setState({ draft: '', typing: id, files: [], viaDictate: false });
+    this.timers = this.timers || [];
+    this.timers.push(setTimeout(function () { self.push(id, { k: 'msg', by: c.group === 'a2a' ? c.a : c.who, time: self.now(), text: 'Verstanden. Ich kümmere mich darum.' }); self.setState({ typing: null }); }, 1300));
+  }
+  decide(id, apId, letter, note) {
+    var L = { A: 'A Ja, so ausführen', B: 'B Ja, mit Änderung', C: 'C Nein, verwerfen', D: 'D Andere Anweisung' };
+    this.setState(function (s) {
+      var cv = Object.assign({}, s.convs), c = cv[id];
+      var msgs = c.msgs.map(function (m) { return m.k === 'approval' && m.id === apId ? { k: 'decision', ok: letter !== 'C', text: L[letter] + (note ? ' · „' + note + '“' : '') } : m; });
+      cv[id] = Object.assign({}, c, { msgs: msgs, status: letter === 'C' ? 'idle' : 'info' }); return { convs: cv, noteFor: null, noteText: '' };
+    });
+  }
+  renderVals() {
+    var self = this, s = this.state, cv = s.convs, q = (s.q || '').trim().toLowerCase(), all = Object.keys(cv).map(function (k) { return cv[k]; });
+    var groups = this.groupDefs.map(function (g) {
+      var rows = all.filter(function (c) { return c.group === g.key; }).map(function (c) { return self.meta(c); }).filter(function (m) {
+        if (s.filter === 'ap' && !m.aps) return false;
+        if (q.length >= 2 && (m.name + ' ' + m.preview).toLowerCase().indexOf(q) < 0 && !cv[m.id].msgs.some(function (x) { return (x.text || x.what || '').toLowerCase().indexOf(q) >= 0; })) return false;
+        return true;
+      }).map(function (m) { return Object.assign(m, { cls: 'hq-chatrow' + (m.unread ? ' is-unread' : ''), hasAps: m.aps > 0, hasUnread: m.unread > 0, open: function () { var c2 = Object.assign({}, s.convs); c2[m.id] = Object.assign({}, c2[m.id], { unread: 0 }); self.setState({ view: 'chat', sel: m.id, convs: c2, draft: '', noteFor: null }); } }); });
+      return { title: g.title, color: g.color, rows: rows };
+    }).filter(function (g) { return g.rows.length; });
+    var c = cv[s.sel], cur = this.meta(c), isPair = c.group === 'a2a', iv = !!s.intervened[c.id];
+    var thread = c.msgs.map(function (m) {
+      var o = { isVoice: m.k === 'voice', isDay: m.k === 'day', isMsg: m.k === 'msg', isHandoff: m.k === 'handoff', isDecision: m.k === 'decision', isApproval: m.k === 'approval' };
+      if (o.isDay) { o.label = m.label; o.dayCls = 'hq-daysep' + (m.isNew ? ' is-new' : ''); }
+      if (o.isMsg) { var p = self.people[m.by], a = self.av(m.by); o.init = a.init; o.avCls = a.cls; o.avStyle = a.style; o.name = p.name; o.time = m.time; o.text = m.text; o.msgCls = 'hq-msg' + (p.human ? ' hq-msg--human' : ''); }
+      if (o.isVoice) { o.time = m.time; o.dur = m.dur; o.lines = m.lines.map(function (l) { return { w: l[0], t: l[1] }; }); }
+      if (o.isMsg) { o.hasFiles = !!(m.files && m.files.length); o.files = self.fileVals(m.files, false); o.hasVia = !!m.via; }
+      if (o.isHandoff) { o.from = m.from; o.to = m.to; o.text = m.text; }
+      if (o.isDecision) { o.text = m.text; o.shapeCls = m.ok ? 'hq-shape hq-shape--dot is-ok' : 'hq-shape hq-shape--ring is-idle'; }
+      if (o.isApproval) {
+        var open = s.noteFor && s.noteFor.ap === m.id;
+        Object.assign(o, { family: m.family, age: m.age, what: m.what, why: m.why, payload: m.payload, bHint: m.bHint, showOptions: !open, noteOpen: !!open, noteLetter: open ? s.noteFor.letter : '', noteLabel: open && s.noteFor.letter === 'B' ? 'Was soll geändert werden?' : 'Neue Anweisung an den Agent',
+          a: function () { self.decide(c.id, m.id, 'A'); }, c: function () { self.decide(c.id, m.id, 'C'); },
+          b: function () { self.setState({ noteFor: { ap: m.id, letter: 'B' }, noteText: '' }); }, d: function () { self.setState({ noteFor: { ap: m.id, letter: 'D' }, noteText: '' }); },
+          cancel: function () { self.setState({ noteFor: null }); }, sendNote: function () { self.decide(c.id, m.id, s.noteFor.letter, (s.noteText || '').trim() || '(ohne Text)'); } });
+      }
+      return o;
+    });
+    return {
+      theme: this.props.theme ?? 'dark', isList: s.view === 'list', isChat: s.view === 'chat',
+      q: s.q, onQuery: function (e) { self.setState({ q: e.target.value }); }, fAll: String(s.filter === 'all'), fAps: String(s.filter === 'ap'),
+      setAll: function () { self.setState({ filter: 'all' }); }, setAps: function () { self.setState({ filter: 'ap' }); },
+      groups: groups, totalUnread: all.reduce(function (n, x) { return n + (x.unread || 0); }, 0), totalAps: all.reduce(function (n, x) { return n + x.msgs.filter(function (m) { return m.k === 'approval'; }).length; }, 0),
+      cur: cur, thread: thread, isTyping: s.typing === c.id, back: function () { if (self.state.voice) self.endVoice(); self.setState({ view: 'list' }); },
+      showReadonly: isPair && !iv, showComposer: !isPair || iv, intervene: function () { var x = Object.assign({}, s.intervened); x[c.id] = true; self.setState({ intervened: x }); },
+      draft: s.draft, onDraft: function (e) { self.setState({ draft: e.target.value }); }, onKey: function (e) { if (e.key === 'Enter') { e.preventDefault(); self.send(); } }, send: function () { self.send(); },
+      noteText: s.noteText, onNote: function (e) { self.setState({ noteText: e.target.value }); },
+      files: this.fileVals(s.files, true), hasFiles: (s.files || []).length > 0,
+      onFiles: function (e) { self.addFiles(e.target.files); try { e.target.value = ''; } catch (x) {} },
+      dictating: !!s.dictating, dictTime: Math.floor((s.dictSec || 0) / 60) + ':' + String((s.dictSec || 0) % 60).padStart(2, '0'),
+      composerCls: 'hq-composer' + (s.dictating ? ' is-dictating' : ''),
+      toggleDictate: function () { if (s.dictating) self.stopDictate(true); else self.startDictate(); },
+      dictCancel: function () { self.stopDictate(false); }, dictDone: function () { self.stopDictate(true); },
+      vc: this.voiceVals(), notVoice: !s.voice, startVoice: function () { self.startVoice(); }, voiceBtnCls: 'hq-btn hq-btn--ghost hq-btn--sm hq-btn--icon' + (s.voice ? ' is-live' : ''),
+      dragging: !!s.dragging, onDragOver: function (e) { e.preventDefault(); if (!s.dragging) self.setState({ dragging: true }); }, onDragLeave: function (e) { if (e.currentTarget === e.target) self.setState({ dragging: false }); },
+      onDrop: function (e) { e.preventDefault(); self.addFiles(e.dataTransfer && e.dataTransfer.files); }
+    };
+  }
+}
+</script>
+</body>
+</html>

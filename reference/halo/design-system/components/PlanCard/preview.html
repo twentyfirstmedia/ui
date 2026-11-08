@@ -1,0 +1,16 @@
+<!-- @dsCard group="Commerce" height=600 width=1100 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>PlanCard</title></head>
+<body>
+<div id="root" class="ha-pad"></div>
+<script>
+  var H = window.Halo, h = React.createElement, useState = React.useState;
+
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div', { className: 'ha-plans' },
+    h(H.PlanCard, { name: 'Starter', price: 9, was: 12, per: 'per seat / month, billed yearly', text: 'For small teams getting organised', features: ['3 projects', '1 agent · Haiku only', 'Shop with up to 50 products', '-Approvals and audit log', '-SSO'] }),
+    h(H.PlanCard, { name: 'Team', price: 24, was: 29, per: 'per seat / month, billed yearly', text: 'Everything a growing company runs on', featured: true, features: ['Unlimited projects', '10 agents · all models', 'Unlimited products, 3 channels', 'Approvals and audit log', '-SSO'] }),
+    h(H.PlanCard, { name: 'Business', price: null, text: 'Security, control and an SLA', cta: 'Talk to sales', current: false, features: ['Everything in Team', 'SSO and SCIM', 'EU data residency', '99.9% uptime SLA'] })));
+</script>
+</body>
+</html>
