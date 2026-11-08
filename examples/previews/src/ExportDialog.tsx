@@ -8,7 +8,7 @@ export default function Preview() {
         placeItems: "center",
         padding: 24,
         background: "var(--canvas)",
-        borderRadius: 24,
+        borderRadius: "var(--radius-lg)",
       }}
     >
       <ExportDialog

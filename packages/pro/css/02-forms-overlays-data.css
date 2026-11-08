@@ -688,12 +688,12 @@ label.tf-menu-item {
 }
 .tf-slider input[type="range"]::-webkit-slider-runnable-track {
   height: 6px;
-  border-radius: 3px;
+  border-radius: var(--radius-1);
   background: linear-gradient(to right, var(--accent) var(--pct), var(--surface-sunken) var(--pct));
 }
 .tf-slider input[type="range"]::-moz-range-track {
   height: 6px;
-  border-radius: 3px;
+  border-radius: var(--radius-1);
   background: linear-gradient(to right, var(--accent) var(--pct), var(--surface-sunken) var(--pct));
 }
 .tf-slider input[type="range"]::-webkit-slider-thumb {
@@ -1305,7 +1305,7 @@ label.tf-menu-item {
   display: inline-block;
   width: 10px;
   height: 10px;
-  border-radius: 3px;
+  border-radius: var(--radius-1);
   margin-right: 8px;
   vertical-align: -1px;
   flex: none;
@@ -1508,7 +1508,7 @@ label.tf-menu-item {
   width: 12px;
   height: 12px;
   min-height: 0;
-  border-radius: 3px;
+  border-radius: var(--radius-1);
   animation: none;
 }
 .tf-funnel {

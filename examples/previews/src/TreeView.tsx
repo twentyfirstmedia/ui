@@ -99,10 +99,9 @@ function App() {
           ]}
         >
           <div
-            className="tf-emptybox"
             style={{
               padding: 24,
-              borderRadius: 16,
+              borderRadius: "var(--radius-md)",
               background: "var(--canvas)",
               textAlign: "center",
             }}

@@ -627,7 +627,7 @@ export function TriggerList(p: TriggerListProps) {
                   p.onRun?.(t);
                 }}
               >
-                <Icon name="play" size={12} />
+                <Icon name="play" />
               </button>
             </Tooltip>
           )}

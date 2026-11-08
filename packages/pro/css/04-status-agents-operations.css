@@ -1005,7 +1005,7 @@
 .tf-hit mark {
   background: var(--butter);
   color: var(--ink);
-  border-radius: 3px;
+  border-radius: var(--radius-1);
   padding: 0 2px;
 }
 .tf-thinking {

@@ -6,7 +6,7 @@ export default function Preview() {
       style={{
         position: "relative",
         height: 430,
-        borderRadius: 24,
+        borderRadius: "var(--radius-lg)",
         overflow: "hidden",
         background: "var(--canvas)",
       }}

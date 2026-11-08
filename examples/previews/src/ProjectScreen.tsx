@@ -202,7 +202,7 @@ function App() {
                 <Checkbox defaultChecked={t[1]} label={t[0]} />
                 <span
                   style={{
-                    fontWeight: 600,
+                    fontWeight: "var(--type-label-weight)",
                     fontSize: 14,
                     textDecoration: t[1] ? "line-through" : "none",
                     color: t[1] ? "var(--ink-muted)" : "var(--ink)",

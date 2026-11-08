@@ -379,6 +379,7 @@
     .tf-inline-input,
     .tf-palette-input input
   ):not([type="checkbox"], [type="radio"]) {
-    font-size: 16px;
+    /* max() keeps the Pro derivation (16px → 14px) from shrinking it */
+    font-size: max(16px, 1em);
   }
 }

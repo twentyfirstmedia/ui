@@ -704,7 +704,7 @@
 .tf-stop-sq {
   width: 12px;
   height: 12px;
-  border-radius: 3px;
+  border-radius: var(--radius-1);
   background: currentColor;
 }
 .tf-composer-cmds {
@@ -925,14 +925,14 @@
 .tf-usage-track {
   display: block;
   height: 6px;
-  border-radius: 3px;
+  border-radius: var(--radius-1);
   background: var(--surface-sunken);
   overflow: hidden;
 }
 .tf-usage-fill {
   display: block;
   height: 100%;
-  border-radius: 3px;
+  border-radius: var(--radius-1);
   transition: width var(--dur-slow) var(--ease-out);
 }
 .tf-usage-fill.tf-sf-mint {

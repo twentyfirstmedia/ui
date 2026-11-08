@@ -6,7 +6,7 @@ function App() {
       style={{
         position: "relative",
         height: 360,
-        borderRadius: 24,
+        borderRadius: "var(--radius-lg)",
         overflow: "hidden",
         background: "var(--canvas)",
         transform: "translateZ(0)",

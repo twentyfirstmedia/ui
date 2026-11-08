@@ -7,7 +7,7 @@ export default function Preview() {
         maxWidth: 340,
         background: "var(--canvas)",
         padding: 12,
-        borderRadius: 24,
+        borderRadius: "var(--radius-lg)",
       }}
     >
       <Panel

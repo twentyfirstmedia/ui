@@ -5,7 +5,7 @@ export default function Preview() {
     <div
       style={{
         background: "var(--surface)",
-        borderRadius: 22,
+        borderRadius: "var(--radius-lg)",
         padding: 8,
       }}
     >

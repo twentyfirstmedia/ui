@@ -55,7 +55,7 @@ function Kpi(p: KpiProps) {
           <CountUp className="tf-stat-value" value={p.value} />
           <div
             style={{
-              font: "600 12px/16px var(--font-sans)",
+              font: "var(--type-label-weight) 12px/16px var(--font-sans)",
               color: "var(--" + (p.up ? "mint" : "blush") + "-ink)",
               marginTop: 2,
             }}

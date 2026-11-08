@@ -11,7 +11,7 @@ const art = (t: Tint, s: string) => (
       display: "grid",
       placeItems: "center",
       color: "var(--" + t + "-ink)",
-      font: "700 14px/1 var(--font-sans)",
+      font: "var(--type-title-weight) 14px/1 var(--font-sans)",
     }}
   >
     {s}
@@ -44,7 +44,7 @@ const after = {
           bottom: "22%",
           width: "38%",
           height: "22%",
-          borderRadius: 18,
+          borderRadius: "var(--radius-md)",
           background: "#5b6b5a",
         }}
       />
@@ -55,7 +55,7 @@ const after = {
           bottom: "38%",
           width: "14%",
           height: "30%",
-          borderRadius: 8,
+          borderRadius: "var(--radius-sm)",
           background: "#3d3a36",
         }}
       />

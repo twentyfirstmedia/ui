@@ -110,7 +110,7 @@ function App() {
             <div>
               <div
                 style={{
-                  fontWeight: 700,
+                  fontWeight: "var(--type-title-weight)",
                 }}
               >
                 38 of 42 seats
@@ -133,7 +133,7 @@ function App() {
                 style={{
                   justifyContent: "space-between",
                   fontSize: 13,
-                  fontWeight: 600,
+                  fontWeight: "var(--type-label-weight)",
                   marginBottom: 8,
                 }}
               >
@@ -148,7 +148,7 @@ function App() {
                 style={{
                   justifyContent: "space-between",
                   fontSize: 13,
-                  fontWeight: 600,
+                  fontWeight: "var(--type-label-weight)",
                   marginBottom: 8,
                 }}
               >
@@ -216,7 +216,7 @@ function App() {
           >
             <span
               style={{
-                font: "600 12px/16px var(--font-sans)",
+                font: "var(--type-label-weight) 12px/16px var(--font-sans)",
                 color: "var(--on-frame-muted)",
               }}
             >
@@ -226,7 +226,7 @@ function App() {
           </div>
           <div
             style={{
-              font: "700 20px/26px var(--font-sans)",
+              font: "var(--type-title-weight) 20px/26px var(--font-sans)",
               letterSpacing: ".08em",
             }}
           >

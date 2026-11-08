@@ -51,7 +51,7 @@ function radius(value: string, sel: string): string {
     .replace(/calc\(var\(--radius-(?:lg|xl|md)\) - \d+px\)/g, "0")
     .replace(/(^|\s)50%/g, "$1var(--radius-1)")
     .replace(/(^|\s)(\d+(?:\.\d+)?)px/g, (m, pre: string, n: string) =>
-      Number(n) >= 4 ? `${pre}var(--radius-1)` : m,
+      Number(n) >= 3 ? `${pre}var(--radius-1)` : m,
     );
 }
 

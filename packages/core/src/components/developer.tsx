@@ -111,7 +111,7 @@ export function SecretField(p: SecretFieldProps) {
                 });
               }}
             >
-              <Icon name="eye" size={14} />
+              <Icon name="eye" size={16} />
             </button>
           </Tooltip>
         )}
@@ -129,7 +129,7 @@ export function SecretField(p: SecretFieldProps) {
                 }, 1400);
               }}
             >
-              <Icon name={copied[0] ? "check" : "file"} size={14} />
+              <Icon name={copied[0] ? "check" : "file"} size={16} />
             </button>
           </Tooltip>
         )}

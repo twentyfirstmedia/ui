@@ -259,7 +259,7 @@ function App() {
                   <span>
                     <div
                       style={{
-                        fontWeight: 700,
+                        fontWeight: "var(--type-title-weight)",
                       }}
                     >
                       {r.n}

@@ -1,0 +1,45 @@
+/* ───────────── Polish ─────────────
+   Small consistency fixes found by auditing every preview in both kits and themes. Zero
+   specificity (`:where`), so every component rule still wins; derived into Pro like the rest. */
+
+/* Text inside kit components never falls back to browser defaults: form controls inherit the
+   kit font, code uses the kit mono font, and bold stays on the scale (no "bolder" stacking to
+   900 inside an already bold line). */
+:where(button, input, select, textarea):where([class*="tf-"]),
+:where([class*="tf-"]) :where(button, input, select, textarea) {
+  font: inherit;
+}
+:where([class*="tf-"]) :where(code, kbd, samp, pre) {
+  font-family: var(--font-mono);
+}
+:where([class*="tf-"]) :where(b, strong) {
+  font-weight: 700;
+}
+
+/* Icon-only buttons carry no browser padding (1px 6px), so their icon box is the button box */
+:where(
+  .tf-dock-btn,
+  .tf-rail-btn,
+  .tf-kanban-add,
+  .tf-cal-day,
+  .tf-map-bubble,
+  .tf-rte-btn,
+  .tf-subnav-action,
+  .tf-tabbar-item,
+  .tf-voice-end,
+  .tf-launch-btn,
+  .tf-announce-x,
+  .tf-number-input button,
+  .tf-otp-cell,
+  .tf-search input
+) {
+  padding: 0;
+}
+
+/* <small> inside a line is sized by the kit, not by the browser's "smaller" */
+.tf-hit-top small {
+  font-size: 12px;
+}
+.tf-push-top small {
+  font-size: inherit;
+}

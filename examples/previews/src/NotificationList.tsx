@@ -7,7 +7,7 @@ export default function Preview() {
         width: 380,
         maxWidth: "100%",
         background: "var(--surface)",
-        borderRadius: 24,
+        borderRadius: "var(--radius-lg)",
         padding: 8,
         boxShadow: "var(--shadow-float)",
       }}
