@@ -734,3 +734,14 @@ select.tf-input {
 .tf-navmenu-feature {
   background: var(--bg-200);
 }
+
+/* Control scale in Pro: md 28, sm 24 — tracks (menubar, small toggle group) included */
+.tf-menubar {
+  padding: 2px;
+}
+.tf-togglegroup.sm .tf-toggle {
+  height: 20px;
+}
+.tf-togglegroup.sm .tf-toggle.icon {
+  width: 20px;
+}

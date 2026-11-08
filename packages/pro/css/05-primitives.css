@@ -153,7 +153,7 @@
   justify-content: center;
   gap: 8px;
   height: var(--density-control);
-  padding: 0 14px;
+  padding: 0 16px;
   border: 0;
   border-radius: var(--radius-pill);
   background: transparent;
@@ -166,7 +166,7 @@
     color var(--dur-fast) var(--ease-out);
 }
 .tf-toggle.icon {
-  width: 36px;
+  width: 40px;
   padding: 0;
 }
 .tf-toggle.sm {
@@ -210,10 +210,12 @@
   width: 32px;
 }
 .tf-togglegroup.sm .tf-toggle {
-  height: 28px;
+  height: 24px;
+  padding: 0 10px;
 }
 .tf-togglegroup.sm .tf-toggle.icon {
-  width: 28px;
+  width: 24px;
+  padding: 0;
 }
 .tf-togglegroup .tf-toggle:hover:not(:disabled) {
   background: var(--surface);
@@ -596,7 +598,7 @@
   align-items: center;
   gap: 6px;
   height: var(--density-control);
-  padding: 0 14px;
+  padding: 0 16px;
   border: 0;
   border-radius: var(--radius-pill);
   background: transparent;
