@@ -54,9 +54,11 @@ Notiz: Lokal läuft Node 22, CI Node 24. TypeScript 6.0 (nicht 7), weil typescri
 Notiz: `pnpm tokens` erzeugt pro Kit `generated/tokens.css` (`:root`, ohne `data-kit`), `generated/tokens.scoped.css` (`[data-kit="…"]`), `generated/tailwind.css` (`@theme inline reference`) und `docs/tokens.md` (Halo/Pro nebeneinander). Ein Test schlägt fehl, wenn etwas veraltet ist oder die Namen abweichen. Namenskonflikt in der Referenz: Halo `--hairline` ist eine Farbe, Pro `--hairline` eine Breite; die Farbe behält den Namen, die Breite heißt `--line-width`. Pro-`fg-400` liegt unter 4.5:1, daher ist `--ink-subtle` in Pro `fg-300` (axe). Fonts: latin + latin-ext aus `@fontsource(-variable)`, beim Build nach `dist/fonts/` kopiert, mit OFL-Lizenz.
 
 ### Phase 2: Core
-- [ ] Label- und Locale-System, `UIProvider`, Formatter
-- [ ] Hooks und Helfer aus der Referenz (`useControlled`, `useId`, Outside-Click, Focus-Trap, Portal, Toast-Store)
-- [ ] Icon-Set (alle Pfade aus `halo.js`, typisiert)
+- [x] Label- und Locale-System, `UIProvider`, Formatter
+- [x] Hooks und Helfer aus der Referenz (`useControlled`, `useId`, Outside-Click, Focus-Trap, Portal, Toast-Store)
+- [x] Icon-Set (alle Pfade aus `halo.js`, typisiert)
+
+Notiz: `UIProvider` setzt Labels und Locale synchron vor dem ersten Render; ändern sie sich, wird der Teilbaum neu gemountet (alle Texte und Zahlen aktualisiert). Kit, Theme und Dichte setzen nur Attribute (Standard am `<html>`, mit `scope="subtree"` an einem eigenen Wrapper, der auch die Portale aufnimmt). `labels/en.json` enthält vorerst die Schlüssel aus der Referenz; Phase 5 erzeugt sie aus dem Quelltext.
 
 ### Phase 3: Komponenten portieren (Halo)
 In Batches, jeweils TSX + Halo-CSS + Tests + Doku-Seite:
