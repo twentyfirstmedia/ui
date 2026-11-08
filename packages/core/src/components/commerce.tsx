@@ -6,6 +6,7 @@ import { Icon } from "../Icon.js";
 import { useControlled } from "../hooks.js";
 import { Badge, Button, IconButton } from "./foundation.js";
 import type {
+  ArtKind,
   CartLineProps,
   CheckoutStepsProps,
   OrderSummaryProps,

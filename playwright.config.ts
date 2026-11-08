@@ -12,10 +12,17 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [["github"], ["list"]] : "list",
   use: { trace: "off" },
-  webServer: {
-    command: "node e2e/serve.mjs examples/kit-switch/dist 4173",
-    port: 4173,
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: [
+    {
+      command: "node e2e/serve.mjs examples/kit-switch/dist 4173",
+      port: 4173,
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: "node e2e/serve.mjs apps/docs/out 4174",
+      port: 4174,
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 });

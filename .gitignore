@@ -10,3 +10,5 @@ test-results/
 !.env.example
 .DS_Store
 .cli-test-*/
+apps/docs/generated/
+apps/docs/out/

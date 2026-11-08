@@ -63,7 +63,7 @@ Requires Node 24 and pnpm 12.
 | Command          | Purpose                                                                    |
 | ---------------- | -------------------------------------------------------------------------- |
 | `pnpm install`   | install                                                                    |
-| `pnpm dev`       | docs site in watch mode                                                    |
+| `pnpm dev`       | docs site in watch mode (http://localhost:3000/halo/)                      |
 | `pnpm check`     | format check, lint, typecheck, unit tests                                  |
 | `pnpm test:e2e`  | Playwright: axe and screenshots of every preview, both kits, light/dark    |
 | `pnpm tokens`    | regenerate token CSS and Tailwind theme from `tokens.json`                 |

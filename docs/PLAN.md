@@ -94,9 +94,11 @@ Notiz: `pnpm labels` sammelt alle Schlüssel aus `L()`, `Lx()` und `LK()` (Marke
 Notiz: `init` setzt `.npmrc` (Scope auf GitHub Packages, Token aus `NPM_TOKEN`), installiert das Kit (abschaltbar mit `--no-install`), trägt `styles.css` bzw. mit `--both` `themes.css` und bei Tailwind v4 das Preset nach `@import "tailwindcss"` ein, legt `components/ui-root.tsx` (UIProvider, bei `de-*` mit `de.json`) an, umschließt `{children}` im Next-Layout und setzt `data-kit` am `<html>`; idempotent. `add` liest die Quellen aus dem installierten `ui-core` (Package liefert `src/` mit), kopiert die Komponente samt privater Helfer und importiert alles Öffentliche aus `@twentyfirstmedia/ui-core`. `diff` vergleicht die Kopie zeilenweise mit der aktuellen Quelle. Der Test kompiliert die Next-App mit Kopien, Provider und Layout. Inline-Styles mit CSS-Variablen sind jetzt explizit als `CSSProperties` getypt, damit Kopien ohne interne Typerweiterung kompilieren. pnpm 12 braucht `allowBuilds` (esbuild) in `pnpm-workspace.yaml`.
 
 ### Phase 7: Doku-Seite
-- [ ] Gerüst, Navigation, Suche, Kit-/Theme-/Sprach-Umschalter
-- [ ] Seiten aus Phase 3–6, Props-Tabellen automatisch, Live-Vorschauen aus `examples/` (die Previews der Referenz als TSX-Beispiele)
-- [ ] Muster-Seiten (Dashboard, Chat, Shop, Admin, Immobilien) aus der Demo
+- [x] Gerüst, Navigation, Suche, Kit-/Theme-/Sprach-Umschalter
+- [x] Seiten aus Phase 3–6, Props-Tabellen automatisch, Live-Vorschauen aus `examples/` (die Previews der Referenz als TSX-Beispiele)
+- [x] Muster-Seiten (Dashboard, Chat, Shop, Admin, Immobilien) aus der Demo
+
+Notiz: `apps/docs` (Next 16, statischer Export, `DOCS_BASE_PATH`/`DOCS_SITE_URL` für Umzug und Canonicals). `[kit]` ist das Root-Segment, `/` leitet auf `/halo/` weiter. Kopfzeile: Kit-Umschalter (gleiche Seite im anderen Kit), EN/DE (deutsche Labels für alle Komponenten), hell/dunkel (gespeichert, ohne Flackern), Suche mit ⌘K (die Kit-eigene CommandPalette), GitHub. Die Doku nutzt die Kit-Komponenten selbst. Seiten: Einführung, Installation, CLI, Theming und Tokens (Halo/Pro nebeneinander, Farbfelder im aktuellen Theme), Texte und Locale, Status und Freigaben, Changelog, „Alle Komponenten", 82 Komponenten-Seiten (README aus der Referenz, Live-Vorschau, Code-Tab, Props-Tabellen automatisch aus `types.ts`) und 26 Muster-Seiten (die 25 Screens der Referenz + Immobilien). Die Vorschauen sind die 108 Referenz-Previews als typisierte TSX-Beispiele in `examples/previews` (Demo-Daten neutral, ohne App-Namen). Die Demo-App (`halo-workspace.html`) selbst ist nicht portiert; die Muster decken Dashboard, Chat, Shop, Admin und Immobilien ab.
 
 ### Phase 8: Qualität und Release 0.1.0
 - [ ] axe und Screenshots grün, beide Kits

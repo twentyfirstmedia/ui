@@ -66,14 +66,18 @@ function fonts(kit: Kit, outDir: string): string {
       const root = postcss.parse(readFileSync(join(pkgDir, file), "utf8"));
       root.walkAtRules("font-face", (rule) => {
         let url = "";
+        let format = "woff2";
         rule.walkDecls("src", (d) => {
-          url = /url\(\.\/files\/([^)]+)\)/.exec(d.value)?.[1] ?? "";
+          const m = /url\(\.\/files\/([^)]+\.woff2)\)\s*format\('([^']+)'\)/.exec(d.value);
+          url = m?.[1] ?? "";
+          format = m?.[2] ?? "woff2";
         });
         if (!url || !SUBSETS.test(url) || url.includes("italic")) return;
         copyFileSync(join(pkgDir, "files", url), join(fontDir, url));
         rule.walkDecls((d) => {
           if (d.prop === "font-family") d.value = `"${src.family}"`;
-          if (d.prop === "src") d.value = d.value.replace("./files/", "./fonts/");
+          // woff2 only: every supported browser has it, and only these files are copied
+          if (d.prop === "src") d.value = `url(./fonts/${url}) format('${format}')`;
         });
         css += rule.toString() + "\n";
       });
