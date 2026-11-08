@@ -2,6 +2,7 @@
 import * as React from "react";
 import { Icon } from "../Icon.js";
 import { cx } from "../cx.js";
+import { useScrollFocus } from "../hooks.js";
 import { L, formatMoney } from "../i18n.js";
 import { StatusIndicator, StatusShape } from "./status.js";
 import { Meter, UptimeBar } from "./developer.js";
@@ -264,8 +265,10 @@ export function DomainList(p: DomainListProps) {
 
 export function MailAuthStatus(p: MailAuthStatusProps) {
   const cols = p.columns || ["MX", "SPF", "DKIM", "DMARC"];
+  const box = React.useRef<HTMLDivElement>(null);
+  useScrollFocus(box);
   return (
-    <div className="tf-scroll-x">
+    <div ref={box} className="tf-scroll-x">
       <table className="tf-table tf-mailauth">
         <thead>
           <tr>
@@ -426,8 +429,10 @@ export function LedgerTable(p: LedgerTableProps) {
 
 export function PnLStatement(p: PnLStatementProps) {
   const cols = p.columns || [];
+  const box = React.useRef<HTMLDivElement>(null);
+  useScrollFocus(box);
   return (
-    <div className="tf-scroll-x">
+    <div ref={box} className="tf-scroll-x">
       <table className="tf-table tf-pnl">
         <thead>
           <tr>

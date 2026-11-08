@@ -1,3 +1,4 @@
+import * as React from "react";
 import { BalanceCard, ServiceMonitor } from "@twentyfirstmedia/ui-core";
 
 export default function Preview() {
@@ -9,11 +10,13 @@ export default function Preview() {
       }}
     >
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-          gap: 16,
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "repeat(3, minmax(0, 1fr))",
+            gap: 16,
+          } as React.CSSProperties
+        }
       >
         <BalanceCard
           name="Provider A"

@@ -1,3 +1,4 @@
+import * as React from "react";
 import { MemoryViewer, OverrideDiff } from "@twentyfirstmedia/ui-core";
 
 const mem = [
@@ -26,12 +27,14 @@ const mem = [
 export default function Preview() {
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 16,
-        alignItems: "start",
-      }}
+      className="tf-grid"
+      style={
+        {
+          "--cols": "1fr 1fr",
+          gap: 16,
+          alignItems: "start",
+        } as React.CSSProperties
+      }
     >
       <div className="tf-panel">
         <MemoryViewer items={mem} onEdit={() => {}} onDelete={() => {}} />

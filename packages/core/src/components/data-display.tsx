@@ -4,7 +4,7 @@ import * as React from "react";
 import { cx, durationToken, reduced } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { L } from "../i18n.js";
-import { useMounted } from "../hooks.js";
+import { useMounted, useScrollFocus } from "../hooks.js";
 import { Avatar, IconButton, TintIcon } from "./foundation.js";
 import { Breadcrumb } from "./navigation.js";
 import type {
@@ -226,46 +226,50 @@ export function Stagger(p: StaggerProps) {
 }
 export function Table(p: TableProps) {
   const cols = p.columns || [];
+  const box = React.useRef<HTMLDivElement>(null);
+  useScrollFocus(box);
   return (
-    <table className="tf-table">
-      <thead>
-        <tr>
-          {cols.map((c) => (
-            <th
-              key={c.key}
-              className={c.align === "right" ? "tf-num" : undefined}
-              style={
-                c.width
-                  ? {
-                      width: c.width,
-                    }
-                  : undefined
-              }
-            >
-              {c.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody
-        className={p.animate === false ? undefined : "tf-stagger"}
-        style={
-          {
-            "--base": "180ms",
-          } as React.CSSProperties
-        }
-      >
-        {(p.rows || []).map((r, i) => (
-          <tr key={i}>
+    <div ref={box} className="tf-table-scroll">
+      <table className="tf-table">
+        <thead>
+          <tr>
             {cols.map((c) => (
-              <td key={c.key} className={c.align === "right" ? "tf-num" : undefined}>
-                {c.render ? c.render(r) : r[c.key]}
-              </td>
+              <th
+                key={c.key}
+                className={c.align === "right" ? "tf-num" : undefined}
+                style={
+                  c.width
+                    ? {
+                        width: c.width,
+                      }
+                    : undefined
+                }
+              >
+                {c.label}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody
+          className={p.animate === false ? undefined : "tf-stagger"}
+          style={
+            {
+              "--base": "180ms",
+            } as React.CSSProperties
+          }
+        >
+          {(p.rows || []).map((r, i) => (
+            <tr key={i}>
+              {cols.map((c) => (
+                <td key={c.key} className={c.align === "right" ? "tf-num" : undefined}>
+                  {c.render ? c.render(r) : r[c.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 export function ListRow(p: ListRowProps) {

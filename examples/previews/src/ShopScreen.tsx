@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Alert,
   Button,
@@ -66,9 +67,13 @@ function App() {
       </Alert>
       <div
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-        }}
+        style={
+          {
+            "--cols": "repeat(4, minmax(0, 1fr))",
+            "--cols-sm": "repeat(2, minmax(0, 1fr))",
+            "--cols-md": "repeat(2, minmax(0, 1fr))",
+          } as React.CSSProperties
+        }
       >
         <StatTile tint="butter" value="€5,592" label="Revenue" />
         <StatTile tint="sky" value="36" label="Orders" />
@@ -77,9 +82,11 @@ function App() {
       </div>
       <div
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "minmax(0, 1.6fr) minmax(0, 1fr)",
-        }}
+        style={
+          {
+            "--cols": "minmax(0, 1.6fr) minmax(0, 1fr)",
+          } as React.CSSProperties
+        }
       >
         <Panel title="Sales by channel">
           <StackedBarChart

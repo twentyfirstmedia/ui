@@ -28,6 +28,7 @@ function App() {
       <div
         style={{
           width: 390,
+          maxWidth: "100%",
         }}
       >
         <MobileTabBar

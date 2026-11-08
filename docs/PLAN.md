@@ -109,8 +109,17 @@ Notiz: `e2e/a11y.spec.ts` prüft jede Doku-Seite (Anleitungen, 82 Komponenten, 2
 
 Notiz (Treue zur Referenz): Bildvergleich aller 108 Referenz-Previews (Referenz-`halo.js`/`halo.css` gegen den Port, Halo hell, gleiche Fonts): 99 pixelgleich. Bewusste Abweichungen: (1) acht Screens, deren TopBar breiter als der Rahmen ist: die Navigation scrollt im Balken, statt Profil und Nutzer aus dem Rahmen zu schieben (axe-Kontrast); (2) abgelaufener Coupon, Energieklassen und Chat-Aktionen ohne Opacity auf Text (axe-Kontrast). Demo-Werte der Referenz-Defaults („Halo", „Admin", „Mara Ellis") stehen jetzt in den Beispielen statt in den Komponenten; ohne Marke rendern TopBar, AuthCard, Wizard und Rechnung keinen Markenblock. Der Select-Pfeil entspricht wieder dem Chevron der Referenz (aus Token-Farben gezeichnet statt Data-URI mit Farb-Literal).
 
+### Phase 9: Mobile first (Kits und Doku)
+- [x] Responsive Schicht für beide Kits: jede Komponente ab 320 px Breite, ab 1181 px unverändert wie die Referenz
+- [x] Touch: 16-px-Eingabefelder (kein Zoom), Pro auf Touch-Geräten mit komfortablen Trefferflächen
+- [x] Beispiele ohne feste Mehrspalten-Raster, Vorschauen ohne erzwungene Mindestbreite
+- [x] Doku-Seite mobile first neu: Kopfzeile, Navigations-Drawer, Startseite, Props als gestapelte Zeilen, Vor/Zurück
+- [x] Überlauf-Test in beiden Kits bei 320 und 390 px, Screenshots neu
+
+Notiz: `packages/halo/css/06-responsive.css` (wird wie alle Halo-Dateien nach Pro abgeleitet). Breakpoints: Telefon ≤ 760 px, Tablet 761–1180 px, Desktop ≥ 1181 px (dort greift nichts davon). Telefon: Shell einspaltig, Rail und SubNav als scrollende Zeilen (SubNav mit Beschriftung), TopBar nur Icons, Dock klebt unten (sticky), Tabellen scrollen in `tf-table-scroll` (neuer Wrapper in `Table`; per `useScrollFocus` nur dann per Tastatur fokussierbar, wenn sie wirklich scrollen), Dialoge als Bottom-Sheet, Cookie-Banner, Chat-Launcher, Toaster und Benachrichtigungen über die volle Breite, Popover unter Vollbreiten-Feldern in Feldbreite, Zeilen umbrechen statt Aktionen hinauszuschieben, Tabs/Segmented scrollen. Tablet: Asides unter die Hauptspalte. `tf-grid` liest `--cols`/`--cols-md`/`--cols-sm` (Telefon standardmäßig einspaltig); neue Layout-Klassen `tf-sheet-nav`/`tf-sheet-aside` ersetzen die Inline-Raster des Workspace-Beispiels. `Popover` und `Tooltip` bleiben per `useKeepInView` im Bildschirm bzw. im scrollenden Rahmen (Breite gedeckelt, seitlich verschoben über `translate`); Popover-Breite kommt als `--pop-w`, `Tooltip` hat `defaultOpen`. Tokens: bei Kits mit kompakter Standarddichte (Pro) setzt `@media (pointer: coarse)` die komfortablen Dichte-Tokens, solange kein `data-density` gesetzt ist. Kontrolle Desktop: alle 108 Referenz-Previews bei 1320 px gegen `main` gerendert, 0 Pixel Unterschied. Doku: `docs.css` mobile first (640/960 px), Menü als Drawer mit Sprache, Theme und GitHub, Esc schließt, Scroll-Sperre; neue Startseite (Hero, Installationsbefehl, Live-Komponenten, Eigenschaften, Einstiege); Props-Tabellen auf dem Telefon als gestapelte Zeilen; Vor/Zurück-Navigation; Abschnitt „Layout and breakpoints" unter Theming. `e2e/mobile.spec.ts`: 2 Breiten × 2 Kits × alle Seiten, weder Seite noch Vorschau-Inhalt ragt hinaus.
+
 ## Offen (Robin)
-- GitHub Actions für das Repo aktivieren (bisher startet kein Workflow, auch nicht auf `main`); danach einmal CI und den Release-Workflow laufen lassen
+- GitHub Actions werden nicht genutzt (Robin); Checks laufen lokal (`pnpm check`, `pnpm test:e2e`). Ein Release braucht damit einen lokalen `pnpm changeset publish` mit Token
 - GitHub-Packages-Token für den Release-Workflow (Secret `NPM_TOKEN`) und Lesezugriff für die Apps
-- Hosting und DNS für `ui.twentyfirst.media` (Vercel oder Hetzner), später `twentyfirst.design`
+- Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`
 - Soll die Doku öffentlich sein oder hinter Login (Code-Tabs zeigen Quelltext)?

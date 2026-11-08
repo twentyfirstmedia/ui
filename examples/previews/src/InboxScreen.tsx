@@ -122,10 +122,13 @@ function App() {
           </div>
           <div
             className="tf-grid"
-            style={{
-              gridTemplateColumns: "1fr 1fr",
-              gap: 12,
-            }}
+            style={
+              {
+                "--cols": "1fr 1fr",
+                "--cols-sm": "1fr 1fr",
+                gap: 12,
+              } as React.CSSProperties
+            }
           >
             <StatTile tint="butter" value="$1,240" label="MRR" />
             <StatTile tint="sky" value="24" label="Seats" />
@@ -164,12 +167,14 @@ function App() {
         />
       </div>
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "320px 1fr",
-          gap: 16,
-          minHeight: 0,
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "320px 1fr",
+            gap: 16,
+            minHeight: 0,
+          } as React.CSSProperties
+        }
       >
         <div className="tf-panel tf-panel-flush tf-panel-list">
           <Tabs block items={["All", "Unread", "Assigned"]} />
@@ -260,6 +265,7 @@ function App() {
               aria-label="Reply"
               style={{
                 flex: 1,
+                minWidth: 0,
                 border: 0,
                 background: "transparent",
                 outline: "none",

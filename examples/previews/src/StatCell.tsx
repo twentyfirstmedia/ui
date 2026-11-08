@@ -1,13 +1,18 @@
+import * as React from "react";
 import { StatCell } from "@twentyfirstmedia/ui-core";
 
 export default function Preview() {
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-        gap: 16,
-      }}
+      className="tf-grid"
+      style={
+        {
+          "--cols": "repeat(4, minmax(0, 1fr))",
+          "--cols-sm": "repeat(2, minmax(0, 1fr))",
+          "--cols-md": "repeat(2, minmax(0, 1fr))",
+          gap: 16,
+        } as React.CSSProperties
+      }
     >
       <StatCell
         label="Revenue today"

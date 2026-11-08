@@ -1,3 +1,4 @@
+import * as React from "react";
 import { LedgerTable, PnLStatement, ReceiptSuggestion } from "@twentyfirstmedia/ui-core";
 import type { LedgerRow } from "@twentyfirstmedia/ui-core";
 
@@ -71,11 +72,13 @@ export default function Preview() {
         />
       </div>
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1.4fr 1fr",
-          gap: 16,
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "1.4fr 1fr",
+            gap: 16,
+          } as React.CSSProperties
+        }
       >
         <div className="tf-panel">
           <PnLStatement

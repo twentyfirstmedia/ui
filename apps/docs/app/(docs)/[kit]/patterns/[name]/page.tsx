@@ -29,7 +29,7 @@ export default async function PatternPage({ params }: { params: Promise<{ name: 
         lead={`A complete screen built only from kit parts: ${ex.components.slice(0, 8).join(", ")}${ex.components.length > 8 ? " …" : ""}`}
       />
       {readmes[name] && <Markdown text={readmes[name]} />}
-      <ExampleView name={ex.name} code={ex.code} width={ex.width} />
+      <ExampleView name={ex.name} code={ex.code} />
     </div>
   );
 }

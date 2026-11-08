@@ -684,6 +684,15 @@
   --panel-gap: 1px;
   color-scheme: light;
 }
+@media (pointer: coarse) {
+  [data-kit="pro"]:not([data-density]) {
+    --density-control: var(--control-comfy);
+    --density-row: var(--row-comfy);
+    --density-pad-x: var(--space-4);
+    --density-font-size: 14px;
+    --density-line-height: 20px;
+  }
+}
 [data-kit="pro"][data-density="compact"], [data-kit="pro"] [data-density="compact"] {
   --density-control: var(--control-dense);
   --density-row: var(--row-dense);

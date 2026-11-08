@@ -3,7 +3,7 @@
 import * as React from "react";
 import { L, formatMoney } from "../i18n.js";
 import { Icon } from "../Icon.js";
-import { useTrap } from "../hooks.js";
+import { useScrollFocus, useTrap } from "../hooks.js";
 import { cx } from "../cx.js";
 import { Avatar, Badge, Button, IconButton, TintIcon } from "./foundation.js";
 import { Tabs } from "./navigation.js";
@@ -552,8 +552,10 @@ export function Wizard(p: WizardProps) {
 }
 const LEVELS = () => [L("None"), L("View"), L("Edit"), L("Full")];
 export function PermissionMatrix(p: PermissionMatrixProps) {
+  const box = React.useRef<HTMLDivElement>(null);
+  useScrollFocus(box);
   return (
-    <div className="tf-scroll">
+    <div ref={box} className="tf-scroll">
       <table className="tf-table tf-perm">
         <thead>
           <tr>

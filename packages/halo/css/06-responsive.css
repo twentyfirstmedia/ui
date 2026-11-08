@@ -1,0 +1,384 @@
+/* ───────────── Mobile first ─────────────
+   Every component works from a 320px wide container up. The reference describes the desktop
+   look; this layer adds the small-screen behaviour on top of it, so ≥ 1181px stays exactly the
+   reference while narrower screens reflow.
+
+   Breakpoints (viewport):  phone ≤ 760px · tablet 761–1180px · desktop ≥ 1181px
+   (plus 480px for the narrowest phones). The Pro CSS is derived from this file like from all
+   other Halo files, so both kits reflow the same way. */
+
+/* Layout grid: one column on phones, the given columns from tablets up.
+   --cols     columns on desktop (e.g. `repeat(3, minmax(0, 1fr))`)
+   --cols-md  columns on tablets (default: --cols)
+   --cols-sm  columns on phones (default: one column) */
+.tf-grid {
+  grid-template-columns: var(--cols-sm, minmax(0, 1fr));
+}
+@media (min-width: 761px) {
+  .tf-grid {
+    grid-template-columns: var(--cols-md, var(--cols, minmax(0, 1fr)));
+  }
+}
+@media (min-width: 1181px) {
+  .tf-grid {
+    grid-template-columns: var(--cols, minmax(0, 1fr));
+  }
+}
+
+/* Sheet with a page nav (SubNav) on the left and an optional aside on the right */
+.tf-sheet-nav {
+  grid-template-columns: 208px minmax(0, 1fr);
+  align-items: start;
+}
+.tf-sheet-nav.tf-sheet-aside {
+  grid-template-columns: 208px minmax(0, 1fr) 304px;
+}
+
+/* Tablet: asides move below the main column, the page nav shrinks to icons (see SubNav) */
+@media (max-width: 1180px) {
+  .tf-sheet:not(.tf-sheet-2):not(.tf-sheet-nav) {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+  .tf-sheet-nav.tf-sheet-aside {
+    grid-template-columns: 208px minmax(0, 1fr);
+  }
+  .tf-sheet > .tf-main ~ :not(.tf-dock-float) {
+    grid-column: 2;
+  }
+}
+@media (max-width: 1040px) {
+  .tf-sheet-nav,
+  .tf-sheet-nav.tf-sheet-aside {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+}
+
+/* Phone: the shell becomes one column; rail and page nav turn into scrolling rows */
+@media (max-width: 760px) {
+  .tf-shell {
+    padding: 0 4px 4px;
+    border-radius: var(--radius-lg);
+  }
+  .tf-topbar,
+  .tf-shell .tf-topbar {
+    gap: var(--space-2);
+    padding: 0 var(--space-3);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .tf-brand-tag,
+  .tf-user-text,
+  .tf-user > .tf-ico {
+    display: none;
+  }
+  .tf-user {
+    padding: 0 4px;
+  }
+  .tf-nav {
+    flex: 1;
+    margin: 0;
+  }
+  .tf-topbar-extra {
+    gap: 4px;
+  }
+  .tf-topbtn {
+    justify-content: center;
+    gap: 0;
+    min-width: 36px;
+    padding: 0;
+    font-size: 0;
+  }
+  .tf-topbtn kbd {
+    display: none;
+  }
+  .tf-sheet,
+  .tf-sheet-2,
+  .tf-sheet:not(.tf-sheet-2):not(.tf-sheet-nav),
+  .tf-sheet-nav,
+  .tf-sheet-nav.tf-sheet-aside {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    padding: var(--space-3);
+    border-radius: calc(var(--radius-lg) - 4px);
+  }
+  .tf-sheet > .tf-main ~ :not(.tf-dock-float) {
+    grid-column: auto;
+  }
+  .tf-rail {
+    width: auto;
+    flex-direction: row;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tf-rail-group {
+    flex-direction: row;
+  }
+  .tf-main {
+    gap: var(--space-4);
+  }
+  /* the dock stays at the bottom of the screen while the page scrolls */
+  .tf-main-dock {
+    padding-bottom: 0;
+  }
+  .tf-dock-float {
+    position: sticky;
+    left: auto;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+    z-index: var(--z-sticky);
+    justify-self: center;
+    max-width: 100%;
+    transform: none;
+  }
+  .tf-dock {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  /* SubNav: a scrolling row of labelled pills above the content */
+  .tf-subnav {
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tf-subnav-head,
+  .tf-subnav-list {
+    flex-direction: row;
+    flex: none;
+  }
+  .tf-subnav-list {
+    gap: 4px;
+  }
+  .tf-subnav-label {
+    display: inline;
+    overflow: visible;
+  }
+  .tf-subnav-item {
+    width: auto;
+    height: 36px;
+    padding: 0 14px;
+    gap: 8px;
+    border-radius: var(--radius-pill);
+  }
+  .tf-subnav-action {
+    width: 36px;
+    height: 36px;
+    flex: none;
+  }
+  .tf-subnav-count {
+    position: static;
+  }
+  .tf-subnav-labels {
+    display: none;
+  }
+}
+
+/* Popover width comes from the component (`width` prop) so phones can override it */
+.tf-popover {
+  width: var(--pop-w, auto);
+}
+
+/* Fixed sizes never exceed their container */
+.tf-skel {
+  max-width: 100%;
+}
+
+/* Tables scroll inside their own box instead of widening the page */
+.tf-table-scroll {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* ── Phone: components ── */
+@media (max-width: 760px) {
+  /* surfaces get a little tighter */
+  .tf-panel {
+    padding: var(--space-5);
+  }
+  .tf-header-title {
+    font-size: 24px;
+    line-height: 30px;
+  }
+  .tf-stat-value {
+    font-size: 26px;
+    line-height: 32px;
+  }
+  .tf-table th,
+  .tf-table td {
+    padding-left: 12px;
+    padding-right: 12px;
+    white-space: nowrap;
+  }
+
+  /* fields shrink with their container */
+  .tf-field {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .tf-otp {
+    gap: 6px;
+  }
+  .tf-otp-cell {
+    height: 52px;
+  }
+
+  /* segmented controls and tabs scroll sideways when the labels do not fit */
+  .tf-seg,
+  .tf-tabs {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tf-seg-item,
+  .tf-tab {
+    flex: none;
+  }
+  .tf-seg,
+  .tf-tabs {
+    min-width: 0;
+  }
+  .tf-model-btn {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .tf-status {
+    min-width: 0;
+    white-space: normal;
+  }
+  .tf-blocks-row,
+  .tf-runs-main,
+  .tf-conn-act,
+  .tf-hook-dl-row,
+  .tf-rating {
+    flex-wrap: wrap;
+  }
+  .tf-header > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* overlays: dialogs become bottom sheets, popovers stay inside the screen */
+  .tf-overlay {
+    place-items: end stretch;
+    padding: 0;
+  }
+  .tf-overlay > .tf-modal {
+    max-width: none;
+    max-height: calc(100% - 24px);
+    overflow-y: auto;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+  }
+  .tf-modal-wrap {
+    padding: var(--space-3);
+  }
+  .tf-palette-wrap {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 8px);
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .tf-palette {
+    max-height: calc(100% - 16px);
+  }
+  .tf-toaster {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: none;
+    transform: none;
+  }
+  .tf-notes {
+    left: 8px;
+    right: 8px;
+    width: auto;
+  }
+  .tf-cookie {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+  }
+  .tf-launch:not(.inline) {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+  }
+  .tf-launch:not(.inline) .tf-launch-panel {
+    width: 100%;
+  }
+  .tf-popover {
+    max-width: calc(100vw - 24px);
+  }
+  /* a popover under a full-width field takes the field's width */
+  .tf-pop-anchor.block > .tf-popover {
+    right: 0;
+    width: auto;
+    min-width: 0;
+  }
+  .tf-tab,
+  .tf-seg-item {
+    white-space: nowrap;
+  }
+
+  /* rows wrap instead of pushing their actions out */
+  .tf-secret {
+    flex-wrap: wrap;
+    row-gap: 4px;
+    padding: 8px 8px 8px 16px;
+    border-radius: var(--radius-lg);
+  }
+  .tf-secret-val {
+    flex-basis: 120px;
+  }
+  .tf-secret > .tf-row {
+    margin-left: auto;
+  }
+  .tf-uptime-bar {
+    gap: 1px;
+  }
+  .tf-uptime-bar i {
+    min-width: 1px;
+  }
+  .tf-imgvar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tf-imgvar-stage {
+    min-height: 0;
+  }
+  .tf-tabbar-item {
+    min-width: 0;
+  }
+}
+
+/* Narrow phones: surfaces get the compact inset */
+@media (max-width: 480px) {
+  .tf-panel {
+    padding: var(--space-4);
+  }
+  .tf-card {
+    padding: var(--space-4);
+  }
+}
+
+/* Touch screens: text fields use 16px so mobile browsers do not zoom in on focus */
+@media (pointer: coarse) {
+  :is(
+    .tf-input,
+    .tf-search input,
+    .tf-combo-input,
+    .tf-number-input,
+    .tf-composer-input,
+    .tf-inline-input,
+    .tf-palette-input input
+  ):not([type="checkbox"], [type="radio"]) {
+    font-size: 16px;
+  }
+}

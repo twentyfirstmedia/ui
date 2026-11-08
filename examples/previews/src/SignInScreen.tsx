@@ -20,12 +20,14 @@ function App() {
       }}
     >
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1.1fr",
-          gap: 8,
-          minHeight: 760,
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "1fr 1.1fr",
+            gap: 8,
+            minHeight: 760,
+          } as React.CSSProperties
+        }
       >
         <div
           className="tf-sheet"
@@ -33,7 +35,7 @@ function App() {
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            padding: 48,
+            padding: "clamp(20px, 6vw, 48px)",
             gridTemplateColumns: "none",
           }}
         >
@@ -177,7 +179,7 @@ function App() {
             position: "relative",
             borderRadius: 24,
             overflow: "hidden",
-            padding: 40,
+            padding: "clamp(20px, 5vw, 40px)",
             display: "flex",
             flexDirection: "column",
             justifyContent: "flex-end",
@@ -186,11 +188,14 @@ function App() {
         >
           <Stagger
             className="tf-grid"
-            style={{
-              gridTemplateColumns: "1fr 1fr",
-              gap: 16,
-              marginBottom: "auto",
-            }}
+            style={
+              {
+                "--cols": "1fr 1fr",
+                "--cols-sm": "1fr 1fr",
+                gap: 16,
+                marginBottom: "auto",
+              } as React.CSSProperties
+            }
             delay={200}
           >
             <StatTile tint="sky" value="1,284" label="Members this month" />

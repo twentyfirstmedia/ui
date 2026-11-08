@@ -1,14 +1,17 @@
+import * as React from "react";
 import { AuthCard, Button, OtpInput, TextField } from "@twentyfirstmedia/ui-core";
 
 export default function Preview() {
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-        gap: 16,
-        alignItems: "start",
-      }}
+      className="tf-grid"
+      style={
+        {
+          "--cols": "repeat(3, minmax(0, 1fr))",
+          gap: 16,
+          alignItems: "start",
+        } as React.CSSProperties
+      }
     >
       <AuthCard
         brand="Halo"

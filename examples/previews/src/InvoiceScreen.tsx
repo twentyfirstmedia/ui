@@ -84,12 +84,14 @@ function App() {
         />
       </div>
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1.1fr) minmax(0, 1fr)",
-          gap: 16,
-          alignItems: "start",
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "minmax(0, 1.1fr) minmax(0, 1fr)",
+            gap: 16,
+            alignItems: "start",
+          } as React.CSSProperties
+        }
       >
         <div
           className="tf-panel tf-in"
@@ -101,9 +103,11 @@ function App() {
         >
           <div
             className="tf-grid"
-            style={{
-              gridTemplateColumns: "1fr 1fr",
-            }}
+            style={
+              {
+                "--cols": "1fr 1fr",
+              } as React.CSSProperties
+            }
           >
             <Select label="Customer" options={["Northwind", "Kestrel Bank"]} />
             <Select label="Payment terms" options={["14 days", "30 days"]} />

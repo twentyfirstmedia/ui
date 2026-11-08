@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Badge, StatusIndicator } from "@twentyfirstmedia/ui-core";
 import type { Status, Tone } from "@twentyfirstmedia/ui-core";
 
@@ -18,11 +19,13 @@ export default function Preview() {
       }}
     >
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-          gap: 16,
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "repeat(3, minmax(0, 1fr))",
+            gap: 16,
+          } as React.CSSProperties
+        }
       >
         {S.map((s) => (
           <StatusIndicator key={s[0]} status={s[0]} label={s[1]} />

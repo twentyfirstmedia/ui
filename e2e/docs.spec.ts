@@ -6,7 +6,7 @@ test.use({ baseURL: "http://localhost:4174" });
 test("the root forwards to the Halo docs", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveURL(/\/halo\/$/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Halo");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Soft, calm interfaces.");
 });
 
 test("the kit switch shows the same page in the other kit", async ({ page }) => {
@@ -46,4 +46,37 @@ test("component pages show the code and the props", async ({ page }) => {
   await expect(page.getByText('from "@twentyfirstmedia/ui-core"')).toBeVisible();
   await expect(page.getByRole("heading", { name: "Props" })).toBeVisible();
   await expect(page.locator("#props-Card")).toBeVisible();
+});
+
+test.describe("on a phone", () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
+
+  test("the menu opens as a drawer, closes with Escape and on navigation", async ({ page }) => {
+    await page.goto("/halo/");
+    const nav = page.getByRole("navigation", { name: "Docs" });
+    await expect(nav).toBeHidden();
+    await page.getByRole("button", { name: "Menu" }).click();
+    await expect(nav).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(nav).toBeHidden();
+    await page.getByRole("button", { name: "Menu" }).click();
+    await nav.getByRole("link", { name: "Data Table" }).click();
+    await expect(page).toHaveURL(/\/halo\/components\/DataTable\/$/);
+    await expect(nav).toBeHidden();
+  });
+
+  test("no docs page is wider than the screen", async ({ page }) => {
+    for (const path of [
+      "/halo/",
+      "/pro/components/DataTable/",
+      "/halo/patterns/Dashboard/",
+      "/pro/theming/",
+    ]) {
+      await page.goto(path);
+      const over = await page.evaluate(
+        () => document.documentElement.scrollWidth - window.innerWidth,
+      );
+      expect(over, path).toBeLessThanOrEqual(0);
+    }
+  });
 });

@@ -58,9 +58,13 @@ function App() {
       </div>
       <Stagger
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "repeat(4, 1fr)",
-        }}
+        style={
+          {
+            "--cols": "repeat(4, 1fr)",
+            "--cols-sm": "repeat(2, minmax(0, 1fr))",
+            "--cols-md": "repeat(2, minmax(0, 1fr))",
+          } as React.CSSProperties
+        }
         delay={80}
       >
         <StatTile tint="sky" value="18" label="All projects" />
@@ -74,6 +78,8 @@ function App() {
           {
             "--d": "260ms",
             display: "flex",
+            flexWrap: "wrap",
+            gap: 12,
             alignItems: "center",
             justifyContent: "space-between",
           } as React.CSSProperties
@@ -96,9 +102,11 @@ function App() {
       </div>
       <Stagger
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "repeat(3, 1fr)",
-        }}
+        style={
+          {
+            "--cols": "repeat(3, 1fr)",
+          } as React.CSSProperties
+        }
         delay={320}
       >
         <Card

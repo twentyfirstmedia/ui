@@ -41,13 +41,14 @@ function App() {
     tags = React.useState(["urgent", "q3"]);
   return (
     <div
-      className="tf-panel"
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 16,
-        alignContent: "start",
-      }}
+      className="tf-panel tf-grid"
+      style={
+        {
+          "--cols": "1fr 1fr",
+          gap: 16,
+          alignContent: "start",
+        } as React.CSSProperties
+      }
     >
       <Combobox
         label="Time zone"

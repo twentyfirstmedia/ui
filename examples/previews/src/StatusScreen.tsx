@@ -1,13 +1,16 @@
+import * as React from "react";
 import { Button, StatusScreen, UsageMeter } from "@twentyfirstmedia/ui-core";
 
 export default function Preview() {
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 16,
-      }}
+      className="tf-grid"
+      style={
+        {
+          "--cols": "1fr 1fr",
+          gap: 16,
+        } as React.CSSProperties
+      }
     >
       <div className="tf-panel">
         <StatusScreen code="404" />

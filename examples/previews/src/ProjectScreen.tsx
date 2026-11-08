@@ -110,9 +110,11 @@ function App() {
       </div>
       <Stagger
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "1.3fr 1fr",
-        }}
+        style={
+          {
+            "--cols": "1.3fr 1fr",
+          } as React.CSSProperties
+        }
         delay={160}
       >
         <div
@@ -150,10 +152,13 @@ function App() {
         </div>
         <div
           className="tf-grid"
-          style={{
-            gridTemplateColumns: "1fr 1fr",
-            gap: 12,
-          }}
+          style={
+            {
+              "--cols": "1fr 1fr",
+              "--cols-sm": "1fr 1fr",
+              gap: 12,
+            } as React.CSSProperties
+          }
         >
           <StatTile tint="sky" value="18" label="Tasks" />
           <StatTile tint="butter" value="3" label="Days left" />
@@ -163,9 +168,11 @@ function App() {
       </Stagger>
       <Stagger
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "1.3fr 1fr",
-        }}
+        style={
+          {
+            "--cols": "1.3fr 1fr",
+          } as React.CSSProperties
+        }
         delay={320}
       >
         <Panel

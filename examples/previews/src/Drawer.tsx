@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Badge, Drawer, StatTile, Tabs } from "@twentyfirstmedia/ui-core";
 
 export default function Preview() {
@@ -27,9 +28,12 @@ export default function Preview() {
         <Tabs block items={["Overview", "Invoices", "Mail"]} />
         <div
           className="tf-grid"
-          style={{
-            gridTemplateColumns: "1fr 1fr",
-          }}
+          style={
+            {
+              "--cols": "1fr 1fr",
+              "--cols-sm": "1fr 1fr",
+            } as React.CSSProperties
+          }
         >
           <StatTile tint="butter" value="€1,240" label="MRR" />
           <StatTile tint="mint" value="€14,880" label="Paid to date" />

@@ -66,13 +66,7 @@ export function Shell(p: ShellProps) {
           </button>,
         ]}
       />
-      <div
-        className="tf-sheet"
-        style={{
-          gridTemplateColumns: "208px minmax(0, 1fr)" + (p.side ? " 304px" : ""),
-          alignItems: "start",
-        }}
-      >
+      <div className={p.side ? "tf-sheet tf-sheet-nav tf-sheet-aside" : "tf-sheet tf-sheet-nav"}>
         <SubNav eyebrow={p.area} action={p.action} current={p.current} items={p.pages} />
         <main className="tf-main">{p.children}</main>
         {p.side || null}

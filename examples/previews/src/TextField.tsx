@@ -7,12 +7,13 @@ function App() {
   const bad = !/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(e[0]);
   return (
     <div
-      className="tf-panel"
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 16,
-      }}
+      className="tf-panel tf-grid"
+      style={
+        {
+          "--cols": "1fr 1fr",
+          gap: 16,
+        } as React.CSSProperties
+      }
     >
       <TextField
         label="Full name"

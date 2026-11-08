@@ -1,14 +1,17 @@
+import * as React from "react";
 import { BackupList, BlockList } from "@twentyfirstmedia/ui-core";
 
 export default function Preview() {
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 16,
-        alignItems: "start",
-      }}
+      className="tf-grid"
+      style={
+        {
+          "--cols": "1fr 1fr",
+          gap: 16,
+          alignItems: "start",
+        } as React.CSSProperties
+      }
     >
       <div className="tf-panel tf-panel-flush tf-panel-list">
         <BackupList

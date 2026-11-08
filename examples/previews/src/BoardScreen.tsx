@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   AppShell,
   AvatarStack,
@@ -68,12 +69,17 @@ function App() {
         />
       </div>
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: 16,
-          alignItems: "start",
-        }}
+        className="tf-grid"
+        style={
+          {
+            "--cols": "repeat(4, 1fr)",
+            "--cols-sm": "repeat(4, minmax(260px, 85%))",
+            "--cols-md": "repeat(2, minmax(0, 1fr))",
+            gap: 16,
+            alignItems: "start",
+            overflowX: "auto",
+          } as React.CSSProperties
+        }
       >
         <KanbanColumn title="To do" dot="sky" delay={120}>
           <T

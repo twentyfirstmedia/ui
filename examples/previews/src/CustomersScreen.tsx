@@ -73,9 +73,12 @@ function App() {
           <Tabs block items={["Overview", "Invoices", "Mail", "Agent brief"]} />
           <div
             className="tf-grid"
-            style={{
-              gridTemplateColumns: "1fr 1fr",
-            }}
+            style={
+              {
+                "--cols": "1fr 1fr",
+                "--cols-sm": "1fr 1fr",
+              } as React.CSSProperties
+            }
           >
             <StatTile tint="butter" value="€1,240" label="MRR" />
             <StatTile tint="mint" value="€14,880" label="Paid to date" />
@@ -102,9 +105,13 @@ function App() {
       </div>
       <Stagger
         className="tf-grid"
-        style={{
-          gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-        }}
+        style={
+          {
+            "--cols": "repeat(4, minmax(0, 1fr))",
+            "--cols-sm": "repeat(2, minmax(0, 1fr))",
+            "--cols-md": "repeat(2, minmax(0, 1fr))",
+          } as React.CSSProperties
+        }
         delay={80}
       >
         <StatTile tint="butter" value="€33,067" label="Monthly recurring revenue" />

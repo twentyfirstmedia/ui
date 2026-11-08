@@ -22,7 +22,7 @@ export default function StatusAndApprovals() {
         return ex ? (
           <div key={n}>
             <h2>{n}</h2>
-            <ExampleView name={ex.name} code={ex.code} width={ex.width} />
+            <ExampleView name={ex.name} code={ex.code} />
           </div>
         ) : null;
       })}
