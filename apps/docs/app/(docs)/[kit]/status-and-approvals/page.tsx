@@ -1,22 +1,31 @@
+import type { Metadata } from "next";
 import { Markdown, PageHead } from "@/components/docs";
 import { ExampleView } from "@/components/example-view";
-import { examples } from "@/lib/site";
+import { examples, forKit, guide, knowledge, type KitName } from "@/lib/site";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata = { title: "Status and approvals" };
+const g = guide("status-and-approvals");
 
-const TEXT = `State is shape plus colour, so it reads without colour vision: **ok** = dot, **running** = pulsing dot, **signal** = diamond (waits for a human), **warn** = triangle, **danger** = square, **idle** = ring. One status word always maps to the same tone on every page. Only \`signal\` may draw attention unasked; warnings and errors never animate.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ kit: KitName }>;
+}): Promise<Metadata> {
+  const { kit } = await params;
+  return pageMeta({ kit, path: g.slug, title: g.title, description: g.description });
+}
 
-Everything an agent may not do alone goes through \`ApprovalCard\` with four answers in this order: **A** yes, as shown · **B** yes, with a change · **C** no, discard · **D** different instruction. The card shows the risk family, agent and project, age and escalation time, and the exact payload that will run. A–D work as keys. Once decided it collapses to one line with letter, person and time. \`ApprovalInbox\` lists open approvals oldest first; J and K move.`;
-
-export default function StatusAndApprovals() {
+export default async function StatusAndApprovals({
+  params,
+}: {
+  params: Promise<{ kit: KitName }>;
+}) {
+  const { kit } = await params;
   const pick = (n: string) => examples.find((e) => e.name === n);
   return (
     <>
-      <PageHead
-        title="Status and approvals"
-        lead="One state model and one way to ask a human, in both kits."
-      />
-      <Markdown text={TEXT} />
+      <PageHead kit={kit} path={g.slug} title={g.title} lead={g.description} />
+      <Markdown text={forKit(knowledge, g.markdown, kit)} />
       {["StatusIndicator", "ApprovalCard", "ApprovalInbox"].map((n) => {
         const ex = pick(n);
         return ex ? (

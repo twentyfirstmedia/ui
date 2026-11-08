@@ -2,6 +2,8 @@ import examplesJson from "../generated/examples.json";
 import propsJson from "../generated/props.json";
 import readmesJson from "../generated/readmes.json";
 import exportsJson from "../generated/exports.json";
+import knowledgeJson from "../generated/knowledge.json";
+import type { Guide, Knowledge } from "../../../packages/cli/src/knowledge.ts";
 
 export type KitName = "halo" | "pro";
 export const KITS: KitName[] = ["halo", "pro"];
@@ -26,9 +28,16 @@ export const examples = examplesJson as Example[];
 export const props = propsJson as Record<string, Prop[]>;
 export const readmes = readmesJson as Record<string, string>;
 export const componentFiles = exportsJson as Record<string, string[]>;
+export const knowledge = knowledgeJson as unknown as Knowledge;
+export const guide = (slug: string): Guide => {
+  const g = knowledge.guides.find((x) => x.slug === slug);
+  if (!g) throw new Error(`No guide ${slug}`);
+  return g;
+};
 
 export const GITHUB = "https://github.com/twentyfirstmedia/ui";
 export const SITE_URL = process.env.DOCS_SITE_URL ?? "https://ui.twentyfirst.media";
+export const SITE_NAME = "Twentyfirst UI";
 export const BASE_PATH = process.env.DOCS_BASE_PATH ?? "";
 
 /** Component groups in sidebar order; "Pages" become the patterns section. */
@@ -63,12 +72,16 @@ export const GUIDES: NavLink[] = [
   { href: "installation", label: "Installation" },
   { href: "cli", label: "CLI" },
   { href: "theming", label: "Theming and tokens" },
+  { href: "ai", label: "AI agents and MCP" },
   { href: "status-and-approvals", label: "Status and approvals" },
   { href: "changelog", label: "Changelog" },
 ];
 
 export function humanize(name: string): string {
-  return name.replace(/Screen$/, "").replace(/([a-z])([A-Z])/g, "$1 $2");
+  return name
+    .replace(/Screen$/, "")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2");
 }
 
 export function nav(): NavSection[] {
@@ -88,10 +101,18 @@ export function nav(): NavSection[] {
       { href: "patterns/real-estate", label: "Real estate" },
     ],
   });
-  sections.push({ title: "Reference", links: [{ href: "components", label: "All components" }] });
+  sections.push({
+    title: "Reference",
+    links: [
+      { href: "components", label: "All components" },
+      { href: "patterns", label: "All patterns" },
+    ],
+  });
   return sections;
 }
 
 export function canonical(kit: KitName, path: string): string {
   return `${SITE_URL}${BASE_PATH}/${kit}/${path ? `${path}/` : ""}`;
 }
+
+export { forKit, mdPath, plain } from "../../../packages/cli/src/knowledge.ts";

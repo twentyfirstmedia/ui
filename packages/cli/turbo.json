@@ -1,0 +1,19 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/examples/previews/**",
+        "$TURBO_ROOT$/apps/docs/content/**",
+        "$TURBO_ROOT$/reference/halo/design-system/components/**",
+        "$TURBO_ROOT$/packages/core/src/**",
+        "$TURBO_ROOT$/packages/core/CHANGELOG.md",
+        "$TURBO_ROOT$/packages/core/package.json",
+        "$TURBO_ROOT$/packages/halo/tokens.json",
+        "$TURBO_ROOT$/packages/pro/tokens.json"
+      ]
+    }
+  }
+}

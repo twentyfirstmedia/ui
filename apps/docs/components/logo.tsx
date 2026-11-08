@@ -1,0 +1,26 @@
+/**
+ * The Twentyfirst Media "21" mark (from the brand assets in twentyfirstmedia/twentyfirst,
+ * .design/assets/logos/21-mark-*.svg), drawn in the current text colour. `size` is the height.
+ */
+const PATHS = [
+  "M65.55,213.13l74.41-59.79c17.72-13.8,26.57-28.73,26.57-44.77v-16.79c0-11.56-2.86-19.87-8.56-24.91-5.71-5.04-15.06-7.56-28.05-7.56h-20.67c-12.6,0-21.46,2.52-26.57,7.56-5.12,5.04-7.68,13.35-7.68,24.91v17.91c0,8.21-4.13,12.31-12.4,12.31H12.4c-8.27,0-12.4-4.1-12.4-12.31v-19.03C0,61.56,8.46,39.18,25.39,23.5,42.32,7.83,66.33,0,97.43,0h44.88c31.09,0,55.11,7.83,72.04,23.5,16.92,15.67,25.39,38.06,25.39,67.16v22.39c0,29.1-11.81,53.17-35.43,72.2l-34.57,27.88",
+  "M326.14,213.13V75.55l-57.87,31.34c-8.27,3.36-12.4,1.12-12.4-6.72v-45.89c0-6.34,2.95-11.19,8.86-14.55l53.74-31.9c9.05-5.22,16.73-7.83,23.03-7.83h47.24c8.27,0,12.4,3.92,12.4,11.75v201.38",
+];
+
+export function Logo({ size = 20, className }: { size?: number; className?: string }) {
+  return (
+    <svg
+      className={className}
+      height={size}
+      width={Math.round((size * 401.14) / 213.13)}
+      viewBox="0 0 401.14 213.13"
+      fill="currentColor"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {PATHS.map((d) => (
+        <path key={d.slice(0, 12)} d={d} />
+      ))}
+    </svg>
+  );
+}

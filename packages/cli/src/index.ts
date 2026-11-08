@@ -6,7 +6,9 @@ import { add } from "./add.js";
 import { diff } from "./diff.js";
 import { init } from "./init.js";
 import { list } from "./list.js";
-import { consoleLogger, type Kit, type Logger } from "./util.js";
+import { createServer, loadKnowledge, serveStdio } from "./mcp.js";
+import { mcpInit, parseClients } from "./mcp-init.js";
+import { consoleLogger, type Kit, type Logger, readConfig } from "./util.js";
 
 const HELP = `twentyfirst-ui: set up and copy components of the Twentyfirst UI kits
 
@@ -15,9 +17,15 @@ Usage
   twentyfirst-ui add <Component…> [--overwrite]
   twentyfirst-ui list
   twentyfirst-ui diff <Component>
+  twentyfirst-ui mcp [--kit halo|pro]
+      start the MCP server for coding agents (stdio)
+  twentyfirst-ui mcp init [--client claude,cursor,vscode|all] [--kit halo|pro] [--no-rules]
+      register the MCP server in .mcp.json, .cursor/mcp.json and .vscode/mcp.json
+      and add the kit rules to AGENTS.md (and CLAUDE.md when it exists)
 
 Options
   --cwd <dir>   run in another directory
+  --kit         defaults to the kit in twentyfirst.json, else halo
 `;
 
 export function parseArgs(argv: string[]): {
@@ -38,7 +46,7 @@ export function parseArgs(argv: string[]): {
       else if (
         next &&
         !next.startsWith("--") &&
-        ["kit", "cwd", "components"].includes(k as string)
+        ["kit", "cwd", "components", "client"].includes(k as string)
       ) {
         flags[k as string] = next;
         i++;
@@ -48,7 +56,15 @@ export function parseArgs(argv: string[]): {
   return { cmd, args, flags };
 }
 
-export function run(argv: string[], log: Logger = consoleLogger): number {
+/** The kit from --kit, else twentyfirst.json, else halo. */
+function resolveKit(flag: string | boolean | undefined, cwd: string): Kit {
+  const kit = typeof flag === "string" ? flag : (readConfig(cwd)?.kit ?? "halo");
+  if (kit !== "halo" && kit !== "pro") throw new Error(`--kit must be halo or pro, not ${kit}`);
+  return kit;
+}
+
+/** Exit code; a promise while the MCP server runs (it resolves when stdin ends). */
+export function run(argv: string[], log: Logger = consoleLogger): number | Promise<number> {
   const { cmd, args, flags } = parseArgs(argv);
   const cwd = resolve(typeof flags.cwd === "string" ? flags.cwd : process.cwd());
   try {
@@ -78,6 +94,23 @@ export function run(argv: string[], log: Logger = consoleLogger): number {
         if (!args[0]) throw new Error("Name a component: twentyfirst-ui diff Button");
         diff(cwd, args[0], log);
         return 0;
+      case "mcp": {
+        const sub = args[0];
+        const kit = resolveKit(flags.kit, cwd);
+        if (sub === "init") {
+          mcpInit({
+            cwd,
+            kit,
+            clients: parseClients(flags.client),
+            rules: flags.rules !== false,
+            log,
+          });
+          return 0;
+        }
+        if (sub) throw new Error(`Unknown mcp command "${sub}". Use: twentyfirst-ui mcp [init]`);
+        const server = createServer(loadKnowledge(), { kit });
+        return serveStdio(server, { onError: (m) => log.warn(m) }).then(() => 0);
+      }
       default:
         log.log(HELP);
         return cmd === "help" || flags.help ? 0 : 1;
@@ -87,6 +120,11 @@ export function run(argv: string[], log: Logger = consoleLogger): number {
     return 1;
   }
 }
+
+const stderrLogger: Logger = {
+  log: (m) => console.error(m),
+  warn: (m) => console.error(m),
+};
 
 function isMain(): boolean {
   try {
@@ -100,5 +138,8 @@ function isMain(): boolean {
 }
 
 if (isMain()) {
-  process.exit(run(process.argv.slice(2)));
+  // the MCP server owns stdout; everything else goes to stderr there
+  const argv = process.argv.slice(2);
+  const log: Logger = argv[0] === "mcp" && argv[1] !== "init" ? stderrLogger : consoleLogger;
+  void Promise.resolve(run(argv, log)).then((code) => process.exit(code));
 }

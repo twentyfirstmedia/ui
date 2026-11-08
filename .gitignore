@@ -12,3 +12,7 @@ test-results/
 .cli-test-*/
 apps/docs/generated/
 apps/docs/out/
+apps/docs/public/halo/
+apps/docs/public/pro/
+apps/docs/public/llms.txt
+apps/docs/public/llms-full.txt

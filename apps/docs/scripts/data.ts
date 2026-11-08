@@ -1,129 +1,40 @@
 /**
- * Build-time data for the docs: props of every component (from ui-core's types.ts), the example
- * list with source code, and the component descriptions from the reference READMEs.
- * Writes apps/docs/generated/*.json (git-ignored, regenerated on dev/build/typecheck).
+ * Build-time data for the docs, from the shared knowledge (scripts/knowledge.ts):
+ *
+ * - generated/*.json and generated/registry.tsx for the pages (git-ignored)
+ * - public/llms.txt, public/llms-full.txt and a Markdown twin of every page
+ *   (/halo/components/Tabs/ → /halo/components/Tabs.md), for agents and LLMs (git-ignored)
  */
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-import ts from "typescript";
+import {
+  componentsIndexMarkdown,
+  entryMarkdown,
+  guideMarkdown,
+  llmsFull,
+  llmsTxt,
+  mdPath,
+  type KitName,
+} from "../../../packages/cli/src/knowledge.ts";
+import { ROOT, buildKnowledge, readExamples } from "../../../scripts/knowledge.ts";
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 const OUT = join(ROOT, "apps/docs/generated");
+const PUBLIC = join(ROOT, "apps/docs/public");
 mkdirSync(OUT, { recursive: true });
 
-export interface Prop {
-  name: string;
-  type: string;
-  optional: boolean;
-  doc: string;
-}
-
-// ── props ──
-const typesFile = join(ROOT, "packages/core/src/components/types.ts");
-const sf = ts.createSourceFile(
-  typesFile,
-  readFileSync(typesFile, "utf8"),
-  ts.ScriptTarget.Latest,
-  true,
-);
-const props: Record<string, Prop[]> = {};
-const docOf = (n: ts.Node) =>
-  ts
-    .getJSDocCommentsAndTags(n)
-    .map((d) => (typeof d.comment === "string" ? d.comment : ""))
-    .join(" ")
-    .trim();
-sf.forEachChild((n) => {
-  if (!ts.isInterfaceDeclaration(n) || !n.name.text.endsWith("Props")) return;
-  const list: Prop[] = [];
-  for (const m of n.members) {
-    if (!ts.isPropertySignature(m) || !m.name) continue;
-    const name = m.name.getText(sf).replace(/^"|"$/g, "");
-    list.push({
-      name,
-      type: m.type ? m.type.getText(sf).replace(/\s+/g, " ") : "unknown",
-      optional: !!m.questionToken,
-      doc: docOf(m),
-    });
-  }
-  const heritage = (n.heritageClauses ?? []).flatMap((h) => h.types.map((t) => t.getText(sf)));
-  if (heritage.some((h) => h.includes("FieldProps")))
-    list.push(
-      { name: "label", type: "string", optional: true, doc: "" },
-      { name: "hint", type: "string", optional: true, doc: "" },
-      { name: "error", type: "string", optional: true, doc: "" },
-    );
-  if (heritage.some((h) => h.includes("BaseProps")))
-    list.push(
-      {
-        name: "className",
-        type: "string",
-        optional: true,
-        doc: "Extra class on the root element.",
-      },
-      {
-        name: "style",
-        type: "CSSProperties",
-        optional: true,
-        doc: "Inline style on the root element.",
-      },
-    );
-  const seen = new Set<string>();
-  props[n.name.text.replace(/Props$/, "")] = list.filter(
-    (p) => !seen.has(p.name) && seen.add(p.name),
-  );
-});
-writeFileSync(join(OUT, "props.json"), JSON.stringify(props, null, 1));
-
-// ── examples ──
-const exDir = join(ROOT, "examples/previews/src");
-interface Example {
-  name: string;
-  group: string;
-  width: number;
-  height: number;
-  components: string[];
-}
-const examples = (JSON.parse(readFileSync(join(exDir, "previews.json"), "utf8")) as Example[]).map(
-  (e) => ({
-    ...e,
-    code: readFileSync(join(exDir, `${e.name}.tsx`), "utf8"),
-  }),
-);
-writeFileSync(join(OUT, "examples.json"), JSON.stringify(examples));
-
-// ── descriptions ──
-const refDir = join(ROOT, "reference/halo/design-system/components");
+const k = buildKnowledge();
+const examples = readExamples();
 const readmes: Record<string, string> = {};
-for (const name of readdirSync(refDir)) {
-  const p = join(refDir, name, "README.md");
-  if (existsSync(p))
-    readmes[name] = readFileSync(p, "utf8")
-      .replace(/^# .*\n+/, "")
-      .replace(/FollowerPilot/g, "admin")
-      .replace(/Capitaso/g, "real-estate")
-      .replace(/\bHalo\.(\w+)/g, "$1")
-      .replace(/(^|[^\w-])ha-/g, "$1tf-");
-}
-// components that are not in the reference bring their description with the example
-const ownDir = join(ROOT, "examples/previews/readme");
-if (existsSync(ownDir))
-  for (const f of readdirSync(ownDir).filter((x) => x.endsWith(".md")))
-    readmes[f.replace(/\.md$/, "")] = readFileSync(join(ownDir, f), "utf8").replace(/^# .*\n+/, "");
+for (const e of [...k.components, ...k.patterns])
+  if (e.description) readmes[e.name] = e.description;
+
+writeFileSync(join(OUT, "knowledge.json"), JSON.stringify(k));
+writeFileSync(join(OUT, "props.json"), JSON.stringify(k.props, null, 1));
+writeFileSync(join(OUT, "examples.json"), JSON.stringify(examples));
 writeFileSync(join(OUT, "readmes.json"), JSON.stringify(readmes));
+writeFileSync(join(OUT, "exports.json"), JSON.stringify(k.exports));
 
-// ── component exports (for the "all components" index) ──
-const index = readFileSync(join(ROOT, "packages/core/src/components/index.ts"), "utf8");
-const groups: Record<string, string[]> = {};
-for (const m of index.matchAll(/export \{([^}]*)\} from "\.\/([\w-]+)\.js";/g))
-  groups[m[2] as string] = (m[1] as string)
-    .split(",")
-    .map((x) => x.trim())
-    .filter(Boolean);
-writeFileSync(join(OUT, "exports.json"), JSON.stringify(groups));
-
-// ── client registry of live examples (static imports so the bundler can split them) ──
+// client registry of live examples (static imports so the bundler can split them)
 writeFileSync(
   join(OUT, "registry.tsx"),
   `"use client";
@@ -137,6 +48,39 @@ ${examples.map((e) => `  ${JSON.stringify(e.name)}: dynamic(() => import("exampl
 `,
 );
 
+// ── Markdown for agents ──
+const put = (path: string, text: string) => {
+  const file = join(PUBLIC, path);
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, text);
+};
+let pages = 0;
+for (const kit of ["halo", "pro"] as KitName[]) {
+  rmSync(join(PUBLIC, kit), { recursive: true, force: true });
+  for (const g of k.guides) {
+    put(mdPath(kit, g.slug === "introduction" ? "" : g.slug), guideMarkdown(k, g, kit));
+    pages++;
+  }
+  put(mdPath(kit, "components"), componentsIndexMarkdown(k, kit));
+  put(
+    mdPath(kit, "patterns"),
+    [
+      "# Patterns",
+      "",
+      `> ${k.patterns.length} complete screens built only from kit components. Each page has the full code.`,
+      "",
+      ...k.patterns.map((e) => `- [${e.title}](${k.site}${mdPath(kit, e.path)}): ${e.summary}`),
+      "",
+    ].join("\n"),
+  );
+  for (const e of [...k.components, ...k.patterns]) {
+    put(mdPath(kit, e.path), entryMarkdown(k, e, kit));
+    pages++;
+  }
+}
+put("llms.txt", llmsTxt(k));
+put("llms-full.txt", llmsFull(k));
+
 console.log(
-  `docs data: ${Object.keys(props).length} props, ${examples.length} examples, ${Object.keys(readmes).length} readmes`,
+  `docs data: ${Object.keys(k.props).length} props, ${examples.length} examples, ${Object.keys(readmes).length} descriptions, ${pages + 2} Markdown pages`,
 );

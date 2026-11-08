@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
+import { Logo } from "@/components/logo";
 import { GITHUB, KIT_LABEL, type KitName, type NavSection } from "@/lib/site";
 
 type ThemeName = "light" | "dark";
@@ -136,8 +137,8 @@ export function Chrome({
         >
           <Icon name={menu ? "x" : "menu"} />
         </button>
-        <Link className="docs-brand" href={`/${kit}/`}>
-          <span className="tf-brand-dot" aria-hidden />
+        <Link className="docs-brand" href="/">
+          <Logo size={18} className="docs-logo" />
           Twentyfirst UI
           <span className="docs-brand-kit">{KIT_LABEL[kit]}</span>
         </Link>

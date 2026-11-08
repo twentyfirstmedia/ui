@@ -13,9 +13,12 @@ both and switch between them at runtime with `data-kit="halo|pro"`.
 | `@twentyfirstmedia/ui-core` | components, hooks, icons, Intl formatting helpers, `themes.css` |
 | `@twentyfirstmedia/halo`    | re-exports `ui-core`, Halo `styles.css`, tokens, fonts          |
 | `@twentyfirstmedia/pro`     | re-exports `ui-core`, Pro `styles.css`, tokens, fonts           |
-| `@twentyfirstmedia/ui`      | CLI: `init`, `add`, `list`, `diff`                              |
+| `@twentyfirstmedia/ui`      | CLI: `init`, `add`, `list`, `diff`, and the MCP server (`mcp`)  |
 
-Docs: `ui.twentyfirst.media/halo` and `/pro`.
+Docs: [ui.twentyfirst.media](https://ui.twentyfirst.media) (`/halo` and `/pro`). For agents and
+LLMs: [`/llms.txt`](https://ui.twentyfirst.media/llms.txt),
+[`/llms-full.txt`](https://ui.twentyfirst.media/llms-full.txt) and a Markdown twin of every page
+(append `.md`).
 
 ## Installation
 
@@ -55,6 +58,16 @@ export function App() {
 
 To switch kits at runtime, import `@twentyfirstmedia/ui-core/themes.css` (both kits) and change
 `kit` on `UIProvider` or `data-kit` on `<html>`.
+
+## Coding agents (MCP)
+
+The CLI includes an MCP server with the docs of the installed version: search, components with
+props and examples, patterns, guides, tokens, icons and a usage check. Offline, no account.
+
+```sh
+npx @twentyfirstmedia/ui mcp init   # .mcp.json, .cursor/mcp.json, .vscode/mcp.json, AGENTS.md rules
+claude mcp add twentyfirst-ui -- npx -y @twentyfirstmedia/ui mcp --kit halo
+```
 
 ## Development
 
