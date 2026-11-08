@@ -3,7 +3,6 @@ import * as React from "react";
 import { useId } from "../hooks.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
-import { L, Lx } from "../i18n.js";
 import { Portal } from "../portal.js";
 import {
   getServerToasts,
@@ -72,7 +71,7 @@ export function Modal(p: ModalProps) {
       <div className="tf-backdrop" aria-hidden />
       <div className="tf-modal" role="dialog" aria-modal="true" aria-label={p.title}>
         <span className="tf-modal-close">
-          <IconButton icon="x" label={L("Close")} size="sm" onClick={p.onClose} />
+          <IconButton icon="x" label="Close" size="sm" onClick={p.onClose} />
         </span>
         {p.icon && <TintIcon icon={p.icon} tint={p.tint || "sky"} size={40} />}
         <div>
@@ -154,13 +153,7 @@ export function Alert(p: AlertProps) {
         <div className="tf-alert-actions">
           {p.action}
           {p.onDismiss && (
-            <IconButton
-              icon="x"
-              label={L("Dismiss")}
-              size="sm"
-              variant="ghost"
-              onClick={p.onDismiss}
-            />
+            <IconButton icon="x" label="Dismiss" size="sm" variant="ghost" onClick={p.onDismiss} />
           )}
         </div>
       )}
@@ -217,9 +210,7 @@ export function ConfirmDialog(p: ConfirmDialogProps) {
           {p.confirmText && (
             <label className="tf-field">
               <span className="tf-field-hint">
-                {Lx("Type {word} to confirm", {
-                  word: <b className="tf-mono">{p.confirmText}</b>,
-                })}
+                Type <b className="tf-mono">{p.confirmText}</b> to confirm
               </span>
               <input
                 className="tf-input"
@@ -233,14 +224,14 @@ export function ConfirmDialog(p: ConfirmDialogProps) {
           )}
           <div className="tf-modal-foot">
             <button ref={cancel} type="button" className="tf-btn tf-btn-ghost" onClick={p.onCancel}>
-              {p.cancelLabel || L("Cancel")}
+              {p.cancelLabel || "Cancel"}
             </button>
             <Button
               variant={p.danger ? "danger-solid" : "primary"}
               disabled={!ok}
               onClick={p.onConfirm}
             >
-              {p.confirmLabel || L("Confirm")}
+              {p.confirmLabel || "Confirm"}
             </Button>
           </div>
         </div>
@@ -288,7 +279,7 @@ export function ToastItem(p: { t: ToastData }) {
             toast.dismiss(t.id);
           }}
         >
-          {L("Undo")}
+          {"Undo"}
         </button>
       )}
       {t.action && (
@@ -306,7 +297,7 @@ export function ToastItem(p: { t: ToastData }) {
       <button
         type="button"
         className="tf-toast-close"
-        aria-label={L("Dismiss")}
+        aria-label="Dismiss"
         onClick={() => {
           toast.dismiss(t.id);
         }}

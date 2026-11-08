@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { cx } from "../cx.js";
-import { L, formatDate, formatNumber, getLocale } from "../i18n.js";
+import { formatDate, formatNumber, WEEK_START } from "../format.js";
 import { Icon } from "../Icon.js";
 import { useControlled, useId, useOutside } from "../hooks.js";
 import { Avatar, IconButton, TintIcon } from "./foundation.js";
@@ -37,7 +37,7 @@ export function FormField(p: FormFieldProps) {
               {" *"}
             </span>
           )}
-          {p.optional && <span className="tf-opt"> {L("optional")}</span>}
+          {p.optional && <span className="tf-opt"> {"optional"}</span>}
         </label>
       )}
       {p.children}
@@ -296,9 +296,7 @@ export function Combobox(p: ComboboxProps) {
                 {labelOf(val)}
                 <button
                   type="button"
-                  aria-label={L("Remove {name}", {
-                    name: labelOf(val),
-                  })}
+                  aria-label={`Remove ${labelOf(val)}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     v[1](selList.filter((x) => x !== val));
@@ -324,7 +322,7 @@ export function Combobox(p: ComboboxProps) {
                   : p.placeholder
                 : selOne != null && !q[0]
                   ? labelOf(selOne)
-                  : p.placeholder || L("Select…")
+                  : p.placeholder || "Select…"
             }
             value={q[0]}
             onChange={(e) => {
@@ -356,7 +354,7 @@ export function Combobox(p: ComboboxProps) {
             aria-multiselectable={multi || undefined}
           >
             {list.length === 0 && !canCreate && (
-              <div className="tf-combo-empty">{L("No matches")}</div>
+              <div className="tf-combo-empty">{"No matches"}</div>
             )}
             {list.map((o, i) => (
               <div
@@ -398,11 +396,7 @@ export function Combobox(p: ComboboxProps) {
                 }}
               >
                 <Icon name="plus" size={15} />
-                <span className="tf-option-text">
-                  {L("Create “{name}”", {
-                    name: q[0].trim(),
-                  })}
-                </span>
+                <span className="tf-option-text">{`Create “${q[0].trim()}”`}</span>
               </div>
             )}
           </div>
@@ -435,9 +429,7 @@ export function TagInput(p: TagInputProps) {
             {t}
             <button
               type="button"
-              aria-label={L("Remove {name}", {
-                name: t,
-              })}
+              aria-label={`Remove ${t}`}
               onClick={() => {
                 v[1](v[0].filter((x) => x !== t));
               }}
@@ -449,7 +441,7 @@ export function TagInput(p: TagInputProps) {
         <input
           id={id}
           className="tf-combo-input"
-          placeholder={v[0].length ? "" : p.placeholder || L("Type and press Enter")}
+          placeholder={v[0].length ? "" : p.placeholder || "Type and press Enter"}
           value={q[0]}
           onChange={(e) => {
             const s = e.target.value;
@@ -482,7 +474,7 @@ function monthName(d: Date) {
 export function weekdays() {
   const out: string[] = [];
   for (let i = 0; i < 7; i++) {
-    const d = new Date(2024, 0, 1 + ((getLocale().weekStart + i - 1) % 7));
+    const d = new Date(2024, 0, 1 + ((WEEK_START + i - 1) % 7));
     out.push(
       formatDate(d, {
         weekday: "short",
@@ -524,7 +516,7 @@ export function Calendar(p: CalendarProps) {
   const m = React.useState(new Date(base.getFullYear(), base.getMonth(), 1)),
     hov = React.useState<Date | null>(null);
   const first = m[0],
-    start = addD(first, -((first.getDay() - getLocale().weekStart + 7) % 7)),
+    start = addD(first, -((first.getDay() - WEEK_START + 7) % 7)),
     days: Date[] = [];
   for (let i = 0; i < 42; i++) days.push(addD(start, i));
   const from = sv ?? null,
@@ -537,7 +529,7 @@ export function Calendar(p: CalendarProps) {
       <div className="tf-cal-head">
         <IconButton
           icon="chevronLeft"
-          label={L("Previous month")}
+          label="Previous month"
           size="sm"
           variant="soft"
           onClick={() => {
@@ -547,7 +539,7 @@ export function Calendar(p: CalendarProps) {
         <b>{monthName(first)}</b>
         <IconButton
           icon="chevronRight"
-          label={L("Next month")}
+          label="Next month"
           size="sm"
           variant="soft"
           onClick={() => {
@@ -626,10 +618,10 @@ export function DatePicker(p: DatePickerProps) {
   const presets =
     p.presets !== false && p.range
       ? [
-          [L("Last 7 days"), -6],
-          [L("Last 30 days"), -29],
-          [L("Last 90 days"), -89],
-          [L("This year"), "y"],
+          ["Last 7 days", -6],
+          ["Last 30 days", -29],
+          ["Last 90 days", -89],
+          ["This year", "y"],
         ]
       : null;
   const rv = p.range ? ((v[0] as DateRange | null) ?? null) : null;
@@ -660,7 +652,7 @@ export function DatePicker(p: DatePickerProps) {
             onClick={s.toggle}
           >
             <Icon name="calendar" size={15} />
-            <span>{txt || p.placeholder || (p.range ? L("Pick a range") : L("Pick a date"))}</span>
+            <span>{txt || p.placeholder || (p.range ? "Pick a range" : "Pick a date")}</span>
           </button>
         )}
       >
@@ -728,7 +720,7 @@ export function NumberInput(p: NumberInputProps) {
       <div className="tf-number">
         <IconButton
           icon="minus"
-          label={L("Decrease")}
+          label="Decrease"
           size="sm"
           disabled={p.min != null && v[0] <= p.min}
           onClick={() => {
@@ -759,7 +751,7 @@ export function NumberInput(p: NumberInputProps) {
         {p.unit && <span className="tf-number-unit">{p.unit}</span>}
         <IconButton
           icon="plus"
-          label={L("Increase")}
+          label="Increase"
           size="sm"
           disabled={p.max != null && v[0] >= p.max}
           onClick={() => {
@@ -834,7 +826,7 @@ export function OtpInput(p: OtpInputProps) {
     <div
       className={cx("tf-otp", p.error && "invalid")}
       role="group"
-      aria-label={p.label || L("Verification code")}
+      aria-label={p.label || "Verification code"}
     >
       {st[0].map((c, i) => (
         <React.Fragment key={i}>
@@ -848,9 +840,7 @@ export function OtpInput(p: OtpInputProps) {
             autoComplete={i === 0 ? "one-time-code" : "off"}
             maxLength={1}
             value={c}
-            aria-label={L("Digit {n}", {
-              n: i + 1,
-            })}
+            aria-label={`Digit ${i + 1}`}
             onChange={(e) => {
               set(i, e.target.value.replace(/\D/g, "").slice(-1));
             }}
@@ -879,8 +869,8 @@ export function OtpInput(p: OtpInputProps) {
 
 function fsize(b: number) {
   return b > 1048576
-    ? L("{n} MB", { n: formatNumber(b / 1048576, { maximumFractionDigits: 1 }) })
-    : L("{n} KB", { n: formatNumber(Math.max(1, Math.round(b / 1024))) });
+    ? `${formatNumber(b / 1048576, { maximumFractionDigits: 1 })} MB`
+    : `${formatNumber(Math.max(1, Math.round(b / 1024)))} KB`;
 }
 
 export function FileDrop(p: FileDropProps) {
@@ -944,8 +934,8 @@ export function FileDrop(p: FileDropProps) {
         }}
       >
         <TintIcon icon="upload" tint={over[0] ? "mint" : "sky"} size={40} />
-        <b>{over[0] ? L("Drop to upload") : p.title || L("Drop files here or browse")}</b>
-        <span>{p.hint || L("PDF, PNG or JPG up to 10 MB")}</span>
+        <b>{over[0] ? "Drop to upload" : p.title || "Drop files here or browse"}</b>
+        <span>{p.hint || "PDF, PNG or JPG up to 10 MB"}</span>
         <input
           ref={inp}
           type="file"
@@ -974,9 +964,7 @@ export function FileDrop(p: FileDropProps) {
                   <b>{f.name}</b>
                   <span>
                     {done
-                      ? L("{size} · uploaded", {
-                          size: fsize(f.size),
-                        })
+                      ? `${fsize(f.size)} · uploaded`
                       : Math.round(f.progress) + "% · " + fsize(f.size)}
                   </span>
                   {!done && (
@@ -991,13 +979,7 @@ export function FileDrop(p: FileDropProps) {
                 </div>
                 <IconButton
                   icon={done ? "trash" : "x"}
-                  label={
-                    done
-                      ? L("Remove {name}", {
-                          name: f.name,
-                        })
-                      : L("Cancel upload")
-                  }
+                  label={done ? `Remove ${f.name}` : "Cancel upload"}
                   size="sm"
                   onClick={() => {
                     files[1](files[0].filter((x) => x.id !== f.id));

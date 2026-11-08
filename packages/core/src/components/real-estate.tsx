@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { Icon } from "../Icon.js";
-import { L, formatMoney, formatNumber } from "../i18n.js";
+import { formatMoney, formatNumber } from "../format.js";
 import { cx } from "../cx.js";
 import { Switch, cbox } from "./inputs.js";
 import { Badge, Button, IconButton, TintIcon } from "./foundation.js";
@@ -22,16 +22,8 @@ import type {
 /* ── Real estate ── */
 function listingFacts(x: Listing) {
   return [
-    x.area != null && [
-      <Icon key="i" name="ruler" size={14} />,
-      L("{n} m²", { n: formatNumber(x.area) }),
-    ],
-    x.rooms != null && [
-      <Icon key="i" name="bed" size={14} />,
-      L("{n} rooms", {
-        n: formatNumber(x.rooms),
-      }),
-    ],
+    x.area != null && [<Icon key="i" name="ruler" size={14} />, `${formatNumber(x.area)} m²`],
+    x.rooms != null && [<Icon key="i" name="bed" size={14} />, `${formatNumber(x.rooms)} rooms`],
     x.place && [<Icon key="i" name="pin" size={14} />, x.place],
   ]
     .filter(Boolean)
@@ -39,11 +31,11 @@ function listingFacts(x: Listing) {
 }
 
 function listingPrice(x: Listing) {
-  if (x.price == null) return <b className="tf-listing-price">{L("Price on request")}</b>;
+  if (x.price == null) return <b className="tf-listing-price">{"Price on request"}</b>;
   return (
     <b className="tf-listing-price">
       {formatMoney(x.price, x.currency)}
-      {x.rent && <small> {L("/ month")}</small>}
+      {x.rent && <small> {"/ month"}</small>}
     </b>
   );
 }
@@ -73,7 +65,7 @@ export function ListingCard(p: ListingCardProps) {
             <Icon name="image" size={24} />
           </div>
         )}
-        {x.isNew && <span className="tf-listing-new">{L("New")}</span>}
+        {x.isNew && <span className="tf-listing-new">{"New"}</span>}
         {(x.photos ?? 0) > 1 && (
           <span className="tf-listing-photos">
             <Icon name="image" size={12} />
@@ -92,7 +84,7 @@ export function ListingCard(p: ListingCardProps) {
               onChange: () => {
                 p.onSelect?.(x);
               },
-              label: L("Select"),
+              label: "Select",
             })}
           </label>
         )}
@@ -109,7 +101,7 @@ export function ListingCard(p: ListingCardProps) {
             <IconButton
               icon="heart"
               size="sm"
-              label={x.wished ? L("Remove from saved") : L("Save")}
+              label={x.wished ? "Remove from saved" : "Save"}
               className={cx("tf-listing-wish", x.wished && "on")}
               onClick={(e) => {
                 e.stopPropagation();
@@ -124,11 +116,11 @@ export function ListingCard(p: ListingCardProps) {
           {x.source && <span className="tf-listing-src">{x.source}</span>}
           {x.seller && (
             <Badge tone={x.seller === "private" ? "success" : "neutral"} dot={false}>
-              {x.sellerLabel || (x.seller === "private" ? L("Private seller") : L("Agent"))}
+              {x.sellerLabel || (x.seller === "private" ? "Private seller" : "Agent")}
             </Badge>
           )}
           {x.phone && (
-            <span className="tf-listing-flag" title={L("Phone number available")}>
+            <span className="tf-listing-flag" title="Phone number available">
               <Icon name="phone" size={13} />
             </span>
           )}
@@ -151,7 +143,7 @@ export function ListingCard(p: ListingCardProps) {
                 onChange={(s) => {
                   p.onStatus && p.onStatus(x, s);
                 }}
-                label={L("Status")}
+                label="Status"
               />
             </span>
           )}
@@ -174,7 +166,7 @@ export function ResultsToolbar(p: ResultsToolbarProps) {
             onChange: () => {
               p.onSelectAll?.(!all);
             },
-            label: all ? L("Deselect all") : L("Select all"),
+            label: all ? "Deselect all" : "Select all",
           })}
         </label>
       )}
@@ -186,16 +178,10 @@ export function ResultsToolbar(p: ResultsToolbarProps) {
       >
         <b>
           {(p.selected ?? 0) > 0
-            ? L("{n} selected", {
-                n: formatNumber(p.selected ?? 0),
-              })
-            : p.title || L("Results")}
+            ? `${formatNumber(p.selected ?? 0)} selected`
+            : p.title || "Results"}
         </b>
-        <small>
-          {L("{n} found", {
-            n: formatNumber(p.total || 0),
-          }) + (p.meta ? " · " + p.meta : "")}
-        </small>
+        <small>{`${formatNumber(p.total || 0)} found` + (p.meta ? " · " + p.meta : "")}</small>
       </div>
       {(p.selected ?? 0) > 0 &&
         (p.bulkActions || []).map((a, i) => (
@@ -207,12 +193,12 @@ export function ResultsToolbar(p: ResultsToolbarProps) {
             disabled={a.busy}
             onClick={a.onClick}
           >
-            {a.busy ? a.busyLabel || L("Working…") : a.label}
+            {a.busy ? a.busyLabel || "Working…" : a.label}
           </Button>
         ))}
       {p.sortOptions && (
         <label className="tf-results-sort">
-          <span>{L("Sort")}</span>
+          <span>{"Sort"}</span>
           <select
             className="tf-input"
             value={p.sort}
@@ -233,11 +219,11 @@ export function ResultsToolbar(p: ResultsToolbarProps) {
           size="sm"
           value={p.view}
           onChange={p.onView}
-          label={L("View")}
+          label="View"
           options={p.views.map((v) => ({
             value: v,
             icon: v === "grid" ? "grid" : v === "map" ? "map" : "list",
-            label: v === "grid" ? L("Grid") : v === "map" ? L("Map") : L("List"),
+            label: v === "grid" ? "Grid" : v === "map" ? "Map" : "List",
           }))}
         />
       )}
@@ -259,22 +245,14 @@ export function SavedSearch(p: SavedSearchProps) {
         >
           <b>{p.name}</b>
           <small>
-            {[
-              p.lastRun &&
-                L("Checked {time}", {
-                  time: p.lastRun,
-                }),
-              p.frequency,
-            ]
-              .filter(Boolean)
-              .join(" · ")}
+            {[p.lastRun && `Checked ${p.lastRun}`, p.frequency].filter(Boolean).join(" · ")}
           </small>
         </div>
         {(p.newCount ?? 0) > 0 && (
           <span className="tf-nav-count">{formatNumber(p.newCount ?? 0)}</span>
         )}
         {p.onToggle && (
-          <Switch checked={p.enabled !== false} onChange={p.onToggle} label={L("Enabled")} />
+          <Switch checked={p.enabled !== false} onChange={p.onToggle} label="Enabled" />
         )}
       </div>
       <div className="tf-saved-crit">
@@ -293,12 +271,12 @@ export function SavedSearch(p: SavedSearchProps) {
         >
           {p.onEdit && (
             <Button size="sm" variant="ghost" icon="edit" onClick={p.onEdit}>
-              {L("Edit")}
+              {"Edit"}
             </Button>
           )}
           {p.onOpen && (
             <Button size="sm" variant="soft" onClick={p.onOpen}>
-              {p.openLabel || L("Show results")}
+              {p.openLabel || "Show results"}
             </Button>
           )}
         </div>
@@ -318,10 +296,10 @@ export function ValuationCard(p: ValuationCardProps) {
       conf == null
         ? null
         : conf >= 0.75
-          ? ["ok", L("High confidence")]
+          ? ["ok", "High confidence"]
           : conf >= 0.5
-            ? ["warn", L("Medium confidence")]
-            : ["danger", L("Low confidence")];
+            ? ["warn", "Medium confidence"]
+            : ["danger", "Low confidence"];
   return (
     <div className="tf-valuation">
       <div className="tf-valuation-head">
@@ -331,7 +309,7 @@ export function ValuationCard(p: ValuationCardProps) {
             padding: 0,
           }}
         >
-          {p.title || L("Estimated value")}
+          {p.title || "Estimated value"}
         </span>
         {cl && <StatusIndicator status={cl[0]} label={p.confidenceLabel || cl[1]} size="sm" />}
       </div>
@@ -344,10 +322,7 @@ export function ValuationCard(p: ValuationCardProps) {
       <div
         className="tf-valuation-range"
         role="img"
-        aria-label={L("Range {low} to {high}", {
-          low: formatMoney(lo, p.currency),
-          high: formatMoney(hi, p.currency),
-        })}
+        aria-label={`Range ${formatMoney(lo, p.currency)} to ${formatMoney(hi, p.currency)}`}
       >
         <div className="tf-valuation-bar">
           {p.asking != null && (
@@ -356,7 +331,7 @@ export function ValuationCard(p: ValuationCardProps) {
               style={{
                 left: Math.max(0, Math.min(100, ((p.asking - lo) / span) * 100)) + "%",
               }}
-              title={L("Asking price")}
+              title="Asking price"
             />
           )}
           <span
@@ -375,9 +350,7 @@ export function ValuationCard(p: ValuationCardProps) {
         <span
           className={cx("tf-valuation-diff", p.asking > hi ? "bad" : p.asking < lo ? "good" : "")}
         >
-          {L("Asking price {price}", {
-            price: formatMoney(p.asking, p.currency),
-          }) +
+          {`Asking price ${formatMoney(p.asking, p.currency)}` +
             " · " +
             (p.asking > v ? "+" : "") +
             formatNumber((p.asking - v) / v, {
@@ -412,9 +385,8 @@ export function EnergyClass(p: EnergyClassProps) {
       className="tf-energy"
       role="img"
       aria-label={
-        L("Energy class {value}", {
-          value: p.value,
-        }) + (p.kwh != null ? ", " + formatNumber(p.kwh) + " kWh/(m²·a)" : "")
+        `Energy class ${p.value}` +
+        (p.kwh != null ? ", " + formatNumber(p.kwh) + " kWh/(m²·a)" : "")
       }
     >
       <div

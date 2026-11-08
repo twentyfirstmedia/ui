@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import { L } from "../i18n.js";
 import { Icon } from "../Icon.js";
 import { cx } from "../cx.js";
 import { Avatar } from "./foundation.js";
@@ -16,7 +15,7 @@ import type {
 
 export function TopBar(p: TopBarProps) {
   return (
-    <nav className="tf-topbar" aria-label={L("Main")}>
+    <nav className="tf-topbar" aria-label="Main">
       {p.brand && (
         <span className="tf-brand">
           {p.brand}
@@ -88,7 +87,7 @@ function railBtn(it: RailItem, i: number) {
 
 export function SideRail(p: SideRailProps) {
   return (
-    <aside className="tf-rail" aria-label={L("Tools")}>
+    <aside className="tf-rail" aria-label="Tools">
       <div className="tf-rail-group">{(p.top || []).map(railBtn)}</div>
       <div className="tf-rail-group">{(p.bottom || []).map((it, i) => railBtn(it, i + 3))}</div>
     </aside>
@@ -97,7 +96,7 @@ export function SideRail(p: SideRailProps) {
 
 export function Dock(p: DockProps) {
   return (
-    <div className="tf-dock" role="toolbar" aria-label={p.label || L("Quick actions")}>
+    <div className="tf-dock" role="toolbar" aria-label={p.label || "Quick actions"}>
       {(p.items || []).map((it) => (
         <button
           key={it.label}
@@ -117,99 +116,99 @@ export function Dock(p: DockProps) {
 /** Example navigation shown when `nav` is not given. */
 export const NAV = (): NavItem[] => [
   {
-    label: L("Home"),
+    label: "Home",
     icon: "home",
   },
   {
-    label: L("People"),
+    label: "People",
     icon: "users",
   },
   {
-    label: L("Projects"),
+    label: "Projects",
     icon: "grid",
   },
   {
-    label: L("Inbox"),
+    label: "Inbox",
     icon: "mail",
   },
   {
-    label: L("Calendar"),
+    label: "Calendar",
     icon: "calendar",
   },
   {
-    label: L("Billing"),
+    label: "Billing",
     icon: "card",
   },
   {
-    label: L("Reports"),
+    label: "Reports",
     icon: "chart",
   },
   {
-    label: L("Settings"),
+    label: "Settings",
     icon: "settings",
   },
 ];
 
 const RAIL_TOP = (): RailItem[] => [
   {
-    label: L("Share"),
+    label: "Share",
     icon: "share",
     active: true,
   },
   {
-    label: L("List view"),
+    label: "List view",
     icon: "menu",
   },
   {
-    label: L("Grid view"),
+    label: "Grid view",
     icon: "grid",
   },
 ];
 
 const RAIL_BOTTOM = (): RailItem[] => [
   {
-    label: L("Notifications"),
+    label: "Notifications",
     icon: "bell",
     count: 3,
   },
   {
-    label: L("Zoom in"),
+    label: "Zoom in",
     icon: "plus",
   },
   {
-    label: L("Zoom out"),
+    label: "Zoom out",
     icon: "minus",
   },
 ];
 
 const DOCK = (): DockItem[] => [
   {
-    label: L("Invite"),
+    label: "Invite",
     icon: "users",
     tint: "sky",
   },
   {
-    label: L("New page"),
+    label: "New page",
     icon: "file",
     tint: "lilac",
   },
   {
-    label: L("New invoice"),
+    label: "New invoice",
     icon: "card",
     tint: "blush",
   },
   {
-    label: L("Announce"),
+    label: "Announce",
     icon: "send",
     tint: "butter",
   },
   {
-    label: L("Export"),
+    label: "Export",
     icon: "download",
     tint: "mint",
   },
   {
-    label: L("More"),
+    label: "More",
     icon: "plus",
   },
 ];

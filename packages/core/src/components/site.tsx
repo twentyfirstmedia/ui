@@ -2,7 +2,6 @@
 import * as React from "react";
 import { useControlled } from "../hooks.js";
 import { cx } from "../cx.js";
-import { L } from "../i18n.js";
 import { Icon } from "../Icon.js";
 import { AgentMark } from "./chat.js";
 import { Button, IconButton, TintIcon } from "./foundation.js";
@@ -15,7 +14,7 @@ export function ChatLauncher(p: ChatLauncherProps) {
   return (
     <div className={cx("tf-launch", open[0] && "open", p.inline && "inline")}>
       {open[0] && (
-        <div className="tf-launch-panel" role="dialog" aria-label={p.title || L("Assistant")}>
+        <div className="tf-launch-panel" role="dialog" aria-label={p.title || "Assistant"}>
           <div className="tf-launch-head">
             <AgentMark tint={p.tint || "lilac"} size={32} />
             <div
@@ -24,14 +23,14 @@ export function ChatLauncher(p: ChatLauncherProps) {
                 flex: 1,
               }}
             >
-              <b>{p.title || L("Assistant")}</b>
+              <b>{p.title || "Assistant"}</b>
               {p.context && <small>{p.context}</small>}
             </div>
             {p.headerAction}
             <IconButton
               icon="x"
               size="sm"
-              label={L("Close")}
+              label="Close"
               onClick={() => {
                 open[1](false);
               }}
@@ -44,7 +43,7 @@ export function ChatLauncher(p: ChatLauncherProps) {
       <button
         type="button"
         className="tf-launch-btn"
-        aria-label={open[0] ? L("Close assistant") : p.title || L("Open assistant")}
+        aria-label={open[0] ? "Close assistant" : p.title || "Open assistant"}
         aria-expanded={open[0]}
         onClick={() => {
           open[1](!open[0]);
@@ -78,7 +77,7 @@ export function CookieConsent(p: CookieConsentProps) {
     <div
       className={cx("tf-cookie", p.inline && "inline")}
       role="dialog"
-      aria-label={p.title || L("Privacy settings")}
+      aria-label={p.title || "Privacy settings"}
     >
       <div
         className="tf-row"
@@ -95,7 +94,7 @@ export function CookieConsent(p: CookieConsentProps) {
             gap: 4,
           }}
         >
-          <b>{p.title || L("Privacy settings")}</b>
+          <b>{p.title || "Privacy settings"}</b>
           <p
             className="tf-card-desc"
             style={{
@@ -103,9 +102,7 @@ export function CookieConsent(p: CookieConsentProps) {
             }}
           >
             {p.text ||
-              L(
-                "We use cookies to run this site and, with your consent, to measure and improve it.",
-              )}
+              "We use cookies to run this site and, with your consent, to measure and improve it."}
             {p.policy && <React.Fragment> {p.policy}</React.Fragment>}
           </p>
         </div>
@@ -124,7 +121,7 @@ export function CookieConsent(p: CookieConsentProps) {
                 {c.text && <small>{c.text}</small>}
               </div>
               {c.required ? (
-                <span className="tf-card-desc">{L("Always on")}</span>
+                <span className="tf-card-desc">{"Always on"}</span>
               ) : (
                 <Switch
                   checked={!!cats[0][c.id]}
@@ -147,7 +144,7 @@ export function CookieConsent(p: CookieConsentProps) {
               done(undefined);
             }}
           >
-            {L("Save choice")}
+            {"Save choice"}
           </Button>
         ) : (
           <Button
@@ -156,7 +153,7 @@ export function CookieConsent(p: CookieConsentProps) {
               more[1](true);
             }}
           >
-            {L("Settings")}
+            {"Settings"}
           </Button>
         )}
         <Button
@@ -165,14 +162,14 @@ export function CookieConsent(p: CookieConsentProps) {
             done(false);
           }}
         >
-          {L("Only necessary")}
+          {"Only necessary"}
         </Button>
         <Button
           onClick={() => {
             done(true);
           }}
         >
-          {L("Accept all")}
+          {"Accept all"}
         </Button>
       </div>
     </div>
@@ -191,7 +188,7 @@ export function AnnouncementBar(p: AnnouncementBarProps) {
         <button
           type="button"
           className="tf-announce-x"
-          aria-label={L("Dismiss")}
+          aria-label="Dismiss"
           onClick={() => {
             shut[1](true);
             p.onDismiss && p.onDismiss();

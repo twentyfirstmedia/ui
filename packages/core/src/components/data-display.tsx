@@ -3,7 +3,6 @@
 import * as React from "react";
 import { cx, durationToken, reduced } from "../cx.js";
 import { Icon } from "../Icon.js";
-import { L } from "../i18n.js";
 import { useMounted, useScrollFocus } from "../hooks.js";
 import { Avatar, IconButton, TintIcon } from "./foundation.js";
 import { Breadcrumb } from "./navigation.js";
@@ -167,9 +166,9 @@ export function EventCard(p: EventCardProps) {
         </span>
         {p.actions !== false && (
           <span className="tf-row">
-            <IconButton icon="eye" label={L("Open")} size="sm" variant="outline" />
-            <IconButton icon="edit" label={L("Edit")} size="sm" variant="outline" />
-            <IconButton icon="trash" label={L("Remove")} size="sm" variant="outline" />
+            <IconButton icon="eye" label="Open" size="sm" variant="outline" />
+            <IconButton icon="edit" label="Edit" size="sm" variant="outline" />
+            <IconButton icon="trash" label="Remove" size="sm" variant="outline" />
           </span>
         )}
       </div>
@@ -292,7 +291,7 @@ export function ListRow(p: ListRowProps) {
         }}
       >
         <span className="tf-row-title">
-          {p.unread && <span className="tf-unread" role="img" aria-label={L("Unread")} />}
+          {p.unread && <span className="tf-unread" role="img" aria-label="Unread" />}
           {p.title}
         </span>
         {p.subtitle && (
@@ -360,13 +359,7 @@ export function FileRow(p: FileRowProps) {
         <div className="tf-file-name">{p.name}</div>
         <div className="tf-file-meta">{p.meta}</div>
       </div>
-      <IconButton
-        icon="download"
-        label={L("Download {name}", {
-          name: p.name,
-        })}
-        size="sm"
-      />
+      <IconButton icon="download" label={`Download ${p.name}`} size="sm" />
     </div>
   );
 }
@@ -396,7 +389,7 @@ export function KanbanColumn(p: KanbanColumnProps) {
           {p.title}
           <span className="tf-kanban-count">{React.Children.count(p.children)}</span>
         </span>
-        <IconButton icon="more" label={L("Column options")} size="sm" />
+        <IconButton icon="more" label="Column options" size="sm" />
       </div>
       <Stagger
         className="tf-col"
@@ -409,7 +402,7 @@ export function KanbanColumn(p: KanbanColumnProps) {
       </Stagger>
       <button type="button" className="tf-kanban-add" onClick={p.onAdd}>
         <Icon name="plus" size={14} />
-        {L("Add card")}
+        {"Add card"}
       </button>
     </section>
   );
@@ -423,7 +416,7 @@ export function Progress(p: ProgressProps) {
       aria-valuenow={v}
       aria-valuemin={0}
       aria-valuemax={100}
-      aria-label={p.label || L("Progress")}
+      aria-label={p.label || "Progress"}
     >
       <span
         style={{
@@ -448,7 +441,7 @@ export function ProgressRing(p: ProgressRingProps) {
         height: size,
       }}
       role="img"
-      aria-label={(p.label || L("Progress")) + " " + v + "%"}
+      aria-label={(p.label || "Progress") + " " + v + "%"}
     >
       <svg width={size} height={size} viewBox={"0 0 " + size + " " + size}>
         <circle className="tf-arc-track" cx={size / 2} cy={size / 2} r={r} strokeWidth={sw} />

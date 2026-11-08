@@ -2166,3 +2166,104 @@ export interface AnnouncementBarProps extends BaseProps {
   action?: ReactNode;
   onDismiss?: (() => void) | false;
 }
+
+/* ── Primitives (shadcn parity) ── */
+export interface AccordionItem {
+  /** Stable id (defaults to the index). */
+  id?: string;
+  title: ReactNode;
+  /** Secondary text on the right of the header. */
+  meta?: ReactNode;
+  icon?: IconName;
+  disabled?: boolean;
+  content: ReactNode;
+}
+export interface AccordionProps extends BaseProps {
+  items: AccordionItem[];
+  /** Several sections open at once (default: one at a time). */
+  multiple?: boolean;
+  /** Open section ids (controlled). */
+  value?: string[];
+  defaultValue?: string[];
+  onChange?: (open: string[]) => void;
+  /** `cards`: each section is a card; `flush`: hairlines only (inside a panel). */
+  variant?: "cards" | "flush";
+}
+export interface SeparatorProps extends BaseProps {
+  orientation?: "horizontal" | "vertical";
+  /** Text in the middle of the line ("or"). */
+  label?: string;
+}
+export interface AspectRatioProps extends BaseProps {
+  /** Width divided by height (default 16 / 9). */
+  ratio?: number;
+  children?: ReactNode;
+}
+export interface LabelProps extends BaseProps {
+  htmlFor?: string;
+  required?: boolean;
+  /** Muted text after the label ("optional"). */
+  hint?: ReactNode;
+  children?: ReactNode;
+}
+export interface ToggleProps extends BaseProps {
+  pressed?: boolean;
+  defaultPressed?: boolean;
+  onChange?: (pressed: boolean) => void;
+  icon?: IconName;
+  /** Accessible name; required when the toggle shows only an icon. */
+  label?: string;
+  size?: "sm" | "md";
+  disabled?: boolean;
+  children?: ReactNode;
+}
+export interface ToggleGroupProps extends BaseProps {
+  items: (string | Option)[];
+  /** `single`: at most one pressed; `multiple`: any number. */
+  type?: "single" | "multiple";
+  value?: string[];
+  defaultValue?: string[];
+  onChange?: (value: string[]) => void;
+  /** Accessible name of the group. */
+  label: string;
+  size?: "sm" | "md";
+}
+export interface ButtonGroupProps extends BaseProps {
+  /** Accessible name of the group. */
+  label?: string;
+  orientation?: "horizontal" | "vertical";
+  children?: ReactNode;
+}
+export interface ScrollAreaProps extends BaseProps {
+  /** Fixed height of the scrolling box. */
+  height?: number | string;
+  maxHeight?: number | string;
+  orientation?: "vertical" | "horizontal" | "both";
+  /** Accessible name; the box is a focusable region so it scrolls from the keyboard. */
+  label: string;
+  children?: ReactNode;
+}
+export interface HoverCardProps extends BaseProps {
+  /** The element that opens the card on hover and keyboard focus. */
+  trigger: ReactNode;
+  children?: ReactNode;
+  side?: "top" | "bottom";
+  align?: "start" | "center" | "end";
+  openDelay?: number;
+  closeDelay?: number;
+  width?: number;
+}
+export interface CarouselProps extends BaseProps {
+  slides: ReactNode[];
+  /** Accessible name of the carousel. */
+  label: string;
+  /** Slides visible at once on wide screens (1 on phones). */
+  perView?: number;
+  /** Next on the last slide goes back to the first. */
+  loop?: boolean;
+  /** Dots under the slides. */
+  dots?: boolean;
+  index?: number;
+  defaultIndex?: number;
+  onChange?: (index: number) => void;
+}

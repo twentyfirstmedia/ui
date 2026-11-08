@@ -1,5 +1,4 @@
 "use client";
-import de from "@twentyfirstmedia/ui-core/labels/de.json";
 import {
   CommandPalette,
   Icon,
@@ -15,7 +14,6 @@ import { useEffect, useState, type ReactNode } from "react";
 import { GITHUB, KIT_LABEL, type KitName, type NavSection } from "@/lib/site";
 
 type ThemeName = "light" | "dark";
-type Lang = "en" | "de";
 
 function stored<T extends string>(key: string, fallback: T): T {
   try {
@@ -46,13 +44,11 @@ export function Chrome({
   // undefined until the saved theme is read: the inline script in <head> has already set it
   const [saved, setTheme] = useState<ThemeName | undefined>(undefined);
   const theme: ThemeName = saved ?? (kit === "pro" ? "dark" : "light");
-  const [lang, setLang] = useState<Lang>("en");
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
 
   useEffect(() => {
     setTheme(stored<ThemeName>(`docs-theme-${kit}`, kit === "pro" ? "dark" : "light"));
-    setLang(stored<Lang>("docs-lang", "en"));
   }, [kit]);
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
@@ -84,10 +80,6 @@ export function Chrome({
     setTheme(next);
     store(`docs-theme-${kit}`, next);
   };
-  const pick = (l: Lang) => {
-    setLang(l);
-    store("docs-lang", l);
-  };
   const items: PaletteItem[] = sections.flatMap((s) =>
     s.links.map((l) => ({
       id: l.href || "intro",
@@ -107,19 +99,9 @@ export function Chrome({
   const next = here >= 0 && here < flat.length - 1 ? flat[here + 1] : undefined;
   const href = (h: string) => `/${kit}/${h ? `${h}/` : ""}`;
 
-  /** Language, theme and GitHub: in the header on wide screens, in the menu on phones. */
+  /** Theme and GitHub: in the header on wide screens, in the menu on phones. */
   const prefs = () => (
     <>
-      <Segmented
-        size="sm"
-        label="Language"
-        value={lang}
-        onChange={(v) => pick(v as Lang)}
-        options={[
-          { value: "en", label: "EN" },
-          { value: "de", label: "DE" },
-        ]}
-      />
       <Tooltip label={theme === "dark" ? "Light theme" : "Dark theme"}>
         <IconButton
           icon={theme === "dark" ? "sun" : "moon"}
@@ -139,12 +121,7 @@ export function Chrome({
   );
 
   return (
-    <UIProvider
-      kit={kit}
-      theme={saved}
-      locale={lang === "de" ? "de-DE" : "en-US"}
-      labels={lang === "de" ? de : undefined}
-    >
+    <UIProvider kit={kit} theme={saved}>
       <a className="docs-skip" href="#content">
         Skip to content
       </a>

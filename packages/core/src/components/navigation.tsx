@@ -2,7 +2,6 @@
 import * as React from "react";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
-import { L } from "../i18n.js";
 import { IconButton } from "./foundation.js";
 import type { BreadcrumbProps, PaginationProps, TabsProps } from "./types.js";
 
@@ -63,7 +62,7 @@ export function Tabs(p: TabsProps) {
 export function Breadcrumb(p: BreadcrumbProps) {
   const items = p.items || [];
   return (
-    <nav className="tf-crumbs" aria-label={L("Breadcrumb")}>
+    <nav className="tf-crumbs" aria-label="Breadcrumb">
       {items.map((it, i) => {
         const last = i === items.length - 1;
         return (
@@ -87,10 +86,10 @@ export function Pagination(p: PaginationProps) {
     else if (pages[pages.length - 1] !== "…") pages.push("…");
   }
   return (
-    <nav className="tf-pager" aria-label={L("Pagination")}>
+    <nav className="tf-pager" aria-label="Pagination">
       <IconButton
         icon="chevronLeft"
-        label={L("Previous page")}
+        label="Previous page"
         size="sm"
         onClick={() => {
           st[1](Math.max(1, cur - 1));
@@ -117,7 +116,7 @@ export function Pagination(p: PaginationProps) {
       )}
       <IconButton
         icon="chevronRight"
-        label={L("Next page")}
+        label="Next page"
         size="sm"
         onClick={() => {
           st[1](Math.min(total, cur + 1));

@@ -2,14 +2,12 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { useState } from "react";
-import { L, formatMoney, setLabels, setLocale } from "./i18n.js";
+import { formatMoney, formatPercent } from "./format.js";
 import { UIProvider } from "./provider.js";
 import { Portal } from "./portal.js";
 
 afterEach(() => {
   cleanup();
-  setLabels({}, true);
-  setLocale(undefined, {});
   for (const a of ["data-kit", "data-theme", "data-density"])
     document.documentElement.removeAttribute(a);
 });
@@ -17,19 +15,15 @@ afterEach(() => {
 function Text() {
   return (
     <p>
-      {L("Copy")} · {formatMoney(1240)}
+      Copy · {formatMoney(1240)} · {formatPercent(19)}
     </p>
   );
 }
 
 describe("UIProvider", () => {
-  it("applies labels and locale before the first render", () => {
-    render(
-      <UIProvider labels={{ Copy: "Kopieren" }} locale="de-DE" currency="EUR">
-        <Text />
-      </UIProvider>,
-    );
-    expect(screen.getByText("Kopieren · 1.240 €")).toBeTruthy();
+  it("formats numbers in English with euros by default", () => {
+    render(<Text />);
+    expect(screen.getByText("Copy · €1,240 · 19%")).toBeTruthy();
   });
 
   it("sets kit, theme and density on <html> by default", () => {
@@ -46,35 +40,29 @@ describe("UIProvider", () => {
     ]);
   });
 
-  it("updates text when the locale changes and keeps state on theme changes", () => {
-    let setLang: (v: string) => void = () => {};
+  it("keeps state when the theme or kit changes", () => {
     let setTheme: (v: "light" | "dark") => void = () => {};
     function Counter() {
       const [n, setN] = useState(0);
       return (
         <button type="button" onClick={() => setN(n + 1)}>
-          {L("Copy")} {n}
+          Count {n}
         </button>
       );
     }
     function App() {
-      const [lang, sl] = useState("en");
       const [theme, st] = useState<"light" | "dark">("light");
-      setLang = sl;
       setTheme = st;
       return (
-        <UIProvider theme={theme} {...(lang === "de" ? { labels: { Copy: "Kopieren" } } : {})}>
+        <UIProvider theme={theme}>
           <Counter />
         </UIProvider>
       );
     }
     render(<App />);
     act(() => screen.getByRole("button").click());
-    expect(screen.getByRole("button").textContent).toBe("Copy 1");
     act(() => setTheme("dark"));
-    expect(screen.getByRole("button").textContent).toBe("Copy 1");
-    act(() => setLang("de"));
-    expect(screen.getByRole("button").textContent).toBe("Kopieren 0");
+    expect(screen.getByRole("button").textContent).toBe("Count 1");
   });
 
   it("subtree scope carries the attributes and hosts portals", () => {

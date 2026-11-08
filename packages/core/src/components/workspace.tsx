@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { L, formatMoney } from "../i18n.js";
+import { formatMoney } from "../format.js";
 import { Icon } from "../Icon.js";
 import { useScrollFocus, useTrap } from "../hooks.js";
 import { cx } from "../cx.js";
@@ -27,12 +27,7 @@ import type {
 } from "./types.js";
 export function SubNav(p: SubNavProps) {
   return (
-    <nav
-      className="tf-subnav"
-      aria-label={L("{section} pages", {
-        section: p.eyebrow || L("Section"),
-      })}
-    >
+    <nav className="tf-subnav" aria-label={`${p.eyebrow || "Section"} pages`}>
       <div className="tf-subnav-head">
         {p.eyebrow && <span className="tf-subnav-eyebrow">{p.eyebrow}</span>}
         {p.action && (
@@ -114,7 +109,7 @@ export function Drawer(p: DrawerProps) {
               {p.subtitle && <div className="tf-panel-sub">{p.subtitle}</div>}
             </div>
           </div>
-          <IconButton icon="x" label={L("Close")} onClick={p.onClose} />
+          <IconButton icon="x" label="Close" onClick={p.onClose} />
         </div>
         {p.children}
       </aside>
@@ -164,7 +159,7 @@ export function CommandPalette(p: CommandPaletteProps) {
     items: [PaletteItem, number][];
   }[] = [];
   res.forEach((it, i) => {
-    const g = it.group || L("Results");
+    const g = it.group || "Results";
     if (!groups.length || groups[groups.length - 1].g !== g)
       groups.push({
         g: g,
@@ -184,13 +179,13 @@ export function CommandPalette(p: CommandPaletteProps) {
         className="tf-palette"
         role="dialog"
         aria-modal="true"
-        aria-label={L("Command palette")}
+        aria-label="Command palette"
       >
         <div className="tf-palette-input">
           <Icon name="search" size={18} />
           <input
-            placeholder={p.placeholder || L("Search pages, actions and records…")}
-            aria-label={L("Search")}
+            placeholder={p.placeholder || "Search pages, actions and records…"}
+            aria-label="Search"
             value={q[0]}
             onChange={(e) => {
               q[1](e.target.value);
@@ -198,9 +193,9 @@ export function CommandPalette(p: CommandPaletteProps) {
             }}
             onKeyDown={key}
           />
-          <kbd>{L("Esc")}</kbd>
+          <kbd>{"Esc"}</kbd>
         </div>
-        <div className="tf-palette-list" role="listbox" aria-label={L("Results")}>
+        <div className="tf-palette-list" role="listbox" aria-label="Results">
           {res.length ? (
             groups.map((g) => (
               <div key={g.g}>
@@ -234,25 +229,21 @@ export function CommandPalette(p: CommandPaletteProps) {
               </div>
             ))
           ) : (
-            <div className="tf-palette-empty">
-              {L("Nothing matches “{query}”.", {
-                query: q[0],
-              })}
-            </div>
+            <div className="tf-palette-empty">{`Nothing matches “${q[0]}”.`}</div>
           )}
         </div>
         <div className="tf-palette-foot">
           <span>
             <kbd>↑</kbd>
-            <kbd>↓</kbd> {L("move")}
+            <kbd>↓</kbd> {"move"}
           </span>
           <span>
-            <kbd>↵</kbd> {L("open")}
+            <kbd>↵</kbd> {"open"}
           </span>
           <span>
             <kbd>⌘</kbd>
             <kbd>K</kbd>
-            {L(" anywhere")}
+            {" anywhere"}
           </span>
         </div>
       </div>
@@ -260,10 +251,10 @@ export function CommandPalette(p: CommandPaletteProps) {
   );
 }
 export function NotificationList(p: NotificationListProps) {
-  const f = React.useState(L("All")),
-    items = (p.items || []).filter((n) => f[0] === L("All") || n.unread);
+  const f = React.useState("All"),
+    items = (p.items || []).filter((n) => f[0] === "All" || n.unread);
   return (
-    <div className="tf-notes" role="region" aria-label={L("Notifications")}>
+    <div className="tf-notes" role="region" aria-label="Notifications">
       <div
         className="tf-header"
         style={{
@@ -276,7 +267,7 @@ export function NotificationList(p: NotificationListProps) {
             fontSize: 16,
           }}
         >
-          {L("Notifications")}
+          {"Notifications"}
         </b>
         <Button
           variant="ghost"
@@ -285,7 +276,7 @@ export function NotificationList(p: NotificationListProps) {
           disabled={!(p.items || []).some((n) => n.unread)}
           onClick={p.onReadAll}
         >
-          {L("Mark all read")}
+          {"Mark all read"}
         </Button>
       </div>
       <div
@@ -293,7 +284,7 @@ export function NotificationList(p: NotificationListProps) {
           padding: "0 8px",
         }}
       >
-        <Tabs block items={[L("All"), L("Unread")]} value={f[0]} onChange={f[1]} />
+        <Tabs block items={["All", "Unread"]} value={f[0]} onChange={f[1]} />
       </div>
       <div className="tf-notes-list">
         {items.length ? (
@@ -320,7 +311,7 @@ export function NotificationList(p: NotificationListProps) {
         ) : (
           <div className="tf-notes-empty">
             <TintIcon icon="check" tint="mint" size={40} />
-            <b>{L("You are all caught up")}</b>
+            <b>{"You are all caught up"}</b>
           </div>
         )}
       </div>
@@ -328,11 +319,11 @@ export function NotificationList(p: NotificationListProps) {
   );
 }
 const STEP = (): Record<FlowStep["kind"], [IconName, Tint, string]> => ({
-  trigger: ["zap", "sky", L("When")],
-  condition: ["filter", "blush", L("If")],
-  agent: ["bot", "lilac", L("Agent")],
-  approval: ["user", "butter", L("Approval")],
-  action: ["send", "mint", L("Then")],
+  trigger: ["zap", "sky", "When"],
+  condition: ["filter", "blush", "If"],
+  agent: ["bot", "lilac", "Agent"],
+  approval: ["user", "butter", "Approval"],
+  action: ["send", "mint", "Then"],
 });
 export function Flow(p: FlowProps) {
   return (
@@ -364,7 +355,7 @@ export function Flow(p: FlowProps) {
               <div className="tf-flow-kind">
                 {k[2]}
                 {st === "active" && <span className="tf-flow-live">running</span>}
-                {st === "wait" && <span className="tf-flow-live wait">{L("waiting for you")}</span>}
+                {st === "wait" && <span className="tf-flow-live wait">{"waiting for you"}</span>}
               </div>
               <div className="tf-flow-text">{s.text}</div>
               {st === "wait" && p.onApprove && (
@@ -375,11 +366,11 @@ export function Flow(p: FlowProps) {
                   }}
                 >
                   <Button size="sm" icon="check" onClick={p.onApprove}>
-                    {L("Approve")}
+                    {"Approve"}
                   </Button>
                   {p.onReject && (
                     <Button size="sm" variant="ghost" onClick={p.onReject}>
-                      {L("Reject")}
+                      {"Reject"}
                     </Button>
                   )}
                 </div>
@@ -478,7 +469,7 @@ export function FileCard(p: FileCardProps) {
       <span className="tf-filecard-name">{p.name}</span>
       <span className="tf-filecard-meta">
         {[p.size, p.meta].filter(Boolean).join(" · ")}
-        {p.shared && <Icon name="users" size={12} label={L("Shared")} />}
+        {p.shared && <Icon name="users" size={12} label="Shared" />}
       </span>
     </button>
   );
@@ -488,7 +479,7 @@ export function Wizard(p: WizardProps) {
     cur = p.current || 0,
     done = p.done || {};
   return (
-    <div className="tf-wizard" role="group" aria-label={p.label || L("Setup")}>
+    <div className="tf-wizard" role="group" aria-label={p.label || "Setup"}>
       <aside className="tf-wizard-rail">
         {p.brand && (
           <span
@@ -523,12 +514,7 @@ export function Wizard(p: WizardProps) {
         </ol>
       </aside>
       <div className="tf-wizard-main">
-        <div className="tf-card-desc">
-          {L("Step {n} of {total}", {
-            n: cur + 1,
-            total: steps.length,
-          })}
-        </div>
+        <div className="tf-card-desc">{`Step ${cur + 1} of ${steps.length}`}</div>
         <div key={cur} className="tf-wizard-body">
           {steps[cur] && steps[cur].icon && (
             <TintIcon icon={steps[cur].icon} tint="sky" size={44} />
@@ -550,7 +536,7 @@ export function Wizard(p: WizardProps) {
     </div>
   );
 }
-const LEVELS = () => [L("None"), L("View"), L("Edit"), L("Full")];
+const LEVELS = () => ["None", "View", "Edit", "Full"];
 export function PermissionMatrix(p: PermissionMatrixProps) {
   const box = React.useRef<HTMLDivElement>(null);
   useScrollFocus(box);
@@ -559,7 +545,7 @@ export function PermissionMatrix(p: PermissionMatrixProps) {
       <table className="tf-table tf-perm">
         <thead>
           <tr>
-            <th>{L("Role")}</th>
+            <th>{"Role"}</th>
             {(p.areas || []).map((a) => (
               <th key={a}>{a}</th>
             ))}
@@ -585,9 +571,7 @@ export function PermissionMatrix(p: PermissionMatrixProps) {
                 </div>
                 {r.people != null && (
                   <div className="tf-card-desc">
-                    {L(r.people === 1 ? "{n} member" : "{n} members", {
-                      n: r.people,
-                    })}
+                    {r.people === 1 ? "1 member" : `${r.people} members`}
                   </div>
                 )}
               </td>
@@ -651,51 +635,47 @@ export function InvoicePreview(p: InvoicePreviewProps) {
           {p.from && <div className="tf-paper-small">{p.from}</div>}
         </div>
         <div className="tf-paper-id">
-          <div className="tf-paper-kind">{p.kind || L("Invoice")}</div>
+          <div className="tf-paper-kind">{p.kind || "Invoice"}</div>
           <div className="tf-mono">{"#" + p.number}</div>
         </div>
       </div>
       <div className="tf-paper-meta">
         <div>
-          <span>{L("Bill to")}</span>
+          <span>{"Bill to"}</span>
           <b>{p.to}</b>
         </div>
         <div>
-          <span>{L("Issued")}</span>
+          <span>{"Issued"}</span>
           <b>{p.issued}</b>
         </div>
         <div>
-          <span>{L("Due")}</span>
+          <span>{"Due"}</span>
           <b>{p.due}</b>
         </div>
       </div>
       <div className="tf-paper-lines">
         {lines.map((l, i) => (
           <div key={i}>
-            <span>{(l.d || L("Untitled line")) + (l.q !== 1 ? " × " + l.q : "")}</span>
+            <span>{(l.d || "Untitled line") + (l.q !== 1 ? " × " + l.q : "")}</span>
             <b>{fmt(l.q * l.u)}</b>
           </div>
         ))}
       </div>
       <div className="tf-paper-totals">
         <div>
-          <span>{L("Net")}</span>
+          <span>{"Net"}</span>
           <b>{fmt(net)}</b>
         </div>
         {Object.keys(vat)
           .filter((k) => +k > 0)
           .map((k) => (
             <div key={k}>
-              <span>
-                {L("VAT {rate}%", {
-                  rate: k,
-                })}
-              </span>
+              <span>{`VAT ${k}%`}</span>
               <b>{fmt(vat[Number(k)] ?? 0)}</b>
             </div>
           ))}
         <div className="grand">
-          <span>{L("Total due")}</span>
+          <span>{"Total due"}</span>
           <b>{fmt(net + tax)}</b>
         </div>
       </div>
@@ -712,20 +692,13 @@ export function TransactionRow(p: TransactionRowProps) {
         <TintIcon icon={inc ? "download" : "send"} tint={inc ? "mint" : "plain"} />
         <div className="tf-tx-text">
           <b className="tf-mono">{p.text}</b>
-          <span>
-            {p.date +
-              (p.matched && p.matchRef
-                ? L(" · matched to {ref}", {
-                    ref: p.matchRef,
-                  })
-                : "")}
-          </span>
+          <span>{p.date + (p.matched && p.matchRef ? ` · matched to ${p.matchRef}` : "")}</span>
         </div>
         <b className={cx("tf-tx-amt", inc ? "in" : "out")}>
           {(inc ? "+" : "−") + money2(Math.abs(p.amount))}
         </b>
         {p.matched ? (
-          <Badge tone="success">{L("Matched")}</Badge>
+          <Badge tone="success">{"Matched"}</Badge>
         ) : (
           <Button
             size="sm"
@@ -734,7 +707,7 @@ export function TransactionRow(p: TransactionRowProps) {
               open[1](!open[0]);
             }}
           >
-            {open[0] ? L("Close") : L("Match")}
+            {open[0] ? "Close" : "Match"}
           </Button>
         )}
       </div>
@@ -747,7 +720,7 @@ export function TransactionRow(p: TransactionRowProps) {
               minWidth: 0,
             }}
           >
-            {p.hint || L("No suggestion yet.")}
+            {p.hint || "No suggestion yet."}
           </span>
           <Button
             size="sm"
@@ -757,7 +730,7 @@ export function TransactionRow(p: TransactionRowProps) {
               p.onMatch && p.onMatch();
             }}
           >
-            {L("Accept")}
+            {"Accept"}
           </Button>
         </div>
       )}

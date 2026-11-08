@@ -10,7 +10,7 @@ both and switch between them at runtime with `data-kit="halo|pro"`.
 
 | Package                     | Contents                                                       |
 | --------------------------- | -------------------------------------------------------------- |
-| `@twentyfirstmedia/ui-core` | components, hooks, icons, label and locale system, `themes.css` |
+| `@twentyfirstmedia/ui-core` | components, hooks, icons, Intl formatting helpers, `themes.css` |
 | `@twentyfirstmedia/halo`    | re-exports `ui-core`, Halo `styles.css`, tokens, fonts          |
 | `@twentyfirstmedia/pro`     | re-exports `ui-core`, Pro `styles.css`, tokens, fonts           |
 | `@twentyfirstmedia/ui`      | CLI: `init`, `add`, `list`, `diff`                              |
@@ -46,7 +46,7 @@ import { UIProvider, Button } from "@twentyfirstmedia/halo";
 
 export function App() {
   return (
-    <UIProvider kit="halo" locale="de-DE">
+    <UIProvider kit="halo">
       <Button variant="primary">Save</Button>
     </UIProvider>
   );

@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { L, formatNumber } from "../i18n.js";
+import { formatNumber } from "../format.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { FormField } from "./forms.js";
@@ -411,7 +411,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
       () => {
         mark("B", "STRONG");
       },
-      L("Bold"),
+      "Bold",
       "B",
     ],
     [
@@ -419,7 +419,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
       () => {
         mark("I", "EM");
       },
-      L("Italic"),
+      "Italic",
       "I",
     ],
     [
@@ -427,7 +427,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
       () => {
         mark("U");
       },
-      L("Underline"),
+      "Underline",
       "U",
     ],
     "-",
@@ -436,38 +436,38 @@ export function RichTextEditor(p: RichTextEditorProps) {
       () => {
         setBlock("H3");
       },
-      L("Heading"),
+      "Heading",
     ],
     [
       "quote",
       () => {
         setBlock("BLOCKQUOTE");
       },
-      L("Quote"),
+      "Quote",
     ],
     [
       "list",
       () => {
         setList("UL");
       },
-      L("Bulleted list"),
+      "Bulleted list",
     ],
     [
       "olist",
       () => {
         setList("OL");
       },
-      L("Numbered list"),
+      "Numbered list",
     ],
     "-",
-    ["link", openLink, L("Link"), "K"],
+    ["link", openLink, "Link", "K"],
     "-",
     [
       "undo",
       () => {
         restore(-1);
       },
-      L("Undo"),
+      "Undo",
       "Z",
     ],
     [
@@ -475,7 +475,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
       () => {
         restore(1);
       },
-      L("Redo"),
+      "Redo",
     ],
   ];
   const over = p.maxLength && count[0] > p.maxLength,
@@ -486,7 +486,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
   return (
     <FormField label={p.label} hint={p.hint} error={p.error}>
       <div className={cx("tf-rte", over && "invalid")}>
-        <div className="tf-rte-bar" role="toolbar" aria-label={L("Formatting")}>
+        <div className="tf-rte-bar" role="toolbar" aria-label="Formatting">
           {tools.map((t, i) => {
             if (t === "-") return <span key={i} className="tf-rte-sep" aria-hidden />;
             const btn = (
@@ -531,8 +531,8 @@ export function RichTextEditor(p: RichTextEditorProps) {
                     onChange={(e) => {
                       linkUrl[1](e.target.value);
                     }}
-                    placeholder={L("Link address")}
-                    aria-label={L("Link address")}
+                    placeholder="Link address"
+                    aria-label="Link address"
                     inputMode="url"
                   />
                   <div
@@ -550,11 +550,11 @@ export function RichTextEditor(p: RichTextEditorProps) {
                           applyLink(true);
                         }}
                       >
-                        {L("Remove link")}
+                        {"Remove link"}
                       </Button>
                     )}
                     <Button size="sm" type="submit">
-                      {L("Apply")}
+                      {"Apply"}
                     </Button>
                   </div>
                 </form>
@@ -577,7 +577,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
                   aria-expanded={s.open}
                 >
                   {"{ }"}
-                  <span>{L("Insert field")}</span>
+                  <span>{"Insert field"}</span>
                 </button>
               )}
             >
@@ -617,7 +617,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
           contentEditable={!p.disabled}
           role="textbox"
           aria-multiline="true"
-          aria-label={typeof p.label === "string" ? p.label : L("Text")}
+          aria-label={typeof p.label === "string" ? p.label : "Text"}
           data-placeholder={p.placeholder || ""}
           suppressContentEditableWarning
           onInput={input}

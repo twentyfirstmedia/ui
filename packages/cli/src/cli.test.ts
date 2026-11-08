@@ -28,9 +28,7 @@ afterAll(() => {
 
 describe("twentyfirst-ui", () => {
   it("init sets up the kit, styles, provider and layout", () => {
-    expect(
-      run(["init", "--kit", "halo", "--locale", "de-DE", "--no-install", "--cwd", dir], log),
-    ).toBe(0);
+    expect(run(["init", "--kit", "halo", "--no-install", "--cwd", dir], log)).toBe(0);
     expect(file(".npmrc")).toContain("@twentyfirstmedia:registry=https://npm.pkg.github.com");
     const css = file("app/globals.css");
     expect(css.indexOf('@import "tailwindcss"')).toBeLessThan(
@@ -38,11 +36,11 @@ describe("twentyfirst-ui", () => {
     );
     expect(css).toContain('@import "@twentyfirstmedia/halo/tailwind.css";');
     const provider = file("components/ui-root.tsx");
-    expect(provider).toContain('locale="de-DE" labels={de}');
+    expect(provider).toContain("<UIProvider>");
     const layout = file("app/layout.tsx");
     expect(layout).toContain('import { UIRoot } from "../components/ui-root";');
     expect(layout).toContain("<UIRoot>{children}</UIRoot>");
-    expect(layout).toContain('<html data-kit="halo" lang="de">');
+    expect(layout).toContain('<html data-kit="halo"');
     expect(JSON.parse(file("twentyfirst.json"))).toMatchObject({
       kit: "halo",
       components: "components/ui",
@@ -51,9 +49,7 @@ describe("twentyfirst-ui", () => {
 
   it("init is idempotent", () => {
     const before = [file("app/globals.css"), file("app/layout.tsx"), file(".npmrc")];
-    expect(
-      run(["init", "--kit", "halo", "--locale", "de-DE", "--no-install", "--cwd", dir], log),
-    ).toBe(0);
+    expect(run(["init", "--kit", "halo", "--no-install", "--cwd", dir], log)).toBe(0);
     expect([file("app/globals.css"), file("app/layout.tsx"), file(".npmrc")]).toEqual(before);
   });
 

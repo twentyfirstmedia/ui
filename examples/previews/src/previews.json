@@ -505,13 +505,6 @@
     "components": ["Collapsible", "Kbd", "KeyValue", "Spinner", "StatusIndicator"]
   },
   {
-    "name": "Labels",
-    "group": "Foundations",
-    "width": 900,
-    "height": 560,
-    "components": ["ApprovalCard", "Segmented"]
-  },
-  {
     "name": "LedgerTable",
     "group": "Data",
     "width": 1100,

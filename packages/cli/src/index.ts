@@ -11,7 +11,7 @@ import { consoleLogger, type Kit, type Logger } from "./util.js";
 const HELP = `twentyfirst-ui: set up and copy components of the Twentyfirst UI kits
 
 Usage
-  twentyfirst-ui init [--kit halo|pro] [--both] [--locale de-DE] [--no-install] [--components components/ui]
+  twentyfirst-ui init [--kit halo|pro] [--both] [--no-install] [--components components/ui]
   twentyfirst-ui add <Component…> [--overwrite]
   twentyfirst-ui list
   twentyfirst-ui diff <Component>
@@ -38,7 +38,7 @@ export function parseArgs(argv: string[]): {
       else if (
         next &&
         !next.startsWith("--") &&
-        ["kit", "locale", "cwd", "components"].includes(k as string)
+        ["kit", "cwd", "components"].includes(k as string)
       ) {
         flags[k as string] = next;
         i++;
@@ -61,7 +61,6 @@ export function run(argv: string[], log: Logger = consoleLogger): number {
           cwd,
           kit,
           both: flags.both === true,
-          locale: typeof flags.locale === "string" ? flags.locale : undefined,
           install: flags.install !== false,
           components: typeof flags.components === "string" ? flags.components : undefined,
           log,

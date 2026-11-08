@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
 import { useControlled } from "../hooks.js";
-import { L } from "../i18n.js";
 import { cx } from "../cx.js";
 import { Avatar } from "./foundation.js";
 import { Segmented } from "./forms.js";
@@ -20,7 +19,7 @@ export function EmailPreview(p: EmailPreviewProps) {
           <div className="tf-option-text">
             <b>{p.fromName || p.from}</b>
             <span className="tf-mailprev-subj">
-              <b>{p.subject || L("(No subject)")}</b>
+              <b>{p.subject || "(No subject)"}</b>
               {p.preheader && <span>{" — " + p.preheader}</span>}
             </span>
           </div>
@@ -29,15 +28,15 @@ export function EmailPreview(p: EmailPreviewProps) {
           size="sm"
           value={dev[0]}
           onChange={dev[1]}
-          label={L("Device")}
+          label="Device"
           options={[
             {
               value: "desktop",
-              label: L("Desktop"),
+              label: "Desktop",
             },
             {
               value: "mobile",
-              label: L("Mobile"),
+              label: "Mobile",
             },
           ]}
         />
@@ -45,7 +44,7 @@ export function EmailPreview(p: EmailPreviewProps) {
       <div className={cx("tf-mailprev-stage", dev[0])}>
         <div className="tf-mailprev-frame">
           {p.html != null ? (
-            <iframe title={L("Email preview")} sandbox="" srcDoc={p.html} />
+            <iframe title="Email preview" sandbox="" srcDoc={p.html} />
           ) : (
             <div className="tf-mailprev-body">{p.children}</div>
           )}
@@ -76,17 +75,9 @@ export function SearchAdPreview(p: SearchAdPreviewProps) {
     (p[x[0]] || []).forEach((s, i) => {
       if (s && s.length > x[1])
         warn.push(
-          L("{field} {n} is {len} characters, the limit is {max}", {
-            field:
-              x[0] === "headlines"
-                ? L("Headline")
-                : x[0] === "descriptions"
-                  ? L("Description")
-                  : L("Path"),
-            n: i + 1,
-            len: s.length,
-            max: x[1],
-          }),
+          `${
+            x[0] === "headlines" ? "Headline" : x[0] === "descriptions" ? "Description" : "Path"
+          } ${i + 1} is ${s.length} characters, the limit is ${x[1]}`,
         );
     });
   });
@@ -110,21 +101,21 @@ export function SearchAdPreview(p: SearchAdPreviewProps) {
             padding: 0,
           }}
         >
-          {L("Preview")}
+          {"Preview"}
         </span>
         <Segmented
           size="sm"
           value={dev[0]}
           onChange={dev[1]}
-          label={L("Device")}
+          label="Device"
           options={[
             {
               value: "mobile",
-              label: L("Mobile"),
+              label: "Mobile",
             },
             {
               value: "desktop",
-              label: L("Desktop"),
+              label: "Desktop",
             },
           ]}
         />
@@ -138,7 +129,7 @@ export function SearchAdPreview(p: SearchAdPreviewProps) {
             <b>{p.name || p.domain}</b>
             <small>{url}</small>
           </div>
-          <span className="tf-adprev-tag">{p.sponsoredLabel || L("Sponsored")}</span>
+          <span className="tf-adprev-tag">{p.sponsoredLabel || "Sponsored"}</span>
         </div>
         <a
           className="tf-adprev-hl"
@@ -147,9 +138,9 @@ export function SearchAdPreview(p: SearchAdPreviewProps) {
             e.preventDefault();
           }}
         >
-          {hl.join(" | ") || L("Your headline")}
+          {hl.join(" | ") || "Your headline"}
         </a>
-        <p className="tf-adprev-desc">{ds.join(" ") || L("Your description")}</p>
+        <p className="tf-adprev-desc">{ds.join(" ") || "Your description"}</p>
         {p.sitelinks && p.sitelinks.length > 0 && (
           <div className="tf-adprev-links">
             {p.sitelinks.map((s, i) => (

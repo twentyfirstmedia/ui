@@ -22,13 +22,11 @@
       "default": "./dist/index.js"
     },
     "./themes.css": "./dist/themes.css",
-    "./labels/*.json": "./labels/*.json",
     "./fonts/*": "./dist/fonts/*",
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
-    "labels",
     "src",
     "!src/**/*.test.ts",
     "!src/**/*.test.tsx"

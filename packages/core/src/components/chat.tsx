@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { cx } from "../cx.js";
-import { L, LK, formatNumber } from "../i18n.js";
+import { formatNumber } from "../format.js";
 import { Icon } from "../Icon.js";
 import { useControlled } from "../hooks.js";
 import { Avatar, Badge, TintIcon } from "./foundation.js";
@@ -167,10 +167,10 @@ export function CodeBlock(p: CodeBlockProps) {
   return (
     <div className="tf-code">
       <div className="tf-code-head">
-        <span>{p.lang || L("text")}</span>
-        <button type="button" className="tf-code-copy" onClick={copy} aria-label={L("Copy code")}>
+        <span>{p.lang || "text"}</span>
+        <button type="button" className="tf-code-copy" onClick={copy} aria-label="Copy code">
           <Icon name={copied[0] ? "check" : "file"} size={13} />
-          {copied[0] ? L("Copied") : L("Copy")}
+          {copied[0] ? "Copied" : "Copy"}
         </button>
       </div>
       <pre tabIndex={0}>
@@ -192,7 +192,7 @@ export function CodeBlock(p: CodeBlockProps) {
 /* ── Chat building blocks ── */
 export function TypingDots(p: { label?: string }) {
   return (
-    <span className="tf-typing" role="status" aria-label={p.label || L("Working")}>
+    <span className="tf-typing" role="status" aria-label={p.label || "Working"}>
       <i />
       <i />
       <i />
@@ -240,7 +240,7 @@ export function ChatMessage(p: ChatMessageProps) {
   return (
     <div className={cx("tf-msg", me ? "me" : "ai", p.className)}>
       {me ? (
-        <Avatar name={p.name || L("You")} size={32} />
+        <Avatar name={p.name || "You"} size={32} />
       ) : (
         <AgentMark tint={p.tint} live={p.streaming} />
       )}
@@ -301,34 +301,29 @@ export function ChatMessage(p: ChatMessageProps) {
         )}
         {!me && !p.streaming && p.actions !== false && (
           <div className="tf-msg-actions">
-            <Tooltip label={copied[0] ? L("Copied") : L("Copy")}>
-              <button
-                type="button"
-                className="tf-msg-act"
-                aria-label={L("Copy reply")}
-                onClick={copy}
-              >
+            <Tooltip label={copied[0] ? "Copied" : "Copy"}>
+              <button type="button" className="tf-msg-act" aria-label="Copy reply" onClick={copy}>
                 <Icon name={copied[0] ? "check" : "file"} size={14} />
               </button>
             </Tooltip>
             {p.onRetry && (
-              <Tooltip label={L("Regenerate")}>
+              <Tooltip label="Regenerate">
                 <button
                   type="button"
                   className="tf-msg-act"
-                  aria-label={L("Regenerate reply")}
+                  aria-label="Regenerate reply"
                   onClick={p.onRetry}
                 >
                   <Icon name="refresh" size={14} />
                 </button>
               </Tooltip>
             )}
-            <Tooltip label={L("Good reply")}>
+            <Tooltip label="Good reply">
               <button
                 type="button"
                 className={cx("tf-msg-act", fb[0] === "up" && "on")}
                 aria-pressed={fb[0] === "up"}
-                aria-label={L("Good reply")}
+                aria-label="Good reply"
                 onClick={() => {
                   fb[1](fb[0] === "up" ? null : "up");
                   p.onFeedback && p.onFeedback("up");
@@ -337,12 +332,12 @@ export function ChatMessage(p: ChatMessageProps) {
                 <Icon name="thumbUp" size={14} />
               </button>
             </Tooltip>
-            <Tooltip label={L("Bad reply")}>
+            <Tooltip label="Bad reply">
               <button
                 type="button"
                 className={cx("tf-msg-act", fb[0] === "down" && "on")}
                 aria-pressed={fb[0] === "down"}
-                aria-label={L("Bad reply")}
+                aria-label="Bad reply"
                 onClick={() => {
                   fb[1](fb[0] === "down" ? null : "down");
                   p.onFeedback && p.onFeedback("down");
@@ -397,13 +392,13 @@ export function ToolCall(p: ToolCallProps) {
         <div className="tf-tool-body">
           {p.input != null && (
             <div>
-              <span className="tf-tool-label">{L("Input")}</span>
+              <span className="tf-tool-label">{"Input"}</span>
               <pre>{typeof p.input === "string" ? p.input : JSON.stringify(p.input, null, 2)}</pre>
             </div>
           )}
           {p.output != null && (
             <div>
-              <span className="tf-tool-label">{st === "error" ? L("Error") : L("Result")}</span>
+              <span className="tf-tool-label">{st === "error" ? "Error" : "Result"}</span>
               <pre className={st === "error" ? "err" : undefined}>
                 {typeof p.output === "string" ? p.output : JSON.stringify(p.output, null, 2)}
               </pre>
@@ -428,11 +423,7 @@ export function Reasoning(p: ReasoningProps) {
         }}
       >
         <Icon name="sparkle" size={13} />
-        {p.streaming
-          ? L("Thinking…")
-          : L("Thought for {time}", {
-              time: p.duration || L("a few seconds"),
-            })}
+        {p.streaming ? "Thinking…" : `Thought for ${p.duration || "a few seconds"}`}
         <Icon name="chevronDown" size={13} className="tf-tool-chev" />
       </button>
       {open[0] && (
@@ -502,7 +493,7 @@ export function ModelPicker(p: ModelPickerProps) {
     >
       {(s) => (
         <div className="tf-menu tf-menu-static" role="menu">
-          <div className="tf-menu-label">{L("Model")}</div>
+          <div className="tf-menu-label">{"Model"}</div>
           {models.map((m) => (
             <button
               key={m.id}
@@ -568,7 +559,7 @@ export function Composer(p: ComposerProps) {
     >
       {cmds.length > 0 && (
         <div className="tf-popover tf-composer-cmds top" role="listbox">
-          <div className="tf-menu-label">{L("Commands")}</div>
+          <div className="tf-menu-label">{"Commands"}</div>
           {cmds.map((c, i) => (
             <button
               key={c.name}
@@ -601,9 +592,7 @@ export function Composer(p: ComposerProps) {
               {p.onRemoveAttachment && (
                 <button
                   type="button"
-                  aria-label={L("Remove {name}", {
-                    name: f.name,
-                  })}
+                  aria-label={`Remove ${f.name}`}
                   onClick={() => {
                     p.onRemoveAttachment?.(i);
                   }}
@@ -619,8 +608,8 @@ export function Composer(p: ComposerProps) {
         ref={ta}
         rows={1}
         className="tf-composer-input"
-        placeholder={p.placeholder || L("Message…")}
-        aria-label={p.label || p.placeholder || L("Message")}
+        placeholder={p.placeholder || "Message…"}
+        aria-label={p.label || p.placeholder || "Message"}
         value={v[0]}
         disabled={p.disabled}
         onChange={(e) => {
@@ -653,11 +642,11 @@ export function Composer(p: ComposerProps) {
       />
       <div className="tf-composer-bar">
         {p.onAttach && (
-          <Tooltip label={L("Attach files")}>
+          <Tooltip label="Attach files">
             <button
               type="button"
               className="tf-composer-tool"
-              aria-label={L("Attach files")}
+              aria-label="Attach files"
               onClick={() => fileRef.current?.click()}
             >
               <Icon name="paperclip" size={16} />
@@ -676,11 +665,11 @@ export function Composer(p: ComposerProps) {
           </Tooltip>
         )}
         {p.commands && (
-          <Tooltip label={L("Commands")} shortcut="/">
+          <Tooltip label="Commands" shortcut="/">
             <button
               type="button"
               className="tf-composer-tool"
-              aria-label={L("Commands")}
+              aria-label="Commands"
               onClick={() => {
                 v[1]("/");
                 ta.current && ta.current.focus();
@@ -693,17 +682,17 @@ export function Composer(p: ComposerProps) {
         {p.models && <ModelPicker models={p.models} value={p.model} onChange={p.onModel} />}
         {p.left}
         <span className="tf-composer-hint">
-          {p.hint != null ? p.hint : L("Enter to send · Shift+Enter for a new line")}
+          {p.hint != null ? p.hint : "Enter to send · Shift+Enter for a new line"}
         </span>
         {p.busy ? (
-          <button type="button" className="tf-send stop" aria-label={L("Stop")} onClick={p.onStop}>
+          <button type="button" className="tf-send stop" aria-label="Stop" onClick={p.onStop}>
             <span className="tf-stop-sq" />
           </button>
         ) : (
           <button
             type="button"
             className="tf-send"
-            aria-label={L("Send")}
+            aria-label="Send"
             disabled={!v[0].trim() && !files.length}
             onClick={send}
           >
@@ -716,12 +705,12 @@ export function Composer(p: ComposerProps) {
 }
 
 const AGENT_TONE: Record<string, Tone> = {
-  [LK("Running")]: "success",
-  [LK("Thinking")]: "info",
-  [LK("Waiting for approval")]: "highlight",
-  [LK("Idle")]: "neutral",
-  [LK("Paused")]: "neutral",
-  [LK("Error")]: "danger",
+  ["Running"]: "success",
+  ["Thinking"]: "info",
+  ["Waiting for approval"]: "highlight",
+  ["Idle"]: "neutral",
+  ["Paused"]: "neutral",
+  ["Error"]: "danger",
 };
 
 export function AgentStatus(p: AgentStatusProps) {
@@ -729,7 +718,7 @@ export function AgentStatus(p: AgentStatusProps) {
   return (
     <span className="tf-agentstatus">
       <Badge tone={AGENT_TONE[s] || "neutral"} live={s === "Running" || s === "Thinking"}>
-        {L(s)}
+        {s}
       </Badge>
       {p.step && <span className="tf-agentstatus-step">{p.step}</span>}
     </span>
@@ -752,20 +741,14 @@ export function RunTrace(p: RunTraceProps) {
     sel = React.useState(p.defaultOpen != null ? p.defaultOpen : null);
   function fms(ms: number) {
     return ms >= 1000
-      ? L("{n} s", {
-          n: formatNumber(ms / 1000, { minimumFractionDigits: 1, maximumFractionDigits: 1 }),
-        })
-      : L("{n} ms", { n: formatNumber(ms) });
+      ? `${formatNumber(ms / 1000, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} s`
+      : `${formatNumber(ms)} ms`;
   }
   return (
     <div className="tf-trace">
       <div className="tf-trace-head">
-        <span>{L("Step")}</span>
-        <span>
-          {L("Timeline · {time}", {
-            time: fms(total),
-          })}
-        </span>
+        <span>{"Step"}</span>
+        <span>{`Timeline · ${fms(total)}`}</span>
       </div>
       {steps.map((s, i) => {
         const open = sel[0] === i,
@@ -794,7 +777,7 @@ export function RunTrace(p: RunTraceProps) {
                     width: Math.max(1.5, ((s.ms || 0) / total) * 100) + "%",
                   }}
                 />
-                <em>{st === "running" ? L("running…") : fms(s.ms || 0)}</em>
+                <em>{st === "running" ? "running…" : fms(s.ms || 0)}</em>
               </span>
             </button>
             {open && s.detail && (
@@ -816,7 +799,7 @@ export function UsageMeter(p: UsageMeterProps) {
   return (
     <div className="tf-usage">
       <div className="tf-usage-top">
-        <span>{p.label || L("Context")}</span>
+        <span>{p.label || "Context"}</span>
         <b>{(p.format || String)(p.used) + " / " + (p.format || String)(p.limit)}</b>
       </div>
       <span className="tf-usage-track">

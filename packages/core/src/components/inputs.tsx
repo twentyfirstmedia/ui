@@ -1,7 +1,6 @@
 import * as React from "react";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
-import { L } from "../i18n.js";
 import type {
   CheckboxProps,
   FieldProps,
@@ -79,8 +78,8 @@ export function SearchField(p: SearchFieldProps) {
       <Icon name="search" size={15} />
       <input
         type="search"
-        placeholder={p.placeholder || L("Search")}
-        aria-label={p.placeholder || L("Search")}
+        placeholder={p.placeholder || "Search"}
+        aria-label={p.placeholder || "Search"}
         value={p.value}
         onChange={p.onChange}
       />

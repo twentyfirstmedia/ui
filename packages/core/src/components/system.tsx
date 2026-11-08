@@ -1,5 +1,4 @@
 import * as React from "react";
-import { L } from "../i18n.js";
 import { Button, TintIcon } from "./foundation.js";
 import type { AuthCardProps, IconName, StatusScreenProps, Tint } from "./types.js";
 
@@ -9,32 +8,32 @@ export function StatusScreen(p: StatusScreenProps) {
   const d: [string | undefined, string | undefined, IconName, Tint] = (
     {
       "404": [
-        L("Page not found"),
-        L("The link may be old, or the page moved. Nothing is broken on your side."),
+        "Page not found",
+        "The link may be old, or the page moved. Nothing is broken on your side.",
         "search",
         "sky",
       ],
       "500": [
-        L("Something broke on our side"),
-        L("We’ve been notified and are on it. Your data is safe; try again in a minute."),
+        "Something broke on our side",
+        "We’ve been notified and are on it. Your data is safe; try again in a minute.",
         "x",
         "blush",
       ],
       maintenance: [
-        L("Back in a few minutes"),
-        L("We’re upgrading the database. Everything you saved is safe."),
+        "Back in a few minutes",
+        "We’re upgrading the database. Everything you saved is safe.",
         "settings",
         "butter",
       ],
       offline: [
-        L("You’re offline"),
-        L("Changes are kept on this device and sync when you’re back."),
+        "You’re offline",
+        "Changes are kept on this device and sync when you’re back.",
         "globe",
         "lilac",
       ],
       "403": [
-        L("You don’t have access"),
-        L("Ask a workspace owner to invite you to this area."),
+        "You don’t have access",
+        "Ask a workspace owner to invite you to this area.",
         "lock",
         "lilac",
       ],
@@ -57,20 +56,14 @@ export function StatusScreen(p: StatusScreenProps) {
       >
         {p.actions || [
           <Button key="h" icon="home" onClick={p.onHome}>
-            {L("Back to overview")}
+            {"Back to overview"}
           </Button>,
           <Button key="s" variant="secondary" icon="mail" onClick={p.onContact}>
-            {L("Contact support")}
+            {"Contact support"}
           </Button>,
         ]}
       </div>
-      {p.reference && (
-        <span className="tf-status-ref">
-          {L("Reference {ref}", {
-            ref: p.reference,
-          })}
-        </span>
-      )}
+      {p.reference && <span className="tf-status-ref">{`Reference ${p.reference}`}</span>}
     </div>
   );
 }

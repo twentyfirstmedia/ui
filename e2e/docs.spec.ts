@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-/** Phase 7: docs chrome — routes for both kits, live kit switch, search, language and theme. */
+/** Phase 7: docs chrome — routes for both kits, live kit switch, search and theme. */
 test.use({ baseURL: "http://localhost:4174" });
 
 test("the root forwards to the Halo docs", async ({ page }) => {
@@ -28,12 +28,9 @@ test("⌘K opens the search and navigates", async ({ page }) => {
   await expect(page).toHaveURL(/\/halo\/components\/ApprovalCard\/$/);
 });
 
-test("EN/DE switches the component labels, the theme switch the colours", async ({ page }) => {
+test("the theme switch changes the colours and is remembered", async ({ page }) => {
   await page.goto("/halo/components/ApprovalCard/");
   await expect(page.getByText("Yes, run it as shown").first()).toBeVisible();
-  await page.getByRole("radio", { name: "DE", exact: true }).check();
-  await expect(page.getByText("Ja, so ausführen").first()).toBeVisible();
-  await page.getByRole("radio", { name: "EN", exact: true }).check();
   await page.getByRole("button", { name: "Dark theme" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.reload();

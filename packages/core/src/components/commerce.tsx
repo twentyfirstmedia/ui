@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { cx } from "../cx.js";
-import { L, Lx, formatMoney } from "../i18n.js";
+import { formatMoney } from "../format.js";
 import { Icon } from "../Icon.js";
 import { useControlled } from "../hooks.js";
 import { Badge, Button, IconButton } from "./foundation.js";
@@ -91,16 +91,7 @@ export function Rating(p: RatingProps) {
     <span
       className="tf-rating"
       role="img"
-      aria-label={
-        L("{value} out of 5", {
-          value: v.toFixed(1),
-        }) +
-        (p.count != null
-          ? L(", {n} reviews", {
-              n: p.count,
-            })
-          : "")
-      }
+      aria-label={`${v.toFixed(1)} out of 5` + (p.count != null ? `, ${p.count} reviews` : "")}
     >
       <span className="tf-stars" aria-hidden>
         {[0, 1, 2, 3, 4].map((i) => {
@@ -130,21 +121,11 @@ export function StockBadge(p: StockBadgeProps) {
   const s = p.stock;
   if (s == null) return null;
   return s <= 0 ? (
-    <Badge tone="danger">{L("Out of stock")}</Badge>
+    <Badge tone="danger">{"Out of stock"}</Badge>
   ) : s <= (p.low || 10) ? (
-    <Badge tone="warning">
-      {L("Low stock · {n} left", {
-        n: s,
-      })}
-    </Badge>
+    <Badge tone="warning">{`Low stock · ${s} left`}</Badge>
   ) : (
-    <Badge tone="success">
-      {p.compact
-        ? L("In stock")
-        : L("In stock · {n}", {
-            n: s,
-          })}
-    </Badge>
+    <Badge tone="success">{p.compact ? "In stock" : `In stock · ${s}`}</Badge>
   );
 }
 
@@ -165,9 +146,7 @@ export function ProductCard(p: ProductCardProps) {
             type="button"
             className={cx("tf-product-wish", p.wished && "on")}
             aria-pressed={!!p.wished}
-            aria-label={L(p.wished ? "Remove {name}" : "Save {name}", {
-              name: p.name,
-            })}
+            aria-label={`${p.wished ? "Remove" : "Save"} ${p.name}`}
             onClick={(e) => {
               e.stopPropagation();
               p.onWish?.();
@@ -187,13 +166,11 @@ export function ProductCard(p: ProductCardProps) {
           <Price value={p.price} compareAt={p.compareAt} />
           {p.onAdd &&
             (p.stock === 0 ? (
-              <span className="tf-card-desc">{L("Sold out")}</span>
+              <span className="tf-card-desc">{"Sold out"}</span>
             ) : (
               <IconButton
                 icon={p.added ? "check" : "plus"}
-                label={L("Add {name} to cart", {
-                  name: p.name,
-                })}
+                label={`Add ${p.name} to cart`}
                 variant={p.added ? "solid" : "soft"}
                 size="sm"
                 onClick={(e) => {
@@ -232,15 +209,7 @@ export function VariantPicker(p: VariantPickerProps) {
               className={cx("tf-variant", on && "on", off && "off")}
               aria-pressed={on}
               disabled={off}
-              aria-label={
-                color
-                  ? off
-                    ? L("{name} (sold out)", {
-                        name: lab,
-                      })
-                    : lab
-                  : undefined
-              }
+              aria-label={color ? (off ? `${lab} (sold out)` : lab) : undefined}
               title={color ? lab : undefined}
               onClick={() => {
                 v[1](val);
@@ -277,13 +246,7 @@ export function CartLine(p: CartLineProps) {
         <div className="tf-number tf-number-sm">
           <IconButton
             icon={p.qty <= 1 ? "trash" : "minus"}
-            label={
-              p.qty <= 1
-                ? L("Remove {name}", {
-                    name: p.name,
-                  })
-                : L("One less")
-            }
+            label={p.qty <= 1 ? `Remove ${p.name}` : "One less"}
             size="sm"
             onClick={() => {
               p.qty <= 1 ? p.onRemove && p.onRemove() : p.onQty?.(p.qty - 1);
@@ -294,7 +257,7 @@ export function CartLine(p: CartLineProps) {
           </span>
           <IconButton
             icon="plus"
-            label={L("One more")}
+            label="One more"
             size="sm"
             onClick={() => {
               p.onQty?.(p.qty + 1);
@@ -325,7 +288,7 @@ export function OrderSummary(p: OrderSummaryProps) {
     toFree = (p.freeShippingFrom || 75) - (sub - disc);
   return (
     <div className="tf-summary">
-      {p.title !== false && <b className="tf-summary-title">{p.title || L("Order summary")}</b>}
+      {p.title !== false && <b className="tf-summary-title">{p.title || "Order summary"}</b>}
       {p.showLines && (
         <div
           className="tf-col"
@@ -351,9 +314,7 @@ export function OrderSummary(p: OrderSummaryProps) {
       {toFree > 0 && p.freeShippingFrom !== 0 && (
         <div className="tf-freeship">
           <span>
-            {Lx("Add {amount} for free shipping", {
-              amount: <b>{money(Math.ceil(toFree * 100) / 100)}</b>,
-            })}
+            Add <b>{money(Math.ceil(toFree * 100) / 100)}</b> for free shipping
           </span>
           <span className="tf-usage-track">
             <span
@@ -378,7 +339,7 @@ export function OrderSummary(p: OrderSummaryProps) {
                 p.onCoupon?.(null);
               }}
             >
-              {L("Remove")}
+              {"Remove"}
             </button>
           </div>
         ) : (
@@ -387,14 +348,14 @@ export function OrderSummary(p: OrderSummaryProps) {
             onSubmit={(e) => {
               e.preventDefault();
               const r = p.onCoupon?.(code[0].trim().toUpperCase());
-              err[1](r === false ? L("That code isn’t valid") : null);
+              err[1](r === false ? "That code isn’t valid" : null);
               if (r !== false) code[1]("");
             }}
           >
             <input
               className="tf-input"
-              placeholder={L("Discount code")}
-              aria-label={L("Discount code")}
+              placeholder="Discount code"
+              aria-label="Discount code"
               value={code[0]}
               onChange={(e) => {
                 code[1](e.target.value);
@@ -403,7 +364,7 @@ export function OrderSummary(p: OrderSummaryProps) {
               aria-invalid={err[0] ? "true" : undefined}
             />
             <Button type="submit" variant="soft" disabled={!code[0].trim()}>
-              {L("Apply")}
+              {"Apply"}
             </Button>
             {err[0] && (
               <span
@@ -419,29 +380,25 @@ export function OrderSummary(p: OrderSummaryProps) {
         ))}
       <dl className="tf-summary-rows">
         <div>
-          <dt>{L("Subtotal")}</dt>
+          <dt>{"Subtotal"}</dt>
           <dd>{money(sub)}</dd>
         </div>
         {disc > 0 && (
           <div className="save">
-            <dt>{L("Discount")}</dt>
+            <dt>{"Discount"}</dt>
             <dd>{"−" + money(disc)}</dd>
           </div>
         )}
         <div>
-          <dt>{L("Shipping")}</dt>
-          <dd>{ship === 0 ? L("Free") : money(ship)}</dd>
+          <dt>{"Shipping"}</dt>
+          <dd>{ship === 0 ? "Free" : money(ship)}</dd>
         </div>
         <div className="total">
-          <dt>{L("Total")}</dt>
+          <dt>{"Total"}</dt>
           <dd>{money(total)}</dd>
         </div>
         <div className="vat">
-          <dt>
-            {L("incl. {rate}% VAT", {
-              rate: p.vat || 19,
-            })}
-          </dt>
+          <dt>{`incl. ${p.vat || 19}% VAT`}</dt>
           <dd>{money(Math.round(vat * 100) / 100)}</dd>
         </div>
       </dl>
@@ -451,10 +408,10 @@ export function OrderSummary(p: OrderSummaryProps) {
 }
 
 export function CheckoutSteps(p: CheckoutStepsProps) {
-  const steps = p.steps || [L("Cart"), L("Details"), L("Shipping"), L("Payment")],
+  const steps = p.steps || ["Cart", "Details", "Shipping", "Payment"],
     cur = p.current || 0;
   return (
-    <ol className="tf-csteps" aria-label={L("Checkout progress")}>
+    <ol className="tf-csteps" aria-label="Checkout progress">
       {steps.map((s, i) => (
         <li
           key={s}
@@ -477,17 +434,17 @@ export function CheckoutSteps(p: CheckoutStepsProps) {
   );
 }
 
-/* Status keys stay English; the visible text goes through L(). */
+/* Status keys and their visible text. */
 const ORDER_STEPS = ["Placed", "Paid", "Packed", "Shipped", "Delivered"] as const;
 const orderStepLabel = (s: string) =>
   ({
-    Placed: L("Placed"),
-    Paid: L("Paid"),
-    Packed: L("Packed"),
-    Shipped: L("Shipped"),
-    Delivered: L("Delivered"),
-    Refunded: L("Refunded"),
-    Cancelled: L("Cancelled"),
+    Placed: "Placed",
+    Paid: "Paid",
+    Packed: "Packed",
+    Shipped: "Shipped",
+    Delivered: "Delivered",
+    Refunded: "Refunded",
+    Cancelled: "Cancelled",
   })[s] ?? s;
 
 export function OrderTimeline(p: OrderTimelineProps) {
@@ -527,20 +484,20 @@ export function OrderTimeline(p: OrderTimelineProps) {
 export function PlanCard(p: PlanCardProps) {
   return (
     <div className={cx("tf-plan", p.featured && "featured", p.current && "current")}>
-      {p.featured && <span className="tf-plan-flag">{p.flag || L("Most popular")}</span>}
+      {p.featured && <span className="tf-plan-flag">{p.flag || "Most popular"}</span>}
       <div className="tf-plan-head">
         <b>{p.name}</b>
         {p.text && <span>{p.text}</span>}
       </div>
       <div className="tf-plan-price">
         {p.price === 0 ? (
-          <b>{L("Free")}</b>
+          <b>{"Free"}</b>
         ) : p.price == null ? (
-          <b>{L("Let’s talk")}</b>
+          <b>{"Let’s talk"}</b>
         ) : (
           <>
             <b>{money(p.price)}</b>
-            <span>{p.per || L("per seat / month")}</span>
+            <span>{p.per || "per seat / month"}</span>
           </>
         )}
         {p.was && <s>{money(p.was)}</s>}
@@ -551,12 +508,7 @@ export function PlanCard(p: PlanCardProps) {
         onClick={p.onPick}
         className="tf-plan-cta"
       >
-        {p.current
-          ? L("Current plan")
-          : p.cta ||
-            L("Choose {name}", {
-              name: p.name,
-            })}
+        {p.current ? "Current plan" : p.cta || `Choose ${p.name}`}
       </Button>
       <ul className="tf-plan-feats">
         {(p.features || []).map((f, i) => (

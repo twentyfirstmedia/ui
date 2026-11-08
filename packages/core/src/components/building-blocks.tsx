@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { cx } from "../cx.js";
-import { L } from "../i18n.js";
 import { useControlled, useOutside } from "../hooks.js";
 import { Icon } from "../Icon.js";
 import { Menu } from "./feedback.js";
@@ -59,7 +58,7 @@ export function Spinner(p: SpinnerProps) {
     <span
       className={cx("tf-spinner", p.size === "lg" && "lg")}
       role="status"
-      aria-label={p.label || L("Loading")}
+      aria-label={p.label || "Loading"}
     />
   );
 }
