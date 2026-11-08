@@ -101,11 +101,14 @@ Notiz: `init` setzt `.npmrc` (Scope auf GitHub Packages, Token aus `NPM_TOKEN`),
 Notiz: `apps/docs` (Next 16, statischer Export, `DOCS_BASE_PATH`/`DOCS_SITE_URL` für Umzug und Canonicals). `[kit]` ist das Root-Segment, `/` leitet auf `/halo/` weiter. Kopfzeile: Kit-Umschalter (gleiche Seite im anderen Kit), EN/DE (deutsche Labels für alle Komponenten), hell/dunkel (gespeichert, ohne Flackern), Suche mit ⌘K (die Kit-eigene CommandPalette), GitHub. Die Doku nutzt die Kit-Komponenten selbst. Seiten: Einführung, Installation, CLI, Theming und Tokens (Halo/Pro nebeneinander, Farbfelder im aktuellen Theme), Texte und Locale, Status und Freigaben, Changelog, „Alle Komponenten", 82 Komponenten-Seiten (README aus der Referenz, Live-Vorschau, Code-Tab, Props-Tabellen automatisch aus `types.ts`) und 26 Muster-Seiten (die 25 Screens der Referenz + Immobilien). Die Vorschauen sind die 108 Referenz-Previews als typisierte TSX-Beispiele in `examples/previews` (Demo-Daten neutral, ohne App-Namen). Die Demo-App (`halo-workspace.html`) selbst ist nicht portiert; die Muster decken Dashboard, Chat, Shop, Admin und Immobilien ab.
 
 ### Phase 8: Qualität und Release 0.1.0
-- [ ] axe und Screenshots grün, beide Kits
-- [ ] Bundle-Größe pro Komponente geprüft (tree-shakeable, `sideEffects` nur für CSS)
+- [x] axe und Screenshots grün, beide Kits
+- [x] Bundle-Größe pro Komponente geprüft (tree-shakeable, `sideEffects` nur für CSS)
 - [ ] Changeset `0.1.0`, Release-Workflow einmal echt durchlaufen
 
+Notiz: `e2e/a11y.spec.ts` prüft jede Doku-Seite (Anleitungen, 82 Komponenten, 26 Muster) mit axe (WCAG 2.1 A/AA) in beiden Kits × hell/dunkel: 464 Seiten grün. Dafür u. a. behoben: Opacity auf Text (Coupon, Energieklasse, Chat-Aktionen), Paper-Text folgt den Paper-Tokens (`--paper-muted` auf 4,5:1 angehoben), zugängliche Namen enthalten den sichtbaren Text (Kalendertage, Status-Auswahl, Karten-Pins, Rail-Zähler), fehlende Labels (Switch `label`, ColorField, Composer-Anhang als Button), Rollen (`img`, Listbox-Name), scrollbare Bereiche fokussierbar, TopBar-Navigation scrollt statt das Profil aus dem Rahmen zu schieben, und Pro `fg-300` minimal angepasst (hell #5e5e68, dunkel #90909b), damit es auch auf `line-200` 4,5:1 erreicht. `UIProvider` lässt Attribute unangetastet, deren Prop fehlt (kein Theme-Flackern beim Hydrieren). `e2e/screenshots.spec.ts`: jede Vorschau in beiden Kits × hell/dunkel × 390/1440 px, 888 Baselines (36 MB) im Repo. Vorschauen haben einen eigenen `UIProvider scope="subtree"`, damit Overlays im Rahmen bleiben. Bundle: `scripts/bundle.ts` (Tabelle) und ein Test: Button allein 3,2 KB gzip, alle Komponenten 60 KB; Budgets für DataTable, RichTextEditor, ApprovalCard, MapView. Changeset `first-release` (alle vier Packages minor → 0.1.0) liegt bereit; `npm pack` geprüft. Der Release-Workflow konnte nicht laufen: GitHub Actions startet in diesem Repo keine Läufe, und `NPM_TOKEN` fehlt.
+
 ## Offen (Robin)
+- GitHub Actions für das Repo aktivieren (bisher startet kein Workflow, auch nicht auf `main`); danach einmal CI und den Release-Workflow laufen lassen
 - GitHub-Packages-Token für den Release-Workflow (Secret `NPM_TOKEN`) und Lesezugriff für die Apps
 - Hosting und DNS für `ui.twentyfirst.media` (Vercel oder Hetzner), später `twentyfirst.design`
 - Soll die Doku öffentlich sein oder hinter Login (Code-Tabs zeigen Quelltext)?

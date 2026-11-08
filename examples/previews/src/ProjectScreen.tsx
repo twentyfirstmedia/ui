@@ -189,7 +189,7 @@ function App() {
                   cursor: "default",
                 }}
               >
-                <Checkbox defaultChecked={t[1]} />
+                <Checkbox defaultChecked={t[1]} label={t[0]} />
                 <span
                   style={{
                     fontWeight: 600,

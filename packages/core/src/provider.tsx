@@ -122,11 +122,21 @@ export function UIProvider(p: UIProviderProps) {
   const version = useSyncExternalStore(subscribeLocale, localeVersion, localeVersion);
   const key = `${version}.${applied.current?.key ?? 0}`;
 
+  // Attributes the provider set itself; an omitted prop leaves what the page already has (for
+  // example a theme set by an inline script before hydration) untouched.
+  const owned = useRef<Set<string>>(new Set());
   useEffect(() => {
     if (scope !== "document") return;
     const el = document.documentElement;
-    const set = (k: string, v: string | undefined) =>
-      v ? el.setAttribute(k, v) : el.removeAttribute(k);
+    const set = (k: string, v: string | undefined) => {
+      if (v) {
+        el.setAttribute(k, v);
+        owned.current.add(k);
+      } else if (owned.current.has(k)) {
+        el.removeAttribute(k);
+        owned.current.delete(k);
+      }
+    };
     set("data-kit", p.kit);
     set("data-theme", p.theme);
     set("data-density", p.density);

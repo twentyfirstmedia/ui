@@ -143,6 +143,7 @@ export function Switch(p: SwitchProps) {
         checked={p.checked}
         onChange={p.onChange}
         disabled={p.disabled}
+        aria-label={p.label}
       />
       {!p.spread && p.children}
     </label>

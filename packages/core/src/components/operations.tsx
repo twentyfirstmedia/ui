@@ -106,7 +106,7 @@ export function ServerCard(p: ServerCardProps) {
 
 export function DeployPipeline(p: DeployPipelineProps) {
   return (
-    <ol className="tf-pipeline">
+    <ol className="tf-pipeline" tabIndex={0} aria-label={L("Deploy pipeline")}>
       {(p.stages || []).map((s, i) => (
         <li key={i} className={cx("tf-stage", "st-" + (s.status || "idle"))}>
           <StatusShape status={s.status === "done" ? "ok" : s.status || "idle"} />

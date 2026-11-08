@@ -194,11 +194,6 @@
   align-items: center;
   gap: 4px;
   margin-left: -8px;
-  opacity: 0.8;
-}
-.tf-msg:hover .tf-msg-actions,
-.tf-msg-actions:focus-within {
-  opacity: 1;
 }
 .tf-msg-act {
   display: grid;
@@ -1577,6 +1572,7 @@
 }
 .tf-plan.featured .tf-plan-head span,
 .tf-plan.featured .tf-plan-price span,
+.tf-plan.featured .tf-plan-price s,
 .tf-plan.featured .tf-plan-feats li.no {
   color: var(--on-frame-muted);
 }

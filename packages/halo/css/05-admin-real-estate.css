@@ -1112,7 +1112,7 @@ button.tf-runs-main[aria-expanded]:hover {
   overflow: hidden;
 }
 .tf-coupon.off {
-  opacity: 0.7;
+  box-shadow: inset 0 0 0 1px var(--line);
 }
 .tf-coupon-val {
   display: flex;
@@ -1990,10 +1990,14 @@ button.tf-runs-main[aria-expanded]:hover {
   display: grid;
   place-items: center;
   height: 28px;
-  background: color-mix(in srgb, var(--mint) calc((1 - var(--e)) * 100%), var(--blush));
+  /* inactive classes are faded towards the surface; the text keeps full contrast */
+  background: color-mix(
+    in srgb,
+    color-mix(in srgb, var(--mint) calc((1 - var(--e)) * 100%), var(--blush)) 55%,
+    var(--surface)
+  );
   color: var(--ink);
   font: 700 11px/1 var(--font-sans);
-  opacity: 0.55;
 }
 .tf-energy-c:first-child {
   border-radius: var(--radius-pill) 0 0 var(--radius-pill);
@@ -2002,7 +2006,7 @@ button.tf-runs-main[aria-expanded]:hover {
   border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
 }
 .tf-energy-c.on {
-  opacity: 1;
+  background: color-mix(in srgb, var(--mint) calc((1 - var(--e)) * 100%), var(--blush));
   transform: scaleY(1.25);
   border-radius: 6px;
   box-shadow: 0 0 0 2px var(--ink);
