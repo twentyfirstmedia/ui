@@ -11,10 +11,10 @@ export default function Preview() {
       <OrderTimeline
         status="Shipped"
         times={{
-          Placed: "12 Apr, 09:14",
-          Paid: "12 Apr, 09:15",
-          Packed: "12 Apr, 15:40",
-          Shipped: "13 Apr, 08:02",
+          Placed: "Apr 12, 09:14",
+          Paid: "Apr 12, 09:15",
+          Packed: "Apr 12, 15:40",
+          Shipped: "Apr 13, 08:02",
         }}
       />
       <OrderTimeline

@@ -51,7 +51,7 @@ function Phone(p: { d: number; tab: number; children?: React.ReactNode }) {
             justifyContent: "space-between",
             alignItems: "center",
             padding: "16px 20px 8px",
-            font: "700 13px var(--font-sans)",
+            font: "var(--type-title-weight) 13px var(--font-sans)",
           }}
         >
           <span>9:41</span>
@@ -59,7 +59,7 @@ function Phone(p: { d: number; tab: number; children?: React.ReactNode }) {
             style={{
               width: 90,
               height: 24,
-              borderRadius: 999,
+              borderRadius: "var(--radius-pill)",
               background: "var(--frame)",
             }}
           />
@@ -126,7 +126,7 @@ function App() {
         scrollSnapType: "x mandatory",
         padding: "20px 0",
         background: "var(--canvas)",
-        borderRadius: 30,
+        borderRadius: "var(--radius-xl)",
       }}
     >
       <Phone d={0} tab={0}>
@@ -161,7 +161,7 @@ function App() {
           delay={150}
         >
           <StatTile tint="sky" value="18" label="Projects" />
-          <StatTile tint="butter" value="$48k" label="Revenue" />
+          <StatTile tint="butter" value="€48k" label="Revenue" />
           <StatTile tint="mint" value="11" label="Live" />
           <StatTile tint="placeholder" value="4" label="Review" />
         </Stagger>

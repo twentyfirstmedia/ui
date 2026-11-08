@@ -18,7 +18,7 @@ export default function Preview() {
         value={20}
         used={312}
         limit={500}
-        until="30 Apr"
+        until="Apr 30"
         min={10}
         revenue={8420}
         text="All Instagram packages"
@@ -53,7 +53,7 @@ export default function Preview() {
         value={30}
         used={1000}
         limit={1000}
-        until="29 Nov"
+        until="Nov 29"
         statusLabel="Used up"
       />
     </div>

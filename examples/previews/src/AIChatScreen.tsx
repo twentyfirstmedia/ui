@@ -10,7 +10,7 @@ import {
 } from "@twentyfirstmedia/ui-core";
 import { Shell } from "./_workspace";
 
-const md = "I drafted a reply to **Ida Nolan**. It quotes **40 seats at €24** prorated to 1 May.";
+const md = "I drafted a reply to **Ida Nolan**. It quotes **40 seats at €24** prorated to May 1.";
 function App() {
   return (
     <Shell
@@ -133,7 +133,7 @@ function App() {
               onEdit={() => {}}
             >
               {
-                "Hi Ida,\n\nhappy to add 40 seats before your renewal on 1 May. The quote is attached.\n\nBest, Mara"
+                "Hi Ida,\n\nhappy to add 40 seats before your renewal on May 1. The quote is attached.\n\nBest, Mara"
               }
             </ApprovalCard>
           }

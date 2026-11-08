@@ -9,6 +9,15 @@ body {
   font-weight: 500;
   -webkit-font-smoothing: antialiased;
 }
+/* Boxes are sized like in the reference, whatever the host page sets globally (e.g. a
+   border-box reset): content-box unless a component says otherwise, and border-box for form
+   controls, as browsers do by default */
+:is([class^="tf-"], [class*=" tf-"]):where(:not(button, input, select, textarea)) {
+  box-sizing: content-box;
+}
+:is([class^="tf-"], [class*=" tf-"]):where(button, input, select, textarea) {
+  box-sizing: border-box;
+}
 .tf-pad {
   padding: var(--space-5);
 }
@@ -276,9 +285,9 @@ body {
   display: inline-grid;
   place-items: center;
   border-radius: 50%;
+  background: var(--av, var(--lilac));
   font: 700 12px/1 var(--font-sans);
   color: var(--ink);
-  background: var(--lilac);
   overflow: hidden;
   flex: none;
 }

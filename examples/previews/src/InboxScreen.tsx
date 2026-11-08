@@ -41,18 +41,18 @@ function Msg(p: {
         style={{
           maxWidth: "72%",
           padding: "12px 16px",
-          borderRadius: 18,
+          borderRadius: "var(--radius-md)",
           borderBottomLeftRadius: p.me ? 18 : 6,
           borderBottomRightRadius: p.me ? 6 : 18,
           background: p.me ? "var(--accent)" : "var(--surface-sunken)",
           color: p.me ? "var(--on-accent)" : "var(--ink)",
-          font: "500 13.5px/20px var(--font-sans)",
+          font: "var(--type-body-weight) 13px/20px var(--font-sans)",
         }}
       >
         {p.children}
         <div
           style={{
-            font: "500 11px/14px var(--font-sans)",
+            font: "var(--type-body-weight) 11px/14px var(--font-sans)",
             opacity: 0.65,
             marginTop: 4,
           }}
@@ -118,7 +118,7 @@ function App() {
         <Panel side title="Northwind" subtitle="Team plan · since 2023">
           <div className="tf-row">
             <Badge tone="success">Active</Badge>
-            <Badge tone="info">Renews 01.05</Badge>
+            <Badge tone="info">Renews May 1</Badge>
           </div>
           <div
             className="tf-grid"
@@ -130,7 +130,7 @@ function App() {
               } as React.CSSProperties
             }
           >
-            <StatTile tint="butter" value="$1,240" label="MRR" />
+            <StatTile tint="butter" value="€1,240" label="MRR" />
             <StatTile tint="sky" value="24" label="Seats" />
           </div>
           <h3
@@ -254,7 +254,7 @@ function App() {
                 gap: 8,
                 alignItems: "center",
                 padding: "4px 4px 4px 20px",
-                borderRadius: 999,
+                borderRadius: "var(--radius-pill)",
                 background: "var(--surface-sunken)",
               } as React.CSSProperties
             }
@@ -269,7 +269,7 @@ function App() {
                 border: 0,
                 background: "transparent",
                 outline: "none",
-                font: "500 13.5px var(--font-sans)",
+                font: "var(--type-body-weight) 13px var(--font-sans)",
                 color: "var(--ink)",
               }}
             />

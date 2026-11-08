@@ -3,7 +3,7 @@ import * as React from "react";
 import { Icon } from "../Icon.js";
 import { cx } from "../cx.js";
 import { useScrollFocus } from "../hooks.js";
-import { L, formatMoney } from "../i18n.js";
+import { L, formatMoney, formatPercent } from "../i18n.js";
 import { StatusIndicator, StatusShape } from "./status.js";
 import { Meter, UptimeBar } from "./developer.js";
 import { DataTable } from "./data-table.js";
@@ -494,7 +494,7 @@ export function ReceiptSuggestion(p: ReceiptSuggestionProps) {
             <b className={f.mono ? "tf-mono" : undefined}>{f.value}</b>
             {f.confidence != null && (
               <span className={cx("tf-conf", f.confidence < 0.8 && "low")}>
-                {Math.round(f.confidence * 100) + " %"}
+                {formatPercent(f.confidence * 100)}
               </span>
             )}
           </div>

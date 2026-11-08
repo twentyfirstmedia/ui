@@ -34,13 +34,13 @@ function App() {
         >
           <Tabs block items={["Events", "Approvals", "History"]} />
           <Stagger className="tf-col" delay={300}>
-            <EventCard kind="meeting" label="Team sync" date="Tue, 14.04" time="10:30">
+            <EventCard kind="meeting" label="Team sync" date="Tue, Apr 14" time="10:30">
               Roadmap check-in with design and growth; bring last sprint numbers.
             </EventCard>
-            <EventCard kind="review" label="Design review" date="Wed, 15.04" time="14:00">
+            <EventCard kind="review" label="Design review" date="Wed, Apr 15" time="14:00">
               Walk through the new billing settings flow.
             </EventCard>
-            <EventCard kind="deadline" label="Deadline" date="Fri, 17.04" time="17:00">
+            <EventCard kind="deadline" label="Deadline" date="Fri, Apr 17" time="17:00">
               Send Q2 invoices to all annual customers.
             </EventCard>
           </Stagger>
@@ -70,7 +70,7 @@ function App() {
         <StatTile tint="sky" value="18" label="All projects" />
         <StatTile tint="mint" value="11" label="Live" delta="+2 this week" />
         <StatTile tint="placeholder" value="4" label="Drafts" />
-        <StatTile tint="butter" value="$48,210" label="Revenue (MTD)" />
+        <StatTile tint="butter" value="€48,210" label="Revenue (MTD)" />
       </Stagger>
       <div
         className="tf-in"

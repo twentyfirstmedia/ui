@@ -943,7 +943,7 @@ export function FileDrop(p: FileDropProps) {
           take(e.dataTransfer.files);
         }}
       >
-        <TintIcon icon="download" tint={over[0] ? "mint" : "sky"} size={40} />
+        <TintIcon icon="upload" tint={over[0] ? "mint" : "sky"} size={40} />
         <b>{over[0] ? L("Drop to upload") : p.title || L("Drop files here or browse")}</b>
         <span>{p.hint || L("PDF, PNG or JPG up to 10 MB")}</span>
         <input
@@ -969,7 +969,7 @@ export function FileDrop(p: FileDropProps) {
             const done = f.progress >= 100;
             return (
               <div key={f.id} className="tf-upload">
-                <TintIcon icon="file" tint={done ? "mint" : "plain"} />
+                <TintIcon icon="file" tint={done ? "mint" : "sky"} />
                 <div className="tf-upload-text">
                   <b>{f.name}</b>
                   <span>

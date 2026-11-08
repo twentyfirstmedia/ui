@@ -107,7 +107,7 @@ function App() {
       active="Calendar"
       dock={false}
       side={
-        <Panel side title="Up next" subtitle="Thursday, 16 April">
+        <Panel side title="Up next" subtitle="Thursday, April 16">
           <div
             className="tf-card tf-in"
             style={
@@ -127,7 +127,7 @@ function App() {
             >
               <span
                 style={{
-                  fontWeight: 700,
+                  fontWeight: "var(--type-title-weight)",
                 }}
               >
                 April 2026
@@ -148,7 +148,7 @@ function App() {
                 gridTemplateColumns: "repeat(7, 1fr)",
                 gap: 4,
                 textAlign: "center",
-                font: "600 11.5px/28px var(--font-sans)",
+                font: "var(--type-label-weight) 11px/28px var(--font-sans)",
               }}
             >
               {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
@@ -177,7 +177,7 @@ function App() {
                     <span
                       key={i}
                       style={{
-                        borderRadius: 999,
+                        borderRadius: "var(--radius-pill)",
                         background: today ? "var(--accent)" : on ? "var(--sky)" : "transparent",
                         color: today ? "var(--on-accent)" : "var(--ink)",
                       }}
@@ -192,14 +192,14 @@ function App() {
             <EventCard
               kind="review"
               label="Pricing review"
-              date="Thu, 16.04"
+              date="Thu, Apr 16"
               time="11:00"
               tint="butter"
               icon="card"
             >
               Moved from Wednesday so Growth can join.
             </EventCard>
-            <EventCard kind="incident" label="Incident retro" date="Thu, 16.04" time="16:00">
+            <EventCard kind="incident" label="Incident retro" date="Thu, Apr 16" time="16:00">
               What delayed EU webhooks and how we stop it.
             </EventCard>
           </Stagger>
@@ -247,9 +247,9 @@ function App() {
               key={d}
               style={{
                 textAlign: "center",
-                font: "700 13px/18px var(--font-sans)",
+                font: "var(--type-title-weight) 13px/18px var(--font-sans)",
                 padding: "8px 0",
-                borderRadius: 999,
+                borderRadius: "var(--radius-pill)",
                 background: i === 3 ? "var(--accent)" : "transparent",
                 color: i === 3 ? "var(--on-accent)" : "var(--ink)",
               }}
@@ -273,7 +273,7 @@ function App() {
                 key={hr}
                 style={{
                   height: ROW,
-                  font: "600 11px/1 var(--font-sans)",
+                  font: "var(--type-label-weight) 11px/1 var(--font-sans)",
                   color: "var(--ink-muted)",
                 }}
               >
@@ -291,7 +291,7 @@ function App() {
                   "repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px " +
                   ROW +
                   "px)",
-                borderRadius: 12,
+                borderRadius: "var(--radius-sm)",
               }}
             >
               {EV.filter((e) => e.d === di).map((e, i) => (
@@ -306,7 +306,7 @@ function App() {
                       right: 4,
                       top: (e.s - START) * ROW + 2,
                       height: (e.e - e.s) * ROW - 4,
-                      borderRadius: 12,
+                      borderRadius: "var(--radius-sm)",
                       padding: "8px 12px",
                       boxSizing: "border-box",
                       overflow: "hidden",
@@ -315,14 +315,14 @@ function App() {
                 >
                   <div
                     style={{
-                      font: "700 12.5px/16px var(--font-sans)",
+                      font: "var(--type-title-weight) 12px/16px var(--font-sans)",
                     }}
                   >
                     {e.t}
                   </div>
                   <div
                     style={{
-                      font: "500 11.5px/15px var(--font-sans)",
+                      font: "var(--type-body-weight) 11px/15px var(--font-sans)",
                       opacity: 0.78,
                     }}
                   >

@@ -20,40 +20,40 @@ const INV = [
   {
     id: "#2044",
     c: "Northwind",
-    d: "12.04.2026",
-    a: "$1,240.00",
+    d: "Apr 12, 2026",
+    a: "€1,240.00",
     s: "Paid",
     tone: "success",
   },
   {
     id: "#2043",
     c: "Copperline",
-    d: "10.04.2026",
-    a: "$3,900.00",
+    d: "Apr 10, 2026",
+    a: "€3,900.00",
     s: "Due",
     tone: "info",
   },
   {
     id: "#2042",
     c: "Blue Fern",
-    d: "08.04.2026",
-    a: "$420.00",
+    d: "Apr 8, 2026",
+    a: "€420.00",
     s: "Paid",
     tone: "success",
   },
   {
     id: "#2041",
     c: "Harbor & Co",
-    d: "02.03.2026",
-    a: "$860.00",
+    d: "Mar 2, 2026",
+    a: "€860.00",
     s: "Overdue",
     tone: "danger",
   },
   {
     id: "#2040",
     c: "Lumen Labs",
-    d: "28.02.2026",
-    a: "$2,150.00",
+    d: "Feb 28, 2026",
+    a: "€2,150.00",
     s: "Paid",
     tone: "success",
   },
@@ -66,7 +66,7 @@ function App() {
       user={{ name: "Mara Ellis", email: "mara@halo.app" }}
       active="Billing"
       side={
-        <Panel side title="Your plan" subtitle="Renews on 01.05.2026">
+        <Panel side title="Your plan" subtitle="Renews on May 1, 2026">
           <div
             className="tf-card tf-bg-lilac"
             style={{
@@ -92,7 +92,7 @@ function App() {
               </Badge>
             </div>
             <div>
-              <span className="tf-stat-value">$96</span>
+              <span className="tf-stat-value">€96</span>
               <span className="tf-card-desc">{" / seat / month"}</span>
             </div>
             <Button variant="primary" iconRight="arrowUpRight">
@@ -110,7 +110,7 @@ function App() {
             <div>
               <div
                 style={{
-                  fontWeight: 700,
+                  fontWeight: "var(--type-title-weight)",
                 }}
               >
                 38 of 42 seats
@@ -133,7 +133,7 @@ function App() {
                 style={{
                   justifyContent: "space-between",
                   fontSize: 13,
-                  fontWeight: 600,
+                  fontWeight: "var(--type-label-weight)",
                   marginBottom: 8,
                 }}
               >
@@ -148,7 +148,7 @@ function App() {
                 style={{
                   justifyContent: "space-between",
                   fontSize: 13,
-                  fontWeight: 600,
+                  fontWeight: "var(--type-label-weight)",
                   marginBottom: 8,
                 }}
               >
@@ -186,8 +186,8 @@ function App() {
         }
         delay={80}
       >
-        <StatTile tint="butter" value="$48,210" label="Collected (MTD)" />
-        <StatTile tint="sky" value="$12,480" label="Outstanding" />
+        <StatTile tint="butter" value="€48,210" label="Collected (MTD)" />
+        <StatTile tint="sky" value="€12,480" label="Outstanding" />
         <StatTile tint="blush" value="3" label="Overdue invoices" />
         <StatTile tint="mint" value="98.2%" label="On-time rate" />
       </Stagger>
@@ -216,7 +216,7 @@ function App() {
           >
             <span
               style={{
-                font: "600 12px/16px var(--font-sans)",
+                font: "var(--type-label-weight) 12px/16px var(--font-sans)",
                 color: "var(--on-frame-muted)",
               }}
             >
@@ -226,7 +226,7 @@ function App() {
           </div>
           <div
             style={{
-              font: "700 20px/26px var(--font-sans)",
+              font: "var(--type-title-weight) 20px/26px var(--font-sans)",
               letterSpacing: ".08em",
             }}
           >
@@ -248,7 +248,7 @@ function App() {
           <BarChart
             height={92}
             barWidth={22}
-            format={(v) => "$" + Math.round(v / 1000) + "k"}
+            format={(v) => "€" + Math.round(v / 1000) + "k"}
             data={[
               {
                 label: "Nov",

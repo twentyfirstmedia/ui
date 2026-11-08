@@ -14,7 +14,7 @@ function App() {
   return (
     <div
       style={{
-        borderRadius: 30,
+        borderRadius: "var(--radius-xl)",
         background: "var(--canvas)",
         overflow: "hidden",
         boxShadow: "inset 0 0 0 1px var(--line)",
@@ -32,7 +32,7 @@ function App() {
       >
         <b
           style={{
-            font: "700 20px/26px var(--font-sans)",
+            font: "var(--type-title-weight) 20px/26px var(--font-sans)",
           }}
         >
           Halo Goods
@@ -80,7 +80,7 @@ function App() {
           <h1
             style={{
               margin: 0,
-              font: "700 28px/34px var(--font-sans)",
+              font: "var(--type-title-weight) 28px/34px var(--font-sans)",
             }}
           >
             Halo Cotton Tee

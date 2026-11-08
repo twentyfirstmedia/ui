@@ -17,7 +17,7 @@ export default function Preview() {
         <BackupList
           onDownload={() => {}}
           onRestore={() => {}}
-          footer="Kept for 30 days · restore test passed 2 Nov"
+          footer="Kept for 30 days · restore test passed Nov 2"
           items={[
             {
               id: 1,
@@ -57,7 +57,7 @@ export default function Preview() {
               kind: "IP",
               reason: "Card testing",
               by: "Fraud rule",
-              until: "15 Nov",
+              until: "Nov 15",
             },
             {
               id: 2,
@@ -72,7 +72,7 @@ export default function Preview() {
               kind: "Account",
               reason: "Abuse",
               by: "Mara Ellis",
-              until: "1 Dec",
+              until: "Dec 1",
             },
           ]}
         />

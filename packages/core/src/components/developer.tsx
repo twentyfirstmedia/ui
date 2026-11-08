@@ -2,7 +2,7 @@
 import * as React from "react";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
-import { L, formatMoney, formatNumber } from "../i18n.js";
+import { L, formatMoney, formatNumber, formatPercent } from "../i18n.js";
 import { useControlled, useId } from "../hooks.js";
 import { Portal } from "../portal.js";
 import { CodeBlock } from "./chat.js";
@@ -111,7 +111,7 @@ export function SecretField(p: SecretFieldProps) {
                 });
               }}
             >
-              <Icon name="eye" size={14} />
+              <Icon name="eye" size={16} />
             </button>
           </Tooltip>
         )}
@@ -129,7 +129,7 @@ export function SecretField(p: SecretFieldProps) {
                 }, 1400);
               }}
             >
-              <Icon name={copied[0] ? "check" : "file"} size={14} />
+              <Icon name={copied[0] ? "check" : "file"} size={16} />
             </button>
           </Tooltip>
         )}
@@ -217,7 +217,7 @@ export function MoneyInput(p: MoneyInputProps) {
                   ? o
                   : {
                       value: o,
-                      label: o + " %",
+                      label: formatPercent(Number(o)),
                     };
               return (
                 <option key={r.value} value={r.value}>
@@ -387,9 +387,9 @@ export function UptimeBar(p: UptimeBarProps) {
         </span>
         {p.uptime != null && (
           <b className="tf-mono">
-            {formatNumber(p.uptime, {
+            {formatPercent(p.uptime, {
               maximumFractionDigits: 2,
-            }) + " %"}
+            })}
           </b>
         )}
       </div>
@@ -405,7 +405,7 @@ export function Meter(p: MeterProps) {
     <div className="tf-meter">
       <div className="tf-usage-top">
         <span>{p.label}</span>
-        <b>{p.text || Math.round(pct) + " %"}</b>
+        <b>{p.text || formatPercent(pct)}</b>
       </div>
       <span className="tf-usage-track">
         <span

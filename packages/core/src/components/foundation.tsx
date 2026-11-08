@@ -122,7 +122,8 @@ export function Avatar(p: AvatarProps) {
       style={{
         width: size,
         height: size,
-        background: "var(--" + t + ")",
+        // a custom property, so a kit can recolour avatars (Pro keeps them monochrome)
+        ["--av" as string]: "var(--" + t + ")",
         fontSize: Math.round(size * 0.36),
       }}
       title={p.name}

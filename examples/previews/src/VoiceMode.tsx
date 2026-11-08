@@ -14,7 +14,12 @@ function App() {
       <Segmented
         value={s[0]}
         onChange={(v) => s[1](v as VoiceModeProps["state"])}
-        options={["listening", "thinking", "speaking", "idle"]}
+        options={[
+          { value: "listening", label: "Listening" },
+          { value: "thinking", label: "Thinking" },
+          { value: "speaking", label: "Speaking" },
+          { value: "idle", label: "Idle" },
+        ]}
       />
       <VoiceMode
         name="Atlas"

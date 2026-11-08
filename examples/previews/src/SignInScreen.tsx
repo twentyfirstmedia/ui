@@ -91,13 +91,7 @@ function App() {
               }}
               delay={160}
             >
-              <Button
-                variant="secondary"
-                icon="globe"
-                style={{
-                  height: 44,
-                }}
-              >
+              <Button variant="secondary" icon="globe">
                 Continue with Google
               </Button>
               <div
@@ -106,7 +100,7 @@ function App() {
                   gap: 12,
                   color: "var(--ink-muted)",
                   fontSize: 12,
-                  fontWeight: 600,
+                  fontWeight: "var(--type-label-weight)",
                 }}
               >
                 <span
@@ -137,21 +131,14 @@ function App() {
                 <a
                   href="#"
                   style={{
-                    font: "600 12.5px var(--font-sans)",
+                    font: "var(--type-label-weight) 12px var(--font-sans)",
                     color: "var(--ink)",
                   }}
                 >
                   Forgot password?
                 </a>
               </div>
-              <Button
-                iconRight="arrowUpRight"
-                style={{
-                  height: 46,
-                }}
-              >
-                Sign in
-              </Button>
+              <Button iconRight="arrowUpRight">Sign in</Button>
             </Stagger>
           </div>
           <span
@@ -167,7 +154,7 @@ function App() {
               href="#"
               style={{
                 color: "var(--ink)",
-                fontWeight: 700,
+                fontWeight: "var(--type-title-weight)",
               }}
             >
               Create a workspace
@@ -177,7 +164,7 @@ function App() {
         <div
           style={{
             position: "relative",
-            borderRadius: 24,
+            borderRadius: "var(--radius-lg)",
             overflow: "hidden",
             padding: "clamp(20px, 5vw, 40px)",
             display: "flex",
@@ -199,7 +186,7 @@ function App() {
             delay={200}
           >
             <StatTile tint="sky" value="1,284" label="Members this month" />
-            <StatTile tint="butter" value="$48,210" label="Collected" />
+            <StatTile tint="butter" value="€48,210" label="Collected" />
             <div
               className="tf-card tf-bg-lilac"
               style={{
@@ -246,7 +233,7 @@ function App() {
           >
             <div
               style={{
-                font: "700 26px/32px var(--font-sans)",
+                font: "var(--type-title-weight) 26px/32px var(--font-sans)",
                 letterSpacing: "-0.015em",
               }}
             >

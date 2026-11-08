@@ -372,7 +372,8 @@ select.tf-input {
   min-height: 0;
   background: var(--surface);
 }
-.tf-stat-value {
+.tf-stat-value,
+.tf-statcell-value {
   font: 500 24px/28px var(--font-mono);
   letter-spacing: -0.02em;
 }
@@ -475,6 +476,17 @@ select.tf-input {
   font-family: var(--font-mono);
   font-weight: 500;
   border-radius: var(--radius-1);
+}
+/* Pro's buttons are smaller than Halo's: badges sit on the corner instead of over the icon */
+.tf-topbtn .tf-nav-count,
+.tf-rail-btn .tf-dotcount {
+  top: -6px;
+  right: -6px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  font-size: 10px;
+  line-height: 16px;
 }
 .tf-dock {
   border-radius: 0;
@@ -614,4 +626,74 @@ select.tf-input {
 }
 .tf-empty-title {
   font-weight: 600;
+}
+
+/* Colour only for state (reference/pro): Halo's decorative tints (icon tiles, tinted cards and
+   tiles, placeholders, dock buttons, avatars) are monochrome in Pro. Badges, alerts, status
+   shapes and thresholds keep their state colours. */
+.tf-t-sky,
+.tf-t-mint,
+.tf-t-lilac,
+.tf-t-butter,
+.tf-t-blush {
+  background: var(--bg-200);
+  color: var(--fg-100);
+}
+.tf-bg-sky,
+.tf-bg-mint,
+.tf-bg-lilac,
+.tf-bg-butter,
+.tf-bg-blush {
+  background: var(--bg-200);
+}
+.tf-avatar {
+  --av: var(--bg-300);
+  background: var(--av);
+}
+
+/* Charts are flat: square bars and segment ends, no rounded caps */
+.tf-chart rect {
+  rx: 0;
+  ry: 0;
+}
+.tf-gauge-arc {
+  stroke-linecap: butt;
+}
+
+/* The key chip on the primary approval option inverts with its row (readable in both themes) */
+.tf-approval-opt.primary kbd {
+  background: var(--on-accent);
+  color: var(--accent);
+}
+
+/* The 404/500 art: the icon tile keeps its size, so it covers the middle digit as in Halo */
+.tf-status-art .tf-tinticon {
+  width: 56px;
+  height: 56px;
+  box-shadow: 0 0 0 8px var(--surface);
+}
+
+/* Unit next to a range input: centred on Pro's density-sized field */
+.tf-range-num > span {
+  right: var(--space-2);
+  bottom: calc((var(--density-control) - 18px) / 2);
+}
+
+/* Map bubbles are data: monochrome like charts, strong enough to read over the dot map */
+.tf-map-bubble[class*="tf-t-"] {
+  background: color-mix(in srgb, var(--chart-1) 45%, transparent);
+  color: var(--fg-100);
+}
+
+/* In-flow cards sit on hairlines, not shadows; the featured plan gets the stronger hairline */
+.tf-auth {
+  box-shadow: 0 0 0 var(--line-width) var(--line);
+}
+.tf-plan.featured {
+  box-shadow: 0 0 0 var(--line-width) var(--line-strong);
+}
+
+/* Chat workspace panes are cells of the hairline grid */
+.tf-chatws > div {
+  box-shadow: 0 0 0 var(--line-width) var(--line);
 }

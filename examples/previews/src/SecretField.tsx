@@ -14,7 +14,7 @@ function App() {
       <SecretField
         prefix="sk_live_"
         last4="4f2a"
-        meta="Added 12 Mar"
+        meta="Added Mar 12"
         onReveal={() => true}
         value="sk_live_51Hx…demo…4f2a"
         onCopy={() => {}}
@@ -29,15 +29,15 @@ function App() {
         vatOptions={[
           {
             value: "19",
-            label: "19 %",
+            label: "19%",
           },
           {
             value: "7",
-            label: "7 %",
+            label: "7%",
           },
           {
             value: "0",
-            label: "0 %",
+            label: "0%",
           },
           {
             value: "rc",

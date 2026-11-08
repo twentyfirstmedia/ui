@@ -29,7 +29,7 @@ export default function Preview() {
                   time: "09:12",
                   status: "warn",
                   actor: "Ads",
-                  text: "reached 82 % of the monthly budget",
+                  text: "reached 82% of the monthly budget",
                 },
                 {
                   time: "08:02",

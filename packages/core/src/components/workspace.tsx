@@ -650,11 +650,7 @@ export function InvoicePreview(p: InvoicePreviewProps) {
           )}
           {p.from && <div className="tf-paper-small">{p.from}</div>}
         </div>
-        <div
-          style={{
-            textAlign: "right",
-          }}
-        >
+        <div className="tf-paper-id">
           <div className="tf-paper-kind">{p.kind || L("Invoice")}</div>
           <div className="tf-mono">{"#" + p.number}</div>
         </div>

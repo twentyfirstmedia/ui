@@ -55,7 +55,7 @@ function Kpi(p: KpiProps) {
           <CountUp className="tf-stat-value" value={p.value} />
           <div
             style={{
-              font: "600 12px/16px var(--font-sans)",
+              font: "var(--type-label-weight) 12px/16px var(--font-sans)",
               color: "var(--" + (p.up ? "mint" : "blush") + "-ink)",
               marginTop: 2,
             }}
@@ -106,7 +106,7 @@ function App() {
       >
         <Kpi
           label="Revenue"
-          value="$41,280"
+          value="€41,280"
           delta="+18.2% vs last month"
           up
           icon="card"
@@ -177,7 +177,7 @@ function App() {
           <LineChart
             height={190}
             labels={["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"]}
-            format={(v) => "$" + Math.round(v / 1000) + "k"}
+            format={(v) => "€" + Math.round(v / 1000) + "k"}
             series={[
               {
                 values: [18000, 22000, 21000, 29000, 34000, 38000, 41000],
@@ -274,7 +274,7 @@ function App() {
                 key: "ch",
                 label: "Channel",
                 render: (r) => (
-                  <span className="tf-row">
+                  <span className="tf-row" style={{ flexWrap: "nowrap" }}>
                     <TintIcon icon={r.icon} tint={r.tint} />
                     {r.ch}
                   </span>

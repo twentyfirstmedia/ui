@@ -41,6 +41,8 @@ function App() {
         style={{
           gap: 16,
           alignItems: "flex-start",
+          // room for the open popover, so the preview shows it whole
+          minHeight: 260,
         }}
       >
         <Popover

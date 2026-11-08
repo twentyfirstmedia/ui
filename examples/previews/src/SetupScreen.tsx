@@ -45,7 +45,7 @@ function App() {
           style={{
             position: "absolute",
             inset: 0,
-            borderRadius: 30,
+            borderRadius: "var(--radius-xl)",
             overflow: "hidden",
           }}
         >

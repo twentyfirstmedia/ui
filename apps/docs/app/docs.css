@@ -15,7 +15,8 @@ html {
 html.docs-locked {
   overflow: hidden;
 }
-* {
+/* border-box for the docs chrome only; previews keep the kit's own box model */
+:where(.docs-skip, .docs-header, .docs-body, .docs-header *, .docs-body *):not(.docs-preview *) {
   box-sizing: border-box;
 }
 .docs-skip {
@@ -206,7 +207,7 @@ html.docs-locked {
   text-transform: uppercase;
   color: var(--ink-muted);
 }
-.docs-main h1 {
+.docs-main h1:not(.docs-preview *) {
   margin: 0;
   font: var(--type-h2-weight) var(--type-h2-size) / var(--type-h2-line) var(--type-h1-family);
   letter-spacing: var(--type-h1-tracking);
@@ -219,12 +220,12 @@ html.docs-locked {
   font-size: var(--type-body-size);
   line-height: var(--type-body-long-line);
 }
-.docs-main h2 {
+.docs-main h2:not(.docs-preview *) {
   margin: var(--space-10) 0 var(--space-3);
   font: var(--type-h3-weight) var(--type-h3-size) / var(--type-h3-line) var(--type-h2-family);
   letter-spacing: var(--type-h2-tracking);
 }
-.docs-main h3 {
+.docs-main h3:not(.docs-preview *) {
   margin: var(--space-6) 0 var(--space-2);
   font: var(--type-h3-weight) var(--type-body-size) / var(--type-h3-line) var(--type-h3-family);
 }
@@ -514,13 +515,13 @@ html.docs-locked {
   .docs-main {
     padding: var(--space-8) var(--space-6) var(--space-16);
   }
-  .docs-main h1 {
+  .docs-main h1:not(.docs-preview *) {
     font: var(--type-h1-weight) var(--type-h1-size) / var(--type-h1-line) var(--type-h1-family);
   }
-  .docs-main h2 {
+  .docs-main h2:not(.docs-preview *) {
     font: var(--type-h2-weight) var(--type-h2-size) / var(--type-h2-line) var(--type-h2-family);
   }
-  .docs-main h3 {
+  .docs-main h3:not(.docs-preview *) {
     font-size: var(--type-h3-size);
   }
   .docs-preview {

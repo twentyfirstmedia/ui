@@ -5,7 +5,7 @@ export default function Preview() {
     <div
       style={{
         background: "var(--surface)",
-        borderRadius: 22,
+        borderRadius: "var(--radius-lg)",
         padding: 8,
       }}
     >
@@ -42,21 +42,21 @@ export default function Preview() {
             plan: "Team",
             status: "Active",
             tone: "success",
-            mrr: "$1,240",
+            mrr: "€1,240",
           },
           {
             name: "Blue Fern",
             plan: "Starter",
             status: "Trial",
             tone: "info",
-            mrr: "$0",
+            mrr: "€0",
           },
           {
             name: "Copperline",
             plan: "Business",
             status: "Past due",
             tone: "warning",
-            mrr: "$3,900",
+            mrr: "€3,900",
           },
         ]}
       />

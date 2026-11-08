@@ -32,7 +32,7 @@ function App() {
       >
         <div className="tf-approval-mail">
           {
-            "Hi Ida,\n\nhappy to add 40 seats before your renewal on 1 May. The quote is attached.\n\nBest,\nMara"
+            "Hi Ida,\n\nhappy to add 40 seats before your renewal on May 1. The quote is attached.\n\nBest,\nMara"
           }
         </div>
       </ApprovalCard>
