@@ -1,23 +1,40 @@
-import { RichText } from "@twentyfirstmedia/ui-core";
 import type { ReactNode } from "react";
-import { props as allProps } from "@/lib/site";
+import { MarkdownDoc } from "@/components/markdown";
+import { PageActions } from "@/components/page-actions";
+import { props as allProps, type KitName } from "@/lib/site";
+import { JsonLd, pageJsonLd } from "@/lib/seo";
 
-export function PageHead({ title, lead }: { title: string; lead?: ReactNode }) {
+/**
+ * Page title, lead, the Markdown actions and the page's structured data. `kit` and `path` give
+ * the structured data; `description` defaults to the lead when that is plain text.
+ */
+export function PageHead({
+  title,
+  lead,
+  kit,
+  path,
+  description,
+}: {
+  title: string;
+  lead?: ReactNode;
+  kit?: KitName;
+  path?: string;
+  description?: string;
+}) {
+  const desc = description ?? (typeof lead === "string" ? lead : "");
   return (
     <>
+      {kit && path != null && <JsonLd data={pageJsonLd(kit, path, title, desc)} />}
       <h1>{title}</h1>
       {lead && <p className="docs-lead">{lead}</p>}
+      <PageActions />
     </>
   );
 }
 
-/** Markdown-ish text (paragraphs, lists, **bold**, `code`, links) rendered with the kit's RichText. */
+/** Markdown (the guides and component descriptions), rendered with the kit. */
 export function Markdown({ text }: { text: string }) {
-  return (
-    <div className="docs-prose">
-      <RichText text={text} />
-    </div>
-  );
+  return <MarkdownDoc text={text} />;
 }
 
 export function Code({ children }: { children: ReactNode }) {

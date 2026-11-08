@@ -1,21 +1,34 @@
 import Link from "next/link";
 import { PageHead } from "@/components/docs";
+import type { Metadata } from "next";
 import { componentFiles, examples, humanize, type KitName } from "@/lib/site";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata = { title: "All components" };
+const total = Object.values(componentFiles).reduce((a, l) => a + l.length, 0);
+const LEAD = `${total} components in ${Object.keys(componentFiles).length} groups. Each links to the example that shows it.`;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ kit: KitName }>;
+}): Promise<Metadata> {
+  const { kit } = await params;
+  return pageMeta({
+    kit,
+    path: "components",
+    title: "All components",
+    description: `All ${total} React components of the kit by group: foundations, navigation, forms, data, charts, overlays, AI, commerce, admin and media.`,
+  });
+}
 
 export default async function AllComponents({ params }: { params: Promise<{ kit: KitName }> }) {
   const { kit } = await params;
   const shownIn = new Map<string, string>();
   for (const e of examples)
     for (const c of e.components) if (!shownIn.has(c)) shownIn.set(c, e.name);
-  const total = Object.values(componentFiles).reduce((a, l) => a + l.length, 0);
   return (
     <>
-      <PageHead
-        title="All components"
-        lead={`${total} components in ${Object.keys(componentFiles).length} groups. Each links to the example that shows it.`}
-      />
+      <PageHead kit={kit} path="components" title="All components" lead={LEAD} />
       {Object.entries(componentFiles).map(([file, names]) => (
         <section key={file}>
           <h2>

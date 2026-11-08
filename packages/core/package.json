@@ -1,7 +1,7 @@
 {
   "name": "@twentyfirstmedia/ui-core",
   "version": "0.0.0",
-  "description": "Components, hooks, icons and the label system shared by the Halo and Pro kits.",
+  "description": "Components, hooks, icons and formatters shared by the Halo and Pro kits.",
   "license": "UNLICENSED",
   "type": "module",
   "repository": {

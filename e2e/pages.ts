@@ -24,7 +24,9 @@ export const guidePages = [
   "installation",
   "cli",
   "theming",
+  "ai",
   "status-and-approvals",
   "changelog",
   "components",
+  "patterns",
 ];

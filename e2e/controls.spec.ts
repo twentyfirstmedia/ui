@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { KITS, guidePages, previewPages } from "./pages";
 
 /**
@@ -29,35 +29,49 @@ const CONTROLS = [
   ".tf-variant",
 ].join(", ");
 
+/** Controls off the scale of their own kit (the closest data-kit, so mixed pages work too). */
+async function offScale(page: Page): Promise<string[]> {
+  return page.evaluate(
+    ([sel, scales]) => {
+      const out: string[] = [];
+      for (const el of document.querySelectorAll<HTMLElement>(sel as string)) {
+        // items inside a track (segments, tabs, toggles in a group) follow the track
+        if (el.matches(".tf-toggle") && el.closest(".tf-togglegroup")) continue;
+        // scaled-down demos (a screen behind a modal) are not real sizes
+        let scaled = false;
+        for (let a: HTMLElement | null = el; a; a = a.parentElement) {
+          const t = getComputedStyle(a).transform;
+          if ((t !== "none" && !/^matrix\(1, 0, 0, 1,/.test(t)) || getComputedStyle(a).zoom !== "1")
+            scaled = true;
+        }
+        if (scaled) continue;
+        const kit = el.closest("[data-kit]")?.getAttribute("data-kit") ?? "halo";
+        const scale = (scales as Record<string, number[]>)[kit] ?? [];
+        const h = Math.round(el.getBoundingClientRect().height);
+        if (!h || scale.includes(h)) continue;
+        out.push(
+          `${kit} ${(el.getAttribute("class") || "").split(" ").slice(0, 3).join(".")} ${h}px`,
+        );
+      }
+      return [...new Set(out)];
+    },
+    [CONTROLS, SCALE] as const,
+  );
+}
+
 for (const kit of KITS)
   test.describe(`${kit} control heights`, () => {
     for (const path of ["", ...guidePages.filter(Boolean), ...previewPages])
       test(`on the scale on /${kit}/${path}`, async ({ page }) => {
         await page.goto(`/${kit}/${path ? `${path}/` : ""}`);
         await page.waitForTimeout(250);
-        const off = await page.evaluate(
-          ([sel, scale]) => {
-            const out: string[] = [];
-            for (const el of document.querySelectorAll<HTMLElement>(sel as string)) {
-              // items inside a track (segments, tabs, toggles in a group) follow the track
-              if (el.matches(".tf-toggle") && el.closest(".tf-togglegroup")) continue;
-              // scaled-down demos (a screen behind a modal) are not real sizes
-              let scaled = false;
-              for (let a: HTMLElement | null = el; a; a = a.parentElement) {
-                const t = getComputedStyle(a).transform;
-                if (t !== "none" && !/^matrix\(1, 0, 0, 1,/.test(t)) scaled = true;
-              }
-              if (scaled) continue;
-              const h = Math.round(el.getBoundingClientRect().height);
-              if (!h || (scale as number[]).includes(h)) continue;
-              out.push(
-                `${(el.getAttribute("class") || "").split(" ").slice(0, 3).join(".")} ${h}px`,
-              );
-            }
-            return [...new Set(out)];
-          },
-          [CONTROLS, SCALE[kit] as number[]] as const,
-        );
-        expect(off).toEqual([]);
+        expect(await offScale(page)).toEqual([]);
       });
+    test(`on the scale on the landing page in ${kit}`, async ({ page }) => {
+      await page.addInitScript((k) => localStorage.setItem("docs-landing-kit", k), kit);
+      await page.goto("/");
+      await expect(page.locator("html")).toHaveAttribute("data-kit", kit);
+      await page.waitForTimeout(250);
+      expect(await offScale(page)).toEqual([]);
+    });
   });

@@ -1,9 +1,10 @@
 import "@twentyfirstmedia/ui-core/themes.css";
 import "../../docs.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Chrome } from "@/components/chrome";
 import { KITS, KIT_LABEL, nav, type KitName } from "@/lib/site";
+import { baseMeta, themeColors } from "@/lib/seo";
 
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -18,9 +19,19 @@ export async function generateMetadata({
   const { kit } = await params;
   const name = KIT_LABEL[kit as KitName] ?? "Halo";
   return {
+    ...baseMeta((kit as KitName) ?? "halo"),
     title: { default: `${name} · Twentyfirst UI`, template: `%s · ${name} · Twentyfirst UI` },
     description: `${name}: React components, tokens and patterns of the Twentyfirst UI kits.`,
   };
+}
+
+export async function generateViewport({
+  params,
+}: {
+  params: Promise<{ kit: string }>;
+}): Promise<Viewport> {
+  const { kit } = await params;
+  return { themeColor: themeColors(kit as KitName), colorScheme: "light dark" };
 }
 
 /** Sets the saved theme before the first paint, so dark mode does not flash. */

@@ -10,9 +10,28 @@ import {
   type IconName,
   type Tint,
 } from "@twentyfirstmedia/ui-core";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Code } from "@/components/docs";
-import { KIT_LABEL, components, patterns, type KitName } from "@/lib/site";
+import { PageActions } from "@/components/page-actions";
+import { KIT_LABEL, components, guide, knowledge, patterns, type KitName } from "@/lib/site";
+import { JsonLd, pageJsonLd, pageMeta } from "@/lib/seo";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ kit: KitName }>;
+}): Promise<Metadata> {
+  const { kit } = await params;
+  const meta = pageMeta({
+    kit,
+    path: "",
+    title: KIT_LABEL[kit],
+    description: `${KIT_LABEL[kit]}: ${knowledge.kits.find((k) => k.name === kit)?.tagline ?? ""} React components, tokens and complete screens; same API as ${KIT_LABEL[kit === "halo" ? "pro" : "halo"]}.`,
+  });
+  // the kit home is the root of its title template
+  return { ...meta, title: { absolute: `${KIT_LABEL[kit]}: React UI kit · Twentyfirst UI` } };
+}
 
 const FEATURES: { icon: IconName; tint: Tint; title: string; text: string }[] = [
   {
@@ -77,7 +96,13 @@ export default async function Intro({ params }: { params: Promise<{ kit: KitName
       text: "Live examples, code and props.",
     },
     {
-      href: `patterns/${patterns[0]?.name ?? ""}/`,
+      href: "ai/",
+      icon: "bot" as IconName,
+      title: "AI agents and MCP",
+      text: "MCP server, llms.txt and Markdown for every page.",
+    },
+    {
+      href: "patterns/",
       icon: "grid" as IconName,
       title: `${patterns.length + 1} patterns`,
       text: "Complete screens built only from kit parts.",
@@ -91,6 +116,7 @@ export default async function Intro({ params }: { params: Promise<{ kit: KitName
   ];
   return (
     <>
+      <JsonLd data={pageJsonLd(kit, "", KIT_LABEL[kit], guide("introduction").description)} />
       <section className="docs-hero" aria-labelledby="docs-title">
         <p className="docs-eyebrow">Twentyfirst UI · {KIT_LABEL[kit]}</p>
         <h1 id="docs-title">
@@ -114,8 +140,9 @@ export default async function Intro({ params }: { params: Promise<{ kit: KitName
           </Link>
         </div>
         <div className="docs-install">
-          <CodeBlock lang="sh" code={`pnpm add @twentyfirstmedia/${kit}`} />
+          <CodeBlock lang="sh" code={`npx @twentyfirstmedia/ui init --kit ${kit}`} />
         </div>
+        <PageActions />
       </section>
 
       <div className="docs-showcase" aria-label="Sample components">
