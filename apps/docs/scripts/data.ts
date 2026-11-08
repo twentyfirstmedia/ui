@@ -106,6 +106,11 @@ for (const name of readdirSync(refDir)) {
       .replace(/\bHalo\.(\w+)/g, "$1")
       .replace(/(^|[^\w-])ha-/g, "$1tf-");
 }
+// components that are not in the reference bring their description with the example
+const ownDir = join(ROOT, "examples/previews/readme");
+if (existsSync(ownDir))
+  for (const f of readdirSync(ownDir).filter((x) => x.endsWith(".md")))
+    readmes[f.replace(/\.md$/, "")] = readFileSync(join(ownDir, f), "utf8").replace(/^# .*\n+/, "");
 writeFileSync(join(OUT, "readmes.json"), JSON.stringify(readmes));
 
 // ── component exports (for the "all components" index) ──

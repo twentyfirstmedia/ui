@@ -48,6 +48,7 @@ export {
   Collapsible,
   ContextMenu,
   SplitPane,
+  ResizablePanels,
   TreeView,
   InlineEdit,
 } from "./building-blocks.js";
@@ -146,6 +147,8 @@ export {
 } from "./forms.js";
 export { Button, IconButton, Chip, Badge, TintIcon, Avatar, AvatarStack } from "./foundation.js";
 export { Input, Select, Textarea, SearchField, Checkbox, Switch } from "./inputs.js";
+export { Form, useFieldError } from "./form.js";
+export { SelectMenu } from "./select-menu.js";
 export {
   AccountSwitcher,
   InboxList,
@@ -154,7 +157,7 @@ export {
   AttachmentPreview,
 } from "./mail.js";
 export { ImageVariants, Gallery, BeforeAfter } from "./media.js";
-export { Tabs, Breadcrumb, Pagination } from "./navigation.js";
+export { Tabs, Breadcrumb, Pagination, Menubar, NavigationMenu, Sidebar } from "./navigation.js";
 export {
   ConnectionCard,
   ConnectionBanner,
@@ -169,6 +172,18 @@ export {
 } from "./operations.js";
 export { Popover, Tooltip } from "./overlays.js";
 export { EmailPreview, SearchAdPreview } from "./previews.js";
+export {
+  Accordion,
+  Separator,
+  AspectRatio,
+  Label,
+  Toggle,
+  ToggleGroup,
+  ButtonGroup,
+  ScrollArea,
+  HoverCard,
+  Carousel,
+} from "./primitives.js";
 export {
   ListingCard,
   ResultsToolbar,

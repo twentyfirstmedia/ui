@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useId } from "../hooks.js";
+import { moveFocus, useId } from "../hooks.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { Portal } from "../portal.js";
@@ -17,6 +17,7 @@ import type {
   ConfirmDialogProps,
   EmptyStateProps,
   IconName,
+  MenuItem,
   MenuProps,
   ModalProps,
   SkeletonProps,
@@ -42,22 +43,133 @@ export function Skeleton(p: SkeletonProps) {
 /* ── Overlays & feedback ── */
 
 /* ── Overlays & feedback ── */
+const MENU_ITEMS = ':scope > [role^="menuitem"], :scope > .tf-menu-subwrap > [role^="menuitem"]';
+
+/**
+ * A menu: items with icons and shortcuts, separators, checkbox and radio items and submenus.
+ * Keyboard: ↑/↓, Home/End and typeahead move; Enter/Space run; → opens a submenu, ← and Escape
+ * close it.
+ */
 export function Menu(p: MenuProps) {
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [sub, setSub] = React.useState<number | null>(null);
+  const subFocus = React.useRef(false);
+  React.useEffect(() => {
+    if (p.autoFocus) ref.current?.querySelector<HTMLElement>(MENU_ITEMS)?.focus();
+  }, [p.autoFocus]);
+  const run = (it: MenuItem) => {
+    it.onClick?.();
+    if (it.type !== "checkbox" && it.type !== "radio") p.onClose?.();
+  };
   return (
-    <div className="tf-menu" role="menu">
+    <div
+      ref={ref}
+      className={cx("tf-menu", p.className)}
+      style={p.style}
+      role="menu"
+      aria-label={p.label}
+      onKeyDown={(e) => {
+        if (moveFocus(e, ref.current, MENU_ITEMS, "vertical", true)) {
+          e.stopPropagation();
+          return;
+        }
+        if (e.key === "Escape" && p.onClose) {
+          e.stopPropagation();
+          p.onClose();
+        }
+      }}
+    >
       {(p.items || []).map((it, i) => {
         if (it === "-") return <div key={i} className="tf-menu-sep" role="separator" />;
+        const check = it.type === "checkbox" || it.type === "radio";
+        const role =
+          it.type === "checkbox"
+            ? "menuitemcheckbox"
+            : it.type === "radio"
+              ? "menuitemradio"
+              : "menuitem";
+        const inner = (
+          <>
+            {check ? (
+              <span className={cx("tf-menu-mark", it.type)} aria-hidden>
+                {it.checked && (it.type === "checkbox" ? <Icon name="check" size={14} /> : <i />)}
+              </span>
+            ) : (
+              it.icon && <Icon name={it.icon} size={15} />
+            )}
+            <span className="tf-menu-text">{it.label}</span>
+            {it.shortcut && <kbd>{it.shortcut}</kbd>}
+            {it.items && <Icon name="chevronRight" size={14} className="tf-menu-subchev" />}
+          </>
+        );
+        if (it.items) {
+          const open = sub === i;
+          return (
+            <div
+              key={i}
+              className="tf-menu-subwrap"
+              onPointerEnter={() => setSub(i)}
+              onPointerLeave={() => setSub(null)}
+              onKeyDownCapture={(e) => {
+                // ← or Escape inside the submenu closes just the submenu
+                const inSub = (e.target as HTMLElement).closest(".tf-menu-sub");
+                if (inSub && (e.key === "ArrowLeft" || e.key === "Escape")) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSub(null);
+                  (e.currentTarget.firstElementChild as HTMLElement | null)?.focus();
+                }
+              }}
+            >
+              <button
+                type="button"
+                role="menuitem"
+                className={cx("tf-menu-item", open && "on")}
+                aria-haspopup="menu"
+                aria-expanded={open}
+                disabled={it.disabled}
+                onClick={() => {
+                  subFocus.current = true;
+                  setSub(open ? null : i);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowRight" || e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    subFocus.current = true;
+                    setSub(i);
+                  }
+                }}
+              >
+                {inner}
+              </button>
+              {open && (
+                <Menu
+                  className="tf-menu-sub"
+                  label={it.label}
+                  items={it.items}
+                  autoFocus={subFocus.current}
+                  onClose={() => {
+                    setSub(null);
+                    subFocus.current = false;
+                    p.onClose?.();
+                  }}
+                />
+              )}
+            </div>
+          );
+        }
         return (
           <button
             key={i}
             type="button"
-            role="menuitem"
+            role={role}
+            aria-checked={check ? !!it.checked : undefined}
             className={cx("tf-menu-item", it.danger && "danger")}
-            onClick={it.onClick}
+            disabled={it.disabled}
+            onClick={() => run(it)}
           >
-            {it.icon && <Icon name={it.icon} size={15} />}
-            {it.label}
-            {it.shortcut && <kbd>{it.shortcut}</kbd>}
+            {inner}
           </button>
         );
       })}

@@ -34,6 +34,7 @@ export const BASE_PATH = process.env.DOCS_BASE_PATH ?? "";
 /** Component groups in sidebar order; "Pages" become the patterns section. */
 export const GROUP_ORDER = [
   "Foundations",
+  "Navigation",
   "Forms",
   "Data",
   "Charts",

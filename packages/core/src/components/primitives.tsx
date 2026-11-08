@@ -173,6 +173,7 @@ export function ToggleGroup(p: ToggleGroupProps) {
             type="button"
             className={cx("tf-toggle", p.size === "sm" && "sm", iconOnly && "icon")}
             aria-pressed={on}
+            aria-label={iconOnly ? o.hint || o.value : undefined}
             title={o.hint}
             onClick={() =>
               v[1](
@@ -321,7 +322,8 @@ export function Carousel(p: CarouselProps) {
         }
       }}
     >
-      <div ref={track} className="tf-carousel-track">
+      {/* focusable, so the slides also scroll from the keyboard */}
+      <div ref={track} className="tf-carousel-track" tabIndex={0}>
         {slides.map((s, i) => (
           <div
             key={i}

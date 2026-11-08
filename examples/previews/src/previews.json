@@ -1049,5 +1049,110 @@
       "TintIcon",
       "TopBar"
     ]
+  },
+  {
+    "name": "Accordion",
+    "group": "Foundations",
+    "width": 960,
+    "height": 420,
+    "components": ["Accordion", "Badge", "Panel"]
+  },
+  {
+    "name": "Separator",
+    "group": "Foundations",
+    "width": 960,
+    "height": 420,
+    "components": ["Separator", "Label", "AspectRatio", "Input", "Button"]
+  },
+  {
+    "name": "ButtonGroup",
+    "group": "Foundations",
+    "width": 960,
+    "height": 420,
+    "components": ["ButtonGroup", "Button", "IconButton", "Popover", "Menu"]
+  },
+  {
+    "name": "ScrollArea",
+    "group": "Foundations",
+    "width": 960,
+    "height": 420,
+    "components": ["ScrollArea", "Avatar", "Separator"]
+  },
+  {
+    "name": "ToggleGroup",
+    "group": "Forms",
+    "width": 960,
+    "height": 420,
+    "components": ["ToggleGroup", "Toggle"]
+  },
+  {
+    "name": "HoverCard",
+    "group": "Overlays",
+    "width": 960,
+    "height": 420,
+    "components": ["HoverCard", "Avatar", "Badge"]
+  },
+  {
+    "name": "Carousel",
+    "group": "Media",
+    "width": 960,
+    "height": 420,
+    "components": ["Carousel", "ProductArt"]
+  },
+  {
+    "name": "Menubar",
+    "group": "Navigation",
+    "width": 960,
+    "height": 420,
+    "components": ["Menubar", "Menu"]
+  },
+  {
+    "name": "NavigationMenu",
+    "group": "Navigation",
+    "width": 960,
+    "height": 420,
+    "components": ["NavigationMenu", "Button"]
+  },
+  {
+    "name": "Tabs",
+    "group": "Navigation",
+    "width": 960,
+    "height": 420,
+    "components": ["Tabs", "Panel", "KeyValue"]
+  },
+  {
+    "name": "Sidebar",
+    "group": "Navigation",
+    "width": 960,
+    "height": 420,
+    "components": ["Sidebar", "Avatar"]
+  },
+  {
+    "name": "SelectMenu",
+    "group": "Forms",
+    "width": 960,
+    "height": 420,
+    "components": ["SelectMenu"]
+  },
+  {
+    "name": "Form",
+    "group": "Forms",
+    "width": 960,
+    "height": 420,
+    "components": ["Form", "TextField", "SelectMenu", "Textarea", "Checkbox", "Button"]
+  },
+  {
+    "name": "Sheet",
+    "group": "Overlays",
+    "width": 960,
+    "height": 420,
+    "components": ["Drawer", "SelectMenu", "Button"]
+  },
+  {
+    "name": "ResizablePanels",
+    "group": "Foundations",
+    "width": 960,
+    "height": 420,
+    "components": ["ResizablePanels"]
   }
 ]

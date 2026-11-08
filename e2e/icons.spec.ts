@@ -48,6 +48,8 @@ for (const kit of KITS)
             if (el.closest("svg") || el.closest("td, th")) continue;
             const svgs = el.querySelectorAll("svg");
             if (svgs.length !== 1 || (el.textContent || "").trim()) continue;
+            // only boxes that hold the icon themselves (not a container around an icon button)
+            if ((svgs[0] as SVGSVGElement).parentElement !== el) continue;
             const r = el.getBoundingClientRect();
             if (r.width < 12 || r.width > 72 || r.height > 72) continue;
             const cs = getComputedStyle(el);

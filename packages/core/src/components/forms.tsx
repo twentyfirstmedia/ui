@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import { cx } from "../cx.js";
+import { useFieldError } from "./form.js";
 import { formatDate, formatNumber, WEEK_START } from "../format.js";
 import { Icon } from "../Icon.js";
 import { useControlled, useId, useOutside } from "../hooks.js";
@@ -27,6 +28,8 @@ import type {
 /* ── Form field shell: label, required mark, hint, error or success ── */
 export function FormField(p: FormFieldProps) {
   const id = p.id;
+  const fromForm = useFieldError(p.name);
+  const error = p.error || fromForm;
   return (
     <div className={cx("tf-field", p.className)} style={p.style}>
       {p.label && (
@@ -41,10 +44,10 @@ export function FormField(p: FormFieldProps) {
         </label>
       )}
       {p.children}
-      {p.error ? (
-        <span className="tf-field-error" role="alert">
+      {error ? (
+        <span id={id ? `${id}-msg` : undefined} className="tf-field-error" role="alert">
           <Icon name="x" size={12} />
-          {p.error}
+          {error}
         </span>
       ) : p.success ? (
         <span className="tf-field-success">
@@ -52,14 +55,21 @@ export function FormField(p: FormFieldProps) {
           {p.success}
         </span>
       ) : (
-        p.hint && <span className="tf-field-hint">{p.hint}</span>
+        p.hint && (
+          <span id={id ? `${id}-msg` : undefined} className="tf-field-hint">
+            {p.hint}
+          </span>
+        )
       )}
     </div>
   );
 }
 
 export function TextField(p: TextFieldProps) {
-  const id = useId("tf");
+  const auto = useId("tf");
+  const id = p.id || auto;
+  const fromForm = useFieldError(p.name);
+  const error = p.error || fromForm;
   return (
     <FormField
       id={id}
@@ -67,19 +77,20 @@ export function TextField(p: TextFieldProps) {
       required={p.required}
       optional={p.optional}
       hint={p.hint}
-      error={p.error}
+      error={error}
       success={p.success}
     >
       <span
         className={cx(
           "tf-inputwrap",
           p.icon && "has-icon",
-          (p.error || p.success || p.suffix) && "has-suffix",
+          (error || p.success || p.suffix) && "has-suffix",
         )}
       >
         {p.icon && <Icon name={p.icon} size={15} className="tf-input-icon" />}
         <input
           id={id}
+          name={p.name}
           className={cx("tf-input", p.success && "is-valid")}
           type={p.type || "text"}
           placeholder={p.placeholder}
@@ -89,10 +100,11 @@ export function TextField(p: TextFieldProps) {
           onBlur={p.onBlur}
           required={p.required}
           disabled={p.disabled}
-          aria-invalid={p.error ? "true" : undefined}
+          aria-invalid={error ? "true" : undefined}
+          aria-describedby={error || p.hint ? `${id}-msg` : undefined}
           autoComplete={p.autoComplete}
         />
-        {p.error ? (
+        {error ? (
           <span className="tf-input-suffix err">
             <Icon name="x" size={14} />
           </span>

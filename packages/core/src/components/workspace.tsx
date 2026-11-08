@@ -6,6 +6,7 @@ import { Icon } from "../Icon.js";
 import { useScrollFocus, useTrap } from "../hooks.js";
 import { cx } from "../cx.js";
 import { Avatar, Badge, Button, IconButton, TintIcon } from "./foundation.js";
+import { Spinner } from "./building-blocks.js";
 import { Tabs } from "./navigation.js";
 
 import type {
@@ -74,7 +75,7 @@ export function Drawer(p: DrawerProps) {
     >
       <aside
         ref={ref}
-        className="tf-drawer"
+        className={cx("tf-drawer", p.side && p.side !== "right" && "side-" + p.side)}
         role="dialog"
         aria-modal="true"
         aria-label={p.title}
@@ -190,12 +191,18 @@ export function CommandPalette(p: CommandPaletteProps) {
             onChange={(e) => {
               q[1](e.target.value);
               idx[1](0);
+              p.onQueryChange?.(e.target.value);
             }}
             onKeyDown={key}
           />
           <kbd>{"Esc"}</kbd>
         </div>
         <div className="tf-palette-list" role="listbox" aria-label="Results">
+          {p.loading && (
+            <div className="tf-palette-empty" role="status">
+              <Spinner /> Searching…
+            </div>
+          )}
           {res.length ? (
             groups.map((g) => (
               <div key={g.g}>
@@ -228,8 +235,8 @@ export function CommandPalette(p: CommandPaletteProps) {
                 })}
               </div>
             ))
-          ) : (
-            <div className="tf-palette-empty">{`Nothing matches “${q[0]}”.`}</div>
+          ) : p.loading ? null : (
+            <div className="tf-palette-empty">{p.empty ?? `Nothing matches “${q[0]}”.`}</div>
           )}
         </div>
         <div className="tf-palette-foot">
