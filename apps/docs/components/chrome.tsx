@@ -149,7 +149,6 @@ export function Chrome({
           </button>
           <Segmented
             className="docs-kit-switch"
-            size="sm"
             label="Kit"
             value={kit}
             onChange={switchKit}
