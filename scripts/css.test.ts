@@ -9,7 +9,7 @@ const read = (kit: string, f: string) =>
 
 /** Colour literals are not allowed in component CSS: tokens only. */
 const COLOUR =
-  /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(|\b(?:white|black|red|green|blue|gray|grey|orange|yellow|purple|pink|silver)\b/i;
+  /#[0-9a-f]{3,8}\b|(?<![\w-])(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(|(?<![\w-])(?:white|black|red|green|blue|gray|grey|orange|yellow|purple|pink|silver)(?![\w-])|%23[0-9a-f]{3,8}/i;
 
 describe("component css", () => {
   it("contains no colour literals", () => {
@@ -30,7 +30,9 @@ describe("component css", () => {
       "halo",
       "body { margin: 0 } .tf-btn, .tf-chip:hover { color: var(--ink) } @media (max-width: 600px) { .tf-x { gap: 0 } } @keyframes tf-in { from { opacity: 0 } } .tf-y { animation: tf-in 1s both }",
     );
-    expect(out).toContain(':where([data-kit="halo"]) { margin: 0 }');
+    expect(out).toContain(
+      ':where([data-kit="halo"]), :where([data-kit="halo"]) body { margin: 0 }',
+    );
     expect(out).toContain(
       ':where([data-kit="halo"]) .tf-btn, :where([data-kit="halo"]) .tf-chip:hover',
     );

@@ -1,6 +1,6 @@
-/** Joins class names, skipping falsy values. */
-export function cx(...parts: Array<string | false | null | undefined | 0>): string {
-  return parts.filter(Boolean).join(" ");
+/** Joins class names, skipping anything that is not a non-empty string. */
+export function cx(...parts: unknown[]): string {
+  return parts.filter((x): x is string => typeof x === "string" && x !== "").join(" ");
 }
 
 /** True when the user asked for reduced motion (false on the server). */
@@ -25,4 +25,23 @@ export function initials(name?: string): string {
       .join("")
       .toUpperCase() || "?"
   );
+}
+
+/**
+ * Reads a duration token (e.g. `--dur-slow`) in ms from the element or the document, so motion
+ * driven from JS follows the active kit (Halo 900ms, Pro 140ms). Falls back on the server.
+ */
+export function durationToken(name: string, fallback: number, el?: Element | null): number {
+  try {
+    if (typeof window === "undefined") return fallback;
+    const raw = getComputedStyle(el || document.documentElement)
+      .getPropertyValue(name)
+      .trim();
+    if (!raw) return fallback;
+    const n = parseFloat(raw);
+    if (isNaN(n)) return fallback;
+    return raw.endsWith("ms") ? n : raw.endsWith("s") ? n * 1000 : n;
+  } catch {
+    return fallback;
+  }
 }

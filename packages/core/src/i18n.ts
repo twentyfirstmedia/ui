@@ -109,7 +109,8 @@ export function formatMoney(
   });
 }
 
-export function formatDate(d: Date, o?: Intl.DateTimeFormatOptions): string {
+export function formatDate(input: Date | string | number, o?: Intl.DateTimeFormatOptions): string {
+  const d = input instanceof Date ? input : new Date(input);
   try {
     return new Intl.DateTimeFormat(
       LOCALE.tag,

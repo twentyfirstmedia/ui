@@ -102,11 +102,13 @@ export function scope(kit: Kit, css: string, from?: string): string {
     const parent = rule.parent;
     if (parent && parent.type === "atrule" && /keyframes$/.test((parent as { name: string }).name))
       return;
-    rule.selectors = rule.selectors.map((s) => {
+    rule.selectors = rule.selectors.flatMap((s) => {
       const t = s.trim();
-      if (t === "html" || t === "body" || t === ":root") return k;
-      if (/^(html|body|:root)\b/.test(t)) return t.replace(/^(html|body|:root)/, k);
-      return `${k} ${t}`;
+      // `body` rules apply to the element carrying data-kit and, when that is <html>, to <body>.
+      if (t === "body") return [k, `${k} body`];
+      if (t === "html" || t === ":root") return [k];
+      if (/^(html|body|:root)\b/.test(t)) return [t.replace(/^(html|body|:root)/, k)];
+      return [`${k} ${t}`];
     });
   });
   if (frames.size) {
