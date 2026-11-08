@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en" data-kit="halo" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Twentyfirst UI in plain HTML</title>
+    <!-- Both kits (switch with data-kit). For one kit: @twentyfirstmedia/halo/dist/styles.css -->
+    <link rel="stylesheet" href="themes.css" />
+    <script type="module" src="elements.js"></script>
+    <style>
+      .demo {
+        box-sizing: border-box;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: var(--space-6) var(--space-4) var(--space-8);
+        display: grid;
+        gap: var(--space-4);
+      }
+      .demo-grid {
+        display: grid;
+        gap: var(--space-4);
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+        align-items: start;
+      }
+      .demo-wide {
+        grid-column: 1 / -1;
+      }
+      .demo-log {
+        margin: 0;
+        color: var(--ink-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="demo">
+      <tf-page-header
+        title="Plain HTML"
+        subtitle="Custom elements from @twentyfirstmedia/elements, no build step and no framework."
+      >
+        <tf-segmented
+          slot="actions"
+          id="kit"
+          label="Kit"
+          size="sm"
+          options='[{"value":"halo","label":"Halo"},{"value":"pro","label":"Pro"}]'
+          default-value="halo"
+        ></tf-segmented>
+        <tf-switch slot="actions" id="dark">Dark theme</tf-switch>
+      </tf-page-header>
+
+      <p class="demo-log" id="log" aria-live="polite">
+        Interact with the page; events show up here.
+      </p>
+
+      <div class="demo-grid">
+        <tf-panel title="Actions" subtitle="Buttons, a dropdown menu, a modal and a toast">
+          <tf-button slot="action" variant="ghost" size="sm" icon="refresh" id="reset"
+            >Reset</tf-button
+          >
+          <div class="tf-row">
+            <tf-button id="open-modal" icon="plus">Invite people</tf-button>
+            <tf-button id="save" variant="secondary" icon="check">Save draft</tf-button>
+            <tf-popover id="more-popover" flush>
+              <tf-button slot="trigger" variant="soft" icon-right="chevronDown" id="more"
+                >More</tf-button
+              >
+              <tf-menu id="menu" label="More actions" auto-focus></tf-menu>
+            </tf-popover>
+          </div>
+        </tf-panel>
+
+        <tf-panel title="Profile" subtitle="Fields keep working in a native form">
+          <form class="tf-col" id="profile">
+            <tf-text-field
+              id="name"
+              name="name"
+              label="Name"
+              placeholder="Ada Lovelace"
+            ></tf-text-field>
+            <tf-switch id="updates" name="updates" spread>Email me product updates</tf-switch>
+            <tf-segmented
+              id="plan"
+              label="Plan"
+              options="Free, Team, Business"
+              default-value="Team"
+            ></tf-segmented>
+          </form>
+        </tf-panel>
+
+        <tf-panel title="Activity">
+          <tf-tabs id="tabs" items="Overview, Members, Billing" label="Workspace">
+            <div slot="panels:Overview" class="tf-col">
+              <p>Three projects shipped this week.</p>
+              <tf-progress value="72" label="Quarterly goal"></tf-progress>
+            </div>
+            <div slot="panels:Members">
+              <tf-avatar-stack
+                names='["Ava Vogel","Ben Okafor","Chen Wu","Dara Kim"]'
+              ></tf-avatar-stack>
+            </div>
+            <div slot="panels:Billing"><p>Next invoice on May 1.</p></div>
+          </tf-tabs>
+        </tf-panel>
+
+        <tf-panel title="Signups" subtitle="Last 7 days">
+          <tf-bar-chart
+            id="chart"
+            label="Signups per day"
+            data='[{"label":"Mon","value":32},{"label":"Tue","value":48},{"label":"Wed","value":41},{"label":"Thu","value":66,"tint":"lilac"},{"label":"Fri","value":52},{"label":"Sat","value":24},{"label":"Sun","value":30}]'
+          ></tf-bar-chart>
+        </tf-panel>
+
+        <div class="demo-wide tf-panel tf-panel-flush">
+          <tf-data-table
+            id="table"
+            selectable
+            row-key="id"
+            columns='[{"key":"name","label":"Name","sortable":true},{"key":"role","label":"Role"},{"key":"seats","label":"Seats","align":"right","sortable":true}]'
+          ></tf-data-table>
+        </div>
+
+        <tf-approval-card
+          class="demo-wide"
+          id="approval"
+          agent="Atlas"
+          project="Support"
+          family="comms"
+          age="4 min"
+          title="Send this email to ida@northwind.io"
+          text="Atlas is set to drafts only, so it needs your OK."
+        >
+          <div class="tf-approval-mail">
+            Hi Ida, happy to add 40 seats before your renewal on May 1.
+          </div>
+          <a slot="trace" href="#trace">Open trace</a>
+        </tf-approval-card>
+      </div>
+    </main>
+
+    <tf-modal
+      id="modal"
+      hidden
+      icon="users"
+      tint="sky"
+      title="Invite teammates"
+      text="They get access to every project in this workspace."
+    >
+      <tf-text-field label="Email addresses" placeholder="name@company.com"></tf-text-field>
+      <tf-button slot="actions" variant="ghost" id="cancel-invite">Cancel</tf-button>
+      <tf-button slot="actions" icon="send" id="send-invite">Send invites</tf-button>
+    </tf-modal>
+    <tf-toaster></tf-toaster>
+
+    <script type="module">
+      import { toast } from "./elements.js";
+
+      const $ = (id) => document.getElementById(id);
+      const log = (text) => ($("log").textContent = text);
+      const html = document.documentElement;
+
+      // kit and theme: plain attributes on <html>
+      $("kit").addEventListener("change", (e) => {
+        html.dataset.kit = e.detail;
+        log(`Kit: ${e.detail}`);
+      });
+      $("dark").addEventListener("change", (e) => {
+        html.dataset.theme = e.detail ? "dark" : "light";
+        log(`Theme: ${html.dataset.theme}`);
+      });
+
+      // the modal opens and closes with the hidden attribute
+      $("open-modal").addEventListener("click", () => ($("modal").hidden = false));
+      $("cancel-invite").addEventListener("click", () => ($("modal").hidden = true));
+      $("send-invite").addEventListener("click", () => {
+        $("modal").hidden = true;
+        toast("Invites sent");
+      });
+      $("modal").addEventListener("close", (e) => {
+        if (e.target === $("modal")) log("Modal closed");
+      });
+      $("save").addEventListener("click", () => toast({ text: "Draft saved", tone: "info" }));
+
+      // complex props as properties: menu items with callbacks, table rows
+      $("menu").items = [
+        { label: "Rename", icon: "edit", onClick: () => log("Menu: Rename") },
+        { label: "Duplicate", icon: "copy", onClick: () => log("Menu: Duplicate") },
+        "-",
+        { label: "Delete", icon: "trash", danger: true, onClick: () => log("Menu: Delete") },
+      ];
+      $("table").rows = [
+        { id: 1, name: "Ava Vogel", role: "Editor", seats: 12 },
+        { id: 2, name: "Ben Okafor", role: "Viewer", seats: 3 },
+        { id: 3, name: "Chen Wu", role: "Admin", seats: 40 },
+      ];
+
+      $("tabs").addEventListener("change", (e) => log(`Tab: ${e.detail}`));
+      $("name").addEventListener("change", (e) => log(`Name: ${e.detail}`));
+      $("updates").addEventListener("change", (e) => log(`Updates: ${e.detail ? "on" : "off"}`));
+      $("plan").addEventListener("change", (e) => log(`Plan: ${e.detail}`));
+      $("reset").addEventListener("click", () => {
+        $("chart").data = [
+          { label: "Mon", value: 10 },
+          { label: "Tue", value: 20 },
+        ];
+        log("Chart reset");
+      });
+      $("approval").addEventListener("decide", (e) => {
+        const [key, text] = e.detail;
+        $("approval").decision = { key, by: "You", at: "now", text };
+        log(`Decision: ${key}`);
+      });
+    </script>
+  </body>
+</html>

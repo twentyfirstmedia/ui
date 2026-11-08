@@ -29,6 +29,7 @@ pnpm dev          # the docs site with live reload
 | `packages/halo/css`, `packages/halo/tokens.json` | Halo's look; the source of truth for component CSS |
 | `packages/pro` | Pro's tokens and look; most Pro CSS is derived from Halo by `scripts/pro-css.ts` |
 | `packages/cli` | The CLI and the MCP server |
+| `packages/elements` | Custom elements for plain HTML and other frameworks, generated from ui-core's props |
 | `examples/previews` | One live example per docs page; descriptions of new components in `readme/` |
 | `apps/docs` | The website; guides are Markdown in `apps/docs/content` |
 | `e2e` | Playwright: axe, screenshots, mobile, control sizes, landing page, SEO |
@@ -51,7 +52,7 @@ pnpm dev          # the docs site with live reload
 
 ## Releases
 
-Merging to `main` opens or updates a "Version packages" pull request. Merging that one publishes all four packages to npm together, with provenance.
+Merging to `main` opens or updates a "Version packages" pull request. Merging that one publishes all five packages to npm together, with provenance.
 
 ## Questions
 

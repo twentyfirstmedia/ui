@@ -18,3 +18,5 @@ apps/docs/public/llms.txt
 apps/docs/public/llms-full.txt
 packages/cli/src/shared/
 .claude/worktrees/
+packages/elements/src/generated/
+examples/html/dist/

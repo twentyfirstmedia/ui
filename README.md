@@ -155,8 +155,9 @@ Plus [26 complete screens](https://ui.twentyfirst.media/halo/patterns/): dashboa
 | [`@twentyfirstmedia/pro`](https://www.npmjs.com/package/@twentyfirstmedia/pro) | Pro: every component plus Pro's `styles.css`, tokens, Tailwind preset and fonts |
 | [`@twentyfirstmedia/ui-core`](https://www.npmjs.com/package/@twentyfirstmedia/ui-core) | The shared components, hooks, icons and `Intl` formatters; `themes.css` with both kits |
 | [`@twentyfirstmedia/ui`](https://www.npmjs.com/package/@twentyfirstmedia/ui) | CLI (`init`, `add`, `list`, `diff`) and the MCP server (`mcp`, `mcp init`) |
+| [`@twentyfirstmedia/elements`](https://www.npmjs.com/package/@twentyfirstmedia/elements) | Every component as a custom element (`<tf-button>`, `<tf-data-table>` …) for plain HTML, Vue, Svelte, Angular and Astro; React bundled |
 
-All four are versioned together. React 18.3 or 19; ESM only; no runtime dependencies besides React.
+All five are versioned together. React 18.3 or 19; ESM only; no runtime dependencies besides React. No React in your app? [Plain HTML and frameworks](https://ui.twentyfirst.media/halo/html/) shows the custom elements.
 
 ## Development
 
@@ -169,7 +170,7 @@ pnpm tokens       # regenerate token CSS and the Tailwind preset from tokens.jso
 pnpm changeset    # describe your change for the next release
 ```
 
-The repository is a pnpm and Turborepo monorepo: `packages/core` (components), `packages/halo` and `packages/pro` (tokens and CSS), `packages/cli` (CLI and MCP server), `apps/docs` (the website), `examples/` (every live example) and `e2e/`. See [CONTRIBUTING.md](CONTRIBUTING.md) for the rules that keep the two kits identical.
+The repository is a pnpm and Turborepo monorepo: `packages/core` (components), `packages/halo` and `packages/pro` (tokens and CSS), `packages/cli` (CLI and MCP server), `packages/elements` (custom elements), `apps/docs` (the website), `examples/` (every live example) and `e2e/`. See [CONTRIBUTING.md](CONTRIBUTING.md) for the rules that keep the two kits identical.
 
 ## Contributing
 

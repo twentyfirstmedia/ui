@@ -26,6 +26,7 @@ export const guidePages = [
   "theming",
   "themes",
   "ai",
+  "html",
   "status-and-approvals",
   "changelog",
   "components",
