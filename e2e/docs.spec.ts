@@ -3,10 +3,13 @@ import { expect, test } from "@playwright/test";
 /** Phase 7: docs chrome — routes for both kits, live kit switch, search and theme. */
 test.use({ baseURL: "http://localhost:4174" });
 
-test("the root forwards to the Halo docs", async ({ page }) => {
+test("the root is the landing page and links into the docs", async ({ page }) => {
   await page.goto("/");
-  await expect(page).toHaveURL(/\/halo\/$/);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Soft, calm interfaces.");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("One API.Two looks.");
+  await page.getByRole("link", { name: "Get started" }).click();
+  await expect(page).toHaveURL(/\/halo\/installation\/$/);
+  await page.getByRole("link", { name: "Twentyfirst UI" }).first().click();
+  await expect(page).toHaveURL(/\/$/);
 });
 
 test("the kit switch shows the same page in the other kit", async ({ page }) => {
