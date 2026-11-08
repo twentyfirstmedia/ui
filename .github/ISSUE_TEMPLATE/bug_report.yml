@@ -1,0 +1,49 @@
+name: Bug report
+description: Something looks or behaves wrong in a component, the CLI or the MCP server.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting! A small reproduction makes a fix much faster.
+  - type: dropdown
+    id: kit
+    attributes:
+      label: Kit
+      options: [Halo, Pro, Both, Not kit-specific (CLI, MCP, docs)]
+    validations:
+      required: true
+  - type: input
+    id: component
+    attributes:
+      label: Component or command
+      placeholder: DataTable, twentyfirst-ui init, get_component …
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      description: Code, steps or a link to a sandbox or repository.
+      render: tsx
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: "@twentyfirstmedia/halo 0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Browser, OS, React and framework
+      placeholder: Chrome 140, macOS, React 19, Next.js 16
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme
+      multiple: true
+      options: [Light, Dark, System]

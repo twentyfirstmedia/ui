@@ -2,7 +2,6 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 export const SCOPE = "@twentyfirstmedia";
-export const REGISTRY = "https://npm.pkg.github.com";
 export const CONFIG_FILE = "twentyfirst.json";
 
 export type Kit = "halo" | "pro";

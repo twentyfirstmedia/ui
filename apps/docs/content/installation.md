@@ -1,20 +1,11 @@
 ---
 title: Installation
-description: The packages are private and live in GitHub Packages. One kit is the normal case.
+description: "Install one kit from npm, import its styles once and wrap the app in UIProvider. React 18.3 or 19; works with Next.js, Vite and any React setup."
 ---
 
-## 1. Registry and token
+## 1. The kit
 
-Point the `@twentyfirstmedia` scope at GitHub Packages in your app's `.npmrc` and keep a token with `read:packages` in the environment as `NPM_TOKEN`.
-
-```ini
-@twentyfirstmedia:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${NPM_TOKEN}
-```
-
-## 2. The kit
-
-Install it with the CLI (it also sets up styles and the provider) or by hand:
+The packages are on npm under the MIT license. Install a kit with the CLI (it also sets up styles, the provider and the Next.js layout) or by hand:
 
 ```sh
 npx @twentyfirstmedia/ui init --kit {{kit}}
@@ -22,7 +13,7 @@ npx @twentyfirstmedia/ui init --kit {{kit}}
 pnpm add @twentyfirstmedia/{{kit}}
 ```
 
-## 3. Styles and provider
+## 2. Styles and provider
 
 Import `styles.css` once. It brings the self-hosted fonts, the tokens (light, dark, density) and every component style; no `data-kit` attribute is needed.
 

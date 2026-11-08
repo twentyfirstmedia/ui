@@ -5,7 +5,7 @@ description: "npx @twentyfirstmedia/ui sets up a kit, copies components into you
 
 ## init
 
-Adds the registry to `.npmrc`, installs the kit, imports its styles (and the Tailwind preset when the app uses Tailwind), creates `components/ui-root.tsx` with the `UIProvider`, wraps the Next.js layout and sets `data-kit` on `<html>`. Running it again changes nothing.
+Installs the kit, imports its styles (and the Tailwind preset when the app uses Tailwind), creates `components/ui-root.tsx` with the `UIProvider`, wraps the Next.js layout and sets `data-kit` on `<html>`. Running it again changes nothing.
 
 ```sh
 npx @twentyfirstmedia/ui init --kit {{kit}}

@@ -1,16 +1,7 @@
 import { execSync } from "node:child_process";
 import { join, relative } from "node:path";
 import { detect, installCommand } from "./project.js";
-import {
-  CONFIG_FILE,
-  type Config,
-  type Kit,
-  type Logger,
-  REGISTRY,
-  SCOPE,
-  read,
-  write,
-} from "./util.js";
+import { CONFIG_FILE, type Config, type Kit, type Logger, SCOPE, read, write } from "./util.js";
 
 export interface InitOptions {
   cwd: string;
@@ -36,18 +27,6 @@ export function init(o: InitOptions): Config {
   const p = detect(o.cwd);
   const pkgs = o.both ? [`${SCOPE}/halo`, `${SCOPE}/pro`] : [`${SCOPE}/${o.kit}`];
   const done: string[] = [];
-
-  // .npmrc: the scope lives in GitHub Packages
-  const npmrcPath = join(o.cwd, ".npmrc");
-  const npmrc = read(npmrcPath) ?? "";
-  if (!npmrc.includes(`${SCOPE}:registry`)) {
-    write(
-      npmrcPath,
-      (npmrc && !npmrc.endsWith("\n") ? npmrc + "\n" : npmrc) +
-        `${SCOPE}:registry=${REGISTRY}\n//npm.pkg.github.com/:_authToken=\${NPM_TOKEN}\n`,
-    );
-    done.push(".npmrc: GitHub Packages for " + SCOPE + " (set NPM_TOKEN in your environment)");
-  }
 
   if (o.install !== false) {
     const cmd = installCommand(p.pm, pkgs);

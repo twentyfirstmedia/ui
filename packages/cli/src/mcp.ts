@@ -799,7 +799,7 @@ export function createServer(k: Knowledge, options: ServerOptions): McpServer {
   // ── dispatch ──
 
   const instructions = [
-    `${PRODUCT} docs for coding agents. ${PRODUCT} is two React UI kits with one component API: Halo (soft, rounded, light-first) and Pro (sharp, dense, dark-first); this project uses ${info.label} (\`${info.package}\`). These are private packages no model knows from training, so look things up here instead of guessing: search_docs to find components, patterns, guides, tokens and icons; get_component for a component's import, example and props; get_pattern for complete screens; check_usage on the code you write.`,
+    `${PRODUCT} docs for coding agents. ${PRODUCT} is two React UI kits with one component API: Halo (soft, rounded, light-first) and Pro (sharp, dense, dark-first); this project uses ${info.label} (\`${info.package}\`). These kits are newer than most models' training data and their exact props matter, so look things up here instead of guessing: search_docs to find components, patterns, guides, tokens and icons; get_component for a component's import, example and props; get_pattern for complete screens; check_usage on the code you write.`,
     "",
     "Rules:",
     agentRules(defaultKit),

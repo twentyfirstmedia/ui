@@ -2,7 +2,22 @@
   "name": "@twentyfirstmedia/halo",
   "version": "0.0.0",
   "description": "Halo: soft, rounded, light-first. Same components and props as Pro.",
-  "license": "UNLICENSED",
+  "license": "MIT",
+  "author": "Twentyfirst Media (https://twentyfirst.media)",
+  "homepage": "https://ui.twentyfirst.media/halo/",
+  "bugs": {
+    "url": "https://github.com/twentyfirstmedia/ui/issues"
+  },
+  "keywords": [
+    "react",
+    "ui-kit",
+    "components",
+    "design-system",
+    "tailwind",
+    "dark-mode",
+    "accessible",
+    "halo"
+  ],
   "type": "module",
   "repository": {
     "type": "git",
@@ -10,8 +25,8 @@
     "directory": "packages/halo"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "restricted"
+    "access": "public",
+    "provenance": true
   },
   "sideEffects": [
     "**/*.css"

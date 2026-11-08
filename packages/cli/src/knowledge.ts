@@ -312,7 +312,7 @@ export function llmsTxt(k: Knowledge): string {
   const out = [
     `# ${PRODUCT}`,
     "",
-    "> Two React UI kits with one component API: Halo (soft, rounded, light-first) and Pro (sharp, dense, hairline grid, dark-first). Same components, props and markup; only tokens and CSS differ, so an app can switch kits at runtime. Private npm packages on GitHub Packages: `@twentyfirstmedia/halo`, `@twentyfirstmedia/pro`, CLI and MCP server `@twentyfirstmedia/ui`.",
+    "> Two React UI kits with one component API: Halo (soft, rounded, light-first) and Pro (sharp, dense, hairline grid, dark-first). Same components, props and markup; only tokens and CSS differ, so an app can switch kits at runtime. MIT-licensed npm packages: `@twentyfirstmedia/halo`, `@twentyfirstmedia/pro`, CLI and MCP server `@twentyfirstmedia/ui`.",
     "",
     "Every page of the docs has a Markdown twin: append `.md` to the page path (`/halo/components/Tabs/` → `/halo/components/Tabs.md`). Halo and Pro pages differ only in the package name; the links below use Halo, replace `/halo/` with `/pro/` for Pro.",
     "",

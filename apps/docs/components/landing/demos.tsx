@@ -87,7 +87,7 @@ export function HeroDemo() {
 
 const PARITY_CODE = `<Panel title="Workspace">
   <TextField label="Name" defaultValue="Northwind" />
-  <Switch label="Weekly digest" defaultChecked />
+  <Switch defaultChecked>Weekly digest</Switch>
   <Progress label="Seats used" value={72} />
   <StatusIndicator status="ok" label="All systems normal" />
   <Button variant="secondary">Cancel</Button>
@@ -102,7 +102,7 @@ export function ParityCard({ id }: { id: string }) {
     >
       <div className="lp-parity-form">
         <TextField id={`${id}-name`} label="Name" defaultValue="Northwind" />
-        <Switch label="Weekly digest" defaultChecked />
+        <Switch defaultChecked>Weekly digest</Switch>
         <Progress label="Seats used" value={72} />
         <StatusIndicator status="ok" label="All systems normal" />
         <div className="lp-parity-actions">
