@@ -494,7 +494,7 @@ export function Wizard(p: WizardProps) {
             color: "var(--on-frame)",
           }}
         >
-          {p.brand || L("Halo")}
+          {p.brand}
           <span className="tf-brand-dot" />
         </span>
         <ol>
@@ -635,7 +635,7 @@ export function InvoicePreview(p: InvoicePreviewProps) {
               fontSize: 18,
             }}
           >
-            {p.brand || L("Halo")}
+            {p.brand}
             <span className="tf-brand-dot" />
           </div>
           {p.from && <div className="tf-paper-small">{p.from}</div>}

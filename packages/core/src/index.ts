@@ -2,6 +2,7 @@ export { cx, initials, reduced } from "./cx.js";
 export {
   L,
   Lx,
+  LK,
   setLabels,
   getLabels,
   setLocale,

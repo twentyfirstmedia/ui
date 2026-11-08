@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { L } from "../i18n.js";
+import { L, LK } from "../i18n.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { StatusShape } from "./status.js";
@@ -18,12 +18,12 @@ import type {
 
 /* ── Approval A–D ── */
 const FAMILY: Record<RiskFamily, [IconName, string]> = {
-  money: ["card", "Money"],
-  infra: ["server", "Infrastructure"],
-  comms: ["mail", "Communication"],
-  marketing: ["trend", "Marketing"],
-  apps: ["code", "Own apps"],
-  legal: ["book", "Legal"],
+  money: ["card", LK("Money")],
+  infra: ["server", LK("Infrastructure")],
+  comms: ["mail", LK("Communication")],
+  marketing: ["trend", LK("Marketing")],
+  apps: ["code", LK("Own apps")],
+  legal: ["book", LK("Legal")],
 };
 
 export function ApprovalCard(p: ApprovalCardProps) {

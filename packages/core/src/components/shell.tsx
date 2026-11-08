@@ -18,7 +18,7 @@ export function TopBar(p: TopBarProps) {
   return (
     <nav className="tf-topbar" aria-label={L("Main")}>
       <span className="tf-brand">
-        {p.brand || L("Halo")}
+        {p.brand}
         <span className="tf-brand-dot" aria-hidden />
         {p.tag && <span className="tf-brand-tag">{p.tag}</span>}
       </span>

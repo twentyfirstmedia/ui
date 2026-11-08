@@ -77,14 +77,16 @@ Notiz: Alle ~190 Komponenten sind per Codemod aus `halo.js` portiert (`h()` → 
 
 ### Phase 4: Pro-Kit (1:1 zu Halo)
 - [x] Pro-CSS für **jede** Halo-Komponente nach dem Look in `reference/pro/` (Hairline-Grid, eckig, dicht, Geist); gleiches Markup, keine JS-Änderung. Auch Komponenten, die es in `reference/pro/` nicht gibt, bekommen einen Pro-Look, abgeleitet aus dessen Regeln.
-- [ ] Laufzeit-Wechsel Halo ↔ Pro in einer App (Beispiel-App + Test: Umschalten ohne Reload, keine Konsole-Fehler, Layout bleibt stabil)
+- [x] Laufzeit-Wechsel Halo ↔ Pro in einer App (Beispiel-App + Test: Umschalten ohne Reload, keine Konsole-Fehler, Layout bleibt stabil)
 - [x] Paritätstest grün (Komponenten, Klassen, Tokens)
 - [x] Wo Pro in der Referenz eine Komponente anders löst, gewinnt die Halo-API; nur die Optik folgt Pro
 
 Notiz: Pro-Struktur wird aus dem Halo-CSS abgeleitet (`scripts/pro-css.ts`, Teil von `pnpm tokens`: eckig, Hairlines statt Schatten, Gewichte ≤ 600, Dichte-Tokens, kein Hover-Lift), der Pro-Look steht handgeschrieben in `packages/pro/css/90-pro-look.css`. Der Paritätstest schlägt fehl, wenn die abgeleiteten Dateien veraltet sind, ein Kit eine Klasse stylt, die das andere nicht hat, oder der Look-Layer eigene Klassen erfindet.
 
 ### Phase 5: Deutsche Texte
-- [ ] `labels/de.json` vollständig, Abdeckungstest
+- [x] `labels/de.json` vollständig, Abdeckungstest
+
+Notiz: `pnpm labels` sammelt alle Schlüssel aus `L()`, `Lx()` und `LK()` (Marker für Schlüssel, die später per Variable übersetzt werden, z. B. Risikofamilien und Agent-Status) per TypeScript-AST in `labels/en.json`; der Test prüft Aktualität, Vollständigkeit von `de.json` und gleiche Platzhalter. Laufzeit-Wechsel: `examples/kit-switch` (esbuild, `themes.css`) und `e2e/kit-switch.spec.ts` (kein Reload, Zustand bleibt, identisches Markup, keine Konsolenfehler, kein horizontaler Überlauf). Die Default-Marke „Halo" ist aus TopBar, AuthCard und Rechnung entfernt (wäre in Pro falsch).
 
 ### Phase 6: CLI
 - [ ] `init`, `add`, `list`, `diff` mit Tests gegen eine Beispiel-App in `examples/next-app`

@@ -45,6 +45,14 @@ export function L(key: string, vars?: Record<string, string | number | null | un
   return s;
 }
 
+/**
+ * Marks a string as a label key without translating it, for keys that are looked up later with a
+ * variable (`L(status)`). The label extractor collects these, so every key ends up in en.json.
+ */
+export function LK<T extends string>(key: T): T {
+  return key;
+}
+
 /** Like `L()`, but `{slots}` can be React nodes: `Lx("Type {word} to confirm", { word: <b>RESET</b> })`. */
 export function Lx(key: string, nodes: Record<string, ReactNode>): ReactNode[] {
   return L(key)

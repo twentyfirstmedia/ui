@@ -79,7 +79,7 @@ export function AuthCard(p: AuthCardProps) {
   return (
     <div className="tf-auth">
       <div className="tf-auth-brand">
-        <span className="tf-brand-word">{p.brand || L("Halo")}</span>
+        <span className="tf-brand-word">{p.brand}</span>
         <span className="tf-brand-dot" />
       </div>
       {p.icon && <TintIcon icon={p.icon} tint={p.tint || "sky"} size={48} />}
