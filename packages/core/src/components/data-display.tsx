@@ -4,7 +4,7 @@ import * as React from "react";
 import { cx, durationToken, reduced } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { L } from "../i18n.js";
-import { useMounted } from "../hooks.js";
+import { useMounted, useScrollFocus } from "../hooks.js";
 import { Avatar, IconButton, TintIcon } from "./foundation.js";
 import { Breadcrumb } from "./navigation.js";
 import type {
@@ -226,8 +226,10 @@ export function Stagger(p: StaggerProps) {
 }
 export function Table(p: TableProps) {
   const cols = p.columns || [];
+  const box = React.useRef<HTMLDivElement>(null);
+  useScrollFocus(box);
   return (
-    <div className="tf-table-scroll">
+    <div ref={box} className="tf-table-scroll">
       <table className="tf-table">
         <thead>
           <tr>

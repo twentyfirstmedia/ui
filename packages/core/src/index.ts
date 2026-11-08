@@ -31,6 +31,7 @@ export {
   useControlled,
   useId,
   useKeepInView,
+  useScrollFocus,
   useMounted,
   useOutside,
   useTrap,

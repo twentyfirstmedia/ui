@@ -174,3 +174,23 @@ export function useKeepInView(ref: RefObject<HTMLElement | null>, active: boolea
     if (shift) el.style.translate = `${Math.round(shift)}px 0`;
   }, [active]);
 }
+
+/**
+ * Makes a box keyboard-scrollable only while its content is wider than the box (tables on
+ * phones): it gets `tabindex="0"` then, and no extra tab stop otherwise.
+ */
+export function useScrollFocus(ref: RefObject<HTMLElement | null>): void {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const check = () => {
+      if (el.scrollWidth > el.clientWidth + 1) el.tabIndex = 0;
+      else el.removeAttribute("tabindex");
+    };
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    if (el.firstElementChild) ro.observe(el.firstElementChild);
+    return () => ro.disconnect();
+  }, [ref]);
+}

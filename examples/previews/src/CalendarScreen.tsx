@@ -228,6 +228,9 @@ function App() {
             overflowX: "auto",
           } as React.CSSProperties
         }
+        tabIndex={0}
+        role="region"
+        aria-label="Week view"
       >
         <div
           style={{
