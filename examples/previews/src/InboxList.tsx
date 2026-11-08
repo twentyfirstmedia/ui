@@ -88,7 +88,7 @@ function App() {
               agentNote: "sent after approval",
               to: "to ida@northwind.io",
               time: "Tue 09:41",
-              body: "Hi Ida,\n\nhappy to add 40 seats before your renewal on 1 May.\n\nBest,\nMara",
+              body: "Hi Ida,\n\nhappy to add 40 seats before your renewal on May 1.\n\nBest,\nMara",
               attachments: [
                 {
                   name: "Quote-0412.pdf",

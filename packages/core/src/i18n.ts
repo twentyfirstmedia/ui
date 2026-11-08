@@ -117,6 +117,11 @@ export function formatMoney(
   });
 }
 
+/** A share in percent (`19` → "19%" in English, "19 %" in German), via Intl. */
+export function formatPercent(v: number, o?: Intl.NumberFormatOptions): string {
+  return formatNumber(v / 100, { style: "percent", maximumFractionDigits: 0, ...o });
+}
+
 export function formatDate(input: Date | string | number, o?: Intl.DateTimeFormatOptions): string {
   const d = input instanceof Date ? input : new Date(input);
   try {

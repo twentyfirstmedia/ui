@@ -186,7 +186,7 @@ function App() {
             delay={200}
           >
             <StatTile tint="sky" value="1,284" label="Members this month" />
-            <StatTile tint="butter" value="$48,210" label="Collected" />
+            <StatTile tint="butter" value="€48,210" label="Collected" />
             <div
               className="tf-card tf-bg-lilac"
               style={{

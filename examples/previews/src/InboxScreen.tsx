@@ -118,7 +118,7 @@ function App() {
         <Panel side title="Northwind" subtitle="Team plan · since 2023">
           <div className="tf-row">
             <Badge tone="success">Active</Badge>
-            <Badge tone="info">Renews 01.05</Badge>
+            <Badge tone="info">Renews May 1</Badge>
           </div>
           <div
             className="tf-grid"
@@ -130,7 +130,7 @@ function App() {
               } as React.CSSProperties
             }
           >
-            <StatTile tint="butter" value="$1,240" label="MRR" />
+            <StatTile tint="butter" value="€1,240" label="MRR" />
             <StatTile tint="sky" value="24" label="Seats" />
           </div>
           <h3

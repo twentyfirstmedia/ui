@@ -5,6 +5,7 @@ export default function Preview() {
     <div
       style={{
         width: 380,
+        boxSizing: "border-box",
         maxWidth: "100%",
         background: "var(--surface)",
         borderRadius: "var(--radius-lg)",

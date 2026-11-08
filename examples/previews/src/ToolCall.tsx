@@ -30,7 +30,7 @@ export default function Preview() {
         }}
         output={{
           messages: 3,
-          latest: "We need 40 more seats before 1 May.",
+          latest: "We need 40 more seats before May 1.",
         }}
       />
       <ToolCall

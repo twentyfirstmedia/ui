@@ -28,6 +28,7 @@ function App() {
       <div
         style={{
           width: 390,
+          boxSizing: "border-box",
           maxWidth: "100%",
         }}
       >

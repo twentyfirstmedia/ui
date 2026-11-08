@@ -5,7 +5,7 @@ import type { LedgerRow } from "@twentyfirstmedia/ui-core";
 const rows: LedgerRow[] = [
   {
     id: 1,
-    date: "02.04.",
+    date: "Apr 2",
     ref: "RE-0412",
     text: "Hetzner Online GmbH",
     category: "Hosting",
@@ -19,7 +19,7 @@ const rows: LedgerRow[] = [
   },
   {
     id: 2,
-    date: "03.04.",
+    date: "Apr 3",
     ref: "ST-2231",
     text: "Stripe payout",
     category: "Revenue",
@@ -33,7 +33,7 @@ const rows: LedgerRow[] = [
   },
   {
     id: 3,
-    date: "04.04.",
+    date: "Apr 4",
     ref: "MAIL-88",
     text: "Google Ireland Ltd.",
     category: "Marketing",
@@ -118,7 +118,7 @@ export default function Preview() {
         </div>
         <ReceiptSuggestion
           file="Rechnung_2026-0412.pdf"
-          source="From billing@hetzner.com · 2 Apr"
+          source="From billing@hetzner.com · Apr 2"
           fields={[
             {
               label: "Vendor",
@@ -127,7 +127,7 @@ export default function Preview() {
             },
             {
               label: "Date",
-              value: "02.04.2026",
+              value: "Apr 2, 2026",
               mono: true,
               confidence: 0.98,
             },
@@ -139,7 +139,7 @@ export default function Preview() {
             },
             {
               label: "VAT",
-              value: "19 %",
+              value: "19%",
               confidence: 0.72,
             },
           ]}

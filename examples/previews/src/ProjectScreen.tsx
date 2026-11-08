@@ -17,12 +17,13 @@ import {
 } from "@twentyfirstmedia/ui-core";
 
 function App() {
-  const tasks: [string, boolean][] = [
-    ["Draft new tier names", true],
-    ["Comparison table component", true],
-    ["Localise tiers for DE and FR", false],
-    ["Checkout seat selector", false],
-    ["Write FAQ for annual plans", false],
+  // task, done, assignee
+  const tasks: [string, boolean, string][] = [
+    ["Draft new tier names", true, "Mara Ellis"],
+    ["Comparison table component", true, "Jonah Petit"],
+    ["Localise tiers for DE and FR", false, "Sun Lee"],
+    ["Checkout seat selector", false, "Rui Costa"],
+    ["Write FAQ for annual plans", false, "Ava Brandt"],
   ];
   return (
     <AppShell
@@ -74,7 +75,7 @@ function App() {
               {
                 icon: "flag",
                 tint: "blush",
-                text: "Deadline set to Fri, 17.04",
+                text: "Deadline set to Fri, Apr 17",
                 time: "Mon",
               },
             ]}
@@ -210,7 +211,7 @@ function App() {
                 >
                   {t[0]}
                 </span>
-                <Avatar name={t[0]} size={24} />
+                <Avatar name={t[2]} size={24} />
               </div>
             ))}
           </Stagger>

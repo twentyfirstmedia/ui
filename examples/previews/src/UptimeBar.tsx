@@ -40,7 +40,7 @@ export default function Preview() {
           {
             label: "CPU",
             value: 34,
-            text: "34 %",
+            text: "34%",
           },
           {
             label: "RAM",

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useMounted, useWidth } from "../hooks.js";
 import { L, formatNumber } from "../i18n.js";
-import { cx, reduced } from "../cx.js";
+import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { CountUp } from "./data-display.js";
 import type {
@@ -260,7 +260,7 @@ export function Donut(p: DonutProps) {
                 cy={size / 2}
                 r={r}
                 strokeWidth={sw}
-                strokeDasharray={(on || reduced() ? len : 0) + " " + c}
+                strokeDasharray={(on ? len : 0) + " " + c}
                 strokeDashoffset={-off}
                 style={{
                   transition: "stroke-dasharray var(--dur-slow) var(--ease-out) " + i * 90 + "ms",
@@ -768,7 +768,7 @@ export function Funnel(p: FunnelProps) {
               <span
                 className={cx("tf-funnel-bar", "tf-sf-" + (s.tint || p.tint || "sky"))}
                 style={{
-                  width: (on || reduced() ? Math.max(pct, 2) : 0) + "%",
+                  width: (on ? Math.max(pct, 2) : 0) + "%",
                   transitionDelay: i * 90 + "ms",
                 }}
               />
@@ -863,7 +863,7 @@ export function Gauge(p: GaugeProps) {
           strokeWidth={sw}
           strokeLinecap="round"
           strokeDasharray={c}
-          strokeDashoffset={on || reduced() ? c * (1 - v / max) : c}
+          strokeDashoffset={on ? c * (1 - v / max) : c}
         />
       </svg>
       <div className="tf-gauge-label">

@@ -20,6 +20,13 @@ for (const kit of KITS)
             await page.goto(`/${kit}/${path}/`);
             await page.waitForTimeout(400);
             await page.evaluate(() => document.fonts.ready);
+            // previews can be taller than the window; grow the window so the whole preview is
+            // painted (a composited preview box is only rendered inside the viewport)
+            const h = await page.evaluate(() => document.documentElement.scrollHeight);
+            if (h > 900) {
+              await page.setViewportSize({ width, height: h });
+              await page.waitForTimeout(200);
+            }
             const previews = page.locator(".docs-preview");
             const n = await previews.count();
             for (let i = 0; i < n; i++) {

@@ -70,7 +70,7 @@ function App() {
             <ChatMessage
               role="assistant"
               name="Assistant"
-              text="This loft is about **4 % above** the estimated value. Want me to draft a first message to the agent?"
+              text="This loft is about **4% above** the estimated value. Want me to draft a first message to the agent?"
             />
             <PromptStarters
               items={[

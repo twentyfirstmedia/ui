@@ -40,7 +40,7 @@ const groups: ChatListProps["groups"] = [
       {
         id: "ads",
         name: "Ads",
-        sub: "Budget at 82 %",
+        sub: "Budget at 82%",
         time: "09:12",
         tint: "mint",
         status: "warn",
@@ -84,7 +84,7 @@ function App() {
               name="Atlas"
               tint="sky"
               time="09:41"
-              text="Drafted. It quotes **40 seats at €24** prorated to 1 May."
+              text="Drafted. It quotes **40 seats at €24** prorated to May 1."
             />
             <ThinkingLine text="Reading 3 messages…" />
             <FeedbackRating label="Was this useful?" />
@@ -99,7 +99,7 @@ function App() {
                 chat: "Atlas",
                 time: "09:41",
                 who: "Atlas",
-                text: "It quotes 40 seats at €24 prorated to 1 May.",
+                text: "It quotes 40 seats at €24 prorated to May 1.",
               },
               {
                 id: 2,

@@ -4,8 +4,9 @@
    look; this layer adds the small-screen behaviour on top of it, so ≥ 1181px stays exactly the
    reference while narrower screens reflow.
 
-   Breakpoints (viewport):  phone ≤ 760px · tablet 761–1180px · desktop ≥ 1181px
-   (plus 480px for the narrowest phones). The Pro CSS is derived from this file like from all
+   Breakpoints: phone ≤ 760px · tablet 761–1180px · desktop ≥ 1181px (plus 480px for the
+   narrowest phones). The app shell measures its own width (container queries); everything else
+   the viewport. The Pro CSS is derived from this file like from all
    other Halo files, so both kits reflow the same way. */
 
 /* Layout grid: one column on phones, the given columns from tablets up.
@@ -35,8 +36,28 @@
   grid-template-columns: 208px minmax(0, 1fr) 304px;
 }
 
-/* Tablet: asides move below the main column, the page nav shrinks to icons (see SubNav) */
-@media (max-width: 1180px) {
+/* The shell reflows by its own width (container queries), not by the screen's: an app shell
+   embedded in a narrower area, or a preview in the docs, gets the layout that fits it. */
+.tf-shell {
+  container: tf-shell / inline-size;
+}
+/* Grids inside a shell follow the shell's width too */
+.tf-shell .tf-grid {
+  grid-template-columns: var(--cols-sm, minmax(0, 1fr));
+}
+@container tf-shell (min-width: 761px) {
+  .tf-shell .tf-grid {
+    grid-template-columns: var(--cols-md, var(--cols, minmax(0, 1fr)));
+  }
+}
+@container tf-shell (min-width: 1181px) {
+  .tf-shell .tf-grid {
+    grid-template-columns: var(--cols, minmax(0, 1fr));
+  }
+}
+
+/* Tablet: asides move below the main column, nav labels and the page nav shrink to icons */
+@container tf-shell (max-width: 1180px) {
   .tf-sheet:not(.tf-sheet-2):not(.tf-sheet-nav) {
     grid-template-columns: 44px minmax(0, 1fr);
   }
@@ -46,20 +67,68 @@
   .tf-sheet > .tf-main ~ :not(.tf-dock-float) {
     grid-column: 2;
   }
+  /* the dock floats over the end of the sheet, not of the main column (asides follow it) */
+  .tf-main-dock {
+    padding-bottom: 0;
+  }
+  .tf-sheet:has(> .tf-dock-float) {
+    padding-bottom: 104px;
+  }
+  .tf-nav-label {
+    display: none;
+  }
+  .tf-nav-item {
+    width: 36px;
+    padding: 0;
+    justify-content: center;
+  }
+  /* with the labels gone, a count becomes a badge on the icon */
+  .tf-nav-item .tf-nav-count {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    font-size: 10px;
+    line-height: 16px;
+  }
 }
-@media (max-width: 1040px) {
+@container tf-shell (max-width: 1040px) {
   .tf-sheet-nav,
   .tf-sheet-nav.tf-sheet-aside {
     grid-template-columns: 44px minmax(0, 1fr);
   }
+  .tf-subnav-label,
+  .tf-subnav-eyebrow,
+  .tf-subnav-action span {
+    display: none;
+  }
+  .tf-subnav-item,
+  .tf-subnav-action {
+    justify-content: center;
+    padding: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-1);
+  }
+  .tf-subnav-item {
+    position: relative;
+  }
+  .tf-subnav-count {
+    position: absolute;
+    top: 0;
+    right: -2px;
+    min-width: 16px;
+    height: 16px;
+    font-size: 10px;
+    line-height: 16px;
+    padding: 0 4px;
+  }
 }
 
 /* Phone: the shell becomes one column; rail and page nav turn into scrolling rows */
-@media (max-width: 760px) {
-  .tf-shell {
-    padding: 0 4px 4px;
-    border-radius: var(--radius-lg);
-  }
+@container tf-shell (max-width: 760px) {
   .tf-topbar,
   .tf-shell .tf-topbar {
     gap: var(--space-2);
@@ -103,6 +172,9 @@
   }
   .tf-sheet > .tf-main ~ :not(.tf-dock-float) {
     grid-column: auto;
+  }
+  .tf-sheet:has(> .tf-dock-float) {
+    padding-bottom: var(--space-3);
   }
   .tf-rail {
     width: auto;
@@ -175,6 +247,13 @@
   }
   .tf-subnav-labels {
     display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .tf-shell {
+    padding: 0 4px 4px;
+    border-radius: var(--radius-lg);
   }
 }
 

@@ -144,8 +144,8 @@ function App() {
             number={2097}
             from="Halo Workspace GmbH · Example Street 1 · 20457 Hamburg"
             to="Northwind"
-            issued="16.04.2026"
-            due="30.04.2026"
+            issued="Apr 16, 2026"
+            due="Apr 30, 2026"
             lines={lines}
             note="Thank you for your business. Please pay within 14 days."
           />
@@ -170,7 +170,7 @@ function App() {
         </h3>
         <TransactionRow
           text="STRIPE PAYOUT 0415"
-          date="15.04.2026"
+          date="Apr 15, 2026"
           amount={2318.4}
           hint="Payout for 3 card payments: invoices #2093, #2094, #2095"
         />

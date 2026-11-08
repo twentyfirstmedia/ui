@@ -25,7 +25,7 @@ export default function Preview() {
           facts={[
             ["Comparables", "42 sales, last 18 months"],
             ["Method", "Comparable sales"],
-            ["As of", "8 Nov 2026"],
+            ["As of", "Nov 8, 2026"],
           ]}
           note="An estimate, not an appraisal."
         />

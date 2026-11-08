@@ -16,7 +16,7 @@ function App() {
       </Alert>
       <Alert
         tone="warning"
-        title="halo.dev expires on 04.05.2026"
+        title="halo.dev expires on May 4, 2026"
         action={
           <Button size="sm" variant="secondary">
             Turn on auto-renew

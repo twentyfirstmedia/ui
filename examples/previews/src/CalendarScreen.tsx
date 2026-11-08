@@ -107,7 +107,7 @@ function App() {
       active="Calendar"
       dock={false}
       side={
-        <Panel side title="Up next" subtitle="Thursday, 16 April">
+        <Panel side title="Up next" subtitle="Thursday, April 16">
           <div
             className="tf-card tf-in"
             style={
@@ -192,14 +192,14 @@ function App() {
             <EventCard
               kind="review"
               label="Pricing review"
-              date="Thu, 16.04"
+              date="Thu, Apr 16"
               time="11:00"
               tint="butter"
               icon="card"
             >
               Moved from Wednesday so Growth can join.
             </EventCard>
-            <EventCard kind="incident" label="Incident retro" date="Thu, 16.04" time="16:00">
+            <EventCard kind="incident" label="Incident retro" date="Thu, Apr 16" time="16:00">
               What delayed EU webhooks and how we stop it.
             </EventCard>
           </Stagger>

@@ -16,7 +16,7 @@ export default function Preview() {
         action={<IconButton icon="plus" label="Add" />}
       >
         <Tabs block items={["Events", "Approvals", "History"]} />
-        <EventCard kind="review" label="Design review" date="Wed, 15.04" time="14:00">
+        <EventCard kind="review" label="Design review" date="Wed, Apr 15" time="14:00">
           Walk through the new billing settings flow.
         </EventCard>
       </Panel>

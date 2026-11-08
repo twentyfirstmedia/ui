@@ -26,7 +26,7 @@ function App() {
     >
       <PageHeader
         title={"Plan & billing"}
-        subtitle="You’re on Team · renews on 1 May 2026"
+        subtitle="You’re on Team · renews on May 1, 2026"
         actions={[
           <Segmented
             key="y"

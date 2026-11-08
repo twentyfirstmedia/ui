@@ -58,7 +58,7 @@ export function fmt(n: number, o: ParsedNumber) {
 }
 export function CountUp(p: CountUpProps) {
   const o = parseNum(p.value),
-    st = React.useState(o && !reduced() ? fmt(0, o) : String(p.value)),
+    st = React.useState(o ? fmt(0, o) : String(p.value)),
     last = React.useRef(0),
     first = React.useRef(true);
   React.useEffect(() => {
@@ -284,7 +284,7 @@ export function ListRow(p: ListRowProps) {
         (p.avatar ? (
           <Avatar name={p.avatar} size={36} />
         ) : (
-          <TintIcon icon={p.icon || "mail"} tint={p.tint || "plain"} />
+          <TintIcon icon={p.icon || "mail"} tint={p.tint || "plain"} size={36} />
         ))}
       <span
         style={{
@@ -459,7 +459,7 @@ export function ProgressRing(p: ProgressRingProps) {
           r={r}
           strokeWidth={sw}
           strokeDasharray={c}
-          strokeDashoffset={on || reduced() ? c * (1 - v / 100) : c}
+          strokeDashoffset={on ? c * (1 - v / 100) : c}
         />
       </svg>
       <span className="tf-ring-label">

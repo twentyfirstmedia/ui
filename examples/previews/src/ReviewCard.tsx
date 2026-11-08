@@ -30,7 +30,7 @@ export default function Preview() {
       <ReviewCard
         author="Ida N."
         product="TikTok views"
-        date="12 Apr"
+        date="Apr 12"
         rating={5}
         state="published"
         text="Fast, simple, worked exactly as described."

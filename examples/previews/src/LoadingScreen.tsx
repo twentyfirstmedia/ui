@@ -75,7 +75,7 @@ function App() {
           <StatTile tint="sky" value="18" label="All projects" />
           <StatTile tint="mint" value="11" label="Live" />
           <StatTile tint="placeholder" value="4" label="Drafts" />
-          <StatTile tint="butter" value="$48,210" label="Revenue (MTD)" />
+          <StatTile tint="butter" value="€48,210" label="Revenue (MTD)" />
         </Stagger>
         <Stagger
           className="tf-grid"

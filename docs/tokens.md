@@ -51,11 +51,11 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--chart-1` | `{accent}` | `{fg-100}` | Chart series 1 / the highlighted series. |
 | `--chart-2` | `{line-strong}` | `#9a9aa4` / `#6e6e79` | Chart series 2 / comparison (prior period). |
 | `--chart-grid` | `{line}` | `{line-100}` | Chart gridlines. |
-| `--chart-sky` | `{sky}` / `{sky-ink}` | `{info}` | Chart series tinted sky: the matching status colour. |
-| `--chart-mint` | `{mint}` / `{mint-ink}` | `{ok}` | Chart series tinted mint: the matching status colour. |
-| `--chart-lilac` | `{lilac}` / `{lilac-ink}` | `{signal}` | Chart series tinted lilac: the matching status colour. |
-| `--chart-butter` | `{butter}` / `{butter-ink}` | `{warn}` | Chart series tinted butter: the matching status colour. |
-| `--chart-blush` | `{blush}` / `{blush-ink}` | `{danger}` | Chart series tinted blush: the matching status colour. |
+| `--chart-sky` | `{sky}` / `{sky-ink}` | `{fg-100}` | Chart series tinted sky: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--chart-mint` | `{mint}` / `{mint-ink}` | `{chart-2}` | Chart series tinted mint: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--chart-lilac` | `{lilac}` / `{lilac-ink}` | `{fg-300}` | Chart series tinted lilac: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--chart-butter` | `{butter}` / `{butter-ink}` | `{fg-200}` | Chart series tinted butter: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--chart-blush` | `{blush}` / `{blush-ink}` | `{line-300}` | Chart series tinted blush: a step of the monochrome ramp (charts carry no decorative colour). |
 | `--accent-hover` | `{accent}` | `#000000` / `#ffffff` | Hover state of accent fills. |
 | `--ok` | `#2f5d16` / `#a8db86` | `#177447` / `#5cc28f` | Success / done / healthy: text and status shapes (circle). On bg-000 to bg-300. |
 | `--ok-bg` | `#d6efc3` / `#24401a` | `rgba(23,116,71,0.09)` / `rgba(92,194,143,0.12)` | Tint behind ok badges, banners and diff additions. |

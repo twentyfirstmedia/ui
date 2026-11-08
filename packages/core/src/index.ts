@@ -10,6 +10,7 @@ export {
   subscribeLocale,
   localeVersion,
   formatNumber,
+  formatPercent,
   formatMoney,
   formatDate,
   type Labels,

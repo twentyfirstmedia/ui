@@ -161,7 +161,7 @@ function App() {
           delay={150}
         >
           <StatTile tint="sky" value="18" label="Projects" />
-          <StatTile tint="butter" value="$48k" label="Revenue" />
+          <StatTile tint="butter" value="€48k" label="Revenue" />
           <StatTile tint="mint" value="11" label="Live" />
           <StatTile tint="placeholder" value="4" label="Review" />
         </Stagger>

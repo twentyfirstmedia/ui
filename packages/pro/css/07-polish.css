@@ -44,3 +44,108 @@
 .tf-push-top small {
   font-size: inherit;
 }
+
+/* Tab and segment labels never break inside a word; a segmented control that does not fit
+   scrolls instead of spilling out of its card */
+.tf-tab,
+.tf-seg-item {
+  white-space: nowrap;
+}
+.tf-seg,
+.tf-tabs {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+/* Pipeline steps wrap onto a second row instead of being cut off in a narrow panel */
+.tf-pipeline {
+  grid-auto-flow: row;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+
+/* Plain links inside components (passed in by the app) look like the kit's links, not the
+   browser's blue */
+:where([class*="tf-"]) a:not([class]) {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Text areas grow with the layout, not by a native drag handle */
+textarea.tf-input,
+.tf-composer-input {
+  resize: none;
+}
+
+/* Row items are full-width; sized as border-box whether they are a button or a div */
+.tf-row-item {
+  box-sizing: border-box;
+}
+
+/* A stat cell's corner icon does not push its value down: every value in a row starts at the
+   same height, with or without an icon */
+.tf-statcell-top > :not(.tf-statcell-label) {
+  margin-block: -8px;
+}
+
+/* Page numbers and the "…" gap centre their text the same way (a span is not a button) */
+.tf-page {
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+}
+
+/* Stacked avatars overlap less, so the initials of the covered avatar stay readable */
+.tf-avatar-stack .tf-avatar + .tf-avatar {
+  margin-left: -4px;
+}
+
+/* Map bubbles carry data: a stronger tint that stays visible on the dark map as well */
+.tf-map-bubble.tf-t-sky {
+  background: color-mix(in srgb, var(--sky-ink) 35%, var(--sky));
+}
+.tf-map-bubble.tf-t-mint {
+  background: color-mix(in srgb, var(--mint-ink) 35%, var(--mint));
+}
+.tf-map-bubble.tf-t-lilac {
+  background: color-mix(in srgb, var(--lilac-ink) 35%, var(--lilac));
+}
+.tf-map-bubble.tf-t-butter {
+  background: color-mix(in srgb, var(--butter-ink) 35%, var(--butter));
+}
+.tf-map-bubble.tf-t-blush {
+  background: color-mix(in srgb, var(--blush-ink) 35%, var(--blush));
+}
+
+/* Colour swatches keep a visible edge, so black on a dark card (or white on light) still shows */
+.tf-swatch {
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+
+/* Every status shape takes the same 8px box, so labels after a dot, diamond or triangle line up */
+.tf-shape-diamond {
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg) scale(0.875);
+}
+.tf-shape-triangle {
+  border-left-width: 4px;
+  border-right-width: 4px;
+  border-bottom-width: 7px;
+  margin-bottom: 1px;
+}
+
+/* Invoice number block: right-aligned at the right edge, also when it wraps under the sender */
+.tf-paper-id {
+  margin-left: auto;
+  text-align: right;
+}
+
+/* A segmented control is as wide as its options (it does not stretch its track in a column or
+   grid cell); the block variant fills the row on purpose */
+.tf-seg:not(.block),
+.tf-tabs:not(.tf-tabs-block) {
+  width: fit-content;
+}
