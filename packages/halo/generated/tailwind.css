@@ -47,6 +47,11 @@
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-grid: var(--chart-grid);
+  --color-chart-sky: var(--chart-sky);
+  --color-chart-mint: var(--chart-mint);
+  --color-chart-lilac: var(--chart-lilac);
+  --color-chart-butter: var(--chart-butter);
+  --color-chart-blush: var(--chart-blush);
   --color-accent-hover: var(--accent-hover);
   --color-ok: var(--ok);
   --color-ok-bg: var(--ok-bg);

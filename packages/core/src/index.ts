@@ -36,3 +36,4 @@ export {
 } from "./toast-store.js";
 export { ICON_PATHS, ICON_NAMES, type IconName } from "./icons.js";
 export { Icon, type IconProps } from "./Icon.js";
+export * from "./components/index.js";

@@ -62,22 +62,26 @@ Notiz: `UIProvider` setzt Labels und Locale synchron vor dem ersten Render; änd
 
 ### Phase 3: Komponenten portieren (Halo)
 In Batches, jeweils TSX + Halo-CSS + Tests + Doku-Seite:
-- [ ] Grundlagen und Aktionen (Button … Pagination, Badge mit Status-Formen)
-- [ ] Formulare (FormField … OtpInput, FileDrop, RangeSlider, StatusSelect, TilePicker, ColorField, MoneyInput, SecretField, LocaleField, RichTextEditor)
-- [ ] Overlays und Feedback (Popover, Tooltip, Menu, ContextMenu, Modal, Drawer, ConfirmDialog, Toaster, CommandPalette, ShortcutsOverlay, ExportDialog)
-- [ ] Layout und Navigation (AppShell, TopBar, SideRail, Dock, SubNav, SplitPane, SettingsLayout, MobileTabBar, WorkspaceSwitcher, LocaleSwitcher)
-- [ ] Daten und Charts (Table, DataTable, FilterBar, KeyValue, TreeView, alle Charts, StatCell, BarList, MapView, UptimeBar, Meter, LogView, CodeViewer)
-- [ ] KI und Agenten (ChatMessage … ApprovalCard A–D, ApprovalInbox, AgentCard … VoiceMode, ChatLauncher)
-- [ ] Betrieb und Geld (Connection…, ServerCard, DeployPipeline, DNS/Domain/MailAuth, Ledger, PnL, Receipt, BalanceCard, ServiceMonitor, RunHistory, WebhookEndpoint, BackupList, BlockList)
-- [ ] Commerce und Inhalte (ProductCard … PlanCard, ReviewCard, CouponCard, EmailPreview, SearchAdPreview, Webmail-Teile)
-- [ ] Immobilien und Medien (ListingCard, ResultsToolbar, SavedSearch, ValuationCard, EnergyClass, Gallery, BeforeAfter, ImageVariants)
-- [ ] Seiten-Chrome (CookieConsent, AnnouncementBar, StatusScreen, AuthCard, TwoFactorSetup)
+- [x] Grundlagen und Aktionen (Button … Pagination, Badge mit Status-Formen)
+- [x] Formulare (FormField … OtpInput, FileDrop, RangeSlider, StatusSelect, TilePicker, ColorField, MoneyInput, SecretField, LocaleField, RichTextEditor)
+- [x] Overlays und Feedback (Popover, Tooltip, Menu, ContextMenu, Modal, Drawer, ConfirmDialog, Toaster, CommandPalette, ShortcutsOverlay, ExportDialog)
+- [x] Layout und Navigation (AppShell, TopBar, SideRail, Dock, SubNav, SplitPane, SettingsLayout, MobileTabBar, WorkspaceSwitcher, LocaleSwitcher)
+- [x] Daten und Charts (Table, DataTable, FilterBar, KeyValue, TreeView, alle Charts, StatCell, BarList, MapView, UptimeBar, Meter, LogView, CodeViewer)
+- [x] KI und Agenten (ChatMessage … ApprovalCard A–D, ApprovalInbox, AgentCard … VoiceMode, ChatLauncher)
+- [x] Betrieb und Geld (Connection…, ServerCard, DeployPipeline, DNS/Domain/MailAuth, Ledger, PnL, Receipt, BalanceCard, ServiceMonitor, RunHistory, WebhookEndpoint, BackupList, BlockList)
+- [x] Commerce und Inhalte (ProductCard … PlanCard, ReviewCard, CouponCard, EmailPreview, SearchAdPreview, Webmail-Teile)
+- [x] Immobilien und Medien (ListingCard, ResultsToolbar, SavedSearch, ValuationCard, EnergyClass, Gallery, BeforeAfter, ImageVariants)
+- [x] Seiten-Chrome (CookieConsent, AnnouncementBar, StatusScreen, AuthCard, TwoFactorSetup)
+
+Notiz: Alle ~190 Komponenten sind per Codemod aus `halo.js` portiert (`h()` → JSX, `ha-` → `tf-`) und von Hand auf TypeScript strict gebracht; Props aus `index.d.ts` (`components/types.ts`), wo die Implementierung mehr kann (z. B. `disabled`, `className`, `danger-solid`), sind die Typen ergänzt. Halo-CSS 1:1 aus `halo.css` in fünf geordneten Dateien. Verbesserungen gegenüber der Referenz: Labels in Modul-Konstanten (NAV, Flow-Schritte, Rechte-Stufen) werden zur Laufzeit übersetzt, Status-Schlüssel bleiben englisch und nur die Anzeige geht durch `L()`, `toast({ title })` → `text`, sichere Links in `RichText`, keine festen IDs, kein `navigator` beim Server-Render, Chart-Tönungen über Tokens statt Theme-Selektoren, Select-Pfeil ohne Farb-Literal, keine Demo-Defaults in `AppShell` (Marke/Nutzer). Tests: jede Referenz-Preview läuft gegen die portierten Komponenten (`reference-previews.test.tsx`), dazu Tastaturpfade (ApprovalCard A–D, Inbox J/K, Combobox, DataTable, Toaster/Undo, ConfirmDialog, OTP, DatePicker, RangeSlider). Die Doku-Seiten je Batch entstehen in Phase 7.
 
 ### Phase 4: Pro-Kit (1:1 zu Halo)
-- [ ] Pro-CSS für **jede** Halo-Komponente nach dem Look in `reference/pro/` (Hairline-Grid, eckig, dicht, Geist); gleiches Markup, keine JS-Änderung. Auch Komponenten, die es in `reference/pro/` nicht gibt, bekommen einen Pro-Look, abgeleitet aus dessen Regeln.
+- [x] Pro-CSS für **jede** Halo-Komponente nach dem Look in `reference/pro/` (Hairline-Grid, eckig, dicht, Geist); gleiches Markup, keine JS-Änderung. Auch Komponenten, die es in `reference/pro/` nicht gibt, bekommen einen Pro-Look, abgeleitet aus dessen Regeln.
 - [ ] Laufzeit-Wechsel Halo ↔ Pro in einer App (Beispiel-App + Test: Umschalten ohne Reload, keine Konsole-Fehler, Layout bleibt stabil)
-- [ ] Paritätstest grün (Komponenten, Klassen, Tokens)
-- [ ] Wo Pro in der Referenz eine Komponente anders löst, gewinnt die Halo-API; nur die Optik folgt Pro
+- [x] Paritätstest grün (Komponenten, Klassen, Tokens)
+- [x] Wo Pro in der Referenz eine Komponente anders löst, gewinnt die Halo-API; nur die Optik folgt Pro
+
+Notiz: Pro-Struktur wird aus dem Halo-CSS abgeleitet (`scripts/pro-css.ts`, Teil von `pnpm tokens`: eckig, Hairlines statt Schatten, Gewichte ≤ 600, Dichte-Tokens, kein Hover-Lift), der Pro-Look steht handgeschrieben in `packages/pro/css/90-pro-look.css`. Der Paritätstest schlägt fehl, wenn die abgeleiteten Dateien veraltet sind, ein Kit eine Klasse stylt, die das andere nicht hat, oder der Look-Layer eigene Klassen erfindet.
 
 ### Phase 5: Deutsche Texte
 - [ ] `labels/de.json` vollständig, Abdeckungstest

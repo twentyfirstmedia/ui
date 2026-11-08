@@ -1,15 +1,16 @@
 "use client";
+import * as React from "react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type RefObject } from "react";
 
 const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 /** Controlled-or-uncontrolled state: uses `value` when given, otherwise internal state. */
-export function useControlled<T>(
+export function useControlled<T, D = T>(
   value: T | undefined,
-  defaultValue: T,
+  defaultValue: D,
   onChange?: (v: T) => void,
-): [T, (v: T) => void] {
-  const [inner, setInner] = useState<T>(defaultValue);
+): [T | D, (v: T) => void] {
+  const [inner, setInner] = useState<T | D>(defaultValue);
   const controlled = value !== undefined;
   const v = controlled ? value : inner;
   const set = useCallback(
@@ -64,7 +65,10 @@ export const FOCUSABLE =
  * Traps keyboard focus inside `ref` while mounted, closes on Escape and returns focus to the
  * element that had it before. Used by Modal, Drawer, CommandPalette and Wizard.
  */
-export function useTrap(ref: RefObject<HTMLElement | null>, onClose?: () => void): void {
+export function useTrap<T extends HTMLElement>(
+  ref: RefObject<T | null>,
+  onClose?: () => void,
+): void {
   const cb = useRef(onClose);
   cb.current = onClose;
   useEffect(() => {
@@ -129,4 +133,9 @@ export function useWidth<T extends HTMLElement = HTMLDivElement>(
     return undefined;
   }, [fixed, fallback]);
   return [ref, fixed || w || fallback];
+}
+
+/** A stable id for aria wiring, unique per component instance (SSR-safe). */
+export function useId(prefix = "tf"): string {
+  return `${prefix}-${React.useId().replace(/[^\w-]/g, "")}`;
 }

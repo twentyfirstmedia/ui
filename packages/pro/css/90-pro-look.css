@@ -1,0 +1,612 @@
+/* Pro look ("Clean Dark Pro", reference/pro): monochrome surfaces on a visible 1px hairline grid,
+   square corners (2px on controls), Geist and Geist Mono, colour only for state, dense by default.
+   Loaded after the derived structure (01–05), so these rules win. Same classes as Halo, no new ones. */
+
+body {
+  font-size: var(--density-font-size);
+  line-height: var(--density-line-height);
+  font-weight: 400;
+  font-feature-settings: "ss01", "cv11";
+}
+:where(
+  .tf-btn,
+  .tf-iconbtn,
+  .tf-chip,
+  .tf-tab,
+  .tf-input,
+  .tf-switch,
+  .tf-dock-btn,
+  .tf-rail-btn,
+  .tf-nav-item,
+  .tf-card
+):focus-visible {
+  outline-offset: 1px;
+}
+
+/* Buttons: secondary by default look, primary is the inverted surface */
+.tf-btn {
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  font: 500 var(--density-font-size)/1 var(--font-sans);
+  border: var(--line-width) solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
+}
+.tf-btn:hover {
+  background: var(--bg-200);
+}
+.tf-btn:active {
+  background: var(--bg-300);
+  transform: none;
+}
+.tf-btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+}
+.tf-btn-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.tf-btn-secondary {
+  box-shadow: none;
+}
+.tf-btn-soft {
+  background: var(--bg-200);
+  border-color: var(--line);
+}
+.tf-btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink-muted);
+}
+.tf-btn-ghost:hover,
+.tf-btn-soft:hover {
+  background: var(--bg-200);
+  color: var(--ink);
+}
+.tf-btn-danger {
+  background: var(--surface);
+  color: var(--danger);
+}
+.tf-btn-danger:hover {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+}
+.tf-btn-sm {
+  height: var(--control-sm);
+  padding: 0 var(--space-2);
+  font-size: 12px;
+}
+.tf-btn[disabled] {
+  opacity: 1;
+  color: var(--fg-400);
+  background: var(--surface);
+  border-color: var(--line);
+}
+
+.tf-iconbtn {
+  border: var(--line-width) solid transparent;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+.tf-iconbtn:active {
+  transform: none;
+}
+.tf-iconbtn-soft {
+  background: transparent;
+  color: var(--ink-muted);
+}
+.tf-iconbtn-soft:hover {
+  background: var(--bg-200);
+  color: var(--ink);
+}
+.tf-iconbtn-outline {
+  box-shadow: none;
+  border-color: var(--line-strong);
+}
+.tf-iconbtn-sm {
+  width: var(--control-sm);
+  height: var(--control-sm);
+}
+.tf-iconbtn-lg {
+  width: var(--control-comfy);
+  height: var(--control-comfy);
+}
+
+/* Chips and badges: 2px, hairline, compact */
+.tf-chip {
+  height: var(--control-sm);
+  padding: 0 var(--space-2);
+  font: 500 12px/1 var(--font-sans);
+  box-shadow: none;
+  border: var(--line-width) solid var(--line);
+  color: var(--ink-muted);
+}
+.tf-chip:hover {
+  background: var(--bg-200);
+  color: var(--ink);
+}
+.tf-chip[aria-pressed="true"] {
+  background: var(--bg-300);
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+.tf-chip-count {
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+.tf-badge {
+  height: 20px;
+  padding: 0 6px;
+  gap: var(--space-1);
+  font: 500 11px/1 var(--font-sans);
+  color: var(--ink-muted);
+  background: var(--bg-200);
+  border: var(--line-width) solid var(--line);
+}
+.tf-badge-success,
+.tf-badge-info,
+.tf-badge-warning,
+.tf-badge-danger,
+.tf-badge-highlight {
+  border-color: transparent;
+}
+.tf-badge-success {
+  color: var(--ok);
+}
+.tf-badge-info {
+  color: var(--info);
+}
+.tf-badge-warning {
+  color: var(--warn);
+}
+.tf-badge-danger {
+  color: var(--danger);
+}
+.tf-badge-highlight {
+  color: var(--signal);
+}
+.tf-badge-success .tf-badge-dot,
+.tf-badge-info .tf-badge-dot,
+.tf-badge-warning .tf-badge-dot,
+.tf-badge-danger .tf-badge-dot,
+.tf-badge-highlight .tf-badge-dot {
+  color: inherit;
+}
+
+.tf-tinticon {
+  width: 24px;
+  height: 24px;
+}
+.tf-tinticon .tf-ico {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}
+.tf-avatar {
+  font: 500 10px/1 var(--font-mono);
+  letter-spacing: 0.02em;
+  background: var(--bg-300);
+  border: var(--line-width) solid var(--line);
+  box-sizing: border-box;
+}
+.tf-avatar-stack .tf-avatar {
+  box-shadow: 0 0 0 1px var(--surface);
+}
+.tf-avatar-stack .tf-avatar + .tf-avatar {
+  margin-left: -4px;
+}
+.tf-kbd {
+  font: 500 11px/1 var(--font-mono);
+  color: var(--fg-300);
+  background: var(--bg-200);
+  border: var(--line-width) solid var(--line);
+  padding: 3px 4px;
+}
+
+/* Form controls: wells on bg-000 with a 3:1 border, 1px focus ring */
+.tf-field {
+  gap: var(--space-1);
+}
+.tf-field-label {
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-field-hint {
+  color: var(--fg-300);
+}
+.tf-field-error {
+  font-weight: 500;
+  color: var(--danger);
+}
+.tf-input {
+  padding: 0 var(--space-2);
+  background: var(--canvas);
+  box-shadow: none;
+  border: var(--line-width) solid var(--line-strong);
+  font: 400 var(--density-font-size)/var(--density-line-height) var(--font-sans);
+}
+.tf-input::placeholder {
+  color: var(--fg-400);
+}
+.tf-input:hover:not(:disabled):not(:focus) {
+  box-shadow: none;
+  border-color: var(--fg-300);
+}
+.tf-input:focus {
+  box-shadow: 0 0 0 1px var(--focus);
+  border-color: var(--focus);
+}
+.tf-input[aria-invalid="true"] {
+  box-shadow: none;
+  border-color: var(--danger);
+}
+textarea.tf-input {
+  padding: var(--space-2);
+  min-height: 72px;
+}
+select.tf-input {
+  padding-right: 28px;
+  background-position:
+    calc(100% - 14px) 52%,
+    calc(100% - 9px) 52%;
+}
+.tf-search {
+  height: var(--density-control);
+  padding: 0 var(--space-2);
+  background: var(--canvas);
+  border: var(--line-width) solid var(--line);
+  color: var(--fg-300);
+  box-sizing: border-box;
+}
+.tf-search input {
+  font: 400 var(--density-font-size)/var(--density-line-height) var(--font-sans);
+}
+.tf-check {
+  gap: var(--space-2);
+  font: 400 var(--density-font-size)/var(--density-line-height) var(--font-sans);
+}
+.tf-switch {
+  width: 28px;
+  height: 16px;
+  background: var(--bg-300);
+  border: var(--line-width) solid var(--line-strong);
+  box-sizing: border-box;
+}
+.tf-switch::after {
+  top: 2px;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  background: var(--fg-300);
+}
+.tf-switch:checked {
+  border-color: var(--accent);
+}
+.tf-switch:checked::after {
+  transform: translateX(12px);
+}
+
+/* Tabs and segmented: one boxed group, selected segment raised to bg-300 */
+.tf-tabs,
+.tf-seg {
+  gap: 0;
+  padding: 0;
+  background: var(--surface);
+  border: var(--line-width) solid var(--line-strong);
+  overflow: hidden;
+}
+.tf-tab,
+.tf-seg-item {
+  height: calc(var(--density-control) - 2px);
+  padding: 0 var(--space-3);
+  font: 500 12px/1 var(--font-sans);
+  color: var(--fg-300);
+  border-radius: 0;
+}
+.tf-tab + .tf-tab,
+.tf-seg-item + .tf-seg-item {
+  border-left: var(--line-width) solid var(--line);
+}
+.tf-tab:hover,
+.tf-seg-item:hover:not(.on) {
+  color: var(--ink);
+}
+.tf-tab[aria-selected="true"],
+.tf-seg-item.on {
+  background: var(--bg-300);
+  color: var(--ink);
+  box-shadow: none;
+}
+.tf-tabs-ind {
+  display: none;
+}
+.tf-seg.sm .tf-seg-item {
+  height: calc(var(--control-sm) - 2px);
+}
+
+/* Surfaces: cells of the hairline grid, no lift */
+.tf-card,
+.tf-panel,
+.tf-stat,
+.tf-event {
+  border-radius: 0;
+  box-shadow: 0 0 0 var(--line-width) var(--line);
+}
+.tf-card {
+  padding: var(--space-4);
+  gap: var(--space-2);
+  min-height: 0;
+}
+.tf-card-interactive:hover {
+  box-shadow: 0 0 0 var(--line-width) var(--line-strong);
+  background: var(--bg-200);
+}
+.tf-card-title {
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.tf-card-meta {
+  font-family: var(--font-mono);
+  color: var(--fg-300);
+}
+.tf-card-corner {
+  top: var(--space-3);
+  right: var(--space-3);
+}
+.tf-panel {
+  padding: var(--space-4);
+  gap: var(--space-3);
+}
+.tf-panel-title {
+  font: 600 14px/20px var(--font-sans);
+  letter-spacing: 0;
+}
+.tf-stat {
+  align-items: flex-start;
+  text-align: left;
+  padding: var(--space-4);
+  min-height: 0;
+  background: var(--surface);
+}
+.tf-stat-value {
+  font: 500 24px/28px var(--font-mono);
+  letter-spacing: -0.02em;
+}
+.tf-stat-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-300);
+  opacity: 1;
+  order: -1;
+}
+.tf-stat-placeholder {
+  border: 0;
+  box-shadow: 0 0 0 var(--line-width) var(--line-strong);
+}
+.tf-bg-surface {
+  box-shadow: 0 0 0 var(--line-width) var(--line);
+}
+.tf-event-bar {
+  border-radius: var(--radius-1);
+}
+.tf-header-title {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* Shell: top bar, rail and sheet touch on hairlines */
+.tf-shell {
+  background: var(--line);
+  padding: 0;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--line-width);
+  box-shadow: 0 0 0 var(--line-width) var(--line);
+}
+.tf-topbar,
+.tf-shell .tf-topbar {
+  border-radius: 0;
+  padding: 0 var(--space-3);
+  gap: var(--space-3);
+}
+.tf-brand {
+  font: 600 14px/1 var(--font-sans);
+  letter-spacing: -0.01em;
+}
+.tf-brand-tag {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+.tf-nav {
+  gap: 1px;
+  margin: 0 0 0 var(--space-4);
+}
+.tf-nav-item {
+  height: var(--row-dense);
+  padding: 0 var(--space-2);
+  font: 400 var(--density-font-size)/1 var(--font-sans);
+  color: var(--ink-muted);
+  border-radius: var(--radius-1);
+}
+.tf-nav-item:hover {
+  background: var(--bg-200);
+  color: var(--ink);
+}
+.tf-nav-item[aria-current="page"] {
+  background: var(--bg-300);
+  color: var(--ink);
+}
+.tf-user {
+  height: var(--row-dense);
+}
+.tf-user-name {
+  font-weight: 500;
+}
+.tf-sheet {
+  border-radius: 0;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+.tf-rail-btn {
+  width: var(--density-control);
+  height: var(--density-control);
+  color: var(--ink-muted);
+}
+.tf-rail-btn:hover {
+  background: var(--bg-200);
+  color: var(--ink);
+}
+.tf-rail-btn[aria-current="page"] {
+  background: var(--bg-300);
+  color: var(--ink);
+}
+.tf-dotcount,
+.tf-nav-count {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  border-radius: var(--radius-1);
+}
+.tf-dock {
+  border-radius: 0;
+  padding: var(--space-1);
+  gap: var(--space-1);
+  background: var(--surface);
+}
+.tf-dock-btn {
+  width: var(--density-control);
+  height: var(--density-control);
+}
+.tf-dock-btn:hover {
+  transform: none;
+  filter: brightness(1.1);
+}
+
+/* Tables: mono eyebrow headers, dense rows, hover raises to bg-200 */
+.tf-table {
+  font: 400 var(--density-font-size)/var(--density-line-height) var(--font-sans);
+}
+.tf-table th {
+  font: 500 11px/16px var(--font-mono);
+  letter-spacing: 0.06em;
+  color: var(--fg-300);
+  padding: 0 var(--density-pad-x);
+  height: var(--density-row);
+  border-bottom-color: var(--line);
+}
+.tf-table td {
+  padding: 0 var(--density-pad-x);
+  height: var(--density-row);
+  border-bottom-color: var(--line-100);
+  color: var(--ink-muted);
+}
+.tf-table tbody tr:hover td {
+  background: var(--bg-200);
+}
+.tf-table .tf-num {
+  font-family: var(--font-mono);
+}
+
+.tf-progress {
+  height: 4px;
+  border-radius: 0;
+  background: var(--bg-300);
+}
+.tf-progress > span {
+  border-radius: 0;
+}
+.tf-progress-sky > span {
+  background: var(--info);
+}
+.tf-progress-mint > span {
+  background: var(--ok);
+}
+.tf-progress-butter > span {
+  background: var(--warn);
+}
+
+/* Floating layers: bg-100, hairline border, overlay shadow, square */
+.tf-menu,
+.tf-popover,
+.tf-modal {
+  border-radius: 0;
+  box-shadow:
+    var(--shadow-overlay),
+    0 0 0 var(--line-width) var(--line);
+}
+.tf-menu {
+  padding: var(--space-1);
+}
+.tf-menu-item {
+  height: var(--row-dense);
+  padding: 0 var(--space-2);
+  gap: var(--space-2);
+  border-radius: var(--radius-1);
+  font: 400 13px/1 var(--font-sans);
+}
+.tf-menu-item:hover {
+  background: var(--bg-300);
+}
+.tf-menu-item.danger {
+  color: var(--danger);
+}
+.tf-menu-item kbd {
+  font: 400 12px/1 var(--font-mono);
+  color: var(--fg-300);
+}
+.tf-menu-sep {
+  margin: var(--space-1) calc(var(--space-1) * -1);
+}
+.tf-menu-label {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--fg-300);
+}
+.tf-modal {
+  padding: var(--space-5);
+}
+.tf-modal-title {
+  font: 600 18px/24px var(--font-sans);
+  letter-spacing: -0.01em;
+}
+.tf-tooltip {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: var(--radius-1);
+  font-size: 12px;
+  line-height: 16px;
+  padding: 4px 8px;
+}
+.tf-toast {
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow:
+    var(--shadow-overlay),
+    0 0 0 var(--line-width) var(--line);
+  font: 400 13px/18px var(--font-sans);
+}
+.tf-alert {
+  border-radius: 0;
+}
+.tf-empty {
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+  align-items: flex-start;
+  text-align: left;
+  padding: var(--space-12) var(--space-6);
+}
+.tf-empty-title {
+  font-weight: 600;
+}
