@@ -85,8 +85,8 @@ body {
   transform: none;
 }
 .tf-btn-primary {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .tf-btn-secondary {
   background: var(--surface);
@@ -94,8 +94,8 @@ body {
   box-shadow: inset 0 0 0 1px var(--line-strong);
 }
 .tf-btn-soft {
-  background: var(--surface-sunken);
-  color: var(--ink);
+  background: var(--secondary);
+  color: var(--secondary-foreground);
 }
 .tf-btn-ghost {
   background: transparent;
@@ -132,15 +132,15 @@ body {
   transform: none;
 }
 .tf-iconbtn-soft {
-  background: var(--surface-sunken);
-  color: var(--ink);
+  background: var(--secondary);
+  color: var(--secondary-foreground);
 }
 .tf-iconbtn-soft:hover {
   background: var(--line);
 }
 .tf-iconbtn-solid {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .tf-iconbtn-outline {
   background: var(--surface);
@@ -176,11 +176,12 @@ body {
   box-shadow: 0 0 0 var(--line-width) var(--line);
 }
 .tf-chip:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-chip[aria-pressed="true"] {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .tf-chip-count {
   font-weight: 600;
@@ -277,8 +278,8 @@ body {
   color: var(--ink);
 }
 .tf-t-ink {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 
 /* Avatar */
@@ -465,11 +466,11 @@ select.tf-input {
   transition: transform 0.15s ease;
 }
 .tf-switch:checked {
-  background: var(--accent);
+  background: var(--primary);
 }
 .tf-switch:checked::after {
   transform: translateX(16px);
-  background: var(--on-accent);
+  background: var(--primary-foreground);
 }
 
 /* Tabs (segmented) */
@@ -808,11 +809,12 @@ select.tf-input {
   cursor: pointer;
 }
 .tf-rail-btn:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-rail-btn[aria-current="page"] {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .tf-dotcount {
   position: absolute;
@@ -903,7 +905,7 @@ select.tf-input {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: var(--accent);
+  background: var(--primary);
 }
 .tf-progress-sky > span {
   background: var(--sky-ink);
@@ -1263,7 +1265,7 @@ select.tf-input {
   animation: tf-grow-y var(--dur-slow) var(--ease-out) both;
 }
 .tf-bar-ink {
-  fill: var(--accent);
+  fill: var(--primary);
 }
 .tf-bar-sky {
   fill: var(--chart-sky);
@@ -1291,22 +1293,22 @@ select.tf-input {
   animation-delay: 150ms;
 }
 .tf-line-ink {
-  stroke: var(--accent);
+  stroke: var(--primary);
 }
 .tf-line-sky {
-  stroke: var(--sky-ink);
+  stroke: var(--chart-1);
 }
 .tf-line-mint {
-  stroke: var(--mint-ink);
+  stroke: var(--chart-2);
 }
 .tf-line-lilac {
-  stroke: var(--lilac-ink);
+  stroke: var(--chart-4);
 }
 .tf-line-butter {
-  stroke: var(--butter-ink);
+  stroke: var(--chart-3);
 }
 .tf-line-blush {
-  stroke: var(--blush-ink);
+  stroke: var(--chart-5);
 }
 .tf-area {
   opacity: 0;
@@ -1348,7 +1350,7 @@ select.tf-input {
   stroke: var(--surface-sunken);
 }
 .tf-arc-ink {
-  stroke: var(--accent);
+  stroke: var(--primary);
 }
 .tf-arc-sky {
   stroke: var(--sky-ink);
@@ -1460,7 +1462,8 @@ select.tf-input {
   font: inherit;
 }
 .tf-row-item:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-row-item[aria-current="true"] {
   background: var(--surface);
@@ -1631,7 +1634,8 @@ select.tf-input {
   text-align: left;
 }
 .tf-menu-item:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-menu-item.danger {
   color: var(--blush-ink);
@@ -1665,12 +1669,12 @@ select.tf-input {
   cursor: pointer;
 }
 .tf-page:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
   color: var(--ink);
 }
 .tf-page[aria-current="page"] {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .tf-crumbs {
   display: flex;
@@ -1842,7 +1846,7 @@ select.tf-input {
 }
 .tf-panel .tf-row-item[aria-current="true"],
 .tf-row-item[aria-current="true"] {
-  background: var(--surface-sunken);
+  background: var(--accent);
   box-shadow: inset 0 0 0 1px var(--line);
 }
 
@@ -1938,7 +1942,7 @@ select.tf-input {
   border-radius: var(--radius-1);
   border: 1.5px solid var(--line-strong);
   background: var(--surface);
-  color: var(--on-accent);
+  color: var(--primary-foreground);
   transition:
     background-color var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
@@ -1951,8 +1955,8 @@ select.tf-input {
     transform var(--dur-base) var(--ease-spring);
 }
 .tf-checkbox input:checked + .tf-checkbox-box {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--primary);
+  border-color: var(--primary);
 }
 .tf-checkbox input:checked + .tf-checkbox-box svg {
   opacity: 1;
@@ -2049,8 +2053,8 @@ select.tf-input {
   height: var(--density-control);
   border: 0;
   border-radius: var(--radius-pill);
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
   font: 500 13px/18px var(--font-sans);
   cursor: pointer;
   transition: transform var(--dur-fast) var(--ease-out);
@@ -2081,7 +2085,7 @@ select.tf-input {
     color var(--dur-fast) var(--ease-out);
 }
 .tf-subnav-item:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
   color: var(--ink);
 }
 .tf-subnav-item[aria-current="page"] {
@@ -2172,7 +2176,8 @@ select.tf-input {
   cursor: pointer;
 }
 .tf-note:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-note.unread {
   background: color-mix(in srgb, var(--sky) 35%, transparent);
@@ -2221,7 +2226,8 @@ select.tf-input {
   display: flex;
   flex-direction: column;
   border-radius: var(--radius-xl);
-  background: var(--surface);
+  background: var(--popover);
+  color: var(--popover-foreground);
   box-shadow: var(--shadow-float), 0 0 0 var(--line-width) var(--line);
   overflow: hidden;
   animation: tf-pop var(--dur-base) var(--ease-spring) both;
@@ -2283,7 +2289,7 @@ select.tf-input {
   cursor: pointer;
 }
 .tf-palette-item[aria-selected="true"] {
-  background: var(--surface-sunken);
+  background: var(--accent);
 }
 .tf-palette-label {
   flex: 1;

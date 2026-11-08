@@ -93,6 +93,14 @@ function block(selector: string, decls: string[], indent = ""): string {
   return `${indent}${selector} {\n${decls.map((d) => `${indent}  ${d}`).join("\n")}\n${indent}}\n`;
 }
 
+/**
+ * Token blocks have zero specificity (`:where`), so a theme wins with any plain selector and in
+ * any order: `:root { --primary: … }` or `[data-theme="dark"] { … }`, like a shadcn theme.
+ */
+function tokenBlock(selector: string, decls: string[], indent = ""): string {
+  return block(`:where(${selector})`, decls, indent);
+}
+
 function themeDecls(t: KitTokens, theme: "light" | "dark"): string[] {
   const out: string[] = [];
   for (const g of THEMED_GROUPS)
@@ -121,24 +129,25 @@ export function tokensCss(kit: Kit, t: KitTokens, scoped = false): string {
     staticDecls.push(`--${n}: ${ref(v)};`);
 
   let css = header(`${t.name} tokens${scoped ? `, scoped to [data-kit="${kit}"]` : ""}`);
-  css += block(k, [...staticDecls, ...themeDecls(t, base)]);
+  css += tokenBlock(k, [...staticDecls, ...themeDecls(t, base)]);
   if (t.defaultTheme === "system") {
-    css += `@media (prefers-color-scheme: dark) {\n${block(`${k}:not([data-theme="light"])`, themeDecls(t, "dark"), "  ")}}\n`;
+    css += `@media (prefers-color-scheme: dark) {\n${tokenBlock(`${k}:not([data-theme="light"])`, themeDecls(t, "dark"), "  ")}}\n`;
   }
-  css += `@media (prefers-color-scheme: dark) {\n${block(self('[data-theme="system"]'), themeDecls(t, "dark"), "  ")}}\n`;
-  css += `@media (prefers-color-scheme: light) {\n${block(self('[data-theme="system"]'), themeDecls(t, "light"), "  ")}}\n`;
-  css += block(self('[data-theme="dark"]'), themeDecls(t, "dark"));
-  css += block(self('[data-theme="light"]'), themeDecls(t, "light"));
+  css += `@media (prefers-color-scheme: dark) {\n${tokenBlock(self('[data-theme="system"]'), themeDecls(t, "dark"), "  ")}}\n`;
+  css += `@media (prefers-color-scheme: light) {\n${tokenBlock(self('[data-theme="system"]'), themeDecls(t, "light"), "  ")}}\n`;
+  // `.dark` / `.light` too: the class shadcn/ui and next-themes put on <html>
+  css += tokenBlock(`${self('[data-theme="dark"]')}, ${self(".dark")}`, themeDecls(t, "dark"));
+  css += tokenBlock(`${self('[data-theme="light"]')}, ${self(".light")}`, themeDecls(t, "light"));
   // touch screens get comfortable hit targets unless a density is chosen explicitly
   if (t.defaultDensity === "compact") {
-    css += `@media (pointer: coarse) {\n${block(
+    css += `@media (pointer: coarse) {\n${tokenBlock(
       `${k}:not([data-density])`,
       Object.entries(t.density.comfortable).map(([n, v]) => `--${n}: ${ref(v)};`),
       "  ",
     )}}\n`;
   }
   for (const d of ["compact", "comfortable"] as const) {
-    css += block(
+    css += tokenBlock(
       self(`[data-density="${d}"]`),
       Object.entries(t.density[d]).map(([n, v]) => `--${n}: ${ref(v)};`),
     );
@@ -161,7 +170,7 @@ export function tailwindCss(t: KitTokens): string {
   );
   for (const c of t.color) lines.push(`--color-${c.name}: var(--${c.name});`);
   lines.push("--radius-*: initial;");
-  for (const r of t.radius)
+  for (const r of t.radius.filter((r) => r.name !== "radius"))
     lines.push(`--radius-${r.name.replace(/^radius-/, "")}: var(--${r.name});`);
   lines.push("--shadow-*: initial;");
   for (const s of t.shadow)

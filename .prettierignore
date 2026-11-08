@@ -12,3 +12,4 @@ e2e/__screenshots__/
 **/*.md
 packages/pro/css/0*.css
 out/
+.claude/

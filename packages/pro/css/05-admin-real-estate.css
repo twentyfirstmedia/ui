@@ -29,7 +29,7 @@
   top: 8px;
   height: 4px;
   border-radius: var(--radius-pill);
-  background: var(--accent);
+  background: var(--primary);
 }
 .tf-range-track input {
   position: absolute;
@@ -49,7 +49,7 @@
   border-radius: var(--radius-1);
   background: var(--surface);
   box-shadow:
-    inset 0 0 0 2px var(--accent),
+    inset 0 0 0 2px var(--primary),
     0 0 0 var(--line-width) var(--line);
   cursor: grab;
 }
@@ -60,7 +60,7 @@
   border: 0;
   border-radius: var(--radius-1);
   background: var(--surface);
-  box-shadow: inset 0 0 0 2px var(--accent);
+  box-shadow: inset 0 0 0 2px var(--primary);
   cursor: grab;
 }
 .tf-range-track input:focus-visible::-webkit-slider-thumb {
@@ -126,7 +126,8 @@
   cursor: pointer;
 }
 .tf-barlist-row.is-btn:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-barlist-bar {
   position: absolute;
@@ -219,7 +220,7 @@
   box-shadow: inset 0 0 0 1px var(--line-strong);
 }
 .tf-tile.on {
-  box-shadow: inset 0 0 0 2px var(--accent);
+  box-shadow: inset 0 0 0 2px var(--primary);
 }
 .tf-tile:focus-visible {
   outline: 2px solid var(--focus);
@@ -260,8 +261,8 @@
   width: 22px;
   height: 22px;
   border-radius: var(--radius-1);
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 
 /* Live feed */
@@ -531,7 +532,8 @@
   cursor: pointer;
 }
 .tf-rte-btn:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-rte-btn:focus-visible,
 .tf-rte-var:focus-visible {
@@ -1198,12 +1200,12 @@ button.tf-runs-main[aria-expanded]:hover {
   cursor: pointer;
 }
 .tf-locfield-tab:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
   color: var(--ink);
 }
 .tf-locfield-tab.on {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .tf-locfield-tab:focus-visible {
   outline: 2px solid var(--focus);
@@ -1333,8 +1335,8 @@ button.tf-runs-main[aria-expanded]:hover {
   color: var(--ink);
 }
 .tf-2fa-steps li.on span {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .tf-2fa-steps li.done span {
   background: var(--ok-bg);
@@ -1562,7 +1564,7 @@ button.tf-runs-main[aria-expanded]:hover {
 }
 .tf-gallery-thumbs button.on {
   opacity: 1;
-  box-shadow: inset 0 0 0 2px var(--accent);
+  box-shadow: inset 0 0 0 2px var(--primary);
 }
 .tf-gallery-thumbs button:focus-visible {
   outline: 2px solid var(--focus);
@@ -1689,7 +1691,7 @@ button.tf-runs-main[aria-expanded]:hover {
 }
 .tf-listing.selected {
   box-shadow:
-    inset 0 0 0 2px var(--accent),
+    inset 0 0 0 2px var(--primary),
     0 0 0 var(--line-width) var(--line);
 }
 .tf-listing.row {
@@ -1722,8 +1724,8 @@ button.tf-runs-main[aria-expanded]:hover {
   top: 12px;
   padding: 4px 10px;
   border-radius: var(--radius-pill);
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
   font: 600 12px/16px var(--font-sans);
 }
 .tf-listing-photos {
@@ -2043,8 +2045,8 @@ button.tf-runs-main[aria-expanded]:hover {
   height: 56px;
   border: 0;
   border-radius: var(--radius-1);
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
   box-shadow: var(--shadow-float), 0 0 0 var(--line-width) var(--line);
   cursor: pointer;
 }

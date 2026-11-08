@@ -168,11 +168,11 @@
 .tf-msg.me .tf-bubble {
   padding: 8px 16px;
   border-radius: 20px 20px 4px 20px;
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .tf-msg.me .tf-bubble .tf-rt-plain {
-  color: var(--on-accent);
+  color: var(--primary-foreground);
 }
 .tf-msg.ai .tf-bubble {
   padding: 4px 0 0;
@@ -207,7 +207,7 @@
   padding: 0;
 }
 .tf-msg-act:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
   color: var(--ink);
 }
 .tf-msg-act.on {
@@ -654,7 +654,7 @@
   padding: 0;
 }
 .tf-composer-tool:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
   color: var(--ink);
 }
 .tf-composer-tool:focus-within,
@@ -681,8 +681,8 @@
   height: 36px;
   border: 0;
   border-radius: 50%;
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
   cursor: pointer;
   padding: 0;
   transition:
@@ -1273,8 +1273,8 @@
   box-sizing: border-box;
   padding: 0 6px;
   border-radius: var(--radius-pill);
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
   font: 700 11px/20px var(--font-sans);
   font-style: normal;
   text-align: center;
@@ -1386,7 +1386,7 @@
 }
 .tf-csteps li.done + li::before,
 .tf-csteps li.done::before {
-  background: var(--ink);
+  background: var(--primary);
 }
 .tf-csteps button {
   display: inline-flex;
@@ -1413,7 +1413,8 @@
   color: var(--ink);
 }
 .tf-csteps li.done button:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-csteps button:focus-visible {
   outline: 2px solid var(--focus);
@@ -1431,8 +1432,8 @@
 }
 .tf-csteps li.cur .tf-cstep-n,
 .tf-csteps li.done .tf-cstep-n {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .tf-otl {
   position: relative;
@@ -1463,7 +1464,7 @@
   display: none;
 }
 .tf-otl-step.done::before {
-  background: var(--ink);
+  background: var(--primary);
 }
 .tf-otl-dot {
   position: relative;
@@ -1475,11 +1476,11 @@
   border-radius: 50%;
   background: var(--surface);
   box-shadow: inset 0 0 0 2px var(--line-strong);
-  color: var(--on-accent);
+  color: var(--primary-foreground);
   margin-bottom: 4px;
 }
 .tf-otl-step.done .tf-otl-dot {
-  background: var(--accent);
+  background: var(--primary);
   box-shadow: none;
 }
 .tf-otl-step.cur .tf-otl-dot {

@@ -12,7 +12,8 @@
       "@twentyfirstmedia/ui-core",
       "@twentyfirstmedia/halo",
       "@twentyfirstmedia/pro",
-      "@twentyfirstmedia/ui"
+      "@twentyfirstmedia/ui",
+      "@twentyfirstmedia/elements"
     ]
   ],
   "linked": [],

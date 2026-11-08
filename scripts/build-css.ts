@@ -10,6 +10,7 @@
  * - scoped.css / themes.css: every rule scoped to `:where([data-kit="<kit>"])` (zero specificity)
  *   and keyframes prefixed with the kit, so both kits can be loaded at once and switched.
  */
+import { THEME_PRESETS, themeCss } from "../packages/core/src/theme.ts";
 import {
   copyFileSync,
   existsSync,
@@ -152,9 +153,21 @@ function generated(kit: Kit, file: string): string {
 
 const banner = (what: string) => `/* Twentyfirst UI · ${what} */\n`;
 
+/** Brand presets: dist/themes/<name>.css (one kit) and ui-core's dist/themes/<name>.css (both). */
+function buildPresets(kits: readonly Kit[], out: string, scoped: boolean): void {
+  mkdirSync(join(out, "themes"), { recursive: true });
+  for (const [name, p] of Object.entries(THEME_PRESETS))
+    writeFileSync(
+      join(out, "themes", `${name}.css`),
+      banner(`${p.label} theme${scoped ? " for both kits" : ` for ${kits[0]}`}`) +
+        kits.map((kit) => themeCss(p.theme, { kit, scoped })).join("\n"),
+    );
+}
+
 function buildKit(kit: Kit): void {
   const out = join(ROOT, "packages", kit, "dist");
   mkdirSync(out, { recursive: true });
+  buildPresets([kit], out, false);
   const fontCss = fonts(kit, out);
   const tokens = generated(kit, "tokens.css");
   writeFileSync(join(out, "fonts.css"), banner(`${kit} fonts (self-hosted)`) + fontCss);
@@ -189,6 +202,7 @@ function buildThemes(): void {
   for (const kit of KITS) css += "\n" + generated(kit, "tokens.scoped.css");
   for (const kit of KITS) css += "\n" + componentCss(kit, true);
   writeFileSync(join(out, "themes.css"), css);
+  buildPresets(KITS, out, true);
 }
 
 const target = process.argv[2];

@@ -35,8 +35,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && node ../../scripts/knowledge.ts dist/knowledge.json",
-    "typecheck": "tsc --noEmit"
+    "build": "node ../../scripts/copy-shared.ts && tsc -p tsconfig.build.json && node ../../scripts/knowledge.ts dist/knowledge.json",
+    "typecheck": "node ../../scripts/copy-shared.ts && tsc --noEmit"
   },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "1.32.2",

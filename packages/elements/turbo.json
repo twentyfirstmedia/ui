@@ -1,0 +1,17 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/packages/core/src/**",
+        "$TURBO_ROOT$/examples/previews/readme/**",
+        "$TURBO_ROOT$/reference/halo/design-system/components/**"
+      ]
+    },
+    "typecheck": {
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/packages/core/src/**"]
+    }
+  }
+}

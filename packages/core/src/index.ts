@@ -19,6 +19,19 @@ export {
 } from "./provider.js";
 export { Portal } from "./portal.js";
 export {
+  THEME_VARS,
+  THEME_PRESETS,
+  themeCss,
+  themeStyle,
+  parseThemeCss,
+  brandTheme,
+  foregroundFor,
+  type ThemeVar,
+  type ThemeValues,
+  type ThemeInput,
+  type ThemeCssOptions,
+} from "./theme.js";
+export {
   FOCUSABLE,
   useControlled,
   useId,

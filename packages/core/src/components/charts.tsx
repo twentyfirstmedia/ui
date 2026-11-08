@@ -297,7 +297,7 @@ export function Donut(p: DonutProps) {
                 <i
                   style={{
                     background:
-                      (d.tint || "ink") === "ink" ? "var(--accent)" : "var(--" + d.tint + "-ink)",
+                      (d.tint || "ink") === "ink" ? "var(--primary)" : "var(--" + d.tint + "-ink)",
                   }}
                 />
                 {d.label}

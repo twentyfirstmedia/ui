@@ -564,7 +564,7 @@ export function createServer(k: Knowledge, options: ServerOptions): McpServer {
       return [
         `# Design tokens${group ? `: ${TOKEN_GROUPS.find((g) => g.group === group)?.title}` : ""}`,
         "",
-        "> CSS custom properties, the same names in both kits. Use them as `var(--name)` in CSS or through the Tailwind preset (`bg-surface`, `text-ink`); never colour literals or arbitrary values. Values with a slash are light / dark.",
+        "> CSS custom properties, the same names in both kits. Use them as `var(--name)` in CSS or through the Tailwind preset (`bg-primary`, `text-muted-foreground`, `bg-card`); never colour literals or arbitrary values. Values with a slash are light / dark.",
         "",
         tokensMarkdown(k, group),
       ].join("\n");

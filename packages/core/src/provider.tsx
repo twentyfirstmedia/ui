@@ -9,6 +9,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import { themeStyle, type ThemeInput, type ThemeValues } from "./theme.js";
 export type Kit = "halo" | "pro";
 export type Theme = "light" | "dark" | "system";
 export type Density = "compact" | "comfortable";
@@ -26,6 +27,12 @@ export interface UIProviderProps {
    * them and hosts the portals, for previews that show several kits on one page.
    */
   scope?: "document" | "subtree";
+  /**
+   * Theme colours for everything inside, like a shadcn theme: shadcn variable names without the
+   * dashes (`{ primary: "#2563eb", ring: "#2563eb" }`), or `{ light, dark, radius }` for values
+   * per mode. For a fixed theme, CSS is simpler (see `themeCss`); this is for runtime brands.
+   */
+  tokens?: ThemeValues | ThemeInput;
   className?: string;
   style?: CSSProperties;
   children?: ReactNode;
@@ -55,8 +62,44 @@ export function useUI(): UIContextValue {
  * Sets kit, theme and density for everything inside (they only change attributes, so switching
  * never re-mounts the subtree).
  */
+/** True while the colour scheme the page shows is dark (theme prop, kit default, system). */
+function useDarkMode(theme: Theme | undefined, kit: Kit | undefined, enabled: boolean): boolean {
+  const [systemDark, setSystemDark] = useState(false);
+  useEffect(() => {
+    if (!enabled || typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const on = () => setSystemDark(mq.matches);
+    on();
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, [enabled]);
+  if (theme === "dark") return true;
+  if (theme === "light") return false;
+  if (theme === undefined && kit === "pro") return true;
+  return systemDark;
+}
+
+const isThemeInput = (t: ThemeValues | ThemeInput): t is ThemeInput =>
+  "light" in t || "dark" in t || "radius" in t;
+
 export function UIProvider(p: UIProviderProps) {
   const scope = p.scope ?? "document";
+  const perMode = !!p.tokens && isThemeInput(p.tokens);
+  const dark = useDarkMode(p.theme, p.kit, perMode);
+  const vars = useMemo(() => {
+    if (!p.tokens) return undefined;
+    if (!isThemeInput(p.tokens)) return themeStyle(p.tokens);
+    return themeStyle(dark ? p.tokens.dark : p.tokens.light, p.tokens.radius);
+  }, [p.tokens, dark]);
+  // tokens on <html> for the document scope (portals included); removed when they go away
+  useEffect(() => {
+    if (scope !== "document" || !vars) return;
+    const el = document.documentElement;
+    for (const [k, v] of Object.entries(vars)) el.style.setProperty(k, v);
+    return () => {
+      for (const k of Object.keys(vars)) el.style.removeProperty(k);
+    };
+  }, [scope, vars]);
   // Attributes the provider set itself; an omitted prop leaves what the page already has (for
   // example a theme set by an inline script before hydration) untouched.
   const owned = useRef<Set<string>>(new Set());
@@ -88,7 +131,7 @@ export function UIProvider(p: UIProviderProps) {
       <UIContext.Provider value={ctx}>
         <div
           className={p.className}
-          style={p.style}
+          style={vars ? ({ ...vars, ...p.style } as CSSProperties) : p.style}
           data-kit={p.kit}
           data-theme={p.theme}
           data-density={p.density}
