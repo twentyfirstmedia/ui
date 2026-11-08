@@ -1,0 +1,20 @@
+{
+  "name": "example-previews",
+  "private": true,
+  "type": "module",
+  "description": "One example per component group, ported from the reference previews. The docs site renders them live in both kits.",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@twentyfirstmedia/ui-core": "workspace:*",
+    "react": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "typescript": "6.0.3"
+  }
+}
