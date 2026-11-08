@@ -177,8 +177,8 @@
   background: var(--line);
 }
 .tf-approval-opt.primary {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .tf-approval-opt.primary:hover {
   filter: brightness(1.12);
@@ -199,7 +199,7 @@
 }
 .tf-approval-opt.primary kbd {
   background: var(--frame-strong);
-  color: var(--on-accent);
+  color: var(--primary-foreground);
 }
 .tf-approval-opt:focus-visible {
   outline: 2px solid var(--focus);
@@ -532,7 +532,8 @@
   cursor: text;
 }
 .tf-inline:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-inline:focus-visible {
   outline: 2px solid var(--focus);
@@ -1120,7 +1121,8 @@
   flex: 1;
 }
 .tf-briefing-item:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-briefing-sugg {
   margin: 0;
@@ -1652,7 +1654,8 @@
   cursor: pointer;
 }
 .tf-mailauth-cell:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-neg {
   color: var(--danger);

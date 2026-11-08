@@ -178,8 +178,8 @@ function App() {
                       key={i}
                       style={{
                         borderRadius: "var(--radius-pill)",
-                        background: today ? "var(--accent)" : on ? "var(--sky)" : "transparent",
-                        color: today ? "var(--on-accent)" : "var(--ink)",
+                        background: today ? "var(--primary)" : on ? "var(--sky)" : "transparent",
+                        color: today ? "var(--primary-foreground)" : "var(--ink)",
                       }}
                     >
                       {n || ""}
@@ -250,8 +250,8 @@ function App() {
                 font: "var(--type-title-weight) 13px/18px var(--font-sans)",
                 padding: "8px 0",
                 borderRadius: "var(--radius-pill)",
-                background: i === 3 ? "var(--accent)" : "transparent",
-                color: i === 3 ? "var(--on-accent)" : "var(--ink)",
+                background: i === 3 ? "var(--primary)" : "transparent",
+                color: i === 3 ? "var(--primary-foreground)" : "var(--ink)",
               }}
             >
               {d}

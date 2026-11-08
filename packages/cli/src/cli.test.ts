@@ -152,3 +152,37 @@ export default function Page() {
     expect(existsSync(join(dir, "components/ui/button.tsx"))).toBe(true);
   });
 });
+
+describe("twentyfirst-ui theme", () => {
+  it("writes a preset next to the stylesheet and imports it after the kit styles", () => {
+    expect(run(["theme", "violet", "--cwd", dir], log)).toBe(0);
+    const theme = file("app/theme.css");
+    expect(theme).toContain("--primary: #7c3aed;");
+    expect(theme).toMatch(/\[data-theme="dark"\],\n\.dark \{/);
+    const css = file("app/globals.css");
+    expect(css.indexOf("@twentyfirstmedia/halo/styles.css")).toBeLessThan(
+      css.indexOf('@import "./theme.css";'),
+    );
+    // again: no second import
+    expect(run(["theme", "blue", "--cwd", dir], log)).toBe(0);
+    expect(file("app/globals.css").split('@import "./theme.css";').length).toBe(2);
+    expect(file("app/theme.css")).toContain("--primary: #2563eb;");
+  });
+
+  it("imports a shadcn theme file and a brand colour", () => {
+    writeFileSync(
+      join(dir, "shadcn.css"),
+      ":root { --radius: 0.5rem; --primary: 222.2 47.4% 11.2%; }\n.dark { --primary: oklch(0.9 0 0); }",
+    );
+    expect(run(["theme", "shadcn.css", "--cwd", dir, "--out", "app/brand.css"], log)).toBe(0);
+    const t = file("app/brand.css");
+    expect(t).toContain("--radius: 0.5rem;");
+    expect(t).toContain("--primary: hsl(222.2 47.4% 11.2%);");
+    expect(t).toContain("--primary: oklch(0.9 0 0);");
+    expect(
+      run(["theme", "#ff0066,#ff6699", "--kit", "pro", "--cwd", dir, "--out", "app/b2.css"], log),
+    ).toBe(0);
+    expect(file("app/b2.css")).toMatch(/^:root:not\(\[data-theme\]\) \{\n {2}--primary: #ff6699;/m);
+    expect(run(["theme", "nope", "--cwd", dir], log)).toBe(1);
+  });
+});

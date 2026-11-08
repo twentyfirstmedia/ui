@@ -55,8 +55,8 @@
   box-shadow: inset 0 0 0 1px var(--mint-ink);
 }
 .tf-btn-danger-solid {
-  background: var(--blush-ink);
-  color: var(--surface);
+  background: var(--destructive);
+  color: var(--destructive-foreground);
 }
 .tf-btn-danger-solid:hover {
   filter: brightness(1.08);
@@ -138,13 +138,13 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--on-accent);
+  background: var(--primary-foreground);
   transform: scale(0);
   transition: transform var(--dur-base) var(--ease-spring);
 }
 .tf-radio.on .tf-radio-dot {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--primary);
+  border-color: var(--primary);
 }
 .tf-radio.on .tf-radio-dot::after {
   transform: scale(1);
@@ -268,7 +268,8 @@
   box-sizing: border-box;
   padding: 16px;
   border-radius: var(--radius-lg);
-  background: var(--surface);
+  background: var(--popover);
+  color: var(--popover-foreground);
   color: var(--ink);
   box-shadow:
     var(--shadow-float),
@@ -476,7 +477,7 @@ label.tf-menu-item {
   cursor: pointer;
 }
 .tf-option.active {
-  background: var(--surface-sunken);
+  background: var(--accent);
 }
 .tf-option-text {
   flex: 1;
@@ -546,11 +547,12 @@ label.tf-menu-item {
   white-space: nowrap;
 }
 .tf-dp-preset:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-dp-preset.on {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .tf-cal {
   flex: 1;
@@ -591,7 +593,8 @@ label.tf-menu-item {
   font-variant-numeric: tabular-nums;
 }
 .tf-cal-day:hover:not(.sel):not(:disabled) {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-cal-day.out {
   color: var(--ink-subtle);
@@ -612,8 +615,8 @@ label.tf-menu-item {
   border-radius: 0;
 }
 .tf-cal-day.sel {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 .tf-cal-day.sel.start {
   border-radius: 18px 0 0 18px;
@@ -688,12 +691,20 @@ label.tf-menu-item {
 .tf-slider input[type="range"]::-webkit-slider-runnable-track {
   height: 6px;
   border-radius: 3px;
-  background: linear-gradient(to right, var(--accent) var(--pct), var(--surface-sunken) var(--pct));
+  background: linear-gradient(
+    to right,
+    var(--primary) var(--pct),
+    var(--surface-sunken) var(--pct)
+  );
 }
 .tf-slider input[type="range"]::-moz-range-track {
   height: 6px;
   border-radius: 3px;
-  background: linear-gradient(to right, var(--accent) var(--pct), var(--surface-sunken) var(--pct));
+  background: linear-gradient(
+    to right,
+    var(--primary) var(--pct),
+    var(--surface-sunken) var(--pct)
+  );
 }
 .tf-slider input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -703,7 +714,7 @@ label.tf-menu-item {
   border-radius: 50%;
   background: var(--surface);
   box-shadow:
-    0 0 0 2px var(--accent),
+    0 0 0 2px var(--primary),
     var(--shadow-card);
   transition: transform var(--dur-fast) var(--ease-out);
 }
@@ -714,7 +725,7 @@ label.tf-menu-item {
   border-radius: 50%;
   background: var(--surface);
   box-shadow:
-    0 0 0 2px var(--accent),
+    0 0 0 2px var(--primary),
     var(--shadow-card);
 }
 .tf-slider input[type="range"]:active::-webkit-slider-thumb {
@@ -725,7 +736,7 @@ label.tf-menu-item {
 }
 .tf-slider input[type="range"]:focus-visible::-webkit-slider-thumb {
   box-shadow:
-    0 0 0 2px var(--accent),
+    0 0 0 2px var(--primary),
     0 0 0 5px var(--focus);
 }
 .tf-slider-val {
@@ -859,7 +870,7 @@ label.tf-menu-item {
 .tf-upload .tf-progress span {
   display: block;
   height: 100%;
-  background: var(--accent);
+  background: var(--primary);
   border-radius: 2px;
   transition: width 0.16s linear;
 }
@@ -941,7 +952,8 @@ label.tf-menu-item {
   color: var(--ink);
 }
 .tf-iconbtn-ghost:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
+  color: var(--accent-foreground);
 }
 .tf-overlay {
   position: fixed;
@@ -1063,8 +1075,8 @@ label.tf-menu-item {
   align-items: center;
   height: 32px;
   border-radius: var(--radius-pill);
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
   font: 500 13px/18px var(--font-sans);
 }
 .tf-filterchip > button {
@@ -1208,7 +1220,7 @@ label.tf-menu-item {
   padding: 0;
 }
 .tf-dt-toggle:hover {
-  background: var(--surface-sunken);
+  background: var(--accent);
   color: var(--ink);
 }
 .tf-dt-toggle .tf-ico {
@@ -1239,8 +1251,8 @@ label.tf-menu-item {
   white-space: normal !important;
 }
 .tf-checkbox-box.ind {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--primary);
+  border-color: var(--primary);
 }
 .tf-checkbox-box.ind svg {
   opacity: 1;
@@ -1311,33 +1323,33 @@ label.tf-menu-item {
 }
 .tf-sw-ink,
 .tf-sf-ink {
-  background: var(--accent);
-  fill: var(--accent);
+  background: var(--primary);
+  fill: var(--primary);
 }
 .tf-sw-sky,
 .tf-sf-sky {
-  background: var(--sky-ink);
-  fill: var(--sky-ink);
+  background: var(--chart-1);
+  fill: var(--chart-1);
 }
 .tf-sw-mint,
 .tf-sf-mint {
-  background: var(--mint-ink);
-  fill: var(--mint-ink);
+  background: var(--chart-2);
+  fill: var(--chart-2);
 }
 .tf-sw-lilac,
 .tf-sf-lilac {
-  background: var(--lilac-ink);
-  fill: var(--lilac-ink);
+  background: var(--chart-4);
+  fill: var(--chart-4);
 }
 .tf-sw-butter,
 .tf-sf-butter {
-  background: var(--butter-ink);
-  fill: var(--butter-ink);
+  background: var(--chart-3);
+  fill: var(--chart-3);
 }
 .tf-sw-blush,
 .tf-sf-blush {
-  background: var(--blush-ink);
-  fill: var(--blush-ink);
+  background: var(--chart-5);
+  fill: var(--chart-5);
 }
 .tf-sw-light-sky,
 .tf-sf-light-sky {

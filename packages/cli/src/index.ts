@@ -6,6 +6,7 @@ import { add } from "./add.js";
 import { diff } from "./diff.js";
 import { init } from "./init.js";
 import { list } from "./list.js";
+import { theme } from "./theme.js";
 import { createServer, loadKnowledge, serveStdio } from "./mcp.js";
 import { mcpInit, parseClients } from "./mcp-init.js";
 import { consoleLogger, type Kit, type Logger, readConfig } from "./util.js";
@@ -17,6 +18,8 @@ Usage
   twentyfirst-ui add <Component…> [--overwrite]
   twentyfirst-ui list
   twentyfirst-ui diff <Component>
+  twentyfirst-ui theme <preset|#colour[,#dark]|shadcn-theme.css> [--kit halo|pro] [--both] [--out app/theme.css]
+      write a shadcn-style theme (presets: blue, violet, emerald, orange, rose, teal) and import it
   twentyfirst-ui mcp [--kit halo|pro]
       start the MCP server for coding agents (stdio)
   twentyfirst-ui mcp init [--client claude,cursor,vscode|all] [--kit halo|pro] [--no-rules]
@@ -46,7 +49,7 @@ export function parseArgs(argv: string[]): {
       else if (
         next &&
         !next.startsWith("--") &&
-        ["kit", "cwd", "components", "client"].includes(k as string)
+        ["kit", "cwd", "components", "out", "client"].includes(k as string)
       ) {
         flags[k as string] = next;
         i++;
@@ -94,6 +97,22 @@ export function run(argv: string[], log: Logger = consoleLogger): number | Promi
         if (!args[0]) throw new Error("Name a component: twentyfirst-ui diff Button");
         diff(cwd, args[0], log);
         return 0;
+      case "theme": {
+        if (!args[0])
+          throw new Error(
+            "Name a preset, a colour or a shadcn theme file: twentyfirst-ui theme blue | #2563eb | theme.css",
+          );
+        const kit = typeof flags.kit === "string" ? resolveKit(flags.kit, cwd) : undefined;
+        theme({
+          cwd,
+          source: args[0],
+          kit,
+          both: flags.both === true ? true : undefined,
+          out: typeof flags.out === "string" ? flags.out : undefined,
+          log,
+        });
+        return 0;
+      }
       case "mcp": {
         const sub = args[0];
         const kit = resolveKit(flags.kit, cwd);

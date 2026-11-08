@@ -43,13 +43,13 @@ body {
   transform: none;
 }
 .tf-btn-primary {
-  background: var(--accent);
-  color: var(--on-accent);
-  border-color: var(--accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
 }
 .tf-btn-primary:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 .tf-btn-secondary {
   box-shadow: none;
@@ -284,7 +284,7 @@ select.tf-input {
   background: var(--fg-300);
 }
 .tf-switch:checked {
-  border-color: var(--accent);
+  border-color: var(--primary);
 }
 .tf-switch:checked::after {
   transform: translateX(12px);
@@ -592,17 +592,17 @@ select.tf-input {
   letter-spacing: -0.01em;
 }
 .tf-tooltip {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--primary);
+  color: var(--primary-foreground);
   border-radius: var(--radius-1);
   font-size: 12px;
   line-height: 16px;
   padding: 4px 8px;
 }
 .tf-tooltip kbd {
-  color: var(--on-accent);
+  color: var(--primary-foreground);
   background: transparent;
-  border: var(--line-width) solid var(--on-accent);
+  border: var(--line-width) solid var(--primary-foreground);
 }
 .tf-toast {
   border-radius: 0;
@@ -663,8 +663,8 @@ select.tf-input {
 
 /* The key chip on the primary approval option inverts with its row (readable in both themes) */
 .tf-approval-opt.primary kbd {
-  background: var(--on-accent);
-  color: var(--accent);
+  background: var(--primary-foreground);
+  color: var(--primary);
 }
 
 /* The 404/500 art: the icon tile keeps its size, so it covers the middle digit as in Halo */

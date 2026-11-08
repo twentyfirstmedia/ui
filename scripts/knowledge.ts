@@ -33,6 +33,7 @@ export const GUIDE_ORDER = [
   "installation",
   "cli",
   "theming",
+  "themes",
   "ai",
   "status-and-approvals",
 ];

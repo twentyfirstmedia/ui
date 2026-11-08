@@ -44,8 +44,8 @@ function Msg(p: {
           borderRadius: "var(--radius-md)",
           borderBottomLeftRadius: p.me ? 18 : 6,
           borderBottomRightRadius: p.me ? 6 : 18,
-          background: p.me ? "var(--accent)" : "var(--surface-sunken)",
-          color: p.me ? "var(--on-accent)" : "var(--ink)",
+          background: p.me ? "var(--primary)" : "var(--surface-sunken)",
+          color: p.me ? "var(--primary-foreground)" : "var(--ink)",
           font: "var(--type-body-weight) 13px/20px var(--font-sans)",
         }}
       >

@@ -293,7 +293,7 @@ export function agentRules(kit: KitName | "both" = "halo"): string {
   return [
     `- Build UI from ${PRODUCT} components first; import them from \`${pkg}\`. Check names, props and examples with the \`twentyfirst-ui\` MCP server (\`get_component\`, \`search_docs\`) instead of guessing.`,
     "- Halo and Pro have the same components, props and markup. Never branch on the kit in code; switch looks with `data-kit` or `<UIProvider kit>`.",
-    "- No colour literals or arbitrary Tailwind values: use tokens (`var(--surface)`, `bg-surface`, `text-ink`) so both kits, light and dark keep working.",
+    "- No colour literals or arbitrary Tailwind values: use the shadcn-style theme variables (`var(--primary)`, `bg-card`, `text-muted-foreground`, `border-border`) so both kits, light and dark, and the app's theme keep working.",
     "- Wrap the app once in `UIProvider` and import the kit's `styles.css` once (or `@twentyfirstmedia/ui-core/themes.css` for both kits).",
     "- Format numbers, money, percentages and dates with `formatNumber`, `formatMoney`, `formatPercent`, `formatDate`.",
     "- Icons: only names from `list_icons`; icon-only buttons need a `label`.",
@@ -626,7 +626,7 @@ export function checkUsage(k: Knowledge, code: string): Finding[] {
     findings.push({
       line: lineAt(m.index ?? 0),
       severity: "warning",
-      message: `Colour literal \`${m[0]}\`: use a token such as var(--accent), var(--ink) or var(--surface) so both kits and dark mode work.`,
+      message: `Colour literal \`${m[0]}\`: use a theme variable such as var(--primary), var(--foreground) or var(--card) so both kits, dark mode and the app's theme work.`,
     });
   }
   for (const m of code.matchAll(/\b[\w:-]+-\[[^\]\s]+\]/g))

@@ -16,3 +16,5 @@ apps/docs/public/halo/
 apps/docs/public/pro/
 apps/docs/public/llms.txt
 apps/docs/public/llms-full.txt
+packages/cli/src/shared/
+.claude/worktrees/

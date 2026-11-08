@@ -43,6 +43,7 @@
     "./tailwind.css": "./dist/tailwind.css",
     "./tokens.json": "./dist/tokens.json",
     "./fonts/*": "./dist/fonts/*",
+    "./themes/*": "./dist/themes/*",
     "./package.json": "./package.json"
   },
   "files": [

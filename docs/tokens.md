@@ -7,19 +7,50 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 
 | Token | Halo | Pro | Use |
 | --- | --- | --- | --- |
-| `--canvas` | `#f4f3f0` / `#0f0f10` | `{bg-000}` | Page background behind every panel and card. |
-| `--surface` | `#ffffff` / `#1a1a1c` | `{bg-100}` | Cards, panels, inputs and the main workspace sheet. |
-| `--surface-sunken` | `#ecebe7` / `#232326` | `{bg-200}` | Search fields, segmented-tab tracks, quiet chips and icon-button fills on `surface`. |
+| `--background` | `#f4f3f0` / `#0f0f10` | `#f6f6f7` / `#09090b` | Theme: page background behind every panel (shadcn `background`). |
+| `--foreground` | `#141414` / `#f2f1ed` | `#111114` / `#ededf0` | Theme: default text and icons (shadcn `foreground`). |
+| `--card` | `#ffffff` / `#1a1a1c` | `#ffffff` / `#0e0e11` | Theme: cards, panels, inputs and the workspace sheet (shadcn `card`). |
+| `--card-foreground` | `{foreground}` | `{foreground}` | Theme: text on cards. |
+| `--popover` | `{card}` | `{card}` | Theme: menus, popovers, select lists, command palette, hover cards, dialogs. |
+| `--popover-foreground` | `{foreground}` | `{foreground}` | Theme: text on popovers. |
+| `--primary` | `#141414` / `#f2f1ed` | `#111114` / `#ededf0` | Theme: the brand colour. Primary buttons, checked boxes, switches, selected chips and days, progress, active marks. |
+| `--primary-foreground` | `#ffffff` / `#141414` | `#ffffff` / `#09090b` | Theme: text and icons on `primary`. |
+| `--primary-hover` | `{primary}` | `color-mix(in oklab, {primary} 70%, #000000)` / `color-mix(in oklab, {primary} 70%, #ffffff)` | Theme: `primary` under the pointer. |
+| `--secondary` | `#ecebe7` / `#232326` | `#f0f0f2` / `#16161a` | Theme: secondary actions. Soft buttons and icon buttons, neutral chips and badges. |
+| `--secondary-foreground` | `{foreground}` | `{foreground}` | Theme: text on `secondary`. |
+| `--muted` | `#ecebe7` / `#232326` | `#f0f0f2` / `#16161a` | Theme: quiet fills. Tracks of segmented controls, tabs and progress, search fields, code, placeholders. |
+| `--muted-foreground` | `#5f5e5a` / `#a9a8a3` | `#4f4f58` / `#a6a6b0` | Theme: secondary text, captions, metadata. |
+| `--accent` | `#ecebe7` / `#232326` | `#f0f0f2` / `#16161a` | Theme: highlight under the pointer or keyboard. Menu items, list rows, options, ghost buttons, nav items. |
+| `--accent-foreground` | `{foreground}` | `{foreground}` | Theme: text on `accent`. |
+| `--destructive` | `#8a2b23` / `#f2a8a0` | `#b0301f` / `#ef6f61` | Theme: destructive actions and errors. Danger buttons, error text and icons. |
+| `--destructive-foreground` | `{card}` | `{card}` | Theme: text on solid `destructive`. |
+| `--border` | `#e5e4df` / `#2c2c30` | `#dfdfe3` / `#26262c` | Theme: hairlines and dividers between surfaces. |
+| `--input` | `#a8a7a1` / `#5a5a60` | `#8a8a94` / `#62626d` | Theme: borders of fields, checkboxes and radios, and strong lines. |
+| `--ring` | `#2f6fe0` / `#8fb8ff` | `{foreground}` | Theme: keyboard focus rings. |
+| `--chart-1` | `{sky-ink}` | `{foreground}` | Theme: chart series 1 (sky series). |
+| `--chart-2` | `{mint-ink}` | `color-mix(in oklab, {foreground} 38%, {card})` / `color-mix(in oklab, {foreground} 48%, {card})` | Theme: chart series 2 (mint series). |
+| `--chart-3` | `{butter-ink}` | `{muted-foreground}` | Theme: chart series 3 (butter series). |
+| `--chart-4` | `{lilac-ink}` | `{fg-300}` | Theme: chart series 4 (lilac series). |
+| `--chart-5` | `{blush-ink}` | `{input}` | Theme: chart series 5 (blush series). |
+| `--sidebar` | `{card}` | `{card}` | Theme: Sidebar background. |
+| `--sidebar-foreground` | `{foreground}` | `{foreground}` | Theme: Sidebar text. |
+| `--sidebar-primary` | `{primary}` | `{primary}` | Theme: Sidebar emphasis (current item mark, badges). |
+| `--sidebar-primary-foreground` | `{primary-foreground}` | `{primary-foreground}` | Theme: text on `sidebar-primary`. |
+| `--sidebar-accent` | `{accent}` | `{accent}` | Theme: Sidebar item under the pointer and the current item. |
+| `--sidebar-accent-foreground` | `{accent-foreground}` | `{accent-foreground}` | Theme: text on `sidebar-accent`. |
+| `--sidebar-border` | `{border}` | `{border}` | Theme: Sidebar edges and dividers. |
+| `--sidebar-ring` | `{ring}` | `{ring}` | Theme: focus rings inside the Sidebar. |
+| `--canvas` | `{background}` | `{bg-000}` | Page background behind every panel and card. |
+| `--surface` | `{card}` | `{bg-100}` | Cards, panels, inputs and the main workspace sheet. |
+| `--surface-sunken` | `{muted}` | `{bg-200}` | Search fields, segmented-tab tracks, quiet chips and icon-button fills on `surface`. |
 | `--frame` | `#121212` / `#050505` | `{bg-100}` | The dark app frame: top bar, dock and the outer shell around the workspace. |
 | `--on-frame` | `#f4f3f0` / `#f2f1ed` | `{fg-100}` | Text and icons on `frame`. |
 | `--on-frame-muted` | `#a3a29d` | `{fg-300}` | Secondary text and idle nav icons on `frame` (7:1+). |
-| `--ink` | `#141414` / `#f2f1ed` | `{fg-100}` | Headings, numbers and body copy on `surface`, `canvas`, `surface-sunken` and every tint. |
-| `--ink-muted` | `#5f5e5a` / `#a9a8a3` | `{fg-200}` | Descriptions, meta lines and labels on `surface` and `canvas` (4.5:1+ in both themes). |
-| `--ink-subtle` | `#6b6a65` / `#8e8d88` | `{fg-300}` | Placeholders, disabled text and the quietest meta; 4.5:1 on surface and surface-sunken in both themes, still clearly lighter than ink-muted. |
-| `--line` | `#e5e4df` / `#2c2c30` | `{line-200}` | Hairline dividers and table rules; decorative, never the only boundary of a control. |
-| `--line-strong` | `#a8a7a1` / `#5a5a60` | `{line-300}` | Dashed placeholder tiles and input borders (3:1 on `surface`). |
-| `--accent` | `#141414` / `#f2f1ed` | `{fg-100}` | Monochrome accent: primary button fill, active tab bar, checked controls, chart emphasis. |
-| `--on-accent` | `#ffffff` / `#141414` | `#ffffff` / `{bg-000}` | Text and icons on accent fills (17:1 or more). |
+| `--ink` | `{foreground}` | `{fg-100}` | Headings, numbers and body copy on `surface`, `canvas`, `surface-sunken` and every tint. |
+| `--ink-muted` | `{muted-foreground}` | `{fg-200}` | Descriptions, meta lines and labels on `surface` and `canvas` (4.5:1+ in both themes). |
+| `--ink-subtle` | `color-mix(in oklab, {muted-foreground} 91%, {background})` / `color-mix(in oklab, {muted-foreground} 84%, {background})` | `{fg-300}` | Placeholders, disabled text and the quietest meta; 4.5:1 on surface and surface-sunken in both themes, still clearly lighter than ink-muted. |
+| `--line` | `{border}` | `{line-200}` | Hairline dividers and table rules; decorative, never the only boundary of a control. |
+| `--line-strong` | `{input}` | `{line-300}` | Dashed placeholder tiles and input borders (3:1 on `surface`). |
 | `--sky` | `#cfe3fb` / `#1e3550` | `{info-bg}` | Info tint: stat tiles, event cards, the 'scheduled' state. Text on it is `ink`. |
 | `--sky-ink` | `#1f4f8a` / `#9cc6f7` | `{info}` | Icons and labels on `sky` or as an icon colour on `surface`. |
 | `--mint` | `#d6efc3` / `#24401a` | `{ok-bg}` | Success tint: published/live states, positive stat tiles. Text on it is `ink`. |
@@ -30,40 +61,37 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--butter-ink` | `#6b4d00` / `#f3d374` | `{warn}` | Icons and labels on `butter`. |
 | `--blush` | `#f8d6d2` / `#4a2320` | `{danger-bg}` | Danger and support tint: errors, tickets, destructive confirms. Text on it is `ink`. |
 | `--blush-ink` | `#8a2b23` / `#f2a8a0` | `{danger}` | Icons and labels on `blush`; destructive text on `surface`. |
-| `--focus` | `#2f6fe0` / `#8fb8ff` | `{fg-100}` | Focus ring: 2px solid outline, 1px offset, on every interactive element. |
+| `--focus` | `{ring}` | `{ring}` | Focus ring: 2px solid outline, 1px offset, on every interactive element. |
 | `--count` | `#d6efc3` | `{signal}` | Count pills on nav items and tabs (unread, open approvals). |
 | `--on-count` | `#141414` | `{bg-000}` | Text on `count`. |
 | `--on-frame-success` | `#a8db86` | `{ok}` | Success marks on frame: the brand dot, ok lines in logs. |
 | `--on-frame-danger` | `#f2a8a0` | `{danger}` | Error lines in logs and other danger marks on frame. |
 | `--scrim` | `rgba(10, 10, 10, 0.32)` | `rgba(17,17,20,0.36)` / `rgba(0,0,0,0.62)` | Backdrop behind dialogs, sheets and the command palette. |
 | `--scrim-strong` | `rgba(10, 10, 10, 0.38)` | `{scrim}` | Backdrop behind modals and the command palette. |
-| `--bg-000` | `{canvas}` | `#f6f6f7` / `#09090b` | Canvas: app background, behind hairline grids, inputs on surfaces. |
-| `--bg-100` | `{surface}` | `#ffffff` / `#0e0e11` | Surface: every grid cell, panel, table, sidebar, dialog. |
-| `--bg-200` | `{surface-sunken}` | `#f0f0f2` / `#16161a` | Raised: row and button hover, kbd keys, skeletons, code blocks. |
-| `--bg-300` | `{line}` | `#e7e7ea` / `#1e1e23` | Selected: active nav item, selected row, pressed segment, open menu trigger. |
-| `--fg-100` | `{ink}` | `#111114` / `#ededf0` | Primary text and icons on every surface (bg-000 to bg-300). |
-| `--fg-200` | `{ink-muted}` | `#4f4f58` / `#a6a6b0` | Secondary text: descriptions, table cells that are not the row's key, inactive nav items. On bg-000 to bg-300. |
-| `--fg-300` | `{ink-muted}` | `#5e5e68` / `#90909b` | Muted text: meta, timestamps, column headers, eyebrows. On bg-000 to bg-300. |
-| `--fg-400` | `{ink-subtle}` | `#a3a3ad` / `#5c5c66` | Disabled text and placeholders only. Below 4.5:1 by design; never for information. |
-| `--line-100` | `{line}` | `#ececef` / `#1a1a1f` | Faint hairline: row separators inside tables and lists, background grid. |
-| `--line-200` | `{line}` | `#dfdfe3` / `#26262c` | Hairline: the structural 1px grid between cells, panel and overlay borders, table header rule. Decorative, not a control boundary. |
-| `--line-300` | `{line-strong}` | `#8a8a94` / `#62626d` | Control border (3:1 on bg-000, bg-100, bg-200): inputs, checkboxes, secondary buttons, crosshair marks. |
-| `--chart-1` | `{accent}` | `{fg-100}` | Chart series 1 / the highlighted series. |
-| `--chart-2` | `{line-strong}` | `#9a9aa4` / `#6e6e79` | Chart series 2 / comparison (prior period). |
+| `--bg-000` | `{canvas}` | `{background}` | Canvas: app background, behind hairline grids, inputs on surfaces. |
+| `--bg-100` | `{surface}` | `{card}` | Surface: every grid cell, panel, table, sidebar, dialog. |
+| `--bg-200` | `{surface-sunken}` | `{muted}` | Raised: row and button hover, kbd keys, skeletons, code blocks. |
+| `--bg-300` | `{line}` | `color-mix(in oklab, {foreground} 3%, {muted})` / `color-mix(in oklab, {foreground} 5%, {muted})` | Selected: active nav item, selected row, pressed segment, open menu trigger. |
+| `--fg-100` | `{ink}` | `{foreground}` | Primary text and icons on every surface (bg-000 to bg-300). |
+| `--fg-200` | `{ink-muted}` | `{muted-foreground}` | Secondary text: descriptions, table cells that are not the row's key, inactive nav items. On bg-000 to bg-300. |
+| `--fg-300` | `{ink-muted}` | `color-mix(in oklab, {muted-foreground} 92%, {background})` / `color-mix(in oklab, {muted-foreground} 90%, {background})` | Muted text: meta, timestamps, column headers, eyebrows. On bg-000 to bg-300. |
+| `--fg-400` | `{ink-subtle}` | `color-mix(in oklab, {muted-foreground} 47%, {background})` / `color-mix(in oklab, {muted-foreground} 57%, {background})` | Disabled text and placeholders only. Below 4.5:1 by design; never for information. |
+| `--line-100` | `{line}` | `color-mix(in oklab, {border} 59%, {card})` / `color-mix(in oklab, {border} 52%, {card})` | Faint hairline: row separators inside tables and lists, background grid. |
+| `--line-200` | `{line}` | `{border}` | Hairline: the structural 1px grid between cells, panel and overlay borders, table header rule. Decorative, not a control boundary. |
+| `--line-300` | `{line-strong}` | `{input}` | Control border (3:1 on bg-000, bg-100, bg-200): inputs, checkboxes, secondary buttons, crosshair marks. |
 | `--chart-grid` | `{line}` | `{line-100}` | Chart gridlines. |
-| `--chart-sky` | `{sky}` / `{sky-ink}` | `{fg-100}` | Chart series tinted sky: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--chart-sky` | `{sky}` / `{sky-ink}` | `{chart-1}` | Chart series tinted sky: a step of the monochrome ramp (charts carry no decorative colour). |
 | `--chart-mint` | `{mint}` / `{mint-ink}` | `{chart-2}` | Chart series tinted mint: a step of the monochrome ramp (charts carry no decorative colour). |
-| `--chart-lilac` | `{lilac}` / `{lilac-ink}` | `{fg-300}` | Chart series tinted lilac: a step of the monochrome ramp (charts carry no decorative colour). |
-| `--chart-butter` | `{butter}` / `{butter-ink}` | `{fg-200}` | Chart series tinted butter: a step of the monochrome ramp (charts carry no decorative colour). |
-| `--chart-blush` | `{blush}` / `{blush-ink}` | `{line-300}` | Chart series tinted blush: a step of the monochrome ramp (charts carry no decorative colour). |
-| `--accent-hover` | `{accent}` | `#000000` / `#ffffff` | Hover state of accent fills. |
+| `--chart-lilac` | `{lilac}` / `{lilac-ink}` | `{chart-4}` | Chart series tinted lilac: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--chart-butter` | `{butter}` / `{butter-ink}` | `{chart-3}` | Chart series tinted butter: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--chart-blush` | `{blush}` / `{blush-ink}` | `{chart-5}` | Chart series tinted blush: a step of the monochrome ramp (charts carry no decorative colour). |
 | `--ok` | `#2f5d16` / `#a8db86` | `#177447` / `#5cc28f` | Success / done / healthy: text and status shapes (circle). On bg-000 to bg-300. |
 | `--ok-bg` | `#d6efc3` / `#24401a` | `rgba(23,116,71,0.09)` / `rgba(92,194,143,0.12)` | Tint behind ok badges, banners and diff additions. |
 | `--info` | `#1f4f8a` / `#9cc6f7` | `#2856b0` / `#7aa7f5` | Running / in progress / neutral notices. Shape: pulsing dot. |
 | `--info-bg` | `#cfe3fb` / `#1e3550` | `rgba(40,86,176,0.08)` / `rgba(122,167,245,0.12)` | Tint behind info badges and banners. |
 | `--warn` | `#6b4d00` / `#f3d374` | `#765600` / `#d9b44a` | Warning: budget at 80 %, expiring domains, degraded checks. Shape: triangle. |
 | `--warn-bg` | `#fbe7aa` / `#4a3a10` | `rgba(118,86,0,0.09)` / `rgba(217,180,74,0.12)` | Tint behind warning badges and banners. |
-| `--danger` | `#8a2b23` / `#f2a8a0` | `#b0301f` / `#ef6f61` | Error, failed run, destructive actions, budget stop. Shape: square. |
+| `--danger` | `{destructive}` | `{destructive}` | Error, failed run, destructive actions, budget stop. Shape: square. |
 | `--danger-bg` | `#f8d6d2` / `#4a2320` | `rgba(176,48,31,0.08)` / `rgba(239,111,97,0.12)` | Tint behind error badges, banners, diff removals. |
 | `--signal` | `#6a2a82` / `#dba6ee` | `#9a4807` / `#f2994a` | Needs a human: approval waiting, beacons, the approval count. Shape: diamond. The only hue that may draw the eye unprompted. |
 | `--signal-bg` | `#e9cdf4` / `#3d2547` | `rgba(154,72,7,0.09)` / `rgba(242,153,74,0.14)` | Tint behind approval cards' header and signal badges. |
@@ -144,13 +172,14 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 
 | Token | Halo | Pro | Use |
 | --- | --- | --- | --- |
-| `--radius-sm` | `10px` | `{radius-1}` | Inputs inside cells, row hovers, small tiles. |
-| `--radius-md` | `16px` | `{radius-0}` | Stat cells, event cards, menus: square in Pro. |
-| `--radius-lg` | `22px` | `{radius-0}` | Cards and panels: square cells of the hairline grid. |
-| `--radius-xl` | `30px` | `{radius-0}` | The workspace sheet and app frame: square in Pro. |
+| `--radius` | `16px` | `2px` | Theme: the base corner radius; Pro is square at 2px, larger values round cards and menus too (shadcn `radius`). |
+| `--radius-sm` | `calc(var(--radius) * 0.625)` | `{radius-1}` | Inputs inside cells, row hovers, small tiles. |
+| `--radius-md` | `var(--radius)` | `calc((var(--radius) - 2px) * 1)` | Stat cells, event cards, menus: square in Pro. |
+| `--radius-lg` | `calc(var(--radius) * 1.375)` | `calc((var(--radius) - 2px) * 1.375)` | Cards and panels: square cells of the hairline grid. |
+| `--radius-xl` | `calc(var(--radius) * 1.875)` | `calc((var(--radius) - 2px) * 1.875)` | The workspace sheet and app frame: square in Pro. |
 | `--radius-pill` | `999px` | `{radius-1}` | Buttons, chips, badges, tabs and inputs: 2px in Pro. |
 | `--radius-0` | `0px` | `0px` | Default for everything structural: cells, panels, tables, dialogs, sheets, cards. |
-| `--radius-1` | `{radius-sm}` | `2px` | Controls: buttons, inputs, badges, kbd, switches, tooltips. |
+| `--radius-1` | `{radius-sm}` | `var(--radius)` | Controls: buttons, inputs, badges, kbd, switches, tooltips. |
 | `--radius-full` | `9999px` | `9999px` | Only status dots and radio buttons. |
 
 ## motion
