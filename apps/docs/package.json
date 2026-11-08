@@ -1,0 +1,27 @@
+{
+  "name": "docs",
+  "private": true,
+  "type": "module",
+  "description": "Docs site for the Twentyfirst UI kits: ui.twentyfirst.media/halo and /pro.",
+  "scripts": {
+    "data": "node scripts/data.ts",
+    "dev": "node scripts/data.ts && next dev",
+    "build": "node scripts/data.ts && next build",
+    "typecheck": "node scripts/data.ts && tsc --noEmit"
+  },
+  "dependencies": {
+    "@twentyfirstmedia/halo": "workspace:*",
+    "@twentyfirstmedia/pro": "workspace:*",
+    "@twentyfirstmedia/ui-core": "workspace:*",
+    "example-previews": "workspace:*",
+    "next": "16.4.5",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "6.0.3"
+  }
+}

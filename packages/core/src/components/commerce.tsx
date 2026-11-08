@@ -6,6 +6,7 @@ import { Icon } from "../Icon.js";
 import { useControlled } from "../hooks.js";
 import { Badge, Button, IconButton } from "./foundation.js";
 import type {
+  ArtKind,
   CartLineProps,
   CheckoutStepsProps,
   OrderSummaryProps,
@@ -62,7 +63,7 @@ export function ProductArt(p: ProductArtProps) {
   );
 }
 
-ProductArt.kinds = Object.keys(ART);
+ProductArt.kinds = Object.keys(ART) as ArtKind[];
 
 /** Formats an amount with the configured locale and currency. */
 export function money(v: number | string, cur?: string) {

@@ -1,0 +1,49 @@
+import { expect, test } from "@playwright/test";
+
+/** Phase 7: docs chrome — routes for both kits, live kit switch, search, language and theme. */
+test.use({ baseURL: "http://localhost:4174" });
+
+test("the root forwards to the Halo docs", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/halo\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Halo");
+});
+
+test("the kit switch shows the same page in the other kit", async ({ page }) => {
+  await page.goto("/halo/components/DataTable/");
+  await expect(page.locator("html")).toHaveAttribute("data-kit", "halo");
+  await page.getByRole("radio", { name: "Pro" }).click();
+  await expect(page).toHaveURL(/\/pro\/components\/DataTable\/$/);
+  await expect(page.locator("html")).toHaveAttribute("data-kit", "pro");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Data Table");
+});
+
+test("⌘K opens the search and navigates", async ({ page }) => {
+  await page.goto("/halo/");
+  await page.keyboard.press("ControlOrMeta+k");
+  const dialog = page.getByRole("dialog", { name: "Command palette" });
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole("textbox").fill("approval card");
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/halo\/components\/ApprovalCard\/$/);
+});
+
+test("EN/DE switches the component labels, the theme switch the colours", async ({ page }) => {
+  await page.goto("/halo/components/ApprovalCard/");
+  await expect(page.getByText("Yes, run it as shown").first()).toBeVisible();
+  await page.getByRole("radio", { name: "DE", exact: true }).check();
+  await expect(page.getByText("Ja, so ausführen").first()).toBeVisible();
+  await page.getByRole("radio", { name: "EN", exact: true }).check();
+  await page.getByRole("button", { name: "Dark theme" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+});
+
+test("component pages show the code and the props", async ({ page }) => {
+  await page.goto("/pro/components/Card/");
+  await page.getByRole("radio", { name: "Code" }).check();
+  await expect(page.getByText('from "@twentyfirstmedia/ui-core"')).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Props" })).toBeVisible();
+  await expect(page.locator("#props-Card")).toBeVisible();
+});

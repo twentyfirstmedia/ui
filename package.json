@@ -15,7 +15,7 @@
     "lint": "eslint .",
     "typecheck": "turbo run typecheck && tsc -p scripts",
     "test": "turbo run build --filter=./packages/* && vitest run",
-    "test:e2e": "turbo run build --filter=./packages/* --filter=./examples/* && playwright test",
+    "test:e2e": "turbo run build && playwright test",
     "tokens": "node scripts/tokens.ts && node scripts/pro-css.ts",
     "changeset": "changeset",
     "release": "turbo run build --filter=./packages/* && changeset publish",

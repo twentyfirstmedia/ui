@@ -1,0 +1,85 @@
+import { ScheduleCalendar, TriggerList } from "@twentyfirstmedia/ui-core";
+
+export default function Preview() {
+  return (
+    <div
+      className="tf-col"
+      style={{
+        gap: 16,
+      }}
+    >
+      <div className="tf-panel tf-panel-flush tf-panel-list">
+        <TriggerList
+          onToggle={() => {}}
+          onRun={() => {}}
+          items={[
+            {
+              id: 1,
+              type: "schedule",
+              rule: "Mon–Fri 08:00",
+              agent: "Main Brain",
+              by: "Config",
+              next: "Tomorrow 08:00",
+            },
+            {
+              id: 2,
+              type: "mail",
+              rule: "New mail to support@",
+              agent: "Atlas",
+              by: "Mara Ellis",
+              next: "On event",
+            },
+            {
+              id: 3,
+              type: "webhook",
+              rule: "Stripe dispute opened",
+              agent: "Ledger",
+              by: "Config",
+              next: "On event",
+              enabled: false,
+            },
+          ]}
+        />
+      </div>
+      <div className="tf-panel tf-scroll-x">
+        <ScheduleCalendar
+          from={7}
+          to={19}
+          days={["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+          events={[
+            {
+              day: 0,
+              start: 8,
+              end: 9,
+              label: "Briefing",
+              tint: "lilac",
+            },
+            {
+              day: 1,
+              start: 8,
+              end: 9,
+              label: "Briefing",
+              tint: "lilac",
+            },
+            {
+              day: 2,
+              start: 10,
+              end: 12,
+              label: "Weekly report",
+              sub: "Ledger",
+              tint: "butter",
+            },
+            {
+              day: 4,
+              start: 14,
+              end: 15,
+              label: "Follow-ups",
+              tint: "sky",
+              self: true,
+            },
+          ]}
+        />
+      </div>
+    </div>
+  );
+}
