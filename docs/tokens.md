@@ -27,11 +27,11 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--border` | `#e5e4df` / `#2c2c30` | `#dfdfe3` / `#26262c` | Theme: hairlines and dividers between surfaces. |
 | `--input` | `#a8a7a1` / `#5a5a60` | `#8a8a94` / `#62626d` | Theme: borders of fields, checkboxes and radios, and strong lines. |
 | `--ring` | `#2f6fe0` / `#8fb8ff` | `{foreground}` | Theme: keyboard focus rings. |
-| `--chart-1` | `{sky-ink}` | `{foreground}` | Theme: chart series 1 (sky series). |
-| `--chart-2` | `{mint-ink}` | `color-mix(in oklab, {foreground} 38%, {card})` / `color-mix(in oklab, {foreground} 48%, {card})` | Theme: chart series 2 (mint series). |
-| `--chart-3` | `{butter-ink}` | `{muted-foreground}` | Theme: chart series 3 (butter series). |
-| `--chart-4` | `{lilac-ink}` | `{fg-300}` | Theme: chart series 4 (lilac series). |
-| `--chart-5` | `{blush-ink}` | `{input}` | Theme: chart series 5 (blush series). |
+| `--chart-1` | `{sky-ink}` | `{sky-ink}` | Theme: chart series 1 (sky series). |
+| `--chart-2` | `{mint-ink}` | `{mint-ink}` | Theme: chart series 2 (mint series). |
+| `--chart-3` | `{butter-ink}` | `{butter-ink}` | Theme: chart series 3 (butter series). |
+| `--chart-4` | `{lilac-ink}` | `{lilac-ink}` | Theme: chart series 4 (lilac series). |
+| `--chart-5` | `{blush-ink}` | `{blush-ink}` | Theme: chart series 5 (blush series). |
 | `--sidebar` | `{card}` | `{card}` | Theme: Sidebar background. |
 | `--sidebar-foreground` | `{foreground}` | `{foreground}` | Theme: Sidebar text. |
 | `--sidebar-primary` | `{primary}` | `{primary}` | Theme: Sidebar emphasis (current item mark, badges). |
@@ -80,11 +80,11 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--line-200` | `{line}` | `{border}` | Hairline: the structural 1px grid between cells, panel and overlay borders, table header rule. Decorative, not a control boundary. |
 | `--line-300` | `{line-strong}` | `{input}` | Control border (3:1 on bg-000, bg-100, bg-200): inputs, checkboxes, secondary buttons, crosshair marks. |
 | `--chart-grid` | `{line}` | `{line-100}` | Chart gridlines. |
-| `--chart-sky` | `{sky}` / `{sky-ink}` | `{chart-1}` | Chart series tinted sky: a step of the monochrome ramp (charts carry no decorative colour). |
-| `--chart-mint` | `{mint}` / `{mint-ink}` | `{chart-2}` | Chart series tinted mint: a step of the monochrome ramp (charts carry no decorative colour). |
-| `--chart-lilac` | `{lilac}` / `{lilac-ink}` | `{chart-4}` | Chart series tinted lilac: a step of the monochrome ramp (charts carry no decorative colour). |
-| `--chart-butter` | `{butter}` / `{butter-ink}` | `{chart-3}` | Chart series tinted butter: a step of the monochrome ramp (charts carry no decorative colour). |
-| `--chart-blush` | `{blush}` / `{blush-ink}` | `{chart-5}` | Chart series tinted blush: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--chart-sky` | `{sky}` / `{sky-ink}` | `{fg-100}` | Chart series tinted sky: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--chart-mint` | `{mint}` / `{mint-ink}` | `color-mix(in oklab, {foreground} 38%, {card})` / `color-mix(in oklab, {foreground} 48%, {card})` | Chart series tinted mint: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--chart-lilac` | `{lilac}` / `{lilac-ink}` | `{fg-300}` | Chart series tinted lilac: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--chart-butter` | `{butter}` / `{butter-ink}` | `{fg-200}` | Chart series tinted butter: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--chart-blush` | `{blush}` / `{blush-ink}` | `{line-300}` | Chart series tinted blush: a step of the monochrome ramp (charts carry no decorative colour). |
 | `--ok` | `#2f5d16` / `#a8db86` | `#177447` / `#5cc28f` | Success / done / healthy: text and status shapes (circle). On bg-000 to bg-300. |
 | `--ok-bg` | `#d6efc3` / `#24401a` | `rgba(23,116,71,0.09)` / `rgba(92,194,143,0.12)` | Tint behind ok badges, banners and diff additions. |
 | `--info` | `#1f4f8a` / `#9cc6f7` | `#2856b0` / `#7aa7f5` | Running / in progress / neutral notices. Shape: pulsing dot. |

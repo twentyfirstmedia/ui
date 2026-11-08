@@ -682,7 +682,7 @@ select.tf-input {
 
 /* Map bubbles are data: monochrome like charts, strong enough to read over the dot map */
 .tf-map-bubble[class*="tf-t-"] {
-  background: color-mix(in srgb, var(--chart-1) 45%, transparent);
+  background: color-mix(in srgb, var(--chart-sky) 45%, transparent);
   color: var(--fg-100);
 }
 
