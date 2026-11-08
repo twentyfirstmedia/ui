@@ -1,0 +1,15 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/packages/halo/css/**",
+        "$TURBO_ROOT$/packages/halo/generated/**",
+        "$TURBO_ROOT$/packages/pro/css/**",
+        "$TURBO_ROOT$/packages/pro/generated/**"
+      ]
+    }
+  }
+}
