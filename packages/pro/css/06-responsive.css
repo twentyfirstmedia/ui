@@ -99,10 +99,18 @@
   .tf-sheet-nav.tf-sheet-aside {
     grid-template-columns: 44px minmax(0, 1fr);
   }
-  .tf-subnav-label,
-  .tf-subnav-eyebrow,
-  .tf-subnav-action span {
+  .tf-subnav-eyebrow {
     display: none;
+  }
+  /* icon-only, but the label stays the button's accessible name */
+  .tf-subnav-label,
+  .tf-subnav-action span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
   .tf-subnav-item,
   .tf-subnav-action {
@@ -228,7 +236,11 @@
   }
   .tf-subnav-label {
     display: inline;
+    position: static;
+    width: auto;
+    height: auto;
     overflow: visible;
+    clip-path: none;
   }
   .tf-subnav-item {
     width: auto;

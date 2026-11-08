@@ -148,3 +148,34 @@ textarea.tf-input,
 .tf-tabs:not(.tf-tabs-block) {
   width: fit-content;
 }
+
+/* The reference hides the page-nav labels on narrow screens with display: none, which also
+   removes the buttons' names; keep them for assistive tech */
+@media (max-width: 1040px) {
+  .tf-subnav-label,
+  .tf-subnav-action span {
+    display: inline;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+@media (max-width: 760px) {
+  .tf-subnav-label {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+}
+
+/* Width-capped surfaces with padding stay inside their container */
+.tf-push,
+.tf-seg,
+.tf-tabs {
+  box-sizing: border-box;
+}
