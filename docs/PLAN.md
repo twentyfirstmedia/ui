@@ -38,9 +38,11 @@ Die Previews in `reference/halo/design-system/components/*/preview.html` laden `
 ## Phasen
 
 ### Phase 0: Repo-Grundgerüst
-- [ ] pnpm-Workspace, Turborepo, TS-Basis, ESLint, Prettier, Vitest, Playwright, Changesets
-- [ ] CI (GitHub Actions): `pnpm check` und `pnpm test:e2e` auf PRs, Release-Workflow (GitHub Packages, `NODE_AUTH_TOKEN` aus Secrets)
-- [ ] `README.md` für Nutzer: Installation inkl. `.npmrc` für GitHub Packages
+- [x] pnpm-Workspace, Turborepo, TS-Basis, ESLint, Prettier, Vitest, Playwright, Changesets
+- [x] CI (GitHub Actions): `pnpm check` und `pnpm test:e2e` auf PRs, Release-Workflow (GitHub Packages, `NODE_AUTH_TOKEN` aus Secrets)
+- [x] `README.md` für Nutzer: Installation inkl. `.npmrc` für GitHub Packages
+
+Notiz: Lokal läuft Node 22, CI Node 24. TypeScript 6.0 (nicht 7), weil typescript-eslint 7 noch nicht unterstützt. Playwright auf 1.63 gepinnt (passt zum vorinstallierten Chromium). Packages bauen mit `tsc` (eine Datei pro Modul, `"use client"` bleibt erhalten, tree-shakeable).
 
 ### Phase 1: Tokens und Fonts
 - [ ] Token-Generator: `tokens.json` je Kit → CSS-Variablen (hell/dunkel) + Tailwind-`@theme`; Test schlägt fehl, wenn die erzeugten Dateien veraltet sind
