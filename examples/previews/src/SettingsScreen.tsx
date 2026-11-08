@@ -24,7 +24,13 @@ function App() {
     ["Billing", "card", "blush"],
   ];
   return (
-    <AppShell active="Settings" dock={false}>
+    <AppShell
+      brand="Halo"
+      tag="Admin"
+      user={{ name: "Mara Ellis", email: "mara@halo.app" }}
+      active="Settings"
+      dock={false}
+    >
       <div className="tf-in">
         <PageHeader
           title="Settings"

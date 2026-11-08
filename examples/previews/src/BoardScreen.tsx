@@ -36,7 +36,13 @@ function T(p: TaskProps) {
 }
 function App() {
   return (
-    <AppShell active="Projects" dock={false}>
+    <AppShell
+      brand="Halo"
+      tag="Admin"
+      user={{ name: "Mara Ellis", email: "mara@halo.app" }}
+      active="Projects"
+      dock={false}
+    >
       <div className="tf-in">
         <PageHeader
           crumbs={["Projects", "Pricing page refresh"]}

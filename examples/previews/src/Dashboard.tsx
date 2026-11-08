@@ -21,6 +21,9 @@ function App() {
   const f = React.useState("All");
   return (
     <AppShell
+      brand="Halo"
+      tag="Admin"
+      user={{ name: "Mara Ellis", email: "mara@halo.app" }}
       active="Projects"
       side={
         <Panel

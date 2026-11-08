@@ -19,7 +19,13 @@ function App() {
         position: "relative",
       }}
     >
-      <AppShell active="People" dock={false}>
+      <AppShell
+        brand="Halo"
+        tag="Admin"
+        user={{ name: "Mara Ellis", email: "mara@halo.app" }}
+        active="People"
+        dock={false}
+      >
         <PageHeader
           title="People"
           subtitle="Everyone with access to this workspace"

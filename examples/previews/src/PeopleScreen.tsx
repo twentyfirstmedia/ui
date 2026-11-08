@@ -86,6 +86,9 @@ function App() {
   const f = React.useState("Everyone");
   return (
     <AppShell
+      brand="Halo"
+      tag="Admin"
+      user={{ name: "Mara Ellis", email: "mara@halo.app" }}
       active="People"
       side={
         <Panel side title="Team" subtitle="42 seats · 38 used">

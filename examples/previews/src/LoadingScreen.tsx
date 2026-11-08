@@ -49,7 +49,13 @@ function App() {
   }, []);
   if (done[0])
     return (
-      <AppShell active="Projects" dock={false}>
+      <AppShell
+        brand="Halo"
+        tag="Admin"
+        user={{ name: "Mara Ellis", email: "mara@halo.app" }}
+        active="Projects"
+        dock={false}
+      >
         <div className="tf-in">
           <PageHeader
             title="Projects"
@@ -109,7 +115,13 @@ function App() {
       </AppShell>
     );
   return (
-    <AppShell active="Projects" dock={false}>
+    <AppShell
+      brand="Halo"
+      tag="Admin"
+      user={{ name: "Mara Ellis", email: "mara@halo.app" }}
+      active="Projects"
+      dock={false}
+    >
       <div
         className="tf-col"
         style={{

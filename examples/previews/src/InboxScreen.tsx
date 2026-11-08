@@ -109,6 +109,9 @@ function App() {
   ];
   return (
     <AppShell
+      brand="Halo"
+      tag="Admin"
+      user={{ name: "Mara Ellis", email: "mara@halo.app" }}
       active="Inbox"
       dock={false}
       side={

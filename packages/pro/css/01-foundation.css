@@ -367,15 +367,28 @@ textarea.tf-input {
 select.tf-input {
   appearance: none;
   padding-right: 40px;
+  /* the reference's chevron (8×4 px, 1.5px stroke, 18px from the edge) drawn with two gradient lines */
   background-image:
-    linear-gradient(45deg, transparent 50%, var(--ink-muted) 50%),
-    linear-gradient(135deg, var(--ink-muted) 50%, transparent 50%);
+    linear-gradient(
+      45deg,
+      transparent calc(50% - 0.8px),
+      var(--ink-subtle) calc(50% - 0.8px),
+      var(--ink-subtle) calc(50% + 0.8px),
+      transparent calc(50% + 0.8px)
+    ),
+    linear-gradient(
+      -45deg,
+      transparent calc(50% - 0.8px),
+      var(--ink-subtle) calc(50% - 0.8px),
+      var(--ink-subtle) calc(50% + 0.8px),
+      transparent calc(50% + 0.8px)
+    );
   background-size:
     5px 5px,
     5px 5px;
   background-position:
-    calc(100% - 21px) 52%,
-    calc(100% - 16px) 52%;
+    calc(100% - 22px) 50%,
+    calc(100% - 18px) 50%;
   background-repeat: no-repeat;
 }
 .tf-search {

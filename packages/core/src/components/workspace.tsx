@@ -490,15 +490,17 @@ export function Wizard(p: WizardProps) {
   return (
     <div className="tf-wizard" role="group" aria-label={p.label || L("Setup")}>
       <aside className="tf-wizard-rail">
-        <span
-          className="tf-brand"
-          style={{
-            color: "var(--on-frame)",
-          }}
-        >
-          {p.brand}
-          <span className="tf-brand-dot" />
-        </span>
+        {p.brand && (
+          <span
+            className="tf-brand"
+            style={{
+              color: "var(--on-frame)",
+            }}
+          >
+            {p.brand}
+            <span className="tf-brand-dot" />
+          </span>
+        )}
         <ol>
           {steps.map((s, j) => {
             const ok = done[s.id || j];
@@ -632,16 +634,18 @@ export function InvoicePreview(p: InvoicePreviewProps) {
     <div className="tf-paper">
       <div className="tf-paper-top">
         <div>
-          <div
-            className="tf-brand"
-            style={{
-              color: "var(--ink)",
-              fontSize: 18,
-            }}
-          >
-            {p.brand}
-            <span className="tf-brand-dot" />
-          </div>
+          {p.brand && (
+            <div
+              className="tf-brand"
+              style={{
+                color: "var(--ink)",
+                fontSize: 18,
+              }}
+            >
+              {p.brand}
+              <span className="tf-brand-dot" />
+            </div>
+          )}
           {p.from && <div className="tf-paper-small">{p.from}</div>}
         </div>
         <div

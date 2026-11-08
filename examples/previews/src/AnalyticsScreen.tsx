@@ -69,7 +69,13 @@ function Kpi(p: KpiProps) {
 }
 function App() {
   return (
-    <AppShell active="Reports" dock={false}>
+    <AppShell
+      brand="Halo"
+      tag="Admin"
+      user={{ name: "Mara Ellis", email: "mara@halo.app" }}
+      active="Reports"
+      dock={false}
+    >
       <div className="tf-in">
         <PageHeader
           title="Analytics"

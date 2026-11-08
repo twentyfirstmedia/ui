@@ -136,6 +136,7 @@ function App() {
           }
         >
           <InvoicePreview
+            brand="Halo"
             number={2097}
             from="Halo Workspace GmbH · Example Street 1 · 20457 Hamburg"
             to="Northwind"

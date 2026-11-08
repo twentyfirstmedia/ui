@@ -101,6 +101,9 @@ function App() {
   for (let i = START; i <= END; i++) hours.push(i);
   return (
     <AppShell
+      brand="Halo"
+      tag="Admin"
+      user={{ name: "Mara Ellis", email: "mara@halo.app" }}
       active="Calendar"
       dock={false}
       side={

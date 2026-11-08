@@ -17,11 +17,13 @@ import type {
 export function TopBar(p: TopBarProps) {
   return (
     <nav className="tf-topbar" aria-label={L("Main")}>
-      <span className="tf-brand">
-        {p.brand}
-        <span className="tf-brand-dot" aria-hidden />
-        {p.tag && <span className="tf-brand-tag">{p.tag}</span>}
-      </span>
+      {p.brand && (
+        <span className="tf-brand">
+          {p.brand}
+          <span className="tf-brand-dot" aria-hidden />
+          {p.tag && <span className="tf-brand-tag">{p.tag}</span>}
+        </span>
+      )}
       <div className="tf-nav">
         {(p.items || []).map((it) => {
           const active = it.label === p.active;
