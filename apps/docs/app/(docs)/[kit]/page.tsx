@@ -157,7 +157,7 @@ export default async function Intro({ params }: { params: Promise<{ kit: KitName
         {explore.map((e) => (
           <Link key={e.href} className="docs-card" href={`/${kit}/${e.href}`}>
             <TintIcon icon={e.icon} />
-            <span>
+            <span className="docs-card-text">
               <b>{e.title}</b>
               <small>{e.text}</small>
             </span>
