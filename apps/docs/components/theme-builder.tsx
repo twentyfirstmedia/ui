@@ -12,7 +12,7 @@ import {
   LineChart,
   Panel,
   Progress,
-  Segmented,
+  Select,
   Switch,
   Tabs,
   TextField,
@@ -48,6 +48,7 @@ const FIELDS: { name: ThemeVar; label: string }[] = [
   { name: "chart-3", label: "Chart 3" },
 ];
 const RADII = ["default", "0", "0.25rem", "0.5rem", "0.75rem", "1rem"];
+const KIT_RADIUS = "Kit default";
 const HEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
 
 /** The value a variable has right now in the preview, as hex (mixes and oklch included). */
@@ -160,17 +161,18 @@ export function ThemeBuilder({ kit }: { kit: KitName }) {
             );
           })}
         </div>
-        <div className="docs-builder-row">
-          <Segmented
+        <div className="docs-builder-radius">
+          <Select
             label="Radius"
-            value={theme.radius ?? "default"}
-            onChange={(r) =>
+            options={RADII.map((r) => (r === "default" ? KIT_RADIUS : r))}
+            value={theme.radius ?? KIT_RADIUS}
+            onChange={(e) => {
+              const r = e.target.value;
               setTheme((t) => {
                 const { radius: _drop, ...rest } = t;
-                return r === "default" ? rest : { ...rest, radius: r };
-              })
-            }
-            options={RADII.map((r) => ({ value: r, label: r === "default" ? "Kit" : r }))}
+                return r === KIT_RADIUS ? rest : { ...rest, radius: r };
+              });
+            }}
           />
         </div>
         <Textarea

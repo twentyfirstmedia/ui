@@ -724,3 +724,10 @@ html.docs-locked {
     grid-column: 1 / -1;
   }
 }
+.docs-builder-controls > *,
+.docs-builder-fields > * {
+  min-width: 0;
+}
+.docs-builder-radius {
+  max-width: 240px;
+}
