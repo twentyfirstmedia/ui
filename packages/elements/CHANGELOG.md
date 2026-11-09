@@ -1,5 +1,13 @@
 # @twentyfirstmedia/elements
 
+## 0.3.0
+
+### Minor Changes
+
+- [#30](https://github.com/twentyfirstmedia/ui/pull/30) [`bef588d`](https://github.com/twentyfirstmedia/ui/commit/bef588d0fb521a5b458113095a7952222efe3c63) Thanks [@robintrepte](https://github.com/robintrepte)! - `Button` and `IconButton` pass native attributes on to their `<button>` (or, with `asChild`, to the child): `id`, `name`, `value`, `form`, `title`, `tabIndex`, `autoFocus`, `aria-label`, `aria-labelledby`, `aria-describedby`, `aria-expanded`, `aria-controls`, `aria-haspopup`, `aria-pressed`, `aria-current` (documented as `NativeButtonProps`), plus any other `<button>` attribute, `data-*`, event handlers and, in React 19, `ref`. `type` also takes `"reset"`, and `IconButton` takes `type`. On `IconButton`, `aria-label` or `title` override the ones `label` sets. With `asChild`, `onClick` and the other attributes now reach the child as well.
+  
+  In `@twentyfirstmedia/elements`, `<tf-button>` and `<tf-icon-button>` take these as attributes; `aria-*` attributes move from the host to the inner button. The docs and the MCP server list them with both components.
+
 ## 0.2.1
 
 ### Patch Changes
