@@ -5,6 +5,8 @@
  * picks, Escape closes. Inside a Form it submits under `name` and shows its message.
  */
 import * as React from "react";
+import { useStrings } from "../context.js";
+import { SELECT_MENU_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { useControlled, useId } from "../hooks.js";
@@ -16,6 +18,7 @@ const norm = (o: string | SelectMenuOption): SelectMenuOption =>
   typeof o === "string" ? { value: o, label: o } : o;
 
 export function SelectMenu(p: SelectMenuProps) {
+  const t = useStrings(SELECT_MENU_STRINGS);
   const uid = useId("sel");
   const id = p.id || uid;
   const fromForm = useFieldError(p.name);
@@ -121,7 +124,7 @@ export function SelectMenu(p: SelectMenuProps) {
           >
             {cur?.icon && <Icon name={cur.icon} size={15} />}
             <span className="tf-selectmenu-value">
-              {cur ? cur.label : p.placeholder || "Select…"}
+              {cur ? cur.label : p.placeholder || t.selectPlaceholder}
             </span>
             <Icon name="chevronDown" size={16} className="tf-selectmenu-chev" />
           </button>
@@ -134,7 +137,7 @@ export function SelectMenu(p: SelectMenuProps) {
           role="listbox"
           tabIndex={-1}
           aria-labelledby={p.label ? `${id}-label` : undefined}
-          aria-label={p.label ? undefined : p.placeholder || "Options"}
+          aria-label={p.label ? undefined : p.placeholder || t.options}
           aria-activedescendant={active >= 0 ? `${uid}-o${active}` : undefined}
           onKeyDown={(e) => {
             const keys: Record<string, () => void> = {

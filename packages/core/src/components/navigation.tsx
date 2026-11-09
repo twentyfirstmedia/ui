@@ -1,5 +1,7 @@
 "use client";
 import * as React from "react";
+import { useStrings } from "../context.js";
+import { NAVIGATION_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { moveFocus, useControlled, useId, useOutside } from "../hooks.js";
@@ -104,9 +106,10 @@ export function Tabs(p: TabsProps) {
 }
 
 export function Breadcrumb(p: BreadcrumbProps) {
+  const t = useStrings(NAVIGATION_STRINGS);
   const items = p.items || [];
   return (
-    <nav className="tf-crumbs" aria-label="Breadcrumb">
+    <nav className="tf-crumbs" aria-label={t.breadcrumb}>
       {items.map((it, i) => {
         const last = i === items.length - 1;
         return (
@@ -121,6 +124,7 @@ export function Breadcrumb(p: BreadcrumbProps) {
 }
 
 export function Pagination(p: PaginationProps) {
+  const t = useStrings(NAVIGATION_STRINGS);
   const total = Math.max(1, p.total || 1),
     // `page` is controlled once someone listens; `page` alone stays the start page (as before)
     controlled = p.page !== undefined && p.onChange !== undefined,
@@ -136,10 +140,10 @@ export function Pagination(p: PaginationProps) {
     else if (pages[pages.length - 1] !== "…") pages.push("…");
   }
   return (
-    <nav className="tf-pager" aria-label="Pagination">
+    <nav className="tf-pager" aria-label={t.pagination}>
       <IconButton
         icon="chevronLeft"
-        label="Previous page"
+        label={t.previousPage}
         size="sm"
         onClick={() => {
           go(cur - 1);
@@ -166,7 +170,7 @@ export function Pagination(p: PaginationProps) {
       )}
       <IconButton
         icon="chevronRight"
-        label="Next page"
+        label={t.nextPage}
         size="sm"
         onClick={() => {
           go(cur + 1);
@@ -268,6 +272,7 @@ export function Menubar(p: MenubarProps) {
 
 /* ── NavigationMenu: site navigation with dropdown panels ── */
 export function NavigationMenu(p: NavigationMenuProps) {
+  const strings = useStrings(NAVIGATION_STRINGS);
   const uid = useId("nav");
   const root = React.useRef<HTMLElement>(null);
   const [open, setOpen] = React.useState<number | null>(null);
@@ -283,7 +288,7 @@ export function NavigationMenu(p: NavigationMenuProps) {
       ref={root}
       className={cx("tf-navmenu", p.className)}
       style={p.style}
-      aria-label={p.label || "Main"}
+      aria-label={p.label || strings.mainNavigation}
       onKeyDown={(e) => {
         if (e.key === "Escape" && open != null) {
           const trigger = root.current?.querySelector<HTMLElement>(`#${uid}-t${open}`);
@@ -354,6 +359,7 @@ export function NavigationMenu(p: NavigationMenuProps) {
 
 /* ── Sidebar: app navigation with groups, nested pages and a collapsed (icons) mode ── */
 export function Sidebar(p: SidebarProps) {
+  const t = useStrings(NAVIGATION_STRINGS);
   const collapsed = useControlled(p.collapsed, !!p.defaultCollapsed, p.onCollapsedChange);
   const idOf = (it: { id?: string; label: string }) => it.id || it.label;
   const hasCurrent = (it: SidebarItem) =>
@@ -405,7 +411,7 @@ export function Sidebar(p: SidebarProps) {
     <nav
       className={cx("tf-sidebar", collapsed[0] && "collapsed", p.className)}
       style={p.style}
-      aria-label={p.label || "Sidebar"}
+      aria-label={p.label || t.sidebar}
     >
       {p.header && <div className="tf-sidebar-head">{p.header}</div>}
       <div className="tf-sidebar-body">
@@ -426,7 +432,7 @@ export function Sidebar(p: SidebarProps) {
         {p.footer}
         <IconButton
           icon={collapsed[0] ? "chevronRight" : "chevronLeft"}
-          label={collapsed[0] ? "Expand sidebar" : "Collapse sidebar"}
+          label={collapsed[0] ? t.expandSidebar : t.collapseSidebar}
           variant="ghost"
           size="sm"
           onClick={() => collapsed[1](!collapsed[0])}

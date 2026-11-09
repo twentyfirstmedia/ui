@@ -5,7 +5,7 @@ import { forKit, knowledge, type KitName } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
 
 /** Guides that are only Markdown (apps/docs/content); theming and status have their own pages. */
-const SLUGS = ["installation", "cli", "ai", "html", "changelog"];
+const SLUGS = ["installation", "cli", "text", "ai", "html", "changelog"];
 
 export const dynamicParams = false;
 export function generateStaticParams() {

@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { leaving, usePresence } from "../presence.js";
-import { formatMoney } from "../format.js";
+import { useFormat, useStrings } from "../context.js";
+import { WORKSPACE_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { useScrollFocus, useTrap } from "../hooks.js";
 import { cx } from "../cx.js";
@@ -28,8 +29,9 @@ import type {
   WizardProps,
 } from "./types.js";
 export function SubNav(p: SubNavProps) {
+  const t = useStrings(WORKSPACE_STRINGS);
   return (
-    <nav className="tf-subnav" aria-label={`${p.eyebrow || "Section"} pages`}>
+    <nav className="tf-subnav" aria-label={t.sectionPages(p.eyebrow)}>
       <div className="tf-subnav-head">
         {p.eyebrow && <span className="tf-subnav-eyebrow">{p.eyebrow}</span>}
         {p.action && (
@@ -65,6 +67,7 @@ export function SubNav(p: SubNavProps) {
   );
 }
 export function Drawer(p: DrawerProps) {
+  const t = useStrings(WORKSPACE_STRINGS);
   const ref = React.useRef<HTMLElement>(null);
   const pr = usePresence(p.open ?? true);
   useTrap(ref, p.onClose);
@@ -114,7 +117,7 @@ export function Drawer(p: DrawerProps) {
               {p.subtitle && <div className="tf-panel-sub">{p.subtitle}</div>}
             </div>
           </div>
-          <IconButton icon="x" label="Close" onClick={p.onClose} />
+          <IconButton icon="x" label={t.close} onClick={p.onClose} />
         </div>
         {p.children}
       </aside>
@@ -122,6 +125,7 @@ export function Drawer(p: DrawerProps) {
   );
 }
 export function CommandPalette(p: CommandPaletteProps) {
+  const t = useStrings(WORKSPACE_STRINGS);
   const q = React.useState(""),
     idx = React.useState(0),
     ref = React.useRef<HTMLDivElement>(null),
@@ -165,7 +169,7 @@ export function CommandPalette(p: CommandPaletteProps) {
     items: [PaletteItem, number][];
   }[] = [];
   res.forEach((it, i) => {
-    const g = it.group || "Results";
+    const g = it.group || t.results;
     if (!groups.length || groups[groups.length - 1].g !== g)
       groups.push({
         g: g,
@@ -187,13 +191,13 @@ export function CommandPalette(p: CommandPaletteProps) {
         className="tf-palette"
         role="dialog"
         aria-modal="true"
-        aria-label="Command palette"
+        aria-label={t.commandPalette}
       >
         <div className="tf-palette-input">
           <Icon name="search" size={18} />
           <input
-            placeholder={p.placeholder || "Search pages, actions and records…"}
-            aria-label="Search"
+            placeholder={p.placeholder || t.paletteSearchPlaceholder}
+            aria-label={t.search}
             value={q[0]}
             onChange={(e) => {
               q[1](e.target.value);
@@ -202,12 +206,12 @@ export function CommandPalette(p: CommandPaletteProps) {
             }}
             onKeyDown={key}
           />
-          <kbd>{"Esc"}</kbd>
+          <kbd>{t.escKey}</kbd>
         </div>
-        <div className="tf-palette-list" role="listbox" aria-label="Results">
+        <div className="tf-palette-list" role="listbox" aria-label={t.results}>
           {p.loading && (
             <div className="tf-palette-empty" role="status">
-              <Spinner /> Searching…
+              <Spinner /> {t.searching}
             </div>
           )}
           {res.length ? (
@@ -243,21 +247,21 @@ export function CommandPalette(p: CommandPaletteProps) {
               </div>
             ))
           ) : p.loading ? null : (
-            <div className="tf-palette-empty">{p.empty ?? `Nothing matches “${q[0]}”.`}</div>
+            <div className="tf-palette-empty">{p.empty ?? t.nothingMatches(q[0])}</div>
           )}
         </div>
         <div className="tf-palette-foot">
           <span>
             <kbd>↑</kbd>
-            <kbd>↓</kbd> {"move"}
+            <kbd>↓</kbd> {t.paletteMove}
           </span>
           <span>
-            <kbd>↵</kbd> {"open"}
+            <kbd>↵</kbd> {t.paletteOpen}
           </span>
           <span>
             <kbd>⌘</kbd>
             <kbd>K</kbd>
-            {" anywhere"}
+            {" " + t.paletteAnywhere}
           </span>
         </div>
       </div>
@@ -265,10 +269,11 @@ export function CommandPalette(p: CommandPaletteProps) {
   );
 }
 export function NotificationList(p: NotificationListProps) {
-  const f = React.useState("All"),
-    items = (p.items || []).filter((n) => f[0] === "All" || n.unread);
+  const t = useStrings(WORKSPACE_STRINGS);
+  const f = React.useState<"all" | "unread">("all"),
+    items = (p.items || []).filter((n) => f[0] === "all" || n.unread);
   return (
-    <div className="tf-notes" role="region" aria-label="Notifications">
+    <div className="tf-notes" role="region" aria-label={t.notifications}>
       <div
         className="tf-header"
         style={{
@@ -281,7 +286,7 @@ export function NotificationList(p: NotificationListProps) {
             fontSize: 16,
           }}
         >
-          {"Notifications"}
+          {t.notifications}
         </b>
         <Button
           variant="ghost"
@@ -290,7 +295,7 @@ export function NotificationList(p: NotificationListProps) {
           disabled={!(p.items || []).some((n) => n.unread)}
           onClick={p.onReadAll}
         >
-          {"Mark all read"}
+          {t.markAllRead}
         </Button>
       </div>
       <div
@@ -298,7 +303,12 @@ export function NotificationList(p: NotificationListProps) {
           padding: "0 8px",
         }}
       >
-        <Tabs block items={["All", "Unread"]} value={f[0]} onChange={f[1]} />
+        <Tabs
+          block
+          items={[t.all, t.unread]}
+          value={f[0] === "all" ? t.all : t.unread}
+          onChange={(v) => f[1](v === t.unread ? "unread" : "all")}
+        />
       </div>
       <div className="tf-notes-list">
         {items.length ? (
@@ -325,21 +335,22 @@ export function NotificationList(p: NotificationListProps) {
         ) : (
           <div className="tf-notes-empty">
             <TintIcon icon="check" tint="mint" size={40} />
-            <b>{"You are all caught up"}</b>
+            <b>{t.allCaughtUp}</b>
           </div>
         )}
       </div>
     </div>
   );
 }
-const STEP = (): Record<FlowStep["kind"], [IconName, Tint, string]> => ({
-  trigger: ["zap", "sky", "When"],
-  condition: ["filter", "blush", "If"],
-  agent: ["bot", "lilac", "Agent"],
-  approval: ["user", "butter", "Approval"],
-  action: ["send", "mint", "Then"],
+const STEP = (): Record<FlowStep["kind"], [IconName, Tint]> => ({
+  trigger: ["zap", "sky"],
+  condition: ["filter", "blush"],
+  agent: ["bot", "lilac"],
+  approval: ["user", "butter"],
+  action: ["send", "mint"],
 });
 export function Flow(p: FlowProps) {
+  const t = useStrings(WORKSPACE_STRINGS);
   return (
     <ol
       className="tf-flow tf-stagger"
@@ -351,7 +362,8 @@ export function Flow(p: FlowProps) {
     >
       {(p.steps || []).map((s, i) => {
         const steps = STEP(),
-          k = steps[s.kind] || steps.action,
+          kind = steps[s.kind] ? s.kind : "action",
+          k = steps[kind],
           st =
             i < (p.active == null ? -1 : p.active)
               ? "done"
@@ -367,9 +379,9 @@ export function Flow(p: FlowProps) {
             </span>
             <div className="tf-flow-card">
               <div className="tf-flow-kind">
-                {k[2]}
-                {st === "active" && <span className="tf-flow-live">running</span>}
-                {st === "wait" && <span className="tf-flow-live wait">{"waiting for you"}</span>}
+                {t.flowStep[kind]}
+                {st === "active" && <span className="tf-flow-live">{t.flowRunning}</span>}
+                {st === "wait" && <span className="tf-flow-live wait">{t.waitingForYou}</span>}
               </div>
               <div className="tf-flow-text">{s.text}</div>
               {st === "wait" && p.onApprove && (
@@ -380,11 +392,11 @@ export function Flow(p: FlowProps) {
                   }}
                 >
                   <Button size="sm" icon="check" onClick={p.onApprove}>
-                    {"Approve"}
+                    {t.approve}
                   </Button>
                   {p.onReject && (
                     <Button size="sm" variant="ghost" onClick={p.onReject}>
-                      {"Reject"}
+                      {t.reject}
                     </Button>
                   )}
                 </div>
@@ -474,6 +486,7 @@ export function FileThumb(p: FileThumbProps) {
   );
 }
 export function FileCard(p: FileCardProps) {
+  const t = useStrings(WORKSPACE_STRINGS);
   const k = FILE_KIND[p.kind] || FILE_KIND.doc;
   return (
     <button type="button" className="tf-filecard" onClick={p.onClick}>
@@ -483,17 +496,18 @@ export function FileCard(p: FileCardProps) {
       <span className="tf-filecard-name">{p.name}</span>
       <span className="tf-filecard-meta">
         {[p.size, p.meta].filter(Boolean).join(" · ")}
-        {p.shared && <Icon name="users" size={12} label="Shared" />}
+        {p.shared && <Icon name="users" size={12} label={t.shared} />}
       </span>
     </button>
   );
 }
 export function Wizard(p: WizardProps) {
+  const t = useStrings(WORKSPACE_STRINGS);
   const steps = p.steps || [],
     cur = p.current || 0,
     done = p.done || {};
   return (
-    <div className="tf-wizard" role="group" aria-label={p.label || "Setup"}>
+    <div className="tf-wizard" role="group" aria-label={p.label || t.setup}>
       <aside className="tf-wizard-rail">
         {p.brand && (
           <span
@@ -528,7 +542,7 @@ export function Wizard(p: WizardProps) {
         </ol>
       </aside>
       <div className="tf-wizard-main">
-        <div className="tf-card-desc">{`Step ${cur + 1} of ${steps.length}`}</div>
+        <div className="tf-card-desc">{t.stepOf(cur + 1, steps.length)}</div>
         <div key={cur} className="tf-wizard-body">
           {steps[cur] && steps[cur].icon && (
             <TintIcon icon={steps[cur].icon} tint="sky" size={44} />
@@ -550,8 +564,9 @@ export function Wizard(p: WizardProps) {
     </div>
   );
 }
-const LEVELS = () => ["None", "View", "Edit", "Full"];
 export function PermissionMatrix(p: PermissionMatrixProps) {
+  const t = useStrings(WORKSPACE_STRINGS);
+  const LEVELS = () => t.permissionLevels;
   const box = React.useRef<HTMLDivElement>(null);
   useScrollFocus(box);
   return (
@@ -559,7 +574,7 @@ export function PermissionMatrix(p: PermissionMatrixProps) {
       <table className="tf-table tf-perm">
         <thead>
           <tr>
-            <th>{"Role"}</th>
+            <th>{t.role}</th>
             {(p.areas || []).map((a) => (
               <th key={a}>{a}</th>
             ))}
@@ -583,11 +598,7 @@ export function PermissionMatrix(p: PermissionMatrixProps) {
                 >
                   {r.name}
                 </div>
-                {r.people != null && (
-                  <div className="tf-card-desc">
-                    {r.people === 1 ? "1 member" : `${r.people} members`}
-                  </div>
-                )}
+                {r.people != null && <div className="tf-card-desc">{t.memberCount(r.people)}</div>}
               </td>
               {r.levels.map((lv, ai) => (
                 <td key={ai}>
@@ -611,12 +622,18 @@ export function PermissionMatrix(p: PermissionMatrixProps) {
     </div>
   );
 }
-function money2(n: number) {
-  return formatMoney(n, null, {
-    minimumFractionDigits: 2,
-  });
+/** Money with cents, in the locale of the nearest UIProvider. */
+function useMoney2() {
+  const { formatMoney } = useFormat();
+  return (n: number) =>
+    formatMoney(n, null, {
+      minimumFractionDigits: 2,
+    });
 }
 export function InvoicePreview(p: InvoicePreviewProps) {
+  const t = useStrings(WORKSPACE_STRINGS);
+  const money2 = useMoney2();
+  const { formatPercent } = useFormat();
   const lines = p.lines || [];
   let net = 0;
   const vat: Record<number, number> = {};
@@ -649,47 +666,47 @@ export function InvoicePreview(p: InvoicePreviewProps) {
           {p.from && <div className="tf-paper-small">{p.from}</div>}
         </div>
         <div className="tf-paper-id">
-          <div className="tf-paper-kind">{p.kind || "Invoice"}</div>
+          <div className="tf-paper-kind">{p.kind || t.invoice}</div>
           <div className="tf-mono">{"#" + p.number}</div>
         </div>
       </div>
       <div className="tf-paper-meta">
         <div>
-          <span>{"Bill to"}</span>
+          <span>{t.billTo}</span>
           <b>{p.to}</b>
         </div>
         <div>
-          <span>{"Issued"}</span>
+          <span>{t.issued}</span>
           <b>{p.issued}</b>
         </div>
         <div>
-          <span>{"Due"}</span>
+          <span>{t.due}</span>
           <b>{p.due}</b>
         </div>
       </div>
       <div className="tf-paper-lines">
         {lines.map((l, i) => (
           <div key={i}>
-            <span>{(l.d || "Untitled line") + (l.q !== 1 ? " × " + l.q : "")}</span>
+            <span>{(l.d || t.untitledLine) + (l.q !== 1 ? " × " + l.q : "")}</span>
             <b>{fmt(l.q * l.u)}</b>
           </div>
         ))}
       </div>
       <div className="tf-paper-totals">
         <div>
-          <span>{"Net"}</span>
+          <span>{t.net}</span>
           <b>{fmt(net)}</b>
         </div>
         {Object.keys(vat)
           .filter((k) => +k > 0)
           .map((k) => (
             <div key={k}>
-              <span>{`VAT ${k}%`}</span>
+              <span>{t.vatAt(formatPercent(Number(k), { maximumFractionDigits: 2 }))}</span>
               <b>{fmt(vat[Number(k)] ?? 0)}</b>
             </div>
           ))}
         <div className="grand">
-          <span>{"Total due"}</span>
+          <span>{t.totalDue}</span>
           <b>{fmt(net + tax)}</b>
         </div>
       </div>
@@ -698,6 +715,8 @@ export function InvoicePreview(p: InvoicePreviewProps) {
   );
 }
 export function TransactionRow(p: TransactionRowProps) {
+  const t = useStrings(WORKSPACE_STRINGS);
+  const money2 = useMoney2();
   const open = React.useState(false),
     inc = p.amount > 0;
   return (
@@ -706,13 +725,13 @@ export function TransactionRow(p: TransactionRowProps) {
         <TintIcon icon={inc ? "download" : "send"} tint={inc ? "mint" : "plain"} />
         <div className="tf-tx-text">
           <b className="tf-mono">{p.text}</b>
-          <span>{p.date + (p.matched && p.matchRef ? ` · matched to ${p.matchRef}` : "")}</span>
+          <span>{p.date + (p.matched && p.matchRef ? " · " + t.matchedTo(p.matchRef) : "")}</span>
         </div>
         <b className={cx("tf-tx-amt", inc ? "in" : "out")}>
           {(inc ? "+" : "−") + money2(Math.abs(p.amount))}
         </b>
         {p.matched ? (
-          <Badge tone="success">{"Matched"}</Badge>
+          <Badge tone="success">{t.matched}</Badge>
         ) : (
           <Button
             size="sm"
@@ -721,7 +740,7 @@ export function TransactionRow(p: TransactionRowProps) {
               open[1](!open[0]);
             }}
           >
-            {open[0] ? "Close" : "Match"}
+            {open[0] ? t.close : t.match}
           </Button>
         )}
       </div>
@@ -734,7 +753,7 @@ export function TransactionRow(p: TransactionRowProps) {
               minWidth: 0,
             }}
           >
-            {p.hint || "No suggestion yet."}
+            {p.hint || t.noSuggestion}
           </span>
           <Button
             size="sm"
@@ -744,7 +763,7 @@ export function TransactionRow(p: TransactionRowProps) {
               p.onMatch && p.onMatch();
             }}
           >
-            {"Accept"}
+            {t.accept}
           </Button>
         </div>
       )}

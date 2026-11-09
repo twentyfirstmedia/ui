@@ -1,5 +1,7 @@
 "use client";
 import * as React from "react";
+import { useStrings } from "../context.js";
+import { SHELL_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { cx, reduced } from "../cx.js";
 import { Avatar } from "./foundation.js";
@@ -16,8 +18,9 @@ import type {
 } from "./types.js";
 
 export function TopBar(p: TopBarProps) {
+  const t = useStrings(SHELL_STRINGS);
   return (
-    <nav className="tf-topbar" aria-label="Main">
+    <nav className="tf-topbar" aria-label={t.mainNavigation}>
       {p.brand && (
         <span className="tf-brand">
           {p.brand}
@@ -88,8 +91,9 @@ function railBtn(it: RailItem, i: number) {
 }
 
 export function SideRail(p: SideRailProps) {
+  const t = useStrings(SHELL_STRINGS);
   return (
-    <aside className="tf-rail" aria-label="Tools">
+    <aside className="tf-rail" aria-label={t.tools}>
       <div className="tf-rail-group">{(p.top || []).map(railBtn)}</div>
       <div className="tf-rail-group">{(p.bottom || []).map((it, i) => railBtn(it, i + 3))}</div>
     </aside>
@@ -97,12 +101,13 @@ export function SideRail(p: SideRailProps) {
 }
 
 export function Dock(p: DockProps) {
+  const t = useStrings(SHELL_STRINGS);
   return (
     <div
       className={cx("tf-dock", p.surface && "tf-" + p.surface, p.className)}
       style={p.style}
       role="toolbar"
-      aria-label={p.label || "Quick actions"}
+      aria-label={p.label || t.quickActions}
     >
       {(p.items || []).map((it) => (
         <button

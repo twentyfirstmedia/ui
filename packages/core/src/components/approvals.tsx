@@ -1,6 +1,8 @@
 "use client";
 import * as React from "react";
 import { cx } from "../cx.js";
+import { useStrings } from "../context.js";
+import { APPROVALS_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { StatusShape } from "./status.js";
 import { Badge, Button } from "./foundation.js";
@@ -16,34 +18,35 @@ import type {
 } from "./types.js";
 
 /* ── Approval A–D ── */
-const FAMILY: Record<RiskFamily, [IconName, string]> = {
-  money: ["card", "Money"],
-  infra: ["server", "Infrastructure"],
-  comms: ["mail", "Communication"],
-  marketing: ["trend", "Marketing"],
-  apps: ["code", "Own apps"],
-  legal: ["book", "Legal"],
+const FAMILY: Record<RiskFamily, IconName> = {
+  money: "card",
+  infra: "server",
+  comms: "mail",
+  marketing: "trend",
+  apps: "code",
+  legal: "book",
 };
 
 export function ApprovalCard(p: ApprovalCardProps) {
+  const t = useStrings(APPROVALS_STRINGS);
   const opts: ApprovalOption[] = p.options || [
     {
       key: "A",
-      label: p.approveLabel || "Yes, run it as shown",
+      label: p.approveLabel || t.approveAsShown,
     },
     {
       key: "B",
-      label: "Yes, with a change",
-      input: "What should change?",
+      label: t.approveWithChange,
+      input: t.whatShouldChange,
     },
     {
       key: "C",
-      label: "No, discard",
+      label: t.discard,
     },
     {
       key: "D",
-      label: "Different instruction",
-      input: "What should happen instead?",
+      label: t.differentInstruction,
+      input: t.whatInstead,
     },
   ];
   const open = React.useState<ApprovalKey | null>(null),
@@ -115,7 +118,7 @@ export function ApprovalCard(p: ApprovalCardProps) {
     >
       <div className="tf-approval-top">
         <StatusShape status="signal" />
-        <b>{p.heading || "Approval needed"}</b>
+        <b>{p.heading || t.approvalNeeded}</b>
         {(p.agent || p.project) && (
           <span className="tf-approval-who">
             {[p.agent, p.project].filter(Boolean).join(" · ")}
@@ -123,8 +126,8 @@ export function ApprovalCard(p: ApprovalCardProps) {
         )}
         {fam && (
           <Badge tone="neutral" dot={false} className="tf-family">
-            <Icon name={fam[0]} size={12} />
-            {p.familyLabel || fam[1]}
+            <Icon name={fam} size={12} />
+            {p.familyLabel || (p.family && t.riskFamily[p.family])}
           </Badge>
         )}
         {p.age && <span className="tf-approval-age">{p.age}</span>}
@@ -178,7 +181,7 @@ export function ApprovalCard(p: ApprovalCardProps) {
                       open[1](null);
                     }}
                   >
-                    {"Cancel"}
+                    {t.cancel}
                   </Button>
                   <Button
                     size="sm"
@@ -187,7 +190,7 @@ export function ApprovalCard(p: ApprovalCardProps) {
                       decide(o);
                     }}
                   >
-                    {o.key + " · " + "Send"}
+                    {o.key + " · " + t.send}
                   </Button>
                 </div>
               </div>
@@ -212,12 +215,13 @@ export function ApprovalCard(p: ApprovalCardProps) {
 }
 
 export function ApprovalInbox(p: ApprovalInboxProps) {
+  const t = useStrings(APPROVALS_STRINGS);
   const items = (p.items || []).slice().sort((a, b) => (b.ageMin || 0) - (a.ageMin || 0));
   return (
     <div
       className="tf-inbox"
       role="listbox"
-      aria-label={p.label || "Approvals"}
+      aria-label={p.label || t.approvals}
       onKeyDown={(e) => {
         const i = items.findIndex((x) => x.id === p.selected);
         if (e.key === "j" || e.key === "ArrowDown") {
@@ -236,7 +240,7 @@ export function ApprovalInbox(p: ApprovalInboxProps) {
         <EmptyState
           icon="check"
           tint="mint"
-          title={p.emptyTitle || "Nothing waiting for you"}
+          title={p.emptyTitle || t.nothingWaiting}
           text={p.emptyText}
         />
       ) : (
@@ -260,8 +264,8 @@ export function ApprovalInbox(p: ApprovalInboxProps) {
               </span>
               {fam && (
                 <Badge tone="neutral" dot={false} className="tf-family">
-                  <Icon name={fam[0]} size={12} />
-                  {x.familyLabel || fam[1]}
+                  <Icon name={fam} size={12} />
+                  {x.familyLabel || (x.family && t.riskFamily[x.family])}
                 </Badge>
               )}
               <span className={cx("tf-inbox-age", x.urgent && "warn")}>

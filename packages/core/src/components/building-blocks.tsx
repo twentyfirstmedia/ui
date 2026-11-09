@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import { useStrings } from "../context.js";
+import { BUILDING_BLOCKS_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
 import { useControlled, useOutside } from "../hooks.js";
 import { Icon } from "../Icon.js";
@@ -55,11 +57,12 @@ export function KeyValue(p: KeyValueProps) {
   );
 }
 export function Spinner(p: SpinnerProps) {
+  const t = useStrings(BUILDING_BLOCKS_STRINGS);
   return (
     <span
       className={cx("tf-spinner", p.size === "lg" && "lg")}
       role="status"
-      aria-label={p.label || "Loading"}
+      aria-label={p.label || t.loading}
     />
   );
 }
@@ -339,6 +342,7 @@ export function InlineEdit(p: InlineEditProps) {
  * jump to the limits, double-click resets.
  */
 export function ResizablePanels(p: ResizablePanelsProps) {
+  const t = useStrings(BUILDING_BLOCKS_STRINGS);
   const n = (p.panels || []).length;
   const vertical = p.orientation === "vertical";
   const min = p.min ?? 10;
@@ -411,7 +415,7 @@ export function ResizablePanels(p: ResizablePanelsProps) {
               className="tf-panels-handle"
               role="separator"
               aria-orientation={vertical ? "horizontal" : "vertical"}
-              aria-label={`Resize ${p.labels?.[i] ?? `panel ${i + 1}`}`}
+              aria-label={t.resizePanel(p.labels?.[i], i + 1)}
               aria-valuenow={Math.round(sizes[i] ?? 0)}
               aria-valuemin={min}
               aria-valuemax={Math.round((sizes[i] ?? 0) + (sizes[i + 1] ?? 0) - min)}

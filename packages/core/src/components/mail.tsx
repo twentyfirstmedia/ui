@@ -1,5 +1,7 @@
 "use client";
 import * as React from "react";
+import { useStrings } from "../context.js";
+import { MAIL_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { cx } from "../cx.js";
 import { useControlled } from "../hooks.js";
@@ -20,6 +22,7 @@ import type {
 
 /* ── Mail ── */
 export function AccountSwitcher(p: AccountSwitcherProps) {
+  const t = useStrings(MAIL_STRINGS);
   const q = React.useState(""),
     list = (p.accounts || []).filter(
       (a) => !q[0] || a.address.toLowerCase().indexOf(q[0].toLowerCase()) > -1,
@@ -38,9 +41,9 @@ export function AccountSwitcher(p: AccountSwitcherProps) {
         >
           <span className="tf-option-text">
             <b className={cur ? "tf-mono" : undefined}>
-              {cur ? cur.address : p.allLabel || "All inboxes"}
+              {cur ? cur.address : p.allLabel || t.allInboxes}
             </b>
-            <small>{cur ? cur.domain : `${(p.accounts || []).length} addresses`}</small>
+            <small>{cur ? cur.domain : t.addressCount((p.accounts || []).length)}</small>
           </span>
           <Icon name="chevronDown" size={14} />
         </button>
@@ -54,7 +57,7 @@ export function AccountSwitcher(p: AccountSwitcherProps) {
           }}
         >
           <SearchField
-            placeholder="Find an address"
+            placeholder={t.findAddress}
             value={q[0]}
             onChange={(e) => {
               q[1](e.target.value);
@@ -70,7 +73,7 @@ export function AccountSwitcher(p: AccountSwitcherProps) {
               }}
             >
               <Icon name="inbox" size={15} />
-              <span className="tf-option-text">{p.allLabel || "All inboxes"}</span>
+              <span className="tf-option-text">{p.allLabel || t.allInboxes}</span>
               {p.unread != null && <span className="tf-nav-count">{p.unread}</span>}
             </button>
             {list.map((a) => (
@@ -98,6 +101,7 @@ export function AccountSwitcher(p: AccountSwitcherProps) {
 }
 
 export function InboxList(p: InboxListProps) {
+  const t = useStrings(MAIL_STRINGS);
   return (
     <div className="tf-inboxlist" role="list">
       {(p.items || []).map((m) => (
@@ -113,7 +117,7 @@ export function InboxList(p: InboxListProps) {
           <span
             className="tf-mailrow-dot"
             role={m.unread ? "img" : undefined}
-            aria-label={m.unread ? "Unread" : undefined}
+            aria-label={m.unread ? t.unread : undefined}
           />
           <span className="tf-mailrow-main">
             <span className="tf-mailrow-top">
@@ -194,13 +198,14 @@ export function MailThread(p: MailThreadProps) {
 }
 
 export function SignatureEditor(p: SignatureEditorProps) {
+  const t = useStrings(MAIL_STRINGS);
   const v = useControlled<Record<string, string>>(p.value, p.defaultValue || {}, p.onChange),
     fields = p.fields || [
-      { key: "name", label: "Name" },
-      { key: "role", label: "Role" },
-      { key: "company", label: "Company" },
-      { key: "phone", label: "Phone" },
-      { key: "website", label: "Website" },
+      { key: "name", label: t.colName },
+      { key: "role", label: t.role },
+      { key: "company", label: t.company },
+      { key: "phone", label: t.phone },
+      { key: "website", label: t.website },
     ];
   function set(k: string, x: string) {
     const n: Record<string, string> = Object.assign({}, v[0]);
@@ -234,7 +239,7 @@ export function SignatureEditor(p: SignatureEditorProps) {
             padding: 0,
           }}
         >
-          {p.previewLabel || "Preview"}
+          {p.previewLabel || t.preview}
         </span>
         <div className="tf-paper tf-sig-paper">
           <p>—</p>

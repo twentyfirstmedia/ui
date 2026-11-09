@@ -35,6 +35,7 @@ export const GUIDE_ORDER = [
   "theming",
   "themes",
   "motion",
+  "text",
   "ai",
   "html",
   "status-and-approvals",

@@ -1,15 +1,18 @@
 "use client";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { UIContext, useUI, type UIContextValue } from "./context.js";
+import { mergeMessages, type UIMessages } from "./strings.js";
 import { themeStyle, type ThemeInput, type ThemeValues } from "./theme.js";
+
+export {
+  useUI,
+  useUIStrings,
+  useStrings,
+  useFormat,
+  formattersFor,
+  type UIContextValue,
+  type Formatters,
+} from "./context.js";
 export type Kit = "halo" | "pro";
 export type Theme = "light" | "dark" | "system";
 export type Density = "compact" | "comfortable";
@@ -53,39 +56,23 @@ export interface UIProviderProps {
    * reduced-motion setting always turns motion off.
    */
   motion?: Motion;
+  /**
+   * BCP 47 locale for the numbers, money, percentages and dates components show (`"de-DE"`).
+   * Default `"en-US"`; a nested provider keeps its parent's locale unless it sets its own.
+   */
+  locale?: string;
+  /**
+   * Your own text for any built-in string: accessible names, button texts, placeholders, status
+   * words (`{ close: "Schließen", selectedCount: (n) => \`${n} ausgewählt\` }`). Partial: what you
+   * leave out stays English (or what an outer provider set). Props such as `title` or `label` on a
+   * component still win. See `DEFAULT_STRINGS` for every key.
+   */
+  messages?: UIMessages;
   className?: string;
   style?: CSSProperties;
   children?: ReactNode;
 }
 
-export interface UIContextValue {
-  kit: Kit | undefined;
-  theme: Theme | undefined;
-  density: Density | undefined;
-  surface: Surface | undefined;
-  motion: Motion | undefined;
-  /** Element portals render into (null: document.body). */
-  portalRoot: HTMLElement | null;
-}
-
-const UIContext = createContext<UIContextValue>({
-  kit: undefined,
-  theme: undefined,
-  density: undefined,
-  surface: undefined,
-  motion: undefined,
-  portalRoot: null,
-});
-
-/** Current kit, theme, density and portal target. */
-export function useUI(): UIContextValue {
-  return useContext(UIContext);
-}
-
-/**
- * Sets kit, theme and density for everything inside (they only change attributes, so switching
- * never re-mounts the subtree).
- */
 /** True while the colour scheme the page shows is dark (theme prop, kit default, system). */
 function useDarkMode(theme: Theme | undefined, kit: Kit | undefined, enabled: boolean): boolean {
   const [systemDark, setSystemDark] = useState(false);
@@ -106,6 +93,10 @@ function useDarkMode(theme: Theme | undefined, kit: Kit | undefined, enabled: bo
 const isThemeInput = (t: ThemeValues | ThemeInput): t is ThemeInput =>
   "light" in t || "dark" in t || "radius" in t;
 
+/**
+ * Sets kit, theme, density, locale and strings for everything inside (switching never re-mounts
+ * the subtree: kit, theme and density only change attributes, locale and strings re-render).
+ */
 export function UIProvider(p: UIProviderProps) {
   const parent = useUI();
   const scope = p.scope ?? "document";
@@ -115,6 +106,11 @@ export function UIProvider(p: UIProviderProps) {
   const density = p.density ?? parent.density;
   const surface = p.surface ?? parent.surface;
   const motion = p.motion ?? parent.motion;
+  const locale = p.locale || parent.locale;
+  const messages = useMemo(
+    () => (p.messages ? mergeMessages(parent.messages, p.messages) : parent.messages),
+    [parent.messages, p.messages],
+  );
   const perMode = !!p.tokens && isThemeInput(p.tokens);
   const dark = useDarkMode(theme, kit, perMode);
   const vars = useMemo(() => {
@@ -155,8 +151,8 @@ export function UIProvider(p: UIProviderProps) {
 
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
   const ctx = useMemo<UIContextValue>(
-    () => ({ kit, theme, density, surface, motion, portalRoot }),
-    [kit, theme, density, surface, motion, portalRoot],
+    () => ({ kit, theme, density, surface, motion, locale, messages, portalRoot }),
+    [kit, theme, density, surface, motion, locale, messages, portalRoot],
   );
   // Derived colours (glass, hover shades, Pro's scale) are worked out where data-theme sits. A
   // subtree with its own tokens needs data-theme too, or they would keep the outer values.

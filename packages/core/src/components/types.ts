@@ -135,6 +135,8 @@ export interface TextareaProps extends FieldProps, BaseProps {
 }
 export interface SearchFieldProps extends BaseProps {
   placeholder?: string;
+  /** Accessible name (default: the placeholder, or "Search"). */
+  label?: string;
   shortcut?: string;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;

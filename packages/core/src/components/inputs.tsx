@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cx } from "../cx.js";
+import { useStrings } from "../context.js";
 import { Icon } from "../Icon.js";
 import { useId } from "../hooks.js";
 import { useFieldError } from "./form.js";
@@ -127,13 +128,14 @@ export function Textarea(p: TextareaProps) {
 }
 
 export function SearchField(p: SearchFieldProps) {
+  const t = useStrings();
   return (
     <label className={cx("tf-search", p.className)} style={p.style}>
       <Icon name="search" size={15} />
       <input
         type="search"
-        placeholder={p.placeholder || "Search"}
-        aria-label={p.placeholder || "Search"}
+        placeholder={p.placeholder || t.search}
+        aria-label={p.label || p.placeholder || t.search}
         value={p.value}
         onChange={p.onChange}
       />

@@ -1,5 +1,7 @@
 "use client";
 import * as React from "react";
+import { useStrings } from "../context.js";
+import { SITE_STRINGS } from "../strings.js";
 import { useControlled } from "../hooks.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
@@ -10,11 +12,12 @@ import type { AnnouncementBarProps, ChatLauncherProps, CookieConsentProps } from
 
 /* ── Site chrome: assistant launcher, cookie consent, announcement ── */
 export function ChatLauncher(p: ChatLauncherProps) {
+  const t = useStrings(SITE_STRINGS);
   const open = useControlled(p.open, false, p.onOpenChange);
   return (
     <div className={cx("tf-launch", open[0] && "open", p.inline && "inline")}>
       {open[0] && (
-        <div className="tf-launch-panel" role="dialog" aria-label={p.title || "Assistant"}>
+        <div className="tf-launch-panel" role="dialog" aria-label={p.title || t.assistant}>
           <div className="tf-launch-head">
             <AgentMark tint={p.tint || "lilac"} size={32} />
             <div
@@ -23,14 +26,14 @@ export function ChatLauncher(p: ChatLauncherProps) {
                 flex: 1,
               }}
             >
-              <b>{p.title || "Assistant"}</b>
+              <b>{p.title || t.assistant}</b>
               {p.context && <small>{p.context}</small>}
             </div>
             {p.headerAction}
             <IconButton
               icon="x"
               size="sm"
-              label="Close"
+              label={t.close}
               onClick={() => {
                 open[1](false);
               }}
@@ -43,7 +46,7 @@ export function ChatLauncher(p: ChatLauncherProps) {
       <button
         type="button"
         className="tf-launch-btn"
-        aria-label={open[0] ? "Close assistant" : p.title || "Open assistant"}
+        aria-label={open[0] ? t.closeAssistant : p.title || t.openAssistant}
         aria-expanded={open[0]}
         onClick={() => {
           open[1](!open[0]);
@@ -57,6 +60,7 @@ export function ChatLauncher(p: ChatLauncherProps) {
 }
 
 export function CookieConsent(p: CookieConsentProps) {
+  const t = useStrings(SITE_STRINGS);
   const more = React.useState(false),
     cats = React.useState(
       (p.categories || []).reduce<Record<string, boolean>>((a, c) => {
@@ -77,7 +81,7 @@ export function CookieConsent(p: CookieConsentProps) {
     <div
       className={cx("tf-cookie", p.inline && "inline")}
       role="dialog"
-      aria-label={p.title || "Privacy settings"}
+      aria-label={p.title || t.privacySettings}
     >
       <div
         className="tf-row"
@@ -94,15 +98,14 @@ export function CookieConsent(p: CookieConsentProps) {
             gap: 4,
           }}
         >
-          <b>{p.title || "Privacy settings"}</b>
+          <b>{p.title || t.privacySettings}</b>
           <p
             className="tf-card-desc"
             style={{
               margin: 0,
             }}
           >
-            {p.text ||
-              "We use cookies to run this site and, with your consent, to measure and improve it."}
+            {p.text || t.cookieText}
             {p.policy && <React.Fragment> {p.policy}</React.Fragment>}
           </p>
         </div>
@@ -121,7 +124,7 @@ export function CookieConsent(p: CookieConsentProps) {
                 {c.text && <small>{c.text}</small>}
               </div>
               {c.required ? (
-                <span className="tf-card-desc">{"Always on"}</span>
+                <span className="tf-card-desc">{t.alwaysOn}</span>
               ) : (
                 <Switch
                   checked={!!cats[0][c.id]}
@@ -144,7 +147,7 @@ export function CookieConsent(p: CookieConsentProps) {
               done(undefined);
             }}
           >
-            {"Save choice"}
+            {t.saveChoice}
           </Button>
         ) : (
           <Button
@@ -153,7 +156,7 @@ export function CookieConsent(p: CookieConsentProps) {
               more[1](true);
             }}
           >
-            {"Settings"}
+            {t.settings}
           </Button>
         )}
         <Button
@@ -162,14 +165,14 @@ export function CookieConsent(p: CookieConsentProps) {
             done(false);
           }}
         >
-          {"Only necessary"}
+          {t.onlyNecessary}
         </Button>
         <Button
           onClick={() => {
             done(true);
           }}
         >
-          {"Accept all"}
+          {t.acceptAll}
         </Button>
       </div>
     </div>
@@ -177,6 +180,7 @@ export function CookieConsent(p: CookieConsentProps) {
 }
 
 export function AnnouncementBar(p: AnnouncementBarProps) {
+  const t = useStrings(SITE_STRINGS);
   const shut = React.useState(false);
   if (shut[0]) return null;
   return (
@@ -188,7 +192,7 @@ export function AnnouncementBar(p: AnnouncementBarProps) {
         <button
           type="button"
           className="tf-announce-x"
-          aria-label="Dismiss"
+          aria-label={t.dismiss}
           onClick={() => {
             shut[1](true);
             p.onDismiss && p.onDismiss();

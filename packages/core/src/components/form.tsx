@@ -6,6 +6,8 @@
  */
 import * as React from "react";
 import { cx } from "../cx.js";
+import { useStrings } from "../context.js";
+import { FORM_STRINGS } from "../strings.js";
 import type { FormProps, FormRule, FormValues } from "./types.js";
 
 interface FormState {
@@ -22,21 +24,26 @@ export function useFieldError(name: string | undefined): string | undefined {
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** Runs one field's rules; returns the message of the first rule that fails. */
-export function checkRule(rule: FormRule, raw: string | string[] | undefined, values: FormValues) {
+export function checkRule(
+  rule: FormRule,
+  raw: string | string[] | undefined,
+  values: FormValues,
+  t: typeof FORM_STRINGS = FORM_STRINGS,
+) {
   const value = Array.isArray(raw) ? raw.join(",") : (raw ?? "");
   const empty = value.trim() === "";
   if (rule.required && empty)
-    return typeof rule.required === "string" ? rule.required : "This field is required";
+    return typeof rule.required === "string" ? rule.required : t.fieldRequired;
   if (empty) return undefined;
-  if (rule.email && !EMAIL.test(value)) return rule.message || "Enter a valid email address";
+  if (rule.email && !EMAIL.test(value)) return rule.message || t.invalidEmail;
   if (rule.minLength != null && value.length < rule.minLength)
-    return rule.message || `Use at least ${rule.minLength} characters`;
+    return rule.message || t.minLength(rule.minLength);
   if (rule.maxLength != null && value.length > rule.maxLength)
-    return rule.message || `Use at most ${rule.maxLength} characters`;
+    return rule.message || t.maxLength(rule.maxLength);
   const n = Number(value.replace(/[^\d.-]/g, ""));
-  if (rule.min != null && n < rule.min) return rule.message || `Use ${rule.min} or more`;
-  if (rule.max != null && n > rule.max) return rule.message || `Use ${rule.max} or less`;
-  if (rule.pattern && !rule.pattern.test(value)) return rule.message || "Use the expected format";
+  if (rule.min != null && n < rule.min) return rule.message || t.minValue(rule.min);
+  if (rule.max != null && n > rule.max) return rule.message || t.maxValue(rule.max);
+  if (rule.pattern && !rule.pattern.test(value)) return rule.message || t.invalidFormat;
   return rule.validate?.(value, values) || undefined;
 }
 
@@ -51,6 +58,7 @@ function read(form: HTMLFormElement): FormValues {
 }
 
 export function Form(p: FormProps) {
+  const t = useStrings(FORM_STRINGS);
   const ref = React.useRef<HTMLFormElement>(null);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [tried, setTried] = React.useState(false);
@@ -59,7 +67,7 @@ export function Form(p: FormProps) {
     const next: Record<string, string> = only ? { ...errors } : {};
     for (const [name, rule] of Object.entries(rules)) {
       if (only && name !== only) continue;
-      const msg = checkRule(rule, values[name], values);
+      const msg = checkRule(rule, values[name], values, t);
       if (msg) next[name] = msg;
       else delete next[name];
     }

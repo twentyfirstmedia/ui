@@ -3,7 +3,8 @@ import * as React from "react";
 import { leaving, usePresence } from "../presence.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
-import { formatMoney, formatNumber, formatPercent } from "../format.js";
+import { useFormat, useStrings } from "../context.js";
+import { DEVELOPER_STRINGS } from "../strings.js";
 import { useControlled, useId } from "../hooks.js";
 import { Portal } from "../portal.js";
 import { CodeBlock } from "./chat.js";
@@ -84,6 +85,7 @@ export function CodeViewer(p: CodeViewerProps) {
 }
 
 export function SecretField(p: SecretFieldProps) {
+  const t = useStrings(DEVELOPER_STRINGS);
   const shown = React.useState(false),
     copied = React.useState(false);
   const masked = (p.prefix || "") + "••••••••" + (p.last4 || "");
@@ -100,11 +102,11 @@ export function SecretField(p: SecretFieldProps) {
         }}
       >
         {p.onReveal && (
-          <Tooltip label={shown[0] ? "Hide" : "Reveal"}>
+          <Tooltip label={shown[0] ? t.hide : t.reveal}>
             <button
               type="button"
               className="tf-iconbtn tf-iconbtn-ghost tf-iconbtn-sm"
-              aria-label={shown[0] ? "Hide" : "Reveal"}
+              aria-label={shown[0] ? t.hide : t.reveal}
               onClick={() => {
                 if (shown[0]) return shown[1](false);
                 Promise.resolve(p.onReveal?.()).then((ok) => {
@@ -117,11 +119,11 @@ export function SecretField(p: SecretFieldProps) {
           </Tooltip>
         )}
         {p.onCopy && (
-          <Tooltip label={copied[0] ? "Copied" : "Copy"}>
+          <Tooltip label={copied[0] ? t.copied : t.copy}>
             <button
               type="button"
               className="tf-iconbtn tf-iconbtn-ghost tf-iconbtn-sm"
-              aria-label="Copy"
+              aria-label={t.copy}
               onClick={() => {
                 p.onCopy?.();
                 copied[1](true);
@@ -136,7 +138,7 @@ export function SecretField(p: SecretFieldProps) {
         )}
         {p.onRotate && (
           <Button size="sm" variant="soft" icon="refresh" onClick={p.onRotate}>
-            {"Rotate"}
+            {t.rotate}
           </Button>
         )}
       </span>
@@ -145,6 +147,8 @@ export function SecretField(p: SecretFieldProps) {
 }
 
 export function MoneyInput(p: MoneyInputProps) {
+  const t = useStrings(DEVELOPER_STRINGS);
+  const { formatMoney, formatNumber, formatPercent } = useFormat();
   const id = useId("mi"),
     v = useControlled<number | null>(
       p.value,
@@ -206,7 +210,7 @@ export function MoneyInput(p: MoneyInputProps) {
         {p.vatOptions && (
           <select
             className="tf-input tf-money-vat"
-            aria-label="VAT rate"
+            aria-label={t.vatRate}
             value={p.vat}
             onChange={(e) => {
               p.onVat && p.onVat(e.target.value);
@@ -231,9 +235,11 @@ export function MoneyInput(p: MoneyInputProps) {
       </div>
       {p.showGross && v[0] != null && p.vat != null && !isNaN(+p.vat) && (
         <span className="tf-field-hint">
-          {`Gross ${formatMoney(v[0] * (1 + Number(p.vat) / 100), p.currency, {
-            minimumFractionDigits: 2,
-          })}`}
+          {t.gross(
+            formatMoney(v[0] * (1 + Number(p.vat) / 100), p.currency, {
+              minimumFractionDigits: 2,
+            }),
+          )}
         </span>
       )}
     </FormField>
@@ -259,6 +265,7 @@ export function SettingsLayout(p: SettingsLayoutProps) {
 }
 
 export function ShortcutsOverlay(p: ShortcutsOverlayProps) {
+  const t = useStrings(DEVELOPER_STRINGS);
   const pr = usePresence(!!p.open);
   React.useEffect(() => {
     if (!p.open) return;
@@ -279,7 +286,7 @@ export function ShortcutsOverlay(p: ShortcutsOverlayProps) {
           className="tf-modal tf-shortcuts"
           role="dialog"
           aria-modal="true"
-          aria-label={p.title || "Keyboard shortcuts"}
+          aria-label={p.title || t.keyboardShortcuts}
         >
           <div
             className="tf-row"
@@ -287,8 +294,8 @@ export function ShortcutsOverlay(p: ShortcutsOverlayProps) {
               justifyContent: "space-between",
             }}
           >
-            <h2 className="tf-modal-title">{p.title || "Keyboard shortcuts"}</h2>
-            <IconButton icon="x" label="Close" size="sm" onClick={p.onClose} />
+            <h2 className="tf-modal-title">{p.title || t.keyboardShortcuts}</h2>
+            <IconButton icon="x" label={t.close} size="sm" onClick={p.onClose} />
           </div>
           <div className="tf-shortcuts-grid">
             {(p.groups || []).map((g) => (
@@ -310,6 +317,7 @@ export function ShortcutsOverlay(p: ShortcutsOverlayProps) {
 }
 
 export function StatCell(p: StatCellProps) {
+  const { formatNumber } = useFormat();
   const up = p.delta != null && p.delta >= 0,
     good = p.invert ? !up : up;
   return (
@@ -350,6 +358,8 @@ export function StatCell(p: StatCellProps) {
 }
 
 export function UptimeBar(p: UptimeBarProps) {
+  const t = useStrings(DEVELOPER_STRINGS);
+  const { formatPercent } = useFormat();
   const days = (p.days || []).map((d) => (typeof d === "string" ? { status: d } : d)),
     hov = React.useState<number | null>(null);
   return (
@@ -376,9 +386,9 @@ export function UptimeBar(p: UptimeBarProps) {
       <div className="tf-uptime-foot">
         <span>
           {hov[0] != null
-            ? (days[hov[0]].label || `${days.length - hov[0] - 1} days ago`) +
+            ? (days[hov[0]].label || t.daysAgo(days.length - hov[0] - 1)) +
               (days[hov[0]].note ? " · " + days[hov[0]].note : "")
-            : p.caption || `Last ${days.length} days`}
+            : p.caption || t.lastDays(days.length)}
         </span>
         {p.uptime != null && (
           <b className="tf-mono">
@@ -393,6 +403,7 @@ export function UptimeBar(p: UptimeBarProps) {
 }
 
 export function Meter(p: MeterProps) {
+  const { formatPercent } = useFormat();
   const pct = Math.max(0, Math.min(100, ((p.value || 0) / (p.max || 100)) * 100)),
     tone =
       p.tone || (pct >= (p.danger || 90) ? "blush" : pct >= (p.warn || 75) ? "butter" : "mint");

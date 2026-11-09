@@ -3,6 +3,8 @@ import * as React from "react";
 import { leaving, usePresence } from "../presence.js";
 import { moveFocus, useId } from "../hooks.js";
 import { cx } from "../cx.js";
+import { useStrings } from "../context.js";
+import { FEEDBACK_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { Portal } from "../portal.js";
 import {
@@ -179,6 +181,7 @@ export function Menu(p: MenuProps) {
 }
 
 export function Modal(p: ModalProps) {
+  const t = useStrings(FEEDBACK_STRINGS);
   const pr = usePresence(p.open ?? true);
   if (!pr.mounted) return null;
   return (
@@ -186,7 +189,7 @@ export function Modal(p: ModalProps) {
       <div className="tf-backdrop" aria-hidden />
       <div className="tf-modal" role="dialog" aria-modal="true" aria-label={p.title}>
         <span className="tf-modal-close">
-          <IconButton icon="x" label="Close" size="sm" onClick={p.onClose} />
+          <IconButton icon="x" label={t.close} size="sm" onClick={p.onClose} />
         </span>
         {p.icon && <TintIcon icon={p.icon} tint={p.tint || "sky"} size={40} />}
         <div>
@@ -251,6 +254,7 @@ const ALERT_ICON: Record<string, IconName> = {
   };
 
 export function Alert(p: AlertProps) {
+  const t = useStrings(FEEDBACK_STRINGS);
   const tone = p.tone || "info";
   return (
     <div
@@ -268,7 +272,13 @@ export function Alert(p: AlertProps) {
         <div className="tf-alert-actions">
           {p.action}
           {p.onDismiss && (
-            <IconButton icon="x" label="Dismiss" size="sm" variant="ghost" onClick={p.onDismiss} />
+            <IconButton
+              icon="x"
+              label={t.dismiss}
+              size="sm"
+              variant="ghost"
+              onClick={p.onDismiss}
+            />
           )}
         </div>
       )}
@@ -277,6 +287,7 @@ export function Alert(p: AlertProps) {
 }
 
 export function ConfirmDialog(p: ConfirmDialogProps) {
+  const t = useStrings(FEEDBACK_STRINGS);
   const titleId = useId("confirm");
   const typed = React.useState(""),
     ok = !p.confirmText || typed[0] === p.confirmText,
@@ -326,7 +337,7 @@ export function ConfirmDialog(p: ConfirmDialogProps) {
           {p.confirmText && (
             <label className="tf-field">
               <span className="tf-field-hint">
-                Type <b className="tf-mono">{p.confirmText}</b> to confirm
+                {t.typeToConfirm(<b className="tf-mono">{p.confirmText}</b>)}
               </span>
               <input
                 className="tf-input"
@@ -340,14 +351,14 @@ export function ConfirmDialog(p: ConfirmDialogProps) {
           )}
           <div className="tf-modal-foot">
             <button ref={cancel} type="button" className="tf-btn tf-btn-ghost" onClick={p.onCancel}>
-              {p.cancelLabel || "Cancel"}
+              {p.cancelLabel || t.cancel}
             </button>
             <Button
               variant={p.danger ? "danger-solid" : "primary"}
               disabled={!ok}
               onClick={p.onConfirm}
             >
-              {p.confirmLabel || "Confirm"}
+              {p.confirmLabel || t.confirm}
             </Button>
           </div>
         </div>
@@ -357,6 +368,7 @@ export function ConfirmDialog(p: ConfirmDialogProps) {
 }
 
 export function ToastItem(p: { t: ToastData }) {
+  const strings = useStrings(FEEDBACK_STRINGS);
   const t = p.t,
     paused = React.useState(false),
     left = React.useRef(t.duration),
@@ -396,7 +408,7 @@ export function ToastItem(p: { t: ToastData }) {
             toast.dismiss(t.id);
           }}
         >
-          {"Undo"}
+          {strings.undo}
         </button>
       )}
       {t.action && (
@@ -414,7 +426,7 @@ export function ToastItem(p: { t: ToastData }) {
       <button
         type="button"
         className="tf-toast-close"
-        aria-label="Dismiss"
+        aria-label={strings.dismiss}
         onClick={() => {
           toast.dismiss(t.id);
         }}
