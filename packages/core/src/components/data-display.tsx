@@ -114,7 +114,13 @@ export function Card(p: CardProps) {
   const tint = p.tint && p.tint !== "surface" ? "tf-bg-" + p.tint : null;
   return (
     <article
-      className={cx("tf-card", tint, p.onClick && "tf-card-interactive", p.className)}
+      className={cx(
+        "tf-card",
+        tint,
+        p.onClick && "tf-card-interactive",
+        p.surface && "tf-" + p.surface,
+        p.className,
+      )}
       style={p.style}
       tabIndex={p.onClick ? 0 : undefined}
       onClick={p.onClick}
@@ -177,7 +183,10 @@ export function EventCard(p: EventCardProps) {
 }
 export function Panel(p: PanelProps) {
   return (
-    <section className={cx("tf-panel", p.side && "tf-side", p.className)} style={p.style}>
+    <section
+      className={cx("tf-panel", p.side && "tf-side", p.surface && "tf-" + p.surface, p.className)}
+      style={p.style}
+    >
       {(p.title || p.action) && (
         <div className="tf-header">
           <div>

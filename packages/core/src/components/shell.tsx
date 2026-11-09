@@ -7,6 +7,7 @@ import type {
   AppShellProps,
   DockItem,
   DockProps,
+  FloatingLayoutProps,
   NavItem,
   RailItem,
   SideRailProps,
@@ -96,7 +97,12 @@ export function SideRail(p: SideRailProps) {
 
 export function Dock(p: DockProps) {
   return (
-    <div className="tf-dock" role="toolbar" aria-label={p.label || "Quick actions"}>
+    <div
+      className={cx("tf-dock", p.surface && "tf-" + p.surface, p.className)}
+      style={p.style}
+      role="toolbar"
+      aria-label={p.label || "Quick actions"}
+    >
       {(p.items || []).map((it) => (
         <button
           key={it.label}
@@ -109,6 +115,32 @@ export function Dock(p: DockProps) {
           <Icon name={it.icon} />
         </button>
       ))}
+    </div>
+  );
+}
+
+/**
+ * UI floating over a full-bleed background (a map, a 3D scene, a video): four slots along the
+ * edges, glass by default. The background stays interactive wherever no slot sits on it.
+ */
+export function FloatingLayout(p: FloatingLayoutProps) {
+  const surface = p.surface ?? "glass";
+  return (
+    <div
+      className={cx("tf-floating", p.className)}
+      style={{ minHeight: p.height ?? 640, ...p.style }}
+      role="region"
+      aria-label={p.label}
+      data-surface={surface}
+    >
+      {p.background != null && <div className="tf-floating-bg">{p.background}</div>}
+      <div className="tf-floating-ui">
+        {p.top != null && <div className="tf-floating-top">{p.top}</div>}
+        {p.start != null && <div className="tf-floating-start">{p.start}</div>}
+        {p.end != null && <div className="tf-floating-end">{p.end}</div>}
+        {p.bottom != null && <div className="tf-floating-bottom">{p.bottom}</div>}
+      </div>
+      {p.children}
     </div>
   );
 }

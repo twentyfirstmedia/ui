@@ -1,8 +1,9 @@
 import type { ChangeEvent, CSSProperties, MouseEvent, ReactNode } from "react";
 import type { IconName } from "../icons.js";
 import type { ToastOptions } from "../toast-store.js";
+import type { Surface } from "../provider.js";
 
-export type { IconName, ToastOptions };
+export type { IconName, ToastOptions, Surface };
 
 /* Props of every component, ported from the reference (design-system/components/index.d.ts). */
 
@@ -160,6 +161,8 @@ export interface CardProps extends BaseProps {
   onClick?: () => void;
   children?: ReactNode;
   eyebrow?: ReactNode;
+  /** `"glass"`: translucent glass over what is behind (maps, 3D, video, photos); `"solid"` opts out inside a glass `UIProvider`. */
+  surface?: Surface;
 }
 export interface EventCardProps extends BaseProps {
   kind?: "meeting" | "deadline" | "review" | "launch" | "incident";
@@ -177,6 +180,8 @@ export interface PanelProps extends BaseProps {
   subtitle?: string;
   action?: ReactNode;
   children?: ReactNode;
+  /** `"glass"`: translucent glass over what is behind (maps, 3D, video, photos); `"solid"` opts out inside a glass `UIProvider`. */
+  surface?: Surface;
 }
 export interface PageHeaderProps extends BaseProps {
   crumbs?: string[];
@@ -211,6 +216,25 @@ export interface SideRailProps extends BaseProps {
   top?: RailItem[];
   bottom?: RailItem[];
 }
+export interface FloatingLayoutProps extends BaseProps {
+  /** What the UI floats over, filling the layout: a map, a 3D canvas, a video, a photo. */
+  background?: ReactNode;
+  /** Bar along the top edge (search, filters, title). */
+  top?: ReactNode;
+  /** Column on the start side (layers, lists, settings). */
+  start?: ReactNode;
+  /** Column on the end side (details of the selected thing). */
+  end?: ReactNode;
+  /** Bar along the bottom edge (dock, playback, a summary). */
+  bottom?: ReactNode;
+  /** Height of the layout (default 640). Below 720px of width the slots stack: top, start, end, bottom. */
+  height?: number | string;
+  /** Glass for every surface in the slots (default) or solid surfaces. */
+  surface?: Surface;
+  /** Accessible name of the region. */
+  label?: string;
+  children?: ReactNode;
+}
 export interface DockItem {
   label: string;
   icon: IconName;
@@ -220,6 +244,8 @@ export interface DockItem {
 export interface DockProps extends BaseProps {
   items: DockItem[];
   label?: string;
+  /** `"glass"`: translucent glass over what is behind (maps, 3D, video, photos); `"solid"` opts out inside a glass `UIProvider`. */
+  surface?: Surface;
 }
 export interface TableColumn {
   key: string;
@@ -1787,8 +1813,11 @@ export interface MapViewProps extends BaseProps {
   renderPopup?: (p: MapPoint) => ReactNode;
   legend?: ReactNode;
   controls?: ReactNode;
-  height?: number;
+  /** Height in px (default 320) or any CSS length, e.g. "100%" to fill a FloatingLayout. */
+  height?: number | string;
   label?: string;
+  /** `"glass"`: the legend, controls and popup float as glass over the map (for a live map in `background`). */
+  surface?: Surface;
   className?: string;
 }
 

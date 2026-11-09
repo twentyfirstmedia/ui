@@ -539,7 +539,7 @@ export function MapView(p: MapViewProps) {
       })}
       {cur && (
         <div
-          className="tf-map-pop"
+          className={cx("tf-map-pop", p.surface && "tf-" + p.surface)}
           style={{
             left: Math.min(72, Math.max(28, xy(cur).x)) + "%",
             top: xy(cur).y + "%",
@@ -555,8 +555,12 @@ export function MapView(p: MapViewProps) {
           )}
         </div>
       )}
-      {p.legend && <div className="tf-map-legend">{p.legend}</div>}
-      {p.controls && <div className="tf-map-ctl">{p.controls}</div>}
+      {p.legend && (
+        <div className={cx("tf-map-legend", p.surface && "tf-" + p.surface)}>{p.legend}</div>
+      )}
+      {p.controls && (
+        <div className={cx("tf-map-ctl", p.surface && "tf-" + p.surface)}>{p.controls}</div>
+      )}
     </div>
   );
 }

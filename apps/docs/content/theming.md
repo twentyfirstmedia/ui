@@ -75,6 +75,37 @@ import { UIProvider, brandTheme } from "@twentyfirstmedia/{{kit}}";
 
 `themeCss(theme, { kit })` writes the CSS for a theme (for a server-rendered `<style>`), `parseThemeCss(css)` reads a shadcn theme, and `brandTheme(color)` picks readable text for a brand colour.
 
+## Glass
+
+For UI that floats over a map, a 3D scene, a video or photos, surfaces can be glass: translucent, blurred and colour-lifted over what is behind, with light catching the top edge. Halo's glass is soft and milky, Pro's is dark with a hairline edge.
+
+```tsx
+import { FloatingLayout, MapView, Panel, SearchField, UIProvider } from "@twentyfirstmedia/{{kit}}";
+
+// a layout for UI over a background: four slots, glass by default
+<FloatingLayout
+  height={720}
+  background={<MapView background={<YourMap />} points={places} height="100%" />}
+  top={<SearchField placeholder="Search places" />}
+  start={<Panel title="Layers">…</Panel>}
+  end={<Panel title="Harbour Museum">…</Panel>}
+/>;
+
+// one surface
+<Panel surface="glass" title="Layers">…</Panel>;
+
+// everything floating in a subtree: panels, cards, dock, map legend, menus, popovers, dialogs
+<UIProvider scope="subtree" surface="glass">…</UIProvider>;
+```
+
+- Inside a glass region, top-level Panels, Cards, the Dock and map legends and controls turn into glass, and so do loose controls (search field, chips, icon and secondary buttons, segmented controls). Menus, popovers, dialogs and drawers take a stronger fill because they carry more text. A surface nested in a glass surface stays clear instead of stacking glass on glass; `surface="solid"` opts one out.
+- What sits on glass follows it: inputs, tab tracks, badges, hover and selection highlights turn translucent too.
+- The fills keep body text at 4.5:1 or more over any backdrop. Reduced transparency and forced colours switch to solid surfaces, more contrast to the stronger fill, and browsers without backdrop blur get the stronger fill too.
+- The glass tokens are themable like every other colour: `--glass`, `--glass-strong`, `--glass-control`, `--glass-well`, `--glass-hover`, `--glass-border`, `--glass-highlight`, `--glass-sheen`, `--shadow-glass` and `--glass-filter` (the backdrop filter). By default they derive from `--card` and `--foreground`, so a theme carries over.
+- Without React: `class="tf-glass"` on a surface, or `data-surface="glass"` on any container.
+
+See the [map pattern](/{{kit}}/patterns/MapScreen/) for a full screen.
+
 ## Tailwind
 
 The preset maps the variables to shadcn's utility names, so `bg-primary text-primary-foreground`, `bg-muted text-muted-foreground`, `border-border`, `ring-ring` and `bg-sidebar` work, plus the kits' own names (`bg-surface`, `text-ink`).

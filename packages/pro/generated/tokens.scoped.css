@@ -233,6 +233,14 @@
   --on-frame-danger: var(--danger);
   --scrim: rgba(0,0,0,0.62);
   --scrim-strong: var(--scrim);
+  --glass: color-mix(in srgb, var(--card) 72%, transparent);
+  --glass-strong: color-mix(in srgb, var(--card) 88%, transparent);
+  --glass-control: color-mix(in srgb, var(--foreground) 7%, transparent);
+  --glass-well: color-mix(in srgb, var(--foreground) 5%, transparent);
+  --glass-hover: color-mix(in srgb, var(--foreground) 9%, transparent);
+  --glass-border: color-mix(in srgb, var(--foreground) 14%, transparent);
+  --glass-highlight: rgba(255, 255, 255, 0.07);
+  --glass-sheen: transparent;
   --bg-000: var(--background);
   --bg-100: var(--card);
   --bg-200: var(--muted);
@@ -290,6 +298,7 @@
   --shadow-lift: none;
   --shadow-float: 0 16px 40px rgba(0,0,0,0.55);
   --shadow-overlay: 0 16px 40px rgba(0,0,0,0.55);
+  --shadow-glass: 0 12px 32px rgba(0, 0, 0, 0.5);
   --button-radius: var(--radius-1);
   --field-radius: var(--radius-1);
   --badge-radius: var(--radius-1);
@@ -299,6 +308,7 @@
   --panel-shadow: none;
   --panel-pad: var(--space-4);
   --panel-gap: 1px;
+  --glass-filter: blur(16px) saturate(120%) brightness(0.8);
   color-scheme: dark;
 }
 @media (prefers-color-scheme: dark) {
@@ -364,6 +374,14 @@
     --on-frame-danger: var(--danger);
     --scrim: rgba(0,0,0,0.62);
     --scrim-strong: var(--scrim);
+    --glass: color-mix(in srgb, var(--card) 72%, transparent);
+    --glass-strong: color-mix(in srgb, var(--card) 88%, transparent);
+    --glass-control: color-mix(in srgb, var(--foreground) 7%, transparent);
+    --glass-well: color-mix(in srgb, var(--foreground) 5%, transparent);
+    --glass-hover: color-mix(in srgb, var(--foreground) 9%, transparent);
+    --glass-border: color-mix(in srgb, var(--foreground) 14%, transparent);
+    --glass-highlight: rgba(255, 255, 255, 0.07);
+    --glass-sheen: transparent;
     --bg-000: var(--background);
     --bg-100: var(--card);
     --bg-200: var(--muted);
@@ -421,6 +439,7 @@
     --shadow-lift: none;
     --shadow-float: 0 16px 40px rgba(0,0,0,0.55);
     --shadow-overlay: 0 16px 40px rgba(0,0,0,0.55);
+    --shadow-glass: 0 12px 32px rgba(0, 0, 0, 0.5);
     --button-radius: var(--radius-1);
     --field-radius: var(--radius-1);
     --badge-radius: var(--radius-1);
@@ -430,6 +449,7 @@
     --panel-shadow: none;
     --panel-pad: var(--space-4);
     --panel-gap: 1px;
+    --glass-filter: blur(16px) saturate(120%) brightness(0.8);
     color-scheme: dark;
   }
 }
@@ -496,6 +516,14 @@
     --on-frame-danger: var(--danger);
     --scrim: rgba(17,17,20,0.36);
     --scrim-strong: var(--scrim);
+    --glass: color-mix(in srgb, var(--card) 74%, transparent);
+    --glass-strong: color-mix(in srgb, var(--card) 88%, transparent);
+    --glass-control: color-mix(in srgb, var(--card) 55%, transparent);
+    --glass-well: color-mix(in srgb, var(--foreground) 5%, transparent);
+    --glass-hover: color-mix(in srgb, var(--foreground) 7%, transparent);
+    --glass-border: color-mix(in srgb, var(--foreground) 12%, transparent);
+    --glass-highlight: rgba(255, 255, 255, 0.7);
+    --glass-sheen: transparent;
     --bg-000: var(--background);
     --bg-100: var(--card);
     --bg-200: var(--muted);
@@ -553,6 +581,7 @@
     --shadow-lift: none;
     --shadow-float: 0 16px 40px rgba(17,17,20,0.12);
     --shadow-overlay: 0 16px 40px rgba(17,17,20,0.12);
+    --shadow-glass: 0 8px 24px rgba(17, 17, 20, 0.1);
     --button-radius: var(--radius-1);
     --field-radius: var(--radius-1);
     --badge-radius: var(--radius-1);
@@ -562,6 +591,7 @@
     --panel-shadow: none;
     --panel-pad: var(--space-4);
     --panel-gap: 1px;
+    --glass-filter: blur(16px) saturate(130%) brightness(1.04);
     color-scheme: light;
   }
 }
@@ -627,6 +657,14 @@
   --on-frame-danger: var(--danger);
   --scrim: rgba(0,0,0,0.62);
   --scrim-strong: var(--scrim);
+  --glass: color-mix(in srgb, var(--card) 72%, transparent);
+  --glass-strong: color-mix(in srgb, var(--card) 88%, transparent);
+  --glass-control: color-mix(in srgb, var(--foreground) 7%, transparent);
+  --glass-well: color-mix(in srgb, var(--foreground) 5%, transparent);
+  --glass-hover: color-mix(in srgb, var(--foreground) 9%, transparent);
+  --glass-border: color-mix(in srgb, var(--foreground) 14%, transparent);
+  --glass-highlight: rgba(255, 255, 255, 0.07);
+  --glass-sheen: transparent;
   --bg-000: var(--background);
   --bg-100: var(--card);
   --bg-200: var(--muted);
@@ -684,6 +722,7 @@
   --shadow-lift: none;
   --shadow-float: 0 16px 40px rgba(0,0,0,0.55);
   --shadow-overlay: 0 16px 40px rgba(0,0,0,0.55);
+  --shadow-glass: 0 12px 32px rgba(0, 0, 0, 0.5);
   --button-radius: var(--radius-1);
   --field-radius: var(--radius-1);
   --badge-radius: var(--radius-1);
@@ -693,6 +732,7 @@
   --panel-shadow: none;
   --panel-pad: var(--space-4);
   --panel-gap: 1px;
+  --glass-filter: blur(16px) saturate(120%) brightness(0.8);
   color-scheme: dark;
 }
 :where([data-kit="pro"][data-theme="light"], [data-kit="pro"] [data-theme="light"], [data-kit="pro"].light, [data-kit="pro"] .light) {
@@ -757,6 +797,14 @@
   --on-frame-danger: var(--danger);
   --scrim: rgba(17,17,20,0.36);
   --scrim-strong: var(--scrim);
+  --glass: color-mix(in srgb, var(--card) 74%, transparent);
+  --glass-strong: color-mix(in srgb, var(--card) 88%, transparent);
+  --glass-control: color-mix(in srgb, var(--card) 55%, transparent);
+  --glass-well: color-mix(in srgb, var(--foreground) 5%, transparent);
+  --glass-hover: color-mix(in srgb, var(--foreground) 7%, transparent);
+  --glass-border: color-mix(in srgb, var(--foreground) 12%, transparent);
+  --glass-highlight: rgba(255, 255, 255, 0.7);
+  --glass-sheen: transparent;
   --bg-000: var(--background);
   --bg-100: var(--card);
   --bg-200: var(--muted);
@@ -814,6 +862,7 @@
   --shadow-lift: none;
   --shadow-float: 0 16px 40px rgba(17,17,20,0.12);
   --shadow-overlay: 0 16px 40px rgba(17,17,20,0.12);
+  --shadow-glass: 0 8px 24px rgba(17, 17, 20, 0.1);
   --button-radius: var(--radius-1);
   --field-radius: var(--radius-1);
   --badge-radius: var(--radius-1);
@@ -823,6 +872,7 @@
   --panel-shadow: none;
   --panel-pad: var(--space-4);
   --panel-gap: 1px;
+  --glass-filter: blur(16px) saturate(130%) brightness(1.04);
   color-scheme: light;
 }
 @media (pointer: coarse) {
@@ -847,4 +897,30 @@
   --density-pad-x: var(--space-4);
   --density-font-size: 14px;
   --density-line-height: 20px;
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :where([data-kit="pro"], [data-kit="pro"][data-theme], [data-kit="pro"] [data-theme], [data-kit="pro"].dark, [data-kit="pro"] .dark, [data-kit="pro"].light, [data-kit="pro"] .light) {
+    --glass: var(--glass-strong);
+  }
+}
+@media (prefers-contrast: more) {
+  :where([data-kit="pro"], [data-kit="pro"][data-theme], [data-kit="pro"] [data-theme], [data-kit="pro"].dark, [data-kit="pro"] .dark, [data-kit="pro"].light, [data-kit="pro"] .light) {
+    --glass: var(--glass-strong);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :where([data-kit="pro"], [data-kit="pro"][data-theme], [data-kit="pro"] [data-theme], [data-kit="pro"].dark, [data-kit="pro"] .dark, [data-kit="pro"].light, [data-kit="pro"] .light) {
+    --glass: var(--card);
+    --glass-strong: var(--popover);
+    --glass-sheen: transparent;
+    --glass-filter: none;
+  }
+}
+@media (forced-colors: active) {
+  :where([data-kit="pro"], [data-kit="pro"][data-theme], [data-kit="pro"] [data-theme], [data-kit="pro"].dark, [data-kit="pro"] .dark, [data-kit="pro"].light, [data-kit="pro"] .light) {
+    --glass: var(--card);
+    --glass-strong: var(--popover);
+    --glass-sheen: transparent;
+    --glass-filter: none;
+  }
 }

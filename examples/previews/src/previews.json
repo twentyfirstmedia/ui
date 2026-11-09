@@ -559,6 +559,27 @@
     ]
   },
   {
+    "name": "MapScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 720,
+    "components": [
+      "Badge",
+      "Button",
+      "ButtonGroup",
+      "Chip",
+      "Dock",
+      "FloatingLayout",
+      "IconButton",
+      "KeyValue",
+      "MapView",
+      "Panel",
+      "SearchField",
+      "Segmented",
+      "Switch"
+    ]
+  },
+  {
     "name": "LocaleField",
     "group": "Forms",
     "width": 1000,
@@ -1126,6 +1147,22 @@
     "width": 960,
     "height": 420,
     "components": ["Sidebar", "Avatar"]
+  },
+  {
+    "name": "FloatingLayout",
+    "group": "Navigation",
+    "width": 1000,
+    "height": 520,
+    "components": [
+      "Badge",
+      "FloatingLayout",
+      "IconButton",
+      "KeyValue",
+      "MapView",
+      "Panel",
+      "SearchField",
+      "Segmented"
+    ]
   },
   {
     "name": "SelectMenu",

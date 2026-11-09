@@ -152,6 +152,29 @@ export function tokensCss(kit: Kit, t: KitTokens, scoped = false): string {
       Object.entries(t.density[d]).map(([n, v]) => `--${n}: ${ref(v)};`),
     );
   }
+  css += glassFallbacks(k, self);
+  return css;
+}
+
+/**
+ * Glass gives way when the reader or the browser asks for it: solid surfaces without blur for
+ * reduced transparency and forced colours, the stronger fill for more contrast or without
+ * backdrop blur. Last in the file, on every element that declares theme tokens, so it wins.
+ */
+function glassFallbacks(k: string, self: (attr: string) => string): string {
+  const where = [k, self("[data-theme]"), self(".dark"), self(".light")].join(", ");
+  const solid = [
+    "--glass: var(--card);",
+    "--glass-strong: var(--popover);",
+    "--glass-sheen: transparent;",
+    "--glass-filter: none;",
+  ];
+  const strong = ["--glass: var(--glass-strong);"];
+  let css = "";
+  css += `@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {\n${tokenBlock(where, strong, "  ")}}\n`;
+  css += `@media (prefers-contrast: more) {\n${tokenBlock(where, strong, "  ")}}\n`;
+  css += `@media (prefers-reduced-transparency: reduce) {\n${tokenBlock(where, solid, "  ")}}\n`;
+  css += `@media (forced-colors: active) {\n${tokenBlock(where, solid, "  ")}}\n`;
   return css;
 }
 

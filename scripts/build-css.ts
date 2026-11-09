@@ -113,6 +113,8 @@ export function scope(kit: Kit, css: string, from?: string): string {
       if (t === "body") return [k, `${k} body`];
       if (t === "html" || t === ":root") return [k];
       if (/^(html|body|:root)\b/.test(t)) return [t.replace(/^(html|body|:root)/, k)];
+      // a data attribute (data-surface …) may sit on the element that carries data-kit as well
+      if (/^\[data-/.test(t)) return [`${k}${t}`, `${k} ${t}`];
       return [`${k} ${t}`];
     });
   });
