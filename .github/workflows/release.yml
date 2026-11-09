@@ -15,7 +15,9 @@ env:
 permissions:
   contents: write
   pull-requests: write
-  id-token: write # npm provenance: each release links back to this workflow run
+  # Trusted Publishing and provenance: npm checks this workflow's identity, and each
+  # release links back to the run that built it
+  id-token: write
 
 jobs:
   release:
@@ -29,6 +31,8 @@ jobs:
           node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
+      # Trusted Publishing needs npm 11.5.1 or later; scripts/publish.ts publishes with it
+      - run: npm install -g npm@11.21.1
       - run: pnpm install --frozen-lockfile
       # Opens a "Version packages" PR while changesets are pending; publishes to
       # npmjs.com (public, with provenance) once that PR is merged.
@@ -40,5 +44,5 @@ jobs:
           commit: "Version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # only a fallback: with a Trusted Publisher set up on npmjs.com, npm uses OIDC
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: "true"

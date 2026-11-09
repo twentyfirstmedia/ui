@@ -3,7 +3,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "no
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { PassThrough } from "node:stream";
+import { PassThrough, Writable } from "node:stream";
 import { fileURLToPath } from "node:url";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
@@ -360,6 +360,29 @@ describe("mcp stdio", () => {
     expect("result" in lines[1]! && (lines[1].result as { tools: unknown[] }).tools).toHaveLength(
       8,
     );
+  });
+
+  it("stops quietly when the client closes the output (EPIPE)", async () => {
+    const input = new PassThrough();
+    const errors: string[] = [];
+    let writes = 0;
+    const output = new Writable({
+      write(_chunk, _enc, cb) {
+        writes++;
+        const e = Object.assign(new Error("write EPIPE"), { code: "EPIPE" });
+        cb(e);
+      },
+    });
+    const done = serveStdio(createServer(k, { kit: "pro" }), {
+      input,
+      output,
+      onError: (m) => errors.push(m),
+    });
+    input.write('{"jsonrpc":"2.0","id":1,"method":"ping"}\n');
+    input.write('{"jsonrpc":"2.0","id":2,"method":"ping"}\n');
+    await done; // resolves although the input never ends
+    expect(writes).toBe(1);
+    expect(errors).toEqual([]);
   });
 
   it("talks to the official MCP client over stdio", async () => {
