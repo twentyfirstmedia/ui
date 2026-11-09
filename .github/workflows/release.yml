@@ -35,7 +35,7 @@ jobs:
       - run: npm install -g npm@11.21.1
       - run: pnpm install --frozen-lockfile
       # Opens a "Version packages" PR while changesets are pending; publishes to
-      # npmjs.com (public, with provenance) once that PR is merged.
+      # npmjs.com (public, with provenance, via Trusted Publishing) once that PR is merged.
       - uses: changesets/action@v1
         with:
           version: pnpm changeset version
@@ -44,5 +44,4 @@ jobs:
           commit: "Version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # only a fallback: with a Trusted Publisher set up on npmjs.com, npm uses OIDC
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # no npm token: npmjs.com trusts this workflow (Trusted Publishing, OIDC)
