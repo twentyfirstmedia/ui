@@ -1,6 +1,6 @@
 {
   "name": "@twentyfirstmedia/ui",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "CLI and MCP server for the Twentyfirst UI kits: set up an app, copy components, give coding agents the docs.",
   "license": "MIT",
   "author": "Twentyfirst Media (https://twentyfirst.media)",

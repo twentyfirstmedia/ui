@@ -1,0 +1,17 @@
+# @twentyfirstmedia/ui
+
+## 0.1.0
+
+### Minor Changes
+
+- [#15](https://github.com/twentyfirstmedia/ui/pull/15) [`2c5ddb6`](https://github.com/twentyfirstmedia/ui/commit/2c5ddb6715c7c296a3379ea241158218185e9262) Thanks [@robintrepte](https://github.com/robintrepte)! - The CLI ships an MCP server for coding agents: `twentyfirst-ui mcp` (stdio, offline, the docs are bundled) with the tools `search_docs`, `list_components`, `get_component`, `get_pattern`, `get_guide`, `get_tokens`, `list_icons` and `check_usage`, every page as a resource, and the prompts `build_screen` and `review_ui`. `twentyfirst-ui mcp init` registers it for Claude Code, Cursor and VS Code and adds the kit rules to `AGENTS.md`.
+
+- [#8](https://github.com/twentyfirstmedia/ui/pull/8) [`2db7b83`](https://github.com/twentyfirstmedia/ui/commit/2db7b83266449602d1209c346b44ad62a66c416d) Thanks [@robintrepte](https://github.com/robintrepte)! - First release: every component of the Halo reference in `ui-core`, the Halo and Pro kits with the same components, props and markup (switchable at runtime via `data-kit`), tokens and a Tailwind v4 preset per kit, self-hosted fonts and the CLI (`init`, `add`, `list`, `diff`).
+
+- [#16](https://github.com/twentyfirstmedia/ui/pull/16) [`350ca53`](https://github.com/twentyfirstmedia/ui/commit/350ca53ea6b1a4dd77759449ac4b56bb8ed2a62a) Thanks [@robintrepte](https://github.com/robintrepte)! - Open source under the MIT license and published on npmjs.com: install with `npm i @twentyfirstmedia/halo` (or `pro`), no registry setup or token. `twentyfirst-ui init` no longer writes an `.npmrc`.
+
+- [#13](https://github.com/twentyfirstmedia/ui/pull/13) [`559cb2d`](https://github.com/twentyfirstmedia/ui/commit/559cb2df5ac851e71ad0f3808b1442f7f79a6401) Thanks [@robintrepte](https://github.com/robintrepte)! - English only: built-in text is plain English and overridable through props; numbers, money, percentages and dates format with Intl in en-US (`formatNumber`, `formatMoney`, `formatPercent`, `formatDate`).
+  
+  New components in both kits: Accordion, Separator, AspectRatio, Label, Toggle, ToggleGroup, ButtonGroup, ScrollArea, HoverCard, Carousel, Menubar, NavigationMenu, Sidebar, SelectMenu, Form and ResizablePanels. Menu gains keyboard navigation, typeahead, submenus, checkbox/radio and disabled items; Tabs render panels; Drawer takes `side`; Popover flips when there is no room; CommandPalette takes `loading`, `empty` and `onQueryChange`; Button and IconButton take `asChild`; inputs take `id`, `name` and `required`.
+
+- [#18](https://github.com/twentyfirstmedia/ui/pull/18) [`0f19447`](https://github.com/twentyfirstmedia/ui/commit/0f19447291603a148759d10b7a2bf13ea7e95cb6) Thanks [@robintrepte](https://github.com/robintrepte)! - shadcn-style theming in both kits. The kits use shadcn/ui's theme variables (`background`, `foreground`, `card`, `popover`, `primary`, `secondary`, `muted`, `accent`, `destructive`, `border`, `input`, `ring`, `radius`, `chart-1` … `chart-5`, `sidebar-*`) and every component reads them, so a pasted shadcn theme restyles everything, light and dark. The old `--accent`/`--on-accent`/`--accent-hover` are now `--primary`/`--primary-foreground`/`--primary-hover`; `--accent` is the highlight under the pointer, as in shadcn. Token blocks have zero specificity and dark mode also follows the `.dark` class. New: `themeCss`, `parseThemeCss`, `brandTheme`, `THEME_PRESETS` and preset CSS files (`themes/blue.css` …), `UIProvider tokens`, `twentyfirst-ui theme`, Tailwind utilities with shadcn's names.
