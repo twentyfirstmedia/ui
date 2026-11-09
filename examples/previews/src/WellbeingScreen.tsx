@@ -9,10 +9,10 @@ import {
   PageHeader,
   Panel,
   ProgressRing,
+  Segmented,
   Stagger,
   StatTile,
   Textarea,
-  ToggleGroup,
   UIProvider,
 } from "@twentyfirstmedia/ui-core";
 
@@ -129,16 +129,11 @@ function App() {
             />
           </Panel>
           <Panel title="How do you feel?" subtitle="3 of 4 habits done">
-            <ToggleGroup
+            <Segmented
               label="Mood"
-              type="single"
-              size="sm"
-              defaultValue={["calm"]}
-              items={[
-                { value: "tired", label: "Tired" },
-                { value: "calm", label: "Calm" },
-                { value: "great", label: "Great" },
-              ]}
+              block
+              defaultValue="Calm"
+              options={["Tired", "Calm", "Great"]}
             />
             <Checkbox defaultChecked>Drink 2 l of water</Checkbox>
             <Checkbox defaultChecked>10 minutes outside</Checkbox>

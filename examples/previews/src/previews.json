@@ -983,10 +983,10 @@
       "PageHeader",
       "Panel",
       "ProgressRing",
+      "Segmented",
       "Stagger",
       "StatTile",
       "Textarea",
-      "ToggleGroup",
       "UIProvider"
     ]
   },
