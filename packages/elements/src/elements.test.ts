@@ -87,6 +87,15 @@ describe("attribute conversion", () => {
 });
 
 describe("rendering", () => {
+  it("keeps the props of a generic component (DataTable<R>)", async () => {
+    const host = mount(`<tf-data-table></tf-data-table>`);
+    const el = host.querySelector("tf-data-table") as HTMLElementTagNameMap["tf-data-table"];
+    el.columns = [{ key: "name", label: "Name" }];
+    el.rows = [{ id: 1, name: "Ava Vogel" }];
+    await settle();
+    expect(host.querySelectorAll("tbody tr").length).toBe(1);
+    expect(host.querySelector("tbody")?.textContent).toContain("Ava Vogel");
+  });
   it("moves ARIA attributes a component takes to its inner element", async () => {
     const host = mount(`<tf-button aria-expanded="true" aria-controls="menu">More</tf-button>`);
     await settle();
