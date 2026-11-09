@@ -2108,6 +2108,17 @@ export interface ImageVariantsProps extends BaseProps {
   tint?: Tint;
   actions?: ReactNode;
 }
+/** `referrerPolicy` values of `<img>`. */
+export type ImageReferrerPolicy =
+  | ""
+  | "no-referrer"
+  | "no-referrer-when-downgrade"
+  | "origin"
+  | "origin-when-cross-origin"
+  | "same-origin"
+  | "strict-origin"
+  | "strict-origin-when-cross-origin"
+  | "unsafe-url";
 export interface GalleryItem {
   src?: string;
   alt?: string;
@@ -2117,6 +2128,13 @@ export interface GalleryItem {
 }
 export interface GalleryProps extends BaseProps {
   items: GalleryItem[];
+  /**
+   * Loading of the main image: `"lazy"` (default) waits until the gallery is near the viewport;
+   * use `"eager"` for a gallery at the top of the page. Thumbnails always load lazily.
+   */
+  loading?: "lazy" | "eager";
+  /** `referrerPolicy` of every image, e.g. `"no-referrer"` for photos from other hosts. */
+  referrerPolicy?: ImageReferrerPolicy;
   start?: number;
   ratio?: string;
   thumbs?: boolean;
@@ -2136,6 +2154,17 @@ export interface BeforeAfterProps extends BaseProps {
   ratio?: string;
   beforeLabel?: string;
   afterLabel?: string;
+  /** Accessible name of the slider (default "Compare before and after"). */
+  label?: string;
+  /**
+   * What screen readers hear for a position (0–100, the share of "before"). Default:
+   * "Before 40%, After 60%", with your `beforeLabel`/`afterLabel`.
+   */
+  valueText?: (percent: number) => string;
+  /** Loading of both images (default `"lazy"`). */
+  loading?: "lazy" | "eager";
+  /** `referrerPolicy` of both images. */
+  referrerPolicy?: ImageReferrerPolicy;
 }
 
 /* ── Kit 5: real estate ── */
