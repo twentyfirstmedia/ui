@@ -298,8 +298,17 @@ export interface BreadcrumbProps extends BaseProps {
   items: string[];
 }
 export interface PaginationProps extends BaseProps {
+  /** Number of pages. */
   total: number;
+  /**
+   * The current page (1-based). Controlled together with `onChange`; without `onChange` it is
+   * only the start page, as in earlier versions (prefer `defaultPage` for that).
+   */
   page?: number;
+  /** Start page when uncontrolled (default 1). */
+  defaultPage?: number;
+  /** A page was picked (previous, next or a number); receives the new 1-based page. */
+  onChange?: (page: number) => void;
 }
 export interface AppShellProps extends BaseProps {
   active?: string;
