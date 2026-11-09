@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useStrings } from "../context.js";
+import { useFormat, useStrings } from "../context.js";
 import { MEDIA_STRINGS } from "../strings.js";
 import { useControlled } from "../hooks.js";
 import { cx } from "../cx.js";
@@ -113,9 +113,16 @@ export function Gallery(p: GalleryProps) {
       document.removeEventListener("keydown", k);
     };
   });
-  function pic(it: GalleryItem, cls: string) {
+  function pic(it: GalleryItem, cls: string, loading: "lazy" | "eager" = p.loading || "lazy") {
     return it.src ? (
-      <img className={cls} src={it.src} alt={it.alt || ""} />
+      <img
+        className={cls}
+        src={it.src}
+        alt={it.alt || ""}
+        loading={loading}
+        decoding="async"
+        referrerPolicy={p.referrerPolicy}
+      />
     ) : (
       <div className={cx(cls, "tf-gallery-ph", "tf-t-" + (it.tint || "sky"))}>
         {it.art || <Icon name="image" size={28} />}
@@ -181,7 +188,7 @@ export function Gallery(p: GalleryProps) {
               }}
               aria-label={it.caption || it.alt || (it.src ? t.imageN(k + 1) : undefined)}
             >
-              {pic(it, "tf-gallery-thumb")}
+              {pic(it, "tf-gallery-thumb", "lazy")}
             </button>
           ))}
         </div>
@@ -198,7 +205,7 @@ export function Gallery(p: GalleryProps) {
               }}
             />
             <div className="tf-lightbox-stage">
-              {pic(cur, "tf-gallery-img")}
+              {pic(cur, "tf-gallery-img", "eager")}
               {n > 1 && (
                 <IconButton
                   icon="chevronLeft"
@@ -232,7 +239,11 @@ export function Gallery(p: GalleryProps) {
 
 export function BeforeAfter(p: BeforeAfterProps) {
   const t = useStrings(MEDIA_STRINGS);
+  const fm = useFormat();
   const pos = React.useState(p.start != null ? p.start : 50),
+    pct = Math.round(pos[0]),
+    before = p.beforeLabel || t.before,
+    after = p.afterLabel || t.after,
     ref = React.useRef<HTMLDivElement>(null),
     drag = React.useRef(false);
   function at(e: { clientX: number }) {
@@ -242,7 +253,14 @@ export function BeforeAfter(p: BeforeAfterProps) {
   }
   function pane(x: MediaPane | undefined, cls: string) {
     return x && x.src ? (
-      <img className={cls} src={x.src} alt={x.alt || ""} />
+      <img
+        className={cls}
+        src={x.src}
+        alt={x.alt || ""}
+        loading={p.loading || "lazy"}
+        decoding="async"
+        referrerPolicy={p.referrerPolicy}
+      />
     ) : (
       <div className={cx(cls, "tf-ba-ph", x && x.tint && "tf-t-" + x.tint)}>{x && x.art}</div>
     );
@@ -275,8 +293,8 @@ export function BeforeAfter(p: BeforeAfterProps) {
       >
         {pane(p.before, "tf-ba-img")}
       </div>
-      <span className="tf-ba-tag left">{p.beforeLabel || t.before}</span>
-      <span className="tf-ba-tag right">{p.afterLabel || t.after}</span>
+      <span className="tf-ba-tag left">{before}</span>
+      <span className="tf-ba-tag right">{after}</span>
       <div
         className="tf-ba-line"
         style={{
@@ -287,13 +305,33 @@ export function BeforeAfter(p: BeforeAfterProps) {
           className="tf-ba-knob"
           role="slider"
           tabIndex={0}
-          aria-label={t.compareBeforeAfter}
+          aria-label={p.label || t.compareBeforeAfter}
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-valuenow={Math.round(pos[0])}
+          aria-valuenow={pct}
+          aria-valuetext={
+            p.valueText
+              ? p.valueText(pct)
+              : `${before} ${fm.formatPercent(pct)}, ${after} ${fm.formatPercent(100 - pct)}`
+          }
           onKeyDown={(e) => {
-            if (e.key === "ArrowLeft") pos[1](Math.max(0, pos[0] - 5));
-            if (e.key === "ArrowRight") pos[1](Math.min(100, pos[0] + 5));
+            const to =
+              e.key === "ArrowLeft" || e.key === "ArrowDown"
+                ? pos[0] - 5
+                : e.key === "ArrowRight" || e.key === "ArrowUp"
+                  ? pos[0] + 5
+                  : e.key === "PageDown"
+                    ? pos[0] - 25
+                    : e.key === "PageUp"
+                      ? pos[0] + 25
+                      : e.key === "Home"
+                        ? 0
+                        : e.key === "End"
+                          ? 100
+                          : null;
+            if (to == null) return;
+            e.preventDefault();
+            pos[1](Math.max(0, Math.min(100, to)));
           }}
         >
           <Icon name="chevronLeft" size={12} />

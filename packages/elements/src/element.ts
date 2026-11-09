@@ -34,8 +34,12 @@ type AnyFn = (...args: unknown[]) => unknown;
 
 /** Events this package dispatched (everything else of the same type is the inner DOM's). */
 const OURS = new WeakSet<Event>();
-/** Global attributes with side effects on the host (tooltip, ARIA role, language): taken as props. */
+/**
+ * Global attributes with side effects on the host (tooltip, ARIA role and states, language): when
+ * a component takes them as props they move to its inner element.
+ */
 const STRIP = new Set(["title", "role", "lang"]);
+const stripped = (name: string) => STRIP.has(name) || name.startsWith("aria-");
 /** Host properties that keep their native meaning even when a component has a prop of that name. */
 const NATIVE = new Set([
   "id",
@@ -320,7 +324,7 @@ export class TfElement extends HTMLElement {
       const v = fromAttribute(p, value);
       if (v === undefined) this._values.delete(p.name);
       else this._values.set(p.name, v);
-      if (STRIP.has(name) && value !== null) {
+      if (stripped(name) && value !== null) {
         this._stripping.add(name);
         this.removeAttribute(name);
       }

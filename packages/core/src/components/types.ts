@@ -21,23 +21,51 @@ export interface IconProps extends BaseProps {
   label?: string;
   className?: string;
 }
-export interface ButtonProps extends BaseProps {
+/**
+ * Native attributes `Button` and `IconButton` pass to their `<button>` (or, with `asChild`, to the
+ * child). Every other attribute of `<button>` (`data-*`, events such as `onKeyDown`, `ref` in
+ * React 19) is passed on as well; these are the ones worth knowing.
+ */
+export interface NativeButtonProps {
+  id?: string;
+  /** Form field name and value, sent with the form when this button submits it. */
+  name?: string;
+  value?: string;
+  /** The id of the form this button belongs to, when it sits outside it. */
+  form?: string;
+  title?: string;
+  tabIndex?: number;
+  autoFocus?: boolean;
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
+  "aria-describedby"?: string;
+  /** For disclosure and menu triggers: whether what the button controls is open. */
+  "aria-expanded"?: boolean | "true" | "false";
+  "aria-controls"?: string;
+  "aria-haspopup"?: boolean | "true" | "false" | "menu" | "listbox" | "tree" | "grid" | "dialog";
+  /** For toggle buttons. */
+  "aria-pressed"?: boolean | "true" | "false" | "mixed";
+  "aria-current"?: boolean | "true" | "false" | "page" | "step" | "location" | "date" | "time";
+}
+export interface ButtonProps extends BaseProps, NativeButtonProps {
   variant?: "primary" | "secondary" | "soft" | "ghost" | "danger" | "danger-solid";
   size?: "md" | "sm";
   icon?: IconName;
   iconRight?: IconName;
   disabled?: boolean;
-  type?: "button" | "submit";
+  type?: "button" | "submit" | "reset";
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   children?: ReactNode;
   /** Render the single child element (a link, a router Link) with the button's look instead of a <button>. */
   asChild?: boolean;
 }
-export interface IconButtonProps extends BaseProps {
+export interface IconButtonProps extends BaseProps, NativeButtonProps {
   icon: IconName;
+  /** Accessible name and tooltip (`aria-label` and `title`); `aria-label` or `title` override them. */
   label: string;
   variant?: "soft" | "solid" | "outline" | "ghost";
   size?: "sm" | "md" | "lg";
+  type?: "button" | "submit" | "reset";
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
   /** Render the single child element (a link) with the button's look; the icon is placed inside it. */
@@ -300,8 +328,17 @@ export interface BreadcrumbProps extends BaseProps {
   items: string[];
 }
 export interface PaginationProps extends BaseProps {
+  /** Number of pages. */
   total: number;
+  /**
+   * The current page (1-based). Controlled together with `onChange`; without `onChange` it is
+   * only the start page, as in earlier versions (prefer `defaultPage` for that).
+   */
   page?: number;
+  /** Start page when uncontrolled (default 1). */
+  defaultPage?: number;
+  /** A page was picked (previous, next or a number); receives the new 1-based page. */
+  onChange?: (page: number) => void;
 }
 export interface AppShellProps extends BaseProps {
   active?: string;
@@ -609,6 +646,7 @@ export interface FormFieldProps extends BaseProps {
   children?: ReactNode;
 }
 export interface TextFieldProps extends Omit<FormFieldProps, "children"> {
+  /** Input type (`"text"` by default): `"email"`, `"number"`, `"tel"`, `"url"`, `"password"` … */
   type?: string;
   icon?: IconName;
   suffix?: ReactNode;
@@ -616,7 +654,23 @@ export interface TextFieldProps extends Omit<FormFieldProps, "children"> {
   defaultValue?: string;
   placeholder?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   autoComplete?: string;
+  autoFocus?: boolean;
+  /** Smallest value for `type="number"`, `"date"` and the like (native `min`). */
+  min?: number | string;
+  /** Largest value (native `max`). */
+  max?: number | string;
+  /** Step between valid values (native `step`), e.g. `1` for whole numbers or `"any"`. */
+  step?: number | string;
+  /** Fewest characters (native `minlength`). */
+  minLength?: number;
+  /** Most characters (native `maxlength`). */
+  maxLength?: number;
+  /** Pattern the value must match (native `pattern`). */
+  pattern?: string;
+  /** Virtual keyboard on touch devices (native `inputmode`), e.g. `"numeric"` or `"decimal"`. */
+  inputMode?: "none" | "text" | "tel" | "url" | "email" | "numeric" | "decimal" | "search";
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -722,13 +776,34 @@ export interface UploadFile {
   id: string;
   name: string;
   size: number;
+  /** Upload progress 0–100: a bar while below 100, "uploaded" at 100. */
   progress: number;
+  /** The picked or dropped file (set by FileDrop for files it adds). */
+  file?: File;
 }
 export interface FileDropProps extends BaseProps {
+  /** The listed files (controlled); set `progress` per file to show real upload progress. */
   files?: UploadFile[];
+  /** The list changed: files added (with their `file`) or removed. */
   onChange?: (f: UploadFile[]) => void;
+  /**
+   * The person picked or dropped files: the real `File` objects, after `accept` and `multiple`.
+   * Upload them yourself. To show progress, control `files` and set each `progress`; an
+   * uncontrolled list shows them with their size only.
+   */
+  onFiles?: (files: File[]) => void;
+  /** Dropped files that do not match `accept` (show an inline Alert). */
+  onReject?: (files: File[]) => void;
+  /** A listed file was removed or its upload cancelled. */
+  onRemove?: (f: UploadFile) => void;
+  /**
+   * Animate made-up progress for added files, as a demo of the look. Default: on without
+   * `onFiles` (as before), off with it.
+   */
+  simulateProgress?: boolean;
   title?: string;
   hint?: string;
+  /** Accepted types, as for `<input type="file">` ("image/*,.pdf"); also checked on drop. */
   accept?: string;
   multiple?: boolean;
 }
@@ -1116,6 +1191,8 @@ export interface PlanCardProps extends BaseProps {
   flag?: string;
   current?: boolean;
   cta?: string;
+  /** Disable the button, e.g. while a checkout starts or when the plan cannot be picked. */
+  disabled?: boolean;
   onPick?: () => void;
 }
 
@@ -2110,6 +2187,17 @@ export interface ImageVariantsProps extends BaseProps {
   tint?: Tint;
   actions?: ReactNode;
 }
+/** `referrerPolicy` values of `<img>`. */
+export type ImageReferrerPolicy =
+  | ""
+  | "no-referrer"
+  | "no-referrer-when-downgrade"
+  | "origin"
+  | "origin-when-cross-origin"
+  | "same-origin"
+  | "strict-origin"
+  | "strict-origin-when-cross-origin"
+  | "unsafe-url";
 export interface GalleryItem {
   src?: string;
   alt?: string;
@@ -2119,6 +2207,13 @@ export interface GalleryItem {
 }
 export interface GalleryProps extends BaseProps {
   items: GalleryItem[];
+  /**
+   * Loading of the main image: `"lazy"` (default) waits until the gallery is near the viewport;
+   * use `"eager"` for a gallery at the top of the page. Thumbnails always load lazily.
+   */
+  loading?: "lazy" | "eager";
+  /** `referrerPolicy` of every image, e.g. `"no-referrer"` for photos from other hosts. */
+  referrerPolicy?: ImageReferrerPolicy;
   start?: number;
   ratio?: string;
   thumbs?: boolean;
@@ -2138,6 +2233,17 @@ export interface BeforeAfterProps extends BaseProps {
   ratio?: string;
   beforeLabel?: string;
   afterLabel?: string;
+  /** Accessible name of the slider (default "Compare before and after"). */
+  label?: string;
+  /**
+   * What screen readers hear for a position (0–100, the share of "before"). Default:
+   * "Before 40%, After 60%", with your `beforeLabel`/`afterLabel`.
+   */
+  valueText?: (percent: number) => string;
+  /** Loading of both images (default `"lazy"`). */
+  loading?: "lazy" | "eager";
+  /** `referrerPolicy` of both images. */
+  referrerPolicy?: ImageReferrerPolicy;
 }
 
 /* ── Kit 5: real estate ── */

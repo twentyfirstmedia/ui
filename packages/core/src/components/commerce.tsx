@@ -512,7 +512,7 @@ export function PlanCard(p: PlanCardProps) {
       </div>
       <Button
         variant={p.current ? "soft" : p.featured ? "primary" : "secondary"}
-        disabled={p.current}
+        disabled={p.current || p.disabled}
         onClick={p.onPick}
         className="tf-plan-cta"
       >
