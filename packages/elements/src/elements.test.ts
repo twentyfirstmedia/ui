@@ -87,6 +87,14 @@ describe("attribute conversion", () => {
 });
 
 describe("rendering", () => {
+  it("moves ARIA attributes a component takes to its inner element", async () => {
+    const host = mount(`<tf-button aria-expanded="true" aria-controls="menu">More</tf-button>`);
+    await settle();
+    const btn = host.querySelector("button")!;
+    expect(btn.getAttribute("aria-expanded")).toBe("true");
+    expect(btn.getAttribute("aria-controls")).toBe("menu");
+    expect(host.querySelector("tf-button")!.hasAttribute("aria-expanded")).toBe(false);
+  });
   it("maps attributes to props and re-renders when they change", async () => {
     const host = mount(`<tf-button variant="secondary" icon-right="arrowRight">Save</tf-button>`);
     await settle();

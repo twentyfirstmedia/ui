@@ -57,14 +57,28 @@ export function readProps(): Record<string, Prop[]> {
     true,
   );
   const props: Record<string, Prop[]> = {};
+  const native: Prop[] = [];
   const docOf = (n: ts.Node) =>
     ts
       .getJSDocCommentsAndTags(n)
       .map((d) => (typeof d.comment === "string" ? d.comment : ""))
       .join(" ")
       .trim();
+  // the native attributes Button and IconButton pass on, listed with each of them
+  sf.forEachChild((n) => {
+    if (ts.isInterfaceDeclaration(n) && n.name.text === "NativeButtonProps")
+      for (const m of n.members)
+        if (ts.isPropertySignature(m) && m.name)
+          native.push({
+            name: m.name.getText(sf).replace(/^"|"$/g, ""),
+            type: m.type ? m.type.getText(sf).replace(/\s+/g, " ") : "unknown",
+            optional: !!m.questionToken,
+            doc: docOf(m),
+          });
+  });
   sf.forEachChild((n) => {
     if (!ts.isInterfaceDeclaration(n) || !n.name.text.endsWith("Props")) return;
+    if (n.name.text === "NativeButtonProps") return;
     const list: Prop[] = [];
     for (const m of n.members) {
       if (!ts.isPropertySignature(m) || !m.name) continue;
@@ -76,6 +90,7 @@ export function readProps(): Record<string, Prop[]> {
       });
     }
     const heritage = (n.heritageClauses ?? []).flatMap((h) => h.types.map((t) => t.getText(sf)));
+    if (heritage.includes("NativeButtonProps")) list.push(...native);
     if (heritage.some((h) => h.includes("FieldProps")))
       list.push(
         { name: "label", type: "string", optional: true, doc: "" },
