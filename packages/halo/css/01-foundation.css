@@ -974,7 +974,7 @@ select.tf-input {
 @keyframes tf-rise {
   from {
     opacity: 0;
-    transform: translateY(14px) scale(0.985);
+    transform: translateY(calc(14px * var(--motion-travel))) scale(0.985);
   }
   to {
     opacity: 1;
@@ -992,7 +992,7 @@ select.tf-input {
 @keyframes tf-drop {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(calc(-10px * var(--motion-travel)));
   }
   to {
     opacity: 1;
@@ -1002,7 +1002,7 @@ select.tf-input {
 @keyframes tf-slide-in {
   from {
     opacity: 0;
-    transform: translateX(24px);
+    transform: translateX(calc(24px * var(--motion-travel)));
   }
   to {
     opacity: 1;
@@ -1012,7 +1012,8 @@ select.tf-input {
 @keyframes tf-slide-up {
   from {
     opacity: 0;
-    transform: translate(0, 28px) scale(0.9);
+    transform: translate(calc(0px * var(--motion-travel)), calc(28px * var(--motion-travel)))
+      scale(0.9);
   }
   to {
     opacity: 1;
@@ -1071,47 +1072,60 @@ select.tf-input {
 }
 
 .tf-in {
+  --enter-delay: var(--d, 0ms);
   animation: tf-rise var(--dur-enter) var(--ease-out) both;
-  animation-delay: var(--d, 0ms);
+  animation-delay: var(--enter-delay);
 }
 .tf-stagger > * {
   animation: tf-rise var(--dur-enter) var(--ease-out) both;
 }
 .tf-stagger > :nth-child(1) {
-  animation-delay: calc(var(--base, 0ms) + var(--stagger-step) * 0);
+  --enter-delay: calc(var(--base, 0ms) + var(--stagger-step) * 0);
+  animation-delay: var(--enter-delay);
 }
 .tf-stagger > :nth-child(2) {
-  animation-delay: calc(var(--base, 0ms) + var(--stagger-step) * 1);
+  --enter-delay: calc(var(--base, 0ms) + var(--stagger-step) * 1);
+  animation-delay: var(--enter-delay);
 }
 .tf-stagger > :nth-child(3) {
-  animation-delay: calc(var(--base, 0ms) + var(--stagger-step) * 2);
+  --enter-delay: calc(var(--base, 0ms) + var(--stagger-step) * 2);
+  animation-delay: var(--enter-delay);
 }
 .tf-stagger > :nth-child(4) {
-  animation-delay: calc(var(--base, 0ms) + var(--stagger-step) * 3);
+  --enter-delay: calc(var(--base, 0ms) + var(--stagger-step) * 3);
+  animation-delay: var(--enter-delay);
 }
 .tf-stagger > :nth-child(5) {
-  animation-delay: calc(var(--base, 0ms) + var(--stagger-step) * 4);
+  --enter-delay: calc(var(--base, 0ms) + var(--stagger-step) * 4);
+  animation-delay: var(--enter-delay);
 }
 .tf-stagger > :nth-child(6) {
-  animation-delay: calc(var(--base, 0ms) + var(--stagger-step) * 5);
+  --enter-delay: calc(var(--base, 0ms) + var(--stagger-step) * 5);
+  animation-delay: var(--enter-delay);
 }
 .tf-stagger > :nth-child(7) {
-  animation-delay: calc(var(--base, 0ms) + var(--stagger-step) * 6);
+  --enter-delay: calc(var(--base, 0ms) + var(--stagger-step) * 6);
+  animation-delay: var(--enter-delay);
 }
 .tf-stagger > :nth-child(8) {
-  animation-delay: calc(var(--base, 0ms) + var(--stagger-step) * 7);
+  --enter-delay: calc(var(--base, 0ms) + var(--stagger-step) * 7);
+  animation-delay: var(--enter-delay);
 }
 .tf-stagger > :nth-child(9) {
-  animation-delay: calc(var(--base, 0ms) + var(--stagger-step) * 8);
+  --enter-delay: calc(var(--base, 0ms) + var(--stagger-step) * 8);
+  animation-delay: var(--enter-delay);
 }
 .tf-stagger > :nth-child(10) {
-  animation-delay: calc(var(--base, 0ms) + var(--stagger-step) * 9);
+  --enter-delay: calc(var(--base, 0ms) + var(--stagger-step) * 9);
+  animation-delay: var(--enter-delay);
 }
 .tf-stagger > :nth-child(11) {
-  animation-delay: calc(var(--base, 0ms) + var(--stagger-step) * 10);
+  --enter-delay: calc(var(--base, 0ms) + var(--stagger-step) * 10);
+  animation-delay: var(--enter-delay);
 }
 .tf-stagger > :nth-child(n + 12) {
-  animation-delay: calc(var(--base, 0ms) + var(--stagger-step) * 11);
+  --enter-delay: calc(var(--base, 0ms) + var(--stagger-step) * 11);
+  animation-delay: var(--enter-delay);
 }
 .tf-topbar {
   animation: tf-drop var(--dur-enter) var(--ease-out) both;
@@ -1121,32 +1135,32 @@ select.tf-input {
 }
 .tf-panel.tf-side {
   animation: tf-slide-in var(--dur-enter) var(--ease-out) both;
-  animation-delay: 160ms;
+  animation-delay: calc(160ms * var(--motion-time));
 }
 .tf-dock {
   animation: tf-slide-up var(--dur-enter) var(--ease-spring) both;
-  animation-delay: 420ms;
+  animation-delay: calc(420ms * var(--motion-time));
 }
 .tf-dock .tf-dock-btn {
   animation: tf-pop var(--dur-base) var(--ease-spring) both;
 }
 .tf-dock .tf-dock-btn:nth-child(1) {
-  animation-delay: 520ms;
+  animation-delay: calc(520ms * var(--motion-time));
 }
 .tf-dock .tf-dock-btn:nth-child(2) {
-  animation-delay: 570ms;
+  animation-delay: calc(570ms * var(--motion-time));
 }
 .tf-dock .tf-dock-btn:nth-child(3) {
-  animation-delay: 620ms;
+  animation-delay: calc(620ms * var(--motion-time));
 }
 .tf-dock .tf-dock-btn:nth-child(4) {
-  animation-delay: 670ms;
+  animation-delay: calc(670ms * var(--motion-time));
 }
 .tf-dock .tf-dock-btn:nth-child(5) {
-  animation-delay: 720ms;
+  animation-delay: calc(720ms * var(--motion-time));
 }
 .tf-dock .tf-dock-btn:nth-child(n + 6) {
-  animation-delay: 770ms;
+  animation-delay: calc(770ms * var(--motion-time));
 }
 .tf-rail-btn {
   animation: tf-pop var(--dur-base) var(--ease-spring) both;
@@ -1183,7 +1197,7 @@ select.tf-input {
 .tf-progress > span {
   transform-origin: left;
   animation: tf-grow-x var(--dur-slow) var(--ease-out) both;
-  animation-delay: 200ms;
+  animation-delay: calc(var(--enter-delay, 0ms) + calc(200ms * var(--motion-time)));
 }
 
 /* Sliding tab indicator */
@@ -1262,6 +1276,7 @@ select.tf-input {
   transform-box: fill-box;
   transform-origin: bottom;
   animation: tf-grow-y var(--dur-slow) var(--ease-out) both;
+  animation-delay: var(--enter-delay, 0ms);
 }
 .tf-bar-ink {
   fill: var(--primary);
@@ -1289,7 +1304,7 @@ select.tf-input {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   animation: tf-draw var(--dur-slow) var(--ease-out) forwards;
-  animation-delay: 150ms;
+  animation-delay: calc(var(--enter-delay, 0ms) + calc(150ms * var(--motion-time)));
 }
 .tf-line-ink {
   stroke: var(--primary);
@@ -1312,7 +1327,7 @@ select.tf-input {
 .tf-area {
   opacity: 0;
   animation: tf-fade var(--dur-slow) var(--ease-out) forwards;
-  animation-delay: 500ms;
+  animation-delay: calc(var(--enter-delay, 0ms) + calc(500ms * var(--motion-time)));
 }
 .tf-area-sky {
   fill: var(--sky);
@@ -1333,7 +1348,7 @@ select.tf-input {
   fill: var(--surface);
   stroke-width: 2.5;
   animation: tf-pop var(--dur-base) var(--ease-spring) both;
-  animation-delay: 900ms;
+  animation-delay: calc(var(--enter-delay, 0ms) + calc(900ms * var(--motion-time)));
   transform-box: fill-box;
   transform-origin: center;
 }
@@ -1762,6 +1777,19 @@ select.tf-input {
   }
 }
 
+/* the same for an app that turns motion off: data-motion="off" */
+[data-motion="off"] *,
+[data-motion="off"] *::before,
+[data-motion="off"] *::after {
+  animation-duration: 1ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important;
+}
+[data-motion="off"] .tf-line {
+  stroke-dashoffset: 0;
+}
+
 /* ───────── Refinements ───────── */
 .tf-nav-label {
   white-space: nowrap;
@@ -1793,7 +1821,7 @@ select.tf-input {
 .tf-area {
   opacity: 0;
   animation: tf-area-in var(--dur-slow) var(--ease-out) forwards;
-  animation-delay: 500ms;
+  animation-delay: calc(var(--enter-delay, 0ms) + calc(500ms * var(--motion-time)));
 }
 @keyframes tf-area-in {
   to {
@@ -2355,7 +2383,7 @@ select.tf-input {
 }
 @keyframes tf-drawer-in {
   from {
-    transform: translateX(40px);
+    transform: translateX(calc(40px * var(--motion-travel)));
     opacity: 0;
   }
   to {

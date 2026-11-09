@@ -64,6 +64,14 @@
   --color-on-frame-danger: var(--on-frame-danger);
   --color-scrim: var(--scrim);
   --color-scrim-strong: var(--scrim-strong);
+  --color-glass: var(--glass);
+  --color-glass-strong: var(--glass-strong);
+  --color-glass-control: var(--glass-control);
+  --color-glass-well: var(--glass-well);
+  --color-glass-hover: var(--glass-hover);
+  --color-glass-border: var(--glass-border);
+  --color-glass-highlight: var(--glass-highlight);
+  --color-glass-sheen: var(--glass-sheen);
   --color-bg-000: var(--bg-000);
   --color-bg-100: var(--bg-100);
   --color-bg-200: var(--bg-200);
@@ -131,6 +139,7 @@
   --shadow-lift: var(--shadow-lift);
   --shadow-float: var(--shadow-float);
   --shadow-overlay: var(--shadow-overlay);
+  --shadow-glass: var(--shadow-glass);
   --font-*: initial;
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);

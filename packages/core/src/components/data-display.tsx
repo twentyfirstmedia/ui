@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { cx, durationToken, reduced } from "../cx.js";
+import { cx, durationToken, enterDelay, reduced } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { useMounted, useScrollFocus } from "../hooks.js";
 import { Avatar, IconButton, TintIcon } from "./foundation.js";
@@ -59,18 +59,20 @@ export function CountUp(p: CountUpProps) {
   const o = parseNum(p.value),
     st = React.useState(o ? fmt(0, o) : String(p.value)),
     last = React.useRef(0),
-    first = React.useRef(true);
+    first = React.useRef(true),
+    el = React.useRef<HTMLSpanElement>(null);
   React.useEffect(() => {
-    if (!o || reduced()) {
+    if (!o || reduced(el.current)) {
       st[1](String(p.value));
       return;
     }
-    const slow = durationToken("--dur-slow", 900);
+    const slow = durationToken("--dur-slow", 900, el.current);
     const from = last.current;
     let start: number | null = null,
       raf = 0;
     const dur = first.current ? p.duration || slow : slow / 2,
-      delay = first.current ? p.delay || 0 : 0;
+      // the first count waits for the card it sits in to come in
+      delay = first.current ? (p.delay || 0) + enterDelay(el.current) : 0;
     first.current = false;
     const target = o;
     function tick(t: number) {
@@ -88,7 +90,11 @@ export function CountUp(p: CountUpProps) {
       cancelAnimationFrame(raf);
     };
   }, [p.value]);
-  return <span className={p.className}>{st[0]}</span>;
+  return (
+    <span ref={el} className={p.className}>
+      {st[0]}
+    </span>
+  );
 }
 export function StatTile(p: StatTileProps) {
   const tint = p.tint || "sky";
@@ -114,7 +120,13 @@ export function Card(p: CardProps) {
   const tint = p.tint && p.tint !== "surface" ? "tf-bg-" + p.tint : null;
   return (
     <article
-      className={cx("tf-card", tint, p.onClick && "tf-card-interactive", p.className)}
+      className={cx(
+        "tf-card",
+        tint,
+        p.onClick && "tf-card-interactive",
+        p.surface && "tf-" + p.surface,
+        p.className,
+      )}
       style={p.style}
       tabIndex={p.onClick ? 0 : undefined}
       onClick={p.onClick}
@@ -177,7 +189,10 @@ export function EventCard(p: EventCardProps) {
 }
 export function Panel(p: PanelProps) {
   return (
-    <section className={cx("tf-panel", p.side && "tf-side", p.className)} style={p.style}>
+    <section
+      className={cx("tf-panel", p.side && "tf-side", p.surface && "tf-" + p.surface, p.className)}
+      style={p.style}
+    >
       {(p.title || p.action) && (
         <div className="tf-header">
           <div>
@@ -211,14 +226,39 @@ export function PageHeader(p: PageHeaderProps) {
     </header>
   );
 }
+const useLayout = typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
+
 export function Stagger(p: StaggerProps) {
   const st: Record<string, unknown> = { ...p.style };
   if (p.delay) st["--base"] = p.delay + "ms";
+  const ref = React.useRef<HTMLElement>(null);
+  // below the fold, the entrance waits until the group scrolls into view
+  const [waiting, setWaiting] = React.useState(false);
+  useLayout(() => {
+    const el = ref.current;
+    if (!el || p.reveal === false || typeof IntersectionObserver === "undefined" || reduced(el))
+      return;
+    if (el.getBoundingClientRect().top < window.innerHeight) return;
+    setWaiting(true);
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setWaiting(false);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   return React.createElement(
     p.as || "div",
     {
+      ref,
       className: cx("tf-stagger", p.className),
       style: st,
+      "data-reveal": waiting ? "waiting" : undefined,
     },
     p.children,
   );

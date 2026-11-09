@@ -27,6 +27,10 @@
   --dur-enter: 520ms;
   --dur-slow: 900ms;
   --stagger-step: 55ms;
+  --dur-exit: 160ms;
+  --motion-time: 1;
+  --motion-travel: 1;
+  --motion-blur: 0px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -233,6 +237,14 @@
   --on-frame-danger: #f2a8a0;
   --scrim: rgba(10, 10, 10, 0.32);
   --scrim-strong: rgba(10, 10, 10, 0.38);
+  --glass: color-mix(in srgb, var(--card) 72%, transparent);
+  --glass-strong: color-mix(in srgb, var(--card) 86%, transparent);
+  --glass-control: color-mix(in srgb, var(--card) 62%, transparent);
+  --glass-well: color-mix(in srgb, var(--foreground) 6%, transparent);
+  --glass-hover: color-mix(in srgb, var(--foreground) 8%, transparent);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-highlight: rgba(255, 255, 255, 0.95);
+  --glass-sheen: rgba(255, 255, 255, 0.5);
   --bg-000: var(--canvas);
   --bg-100: var(--surface);
   --bg-200: var(--surface-sunken);
@@ -290,6 +302,7 @@
   --shadow-lift: 0 2px 4px rgba(20,20,20,0.06), 0 14px 32px rgba(20,20,20,0.10);
   --shadow-float: 0 16px 40px rgba(0,0,0,0.22);
   --shadow-overlay: var(--shadow-float);
+  --shadow-glass: 0 1px 2px rgba(20, 20, 40, 0.06), 0 12px 40px rgba(20, 20, 40, 0.14);
   --button-radius: var(--radius-pill);
   --field-radius: var(--radius-pill);
   --badge-radius: var(--radius-pill);
@@ -299,6 +312,7 @@
   --panel-shadow: var(--shadow-card);
   --panel-pad: var(--space-6);
   --panel-gap: var(--space-4);
+  --glass-filter: blur(24px) saturate(180%) brightness(1.05);
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -364,6 +378,14 @@
     --on-frame-danger: #f2a8a0;
     --scrim: rgba(10, 10, 10, 0.32);
     --scrim-strong: rgba(10, 10, 10, 0.38);
+    --glass: color-mix(in srgb, var(--card) 70%, transparent);
+    --glass-strong: color-mix(in srgb, var(--card) 86%, transparent);
+    --glass-control: color-mix(in srgb, var(--foreground) 10%, transparent);
+    --glass-well: color-mix(in srgb, var(--foreground) 6%, transparent);
+    --glass-hover: color-mix(in srgb, var(--foreground) 12%, transparent);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.18);
+    --glass-sheen: rgba(255, 255, 255, 0.05);
     --bg-000: var(--canvas);
     --bg-100: var(--surface);
     --bg-200: var(--surface-sunken);
@@ -421,6 +443,7 @@
     --shadow-lift: 0 2px 6px rgba(0,0,0,0.5), 0 14px 32px rgba(0,0,0,0.45);
     --shadow-float: 0 16px 40px rgba(0,0,0,0.6);
     --shadow-overlay: var(--shadow-float);
+    --shadow-glass: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 48px rgba(0, 0, 0, 0.45);
     --button-radius: var(--radius-pill);
     --field-radius: var(--radius-pill);
     --badge-radius: var(--radius-pill);
@@ -430,6 +453,7 @@
     --panel-shadow: var(--shadow-card);
     --panel-pad: var(--space-6);
     --panel-gap: var(--space-4);
+    --glass-filter: blur(24px) saturate(160%) brightness(0.85);
     color-scheme: dark;
   }
 }
@@ -496,6 +520,14 @@
     --on-frame-danger: #f2a8a0;
     --scrim: rgba(10, 10, 10, 0.32);
     --scrim-strong: rgba(10, 10, 10, 0.38);
+    --glass: color-mix(in srgb, var(--card) 70%, transparent);
+    --glass-strong: color-mix(in srgb, var(--card) 86%, transparent);
+    --glass-control: color-mix(in srgb, var(--foreground) 10%, transparent);
+    --glass-well: color-mix(in srgb, var(--foreground) 6%, transparent);
+    --glass-hover: color-mix(in srgb, var(--foreground) 12%, transparent);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.18);
+    --glass-sheen: rgba(255, 255, 255, 0.05);
     --bg-000: var(--canvas);
     --bg-100: var(--surface);
     --bg-200: var(--surface-sunken);
@@ -553,6 +585,7 @@
     --shadow-lift: 0 2px 6px rgba(0,0,0,0.5), 0 14px 32px rgba(0,0,0,0.45);
     --shadow-float: 0 16px 40px rgba(0,0,0,0.6);
     --shadow-overlay: var(--shadow-float);
+    --shadow-glass: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 48px rgba(0, 0, 0, 0.45);
     --button-radius: var(--radius-pill);
     --field-radius: var(--radius-pill);
     --badge-radius: var(--radius-pill);
@@ -562,6 +595,7 @@
     --panel-shadow: var(--shadow-card);
     --panel-pad: var(--space-6);
     --panel-gap: var(--space-4);
+    --glass-filter: blur(24px) saturate(160%) brightness(0.85);
     color-scheme: dark;
   }
 }
@@ -628,6 +662,14 @@
     --on-frame-danger: #f2a8a0;
     --scrim: rgba(10, 10, 10, 0.32);
     --scrim-strong: rgba(10, 10, 10, 0.38);
+    --glass: color-mix(in srgb, var(--card) 72%, transparent);
+    --glass-strong: color-mix(in srgb, var(--card) 86%, transparent);
+    --glass-control: color-mix(in srgb, var(--card) 62%, transparent);
+    --glass-well: color-mix(in srgb, var(--foreground) 6%, transparent);
+    --glass-hover: color-mix(in srgb, var(--foreground) 8%, transparent);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-highlight: rgba(255, 255, 255, 0.95);
+    --glass-sheen: rgba(255, 255, 255, 0.5);
     --bg-000: var(--canvas);
     --bg-100: var(--surface);
     --bg-200: var(--surface-sunken);
@@ -685,6 +727,7 @@
     --shadow-lift: 0 2px 4px rgba(20,20,20,0.06), 0 14px 32px rgba(20,20,20,0.10);
     --shadow-float: 0 16px 40px rgba(0,0,0,0.22);
     --shadow-overlay: var(--shadow-float);
+    --shadow-glass: 0 1px 2px rgba(20, 20, 40, 0.06), 0 12px 40px rgba(20, 20, 40, 0.14);
     --button-radius: var(--radius-pill);
     --field-radius: var(--radius-pill);
     --badge-radius: var(--radius-pill);
@@ -694,6 +737,7 @@
     --panel-shadow: var(--shadow-card);
     --panel-pad: var(--space-6);
     --panel-gap: var(--space-4);
+    --glass-filter: blur(24px) saturate(180%) brightness(1.05);
     color-scheme: light;
   }
 }
@@ -759,6 +803,14 @@
   --on-frame-danger: #f2a8a0;
   --scrim: rgba(10, 10, 10, 0.32);
   --scrim-strong: rgba(10, 10, 10, 0.38);
+  --glass: color-mix(in srgb, var(--card) 70%, transparent);
+  --glass-strong: color-mix(in srgb, var(--card) 86%, transparent);
+  --glass-control: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --glass-well: color-mix(in srgb, var(--foreground) 6%, transparent);
+  --glass-hover: color-mix(in srgb, var(--foreground) 12%, transparent);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-highlight: rgba(255, 255, 255, 0.18);
+  --glass-sheen: rgba(255, 255, 255, 0.05);
   --bg-000: var(--canvas);
   --bg-100: var(--surface);
   --bg-200: var(--surface-sunken);
@@ -816,6 +868,7 @@
   --shadow-lift: 0 2px 6px rgba(0,0,0,0.5), 0 14px 32px rgba(0,0,0,0.45);
   --shadow-float: 0 16px 40px rgba(0,0,0,0.6);
   --shadow-overlay: var(--shadow-float);
+  --shadow-glass: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 48px rgba(0, 0, 0, 0.45);
   --button-radius: var(--radius-pill);
   --field-radius: var(--radius-pill);
   --badge-radius: var(--radius-pill);
@@ -825,6 +878,7 @@
   --panel-shadow: var(--shadow-card);
   --panel-pad: var(--space-6);
   --panel-gap: var(--space-4);
+  --glass-filter: blur(24px) saturate(160%) brightness(0.85);
   color-scheme: dark;
 }
 :where([data-theme="light"], .light) {
@@ -889,6 +943,14 @@
   --on-frame-danger: #f2a8a0;
   --scrim: rgba(10, 10, 10, 0.32);
   --scrim-strong: rgba(10, 10, 10, 0.38);
+  --glass: color-mix(in srgb, var(--card) 72%, transparent);
+  --glass-strong: color-mix(in srgb, var(--card) 86%, transparent);
+  --glass-control: color-mix(in srgb, var(--card) 62%, transparent);
+  --glass-well: color-mix(in srgb, var(--foreground) 6%, transparent);
+  --glass-hover: color-mix(in srgb, var(--foreground) 8%, transparent);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-highlight: rgba(255, 255, 255, 0.95);
+  --glass-sheen: rgba(255, 255, 255, 0.5);
   --bg-000: var(--canvas);
   --bg-100: var(--surface);
   --bg-200: var(--surface-sunken);
@@ -946,6 +1008,7 @@
   --shadow-lift: 0 2px 4px rgba(20,20,20,0.06), 0 14px 32px rgba(20,20,20,0.10);
   --shadow-float: 0 16px 40px rgba(0,0,0,0.22);
   --shadow-overlay: var(--shadow-float);
+  --shadow-glass: 0 1px 2px rgba(20, 20, 40, 0.06), 0 12px 40px rgba(20, 20, 40, 0.14);
   --button-radius: var(--radius-pill);
   --field-radius: var(--radius-pill);
   --badge-radius: var(--radius-pill);
@@ -955,6 +1018,7 @@
   --panel-shadow: var(--shadow-card);
   --panel-pad: var(--space-6);
   --panel-gap: var(--space-4);
+  --glass-filter: blur(24px) saturate(180%) brightness(1.05);
   color-scheme: light;
 }
 :where([data-density="compact"]) {
@@ -970,4 +1034,67 @@
   --density-pad-x: var(--space-4);
   --density-font-size: 14px;
   --density-line-height: 20px;
+}
+:where([data-motion="expressive"]) {
+  --dur-enter: 760ms;
+  --dur-slow: 1300ms;
+  --dur-exit: 220ms;
+  --stagger-step: 90ms;
+  --motion-time: 1.4;
+  --motion-travel: 1.7;
+  --motion-blur: 8px;
+}
+:where([data-motion="off"]) {
+  --duration-fast: 0ms;
+  --duration-base: 0ms;
+  --dur-fast: 0ms;
+  --dur-base: 0ms;
+  --dur-enter: 0ms;
+  --dur-slow: 0ms;
+  --dur-exit: 0ms;
+  --stagger-step: 0ms;
+  --motion-time: 0;
+  --motion-travel: 0;
+  --motion-blur: 0px;
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(:root, [data-motion], [data-theme]) {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-enter: 0ms;
+    --dur-slow: 0ms;
+    --dur-exit: 0ms;
+    --stagger-step: 0ms;
+    --motion-time: 0;
+    --motion-travel: 0;
+    --motion-blur: 0px;
+  }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :where(:root, [data-theme], .dark, .light) {
+    --glass: var(--glass-strong);
+  }
+}
+@media (prefers-contrast: more) {
+  :where(:root, [data-theme], .dark, .light) {
+    --glass: var(--glass-strong);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :where(:root, [data-theme], .dark, .light) {
+    --glass: var(--card);
+    --glass-strong: var(--popover);
+    --glass-sheen: transparent;
+    --glass-filter: none;
+  }
+}
+@media (forced-colors: active) {
+  :where(:root, [data-theme], .dark, .light) {
+    --glass: var(--card);
+    --glass-strong: var(--popover);
+    --glass-sheen: transparent;
+    --glass-filter: none;
+  }
 }

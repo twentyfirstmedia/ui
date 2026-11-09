@@ -107,7 +107,7 @@ With one kit's `styles.css` no attribute is needed. To switch between Halo and P
 
 ```css
 :root {
-  --accent: var(--lilac-ink);
+  --primary: var(--lilac-ink);
   --radius-lg: 12px;
 }
 ```
@@ -210,6 +210,15 @@ For markup that needs no behaviour, the kit classes work without any script: the
 ```
 
 Interactive components (tabs, menus, dialogs, tables) need the elements for their keyboard paths and ARIA.
+
+For UI over a map, a video or photos, `class="tf-glass"` turns a surface into glass, and `data-surface="glass"` on a container turns everything floating inside into glass (see [Glass](/{{kit}}/theming/#glass)):
+
+```html
+<div data-surface="glass" style="position: relative">
+  <canvas id="map"></canvas>
+  <section class="tf-panel" style="position: absolute; top: 16px; left: 16px">Layers</section>
+</div>
+```
 
 ## Editor support and types
 

@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { leaving, usePresence } from "../presence.js";
 import { useControlled, useId, useKeepInView, useOutside } from "../hooks.js";
 import { cx } from "../cx.js";
 import type { PopoverProps, TooltipProps } from "./types.js";
@@ -8,7 +9,8 @@ import type { PopoverProps, TooltipProps } from "./types.js";
 export function Popover(p: PopoverProps) {
   const ref = React.useRef<HTMLSpanElement>(null),
     pop = React.useRef<HTMLDivElement>(null),
-    st = useControlled(p.open, false, p.onOpenChange);
+    st = useControlled(p.open, false, p.onOpenChange),
+    pr = usePresence(st[0]);
   useOutside(ref, st[0], () => {
     st[1](false);
   });
@@ -52,8 +54,9 @@ export function Popover(p: PopoverProps) {
   return (
     <span ref={ref} className={cx("tf-pop-anchor", p.block && "block", p.className)}>
       {trigger}
-      {st[0] && (
+      {pr.mounted && (
         <div
+          {...leaving(pr.closing)}
           ref={pop}
           className={cx(
             "tf-popover",
@@ -88,7 +91,8 @@ export function Tooltip(p: TooltipProps) {
     st = React.useState(!!p.defaultOpen),
     t = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined),
     tip = React.useRef<HTMLSpanElement>(null),
-    side = p.side || "top";
+    side = p.side || "top",
+    pr = usePresence(st[0]);
   // keep a top or bottom tooltip inside the screen (or the scrolling box around it)
   useKeepInView(tip, st[0] && side !== "left" && side !== "right");
   function show() {
@@ -118,8 +122,14 @@ export function Tooltip(p: TooltipProps) {
       {React.cloneElement(child, {
         "aria-describedby": st[0] ? id : undefined,
       })}
-      {st[0] && (
-        <span id={id} ref={tip} role="tooltip" className={cx("tf-tooltip", "tf-tip-" + side)}>
+      {pr.mounted && (
+        <span
+          {...leaving(pr.closing)}
+          id={id}
+          ref={tip}
+          role="tooltip"
+          className={cx("tf-tooltip", "tf-tip-" + side)}
+        >
           {p.label}
           {p.shortcut && <kbd>{p.shortcut}</kbd>}
         </span>

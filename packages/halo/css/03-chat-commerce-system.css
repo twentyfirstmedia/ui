@@ -1731,3 +1731,11 @@
     animation: none !important;
   }
 }
+/* the same for an app that turns motion off: data-motion="off" */
+[data-motion="off"] .tf-msg,
+[data-motion="off"] .tf-caret,
+[data-motion="off"] .tf-typing i,
+[data-motion="off"] .tf-spin,
+[data-motion="off"] .tf-reason.live .tf-reason-head {
+  animation: none !important;
+}

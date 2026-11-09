@@ -1,11 +1,12 @@
 "use client";
-import { CodeBlock, Segmented, UIProvider, useUI } from "@twentyfirstmedia/ui-core";
+import { CodeBlock, IconButton, Segmented, UIProvider, useUI } from "@twentyfirstmedia/ui-core";
 import { useState } from "react";
 import { registry } from "@/generated/registry";
 
 /** A live example in the current kit, with its source one click away. */
 export function ExampleView({ name, code }: { name: string; code: string }) {
   const [tab, setTab] = useState("preview");
+  const [run, setRun] = useState(0);
   const { kit, theme } = useUI();
   const Example = registry[name];
   return (
@@ -21,6 +22,14 @@ export function ExampleView({ name, code }: { name: string; code: string }) {
             { value: "code", label: "Code" },
           ]}
         />
+        {tab === "preview" && (
+          <IconButton
+            icon="refresh"
+            label="Replay animations"
+            size="sm"
+            onClick={() => setRun((r) => r + 1)}
+          />
+        )}
       </div>
       {tab === "preview" ? (
         <div
@@ -31,7 +40,13 @@ export function ExampleView({ name, code }: { name: string; code: string }) {
           aria-label={`${name} preview`}
         >
           {/* a subtree provider keeps overlays (modals, sheets, toasts) inside the preview frame */}
-          <UIProvider scope="subtree" kit={kit} theme={theme} className="docs-preview-inner">
+          <UIProvider
+            key={run}
+            scope="subtree"
+            kit={kit}
+            theme={theme}
+            className="docs-preview-inner"
+          >
             {Example ? <Example /> : null}
           </UIProvider>
         </div>

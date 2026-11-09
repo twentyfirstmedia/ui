@@ -1,0 +1,116 @@
+/* Motion: leaving layers, reveal on scroll, page transitions, the expressive level.
+ *
+ * Levels come from `data-motion` (tokens.css): "standard", "expressive" (longer, staggered page
+ * entrances, more travel) and "off". The reader's reduced-motion setting always means off. Only
+ * transform, opacity and (expressive Halo) a short blur move; everything else stays put.
+ */
+
+/* ── Leaving: layers animate out for --dur-exit, then unmount (usePresence) ── */
+@keyframes tf-out {
+  to {
+    opacity: 0;
+    translate: 0 calc(6px * var(--motion-travel));
+    scale: 0.98;
+  }
+}
+@keyframes tf-out-fade {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes tf-out-right {
+  to {
+    opacity: 0;
+    translate: calc(40px * var(--motion-travel)) 0;
+  }
+}
+@keyframes tf-out-left {
+  to {
+    opacity: 0;
+    translate: calc(-40px * var(--motion-travel)) 0;
+  }
+}
+@keyframes tf-out-up {
+  to {
+    opacity: 0;
+    translate: 0 calc(-40px * var(--motion-travel));
+  }
+}
+@keyframes tf-out-down {
+  to {
+    opacity: 0;
+    translate: 0 calc(16px * var(--motion-travel));
+  }
+}
+[data-closing] {
+  pointer-events: none;
+}
+.tf-popover[data-closing],
+.tf-hovercard[data-closing],
+.tf-modal-wrap[data-closing] .tf-modal,
+.tf-overlay[data-closing] :is(.tf-modal, .tf-confirm),
+.tf-palette-wrap[data-closing] .tf-palette {
+  animation: tf-out var(--dur-exit) var(--ease-in-out) forwards;
+}
+.tf-tooltip[data-closing],
+.tf-modal-wrap[data-closing] .tf-backdrop,
+.tf-overlay[data-closing] .tf-backdrop,
+.tf-palette-wrap[data-closing],
+.tf-drawer-wrap[data-closing] {
+  animation: tf-out-fade var(--dur-exit) var(--ease-in-out) forwards;
+}
+.tf-drawer-wrap[data-closing] .tf-drawer {
+  animation: tf-out-right var(--dur-exit) var(--ease-in-out) forwards;
+}
+.tf-drawer-wrap[data-closing] .tf-drawer.side-left {
+  animation-name: tf-out-left;
+}
+.tf-drawer-wrap[data-closing] .tf-drawer.side-top {
+  animation-name: tf-out-up;
+}
+.tf-drawer-wrap[data-closing] .tf-drawer.side-bottom,
+.tf-toast[data-closing] {
+  animation: tf-out-down var(--dur-exit) var(--ease-in-out) forwards;
+}
+
+/* ── Reveal: a Stagger below the fold waits until it scrolls into view ── */
+.tf-stagger[data-reveal="waiting"] > *,
+.tf-stagger[data-reveal="waiting"] > * * {
+  animation-play-state: paused;
+}
+
+/* ── Page transitions (startViewTransition, Next.js and React view transitions) ── */
+@keyframes tf-vt-out {
+  to {
+    opacity: 0;
+    translate: 0 calc(-6px * var(--motion-travel));
+  }
+}
+@keyframes tf-vt-in {
+  from {
+    opacity: 0;
+    translate: 0 calc(10px * var(--motion-travel));
+  }
+}
+:root::view-transition-old(root) {
+  animation: tf-vt-out var(--dur-base) var(--ease-in-out) both;
+}
+:root::view-transition-new(root) {
+  animation: tf-vt-in var(--dur-enter) var(--ease-out) both;
+}
+
+/* ── Expressive: things come into focus as they rise (Halo; Pro keeps a blur of 0) ── */
+@keyframes tf-focus-in {
+  from {
+    filter: blur(var(--motion-blur));
+  }
+  to {
+    filter: none;
+  }
+}
+[data-motion="expressive"] :is(.tf-stagger > *, .tf-in) {
+  animation-name: tf-rise, tf-focus-in;
+}
+[data-motion="expressive"] .tf-topbar {
+  animation-name: tf-drop, tf-focus-in;
+}

@@ -16,6 +16,8 @@ export interface ToastData extends ToastOptions {
   id: string;
   tone: ToastTone;
   duration: number;
+  /** Animating out; removed after `--dur-exit`. */
+  leaving?: boolean;
 }
 
 let list: ToastData[] = [];
@@ -36,9 +38,34 @@ export function toast(o: ToastOptions | string): string {
   return t.id;
 }
 toast.dismiss = (id: string): void => {
-  list = list.filter((t) => t.id !== id);
+  const ms = exitMs();
+  if (ms <= 0) {
+    list = list.filter((t) => t.id !== id);
+    emit();
+    return;
+  }
+  list = list.map((t) => (t.id === id ? { ...t, leaving: true } : t));
   emit();
+  setTimeout(() => {
+    list = list.filter((t) => t.id !== id);
+    emit();
+  }, ms);
 };
+
+/** How long a toast takes to leave (0 without motion). */
+function exitMs(): number {
+  try {
+    if (typeof window === "undefined") return 0;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return 0;
+    if (document.documentElement.closest("[data-motion]")?.getAttribute("data-motion") === "off")
+      return 0;
+    const raw = getComputedStyle(document.documentElement).getPropertyValue("--dur-exit").trim();
+    const n = parseFloat(raw);
+    return isNaN(n) ? 0 : raw.endsWith("ms") ? n : n * 1000;
+  } catch {
+    return 0;
+  }
+}
 toast.clear = (): void => {
   list = [];
   emit();

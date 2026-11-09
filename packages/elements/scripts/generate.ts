@@ -458,10 +458,11 @@ export function buildElements(): GenElement[] {
     if (has("open"))
       for (const e of ["onClose", "onCancel", "onConfirm", "onDismiss"])
         if (hasEv(e)) sync.push([e, "open", "false"]);
-    const dismiss =
-      has("open") || NO_DISMISS.has(name)
-        ? []
-        : events.filter((e) => e.prop === "onClose" || e.prop === "onDismiss").map((e) => e.prop);
+    // with an `open` property the close events set it to false (the layer animates out); an
+    // element used without `open` hides itself instead
+    const dismiss = NO_DISMISS.has(name)
+      ? []
+      : events.filter((e) => e.prop === "onClose" || e.prop === "onDismiss").map((e) => e.prop);
     return {
       tag: tagOf(name),
       name,

@@ -34,6 +34,7 @@ export const GUIDE_ORDER = [
   "cli",
   "theming",
   "themes",
+  "motion",
   "ai",
   "html",
   "status-and-approvals",

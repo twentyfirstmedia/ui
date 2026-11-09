@@ -16,8 +16,11 @@ export {
   type Kit,
   type Theme,
   type Density,
+  type Motion,
 } from "./provider.js";
 export { Portal } from "./portal.js";
+export { startViewTransition, useMotion } from "./motion.js";
+export { usePresence, leaving, type Presence } from "./presence.js";
 export {
   THEME_VARS,
   THEME_PRESETS,

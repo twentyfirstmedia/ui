@@ -73,6 +73,7 @@ export const GUIDES: NavLink[] = [
   { href: "cli", label: "CLI" },
   { href: "theming", label: "Theming and tokens" },
   { href: "themes", label: "Theme builder" },
+  { href: "motion", label: "Motion" },
   { href: "ai", label: "AI agents and MCP" },
   { href: "html", label: "Plain HTML and frameworks" },
   { href: "status-and-approvals", label: "Status and approvals" },

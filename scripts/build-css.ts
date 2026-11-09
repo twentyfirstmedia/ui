@@ -113,18 +113,23 @@ export function scope(kit: Kit, css: string, from?: string): string {
       if (t === "body") return [k, `${k} body`];
       if (t === "html" || t === ":root") return [k];
       if (/^(html|body|:root)\b/.test(t)) return [t.replace(/^(html|body|:root)/, k)];
+      // a data attribute (data-surface …) may sit on the element that carries data-kit as well
+      if (/^\[data-/.test(t)) return [`${k}${t}`, `${k} ${t}`];
       return [`${k} ${t}`];
     });
   });
-  if (frames.size) {
-    const re = new RegExp(
-      `(?<![\\w-])(${[...frames.keys()].map((n) => n.replace(/[-]/g, "\\-")).join("|")})(?![\\w-])`,
-      "g",
+  // keyframes of the kit are all `tf-…`: rename references to them in any file, plus the
+  // file's own other keyframes
+  const re = new RegExp(
+    `(?<![\\w-])(tf-(?!${kit}-)[a-z0-9-]+${frames.size ? `|${[...frames.keys()].map((n) => n.replace(/[-]/g, "\\-")).join("|")}` : ""})(?![\\w-])`,
+    "g",
+  );
+  root.walkDecls(/^(-webkit-)?animation(-name)?$/, (d) => {
+    d.value = d.value.replace(
+      re,
+      (m) => frames.get(m) ?? (m.startsWith("tf-") ? `tf-${kit}-${m.slice(3)}` : m),
     );
-    root.walkDecls(/^(-webkit-)?animation(-name)?$/, (d) => {
-      d.value = d.value.replace(re, (m) => frames.get(m) ?? m);
-    });
-  }
+  });
   return root.toString();
 }
 

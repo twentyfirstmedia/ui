@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { leaving, usePresence } from "../presence.js";
 import { cx } from "../cx.js";
 import { useFieldError } from "./form.js";
 import { formatDate, formatNumber, WEEK_START } from "../format.js";
@@ -235,6 +236,7 @@ export function Combobox(p: ComboboxProps) {
     act = React.useState(0),
     ref = React.useRef<HTMLDivElement>(null),
     inp = React.useRef<HTMLInputElement>(null);
+  const openPr = usePresence(!!open[0]);
   useOutside(ref, open[0], () => {
     open[1](false);
     q[1]("");
@@ -358,8 +360,9 @@ export function Combobox(p: ComboboxProps) {
             <Icon name="chevronDown" size={15} />
           </span>
         </div>
-        {open[0] && (
+        {openPr.mounted && (
           <div
+            {...leaving(openPr.closing)}
             className="tf-popover tf-combo-pop"
             id={id + "-list"}
             role="listbox"

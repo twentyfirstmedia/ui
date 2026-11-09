@@ -68,6 +68,14 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--on-frame-danger` | `#f2a8a0` | `{danger}` | Error lines in logs and other danger marks on frame. |
 | `--scrim` | `rgba(10, 10, 10, 0.32)` | `rgba(17,17,20,0.36)` / `rgba(0,0,0,0.62)` | Backdrop behind dialogs, sheets and the command palette. |
 | `--scrim-strong` | `rgba(10, 10, 10, 0.38)` | `{scrim}` | Backdrop behind modals and the command palette. |
+| `--glass` | `color-mix(in srgb, {card} 72%, transparent)` / `color-mix(in srgb, {card} 70%, transparent)` | `color-mix(in srgb, {card} 74%, transparent)` / `color-mix(in srgb, {card} 72%, transparent)` | Glass surfaces: panels, cards, docks and map overlays floating over content. Opaque enough that body text stays at 4.5:1 or more over any backdrop. |
+| `--glass-strong` | `color-mix(in srgb, {card} 86%, transparent)` | `color-mix(in srgb, {card} 88%, transparent)` | Glass for text-heavy floating layers: menus, popovers, dialogs, drawers. |
+| `--glass-control` | `color-mix(in srgb, {card} 62%, transparent)` / `color-mix(in srgb, {foreground} 10%, transparent)` | `color-mix(in srgb, {card} 55%, transparent)` / `color-mix(in srgb, {foreground} 7%, transparent)` | Inputs, secondary buttons and chips on glass (replaces surface inside a glass surface). |
+| `--glass-well` | `color-mix(in srgb, {foreground} 6%, transparent)` | `color-mix(in srgb, {foreground} 5%, transparent)` | Tab tracks, badges, search fields and nested cards on glass (replaces surface-sunken). |
+| `--glass-hover` | `color-mix(in srgb, {foreground} 8%, transparent)` / `color-mix(in srgb, {foreground} 12%, transparent)` | `color-mix(in srgb, {foreground} 7%, transparent)` / `color-mix(in srgb, {foreground} 9%, transparent)` | Hover and selection highlight on glass (replaces accent). |
+| `--glass-border` | `rgba(255, 255, 255, 0.6)` / `rgba(255, 255, 255, 0.1)` | `color-mix(in srgb, {foreground} 12%, transparent)` / `color-mix(in srgb, {foreground} 14%, transparent)` | The hairline edge of a glass surface. |
+| `--glass-highlight` | `rgba(255, 255, 255, 0.95)` / `rgba(255, 255, 255, 0.18)` | `rgba(255, 255, 255, 0.7)` / `rgba(255, 255, 255, 0.07)` | Light catching the top edge of a glass surface. |
+| `--glass-sheen` | `rgba(255, 255, 255, 0.5)` / `rgba(255, 255, 255, 0.05)` | `transparent` | Pro glass is flat: no sheen. |
 | `--bg-000` | `{canvas}` | `{background}` | Canvas: app background, behind hairline grids, inputs on surfaces. |
 | `--bg-100` | `{surface}` | `{card}` | Surface: every grid cell, panel, table, sidebar, dialog. |
 | `--bg-200` | `{surface-sunken}` | `{muted}` | Raised: row and button hover, kbd keys, skeletons, code blocks. |
@@ -130,6 +138,7 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--shadow-lift` | `0 2px 4px rgba(20,20,20,0.06), 0 14px 32px rgba(20,20,20,0.10)` / `0 2px 6px rgba(0,0,0,0.5), 0 14px 32px rgba(0,0,0,0.45)` | `none` | Hovered card. Pro: none. |
 | `--shadow-float` | `0 16px 40px rgba(0,0,0,0.22)` / `0 16px 40px rgba(0,0,0,0.6)` | `0 16px 40px rgba(17,17,20,0.12)` / `0 16px 40px rgba(0,0,0,0.55)` | Floating layers: dock, toasts, menus and dialogs. |
 | `--shadow-overlay` | `{shadow-float}` | `0 16px 40px rgba(17,17,20,0.12)` / `0 16px 40px rgba(0,0,0,0.55)` | Only floating layers: menus, popovers, dialogs, toasts, command palette. Always paired with a line-200 border. |
+| `--shadow-glass` | `0 1px 2px rgba(20, 20, 40, 0.06), 0 12px 40px rgba(20, 20, 40, 0.14)` / `0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 48px rgba(0, 0, 0, 0.45)` | `0 8px 24px rgba(17, 17, 20, 0.1)` / `0 12px 32px rgba(0, 0, 0, 0.5)` | Shadow under glass surfaces. |
 
 ## component
 
@@ -144,6 +153,7 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--panel-shadow` | `{shadow-card}` | `none` | Resting shadow of a panel. Pro: none, the hairlines divide. |
 | `--panel-pad` | `{space-6}` | `{space-4}` | Inner padding of a panel. |
 | `--panel-gap` | `{space-4}` | `1px` | Gap between panels in a grid: the hairline in Pro, air between cards in Halo. |
+| `--glass-filter` | `blur(24px) saturate(180%) brightness(1.05)` / `blur(24px) saturate(160%) brightness(0.85)` | `blur(16px) saturate(130%) brightness(1.04)` / `blur(16px) saturate(120%) brightness(0.8)` | backdrop-filter of glass surfaces: blur, colour lift and a nudge towards the theme's side. |
 
 ## font
 
@@ -191,6 +201,10 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--dur-enter` | `520ms` | `{duration-base}` | Entrances: short and quiet in Pro. |
 | `--dur-slow` | `900ms` | `{duration-base}` | Count-ups, chart draw-ins and progress fills: short in Pro. |
 | `--stagger-step` | `55ms` | `0ms` | No staggered entrances in Pro. |
+| `--dur-exit` | `160ms` | `{duration-fast}` | Overlays leaving: menus, popovers, dialogs, drawers, toasts. |
+| `--motion-time` | `1` | `1` | Multiplier for choreography delays (when the dock, side panels and chart data come in). |
+| `--motion-travel` | `1` | `1` | Multiplier for how far things travel when they come in. |
+| `--motion-blur` | `0px` | `0px` | Blur things come out of as they rise (expressive Halo only). |
 | `--ease-out` | `cubic-bezier(0.22, 1, 0.36, 1)` | `{ease-standard}` | Entrances. |
 | `--ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` | `{ease-standard}` | No overshoot in Pro: the standard curve. |
 | `--ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | `{ease-standard}` | Things moving between two resting places. |

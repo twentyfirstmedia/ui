@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { leaving, usePresence } from "../presence.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { formatMoney, formatNumber, formatPercent } from "../format.js";
@@ -258,6 +259,7 @@ export function SettingsLayout(p: SettingsLayoutProps) {
 }
 
 export function ShortcutsOverlay(p: ShortcutsOverlayProps) {
+  const pr = usePresence(!!p.open);
   React.useEffect(() => {
     if (!p.open) return;
     function k(e: KeyboardEvent) {
@@ -268,10 +270,10 @@ export function ShortcutsOverlay(p: ShortcutsOverlayProps) {
       document.removeEventListener("keydown", k);
     };
   }, [p.open]);
-  if (!p.open) return null;
+  if (!pr.mounted) return null;
   return (
     <Portal>
-      <div className="tf-overlay">
+      <div {...leaving(pr.closing)} className="tf-overlay">
         <div className="tf-backdrop" onClick={p.onClose} />
         <div
           className="tf-modal tf-shortcuts"

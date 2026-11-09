@@ -47,6 +47,8 @@ export interface KitTokens {
   size: Token[];
   z: Token[];
   density: Record<"compact" | "comfortable", Record<string, string>>;
+  /** Motion levels (`data-motion`): overrides of motion tokens. "off" also applies for reduced motion. */
+  motionLevels: Record<"off" | "expressive", Record<string, string>>;
 }
 
 /** Groups whose values change with the theme (or reference something that does). */
@@ -152,6 +154,51 @@ export function tokensCss(kit: Kit, t: KitTokens, scoped = false): string {
       Object.entries(t.density[d]).map(([n, v]) => `--${n}: ${ref(v)};`),
     );
   }
+  css += motionCss(t, k, self);
+  css += glassFallbacks(k, self);
+  return css;
+}
+
+/**
+ * Motion levels: `data-motion="expressive"` turns up durations, staggering and travel;
+ * `data-motion="off"` (and the reader's reduced-motion setting, always) turns them to zero.
+ */
+function motionCss(t: KitTokens, k: string, self: (attr: string) => string): string {
+  const known = new Set(t.motion.map((m) => m.name));
+  const decls = (level: "off" | "expressive") =>
+    Object.entries(t.motionLevels[level]).map(([n, v]) => {
+      if (!known.has(n)) throw new Error(`motionLevels.${level}: unknown motion token "${n}"`);
+      return `--${n}: ${ref(v)};`;
+    });
+  let css = tokenBlock(self('[data-motion="expressive"]'), decls("expressive"));
+  css += tokenBlock(self('[data-motion="off"]'), decls("off"));
+  css += `@media (prefers-reduced-motion: reduce) {\n${tokenBlock(
+    [k, self("[data-motion]"), self("[data-theme]")].join(", "),
+    decls("off"),
+    "  ",
+  )}}\n`;
+  return css;
+}
+
+/**
+ * Glass gives way when the reader or the browser asks for it: solid surfaces without blur for
+ * reduced transparency and forced colours, the stronger fill for more contrast or without
+ * backdrop blur. Last in the file, on every element that declares theme tokens, so it wins.
+ */
+function glassFallbacks(k: string, self: (attr: string) => string): string {
+  const where = [k, self("[data-theme]"), self(".dark"), self(".light")].join(", ");
+  const solid = [
+    "--glass: var(--card);",
+    "--glass-strong: var(--popover);",
+    "--glass-sheen: transparent;",
+    "--glass-filter: none;",
+  ];
+  const strong = ["--glass: var(--glass-strong);"];
+  let css = "";
+  css += `@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {\n${tokenBlock(where, strong, "  ")}}\n`;
+  css += `@media (prefers-contrast: more) {\n${tokenBlock(where, strong, "  ")}}\n`;
+  css += `@media (prefers-reduced-transparency: reduce) {\n${tokenBlock(where, solid, "  ")}}\n`;
+  css += `@media (forced-colors: active) {\n${tokenBlock(where, solid, "  ")}}\n`;
   return css;
 }
 
