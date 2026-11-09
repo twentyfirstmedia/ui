@@ -888,20 +888,57 @@ function fsize(b: number) {
     : `${formatNumber(Math.max(1, Math.round(b / 1024)))} KB`;
 }
 
+/** Whether a file matches an `accept` list ("image/*,.pdf,application/pdf"); empty accepts all. */
+function acceptsFile(file: { name: string; type: string }, accept?: string): boolean {
+  const rules = (accept || "")
+    .split(",")
+    .map((r) => r.trim().toLowerCase())
+    .filter(Boolean);
+  if (!rules.length) return true;
+  const name = file.name.toLowerCase(),
+    type = (file.type || "").toLowerCase();
+  return rules.some((r) =>
+    r.startsWith(".")
+      ? name.endsWith(r)
+      : r.endsWith("/*")
+        ? type.startsWith(r.slice(0, -1))
+        : type === r,
+  );
+}
+
 export function FileDrop(p: FileDropProps) {
   const over = React.useState(false),
     files = useControlled(p.files, [], p.onChange),
-    inp = React.useRef<HTMLInputElement>(null);
+    inp = React.useRef<HTMLInputElement>(null),
+    timers = React.useRef<ReturnType<typeof setInterval>[]>([]);
+  // Simulated progress is a demo of the look; with `onFiles` the app reports real progress, so
+  // an uncontrolled list without simulation shows no progress at all.
+  const simulate = p.simulateProgress ?? !p.onFiles,
+    tracked = simulate || p.files !== undefined;
+  React.useEffect(
+    () => () => {
+      timers.current.forEach(clearInterval);
+    },
+    [],
+  );
   function take(list: FileList | null) {
-    const add: UploadFile[] = Array.from(list || []).map((f) => ({
+    let picked = Array.from(list || []);
+    const rejected = picked.filter((f) => !acceptsFile(f, p.accept));
+    picked = picked.filter((f) => acceptsFile(f, p.accept));
+    if (p.multiple === false) picked = picked.slice(0, 1);
+    if (rejected.length) p.onReject?.(rejected);
+    if (!picked.length) return;
+    p.onFiles?.(picked);
+    const add: UploadFile[] = picked.map((f) => ({
       name: f.name,
       size: f.size,
       progress: 0,
+      file: f,
       id: Math.random().toString(36).slice(2),
     }));
-    if (!add.length) return;
     const all = (p.multiple === false ? [] : files[0]).concat(add);
     files[1](all);
+    if (!simulate) return;
     add.forEach((f, k) => {
       let t = 0;
       const iv = setInterval(
@@ -913,6 +950,7 @@ export function FileDrop(p: FileDropProps) {
         },
         160 + k * 40,
       );
+      timers.current.push(iv);
     });
   }
   return (
@@ -971,19 +1009,30 @@ export function FileDrop(p: FileDropProps) {
           }}
         >
           {files[0].map((f) => {
-            const done = f.progress >= 100;
+            // untracked: a file that is only listed (the app uploads it, or not yet)
+            const pending = tracked && f.progress < 100,
+              done = tracked && f.progress >= 100;
             return (
               <div key={f.id} className="tf-upload">
-                <TintIcon icon="file" tint={done ? "mint" : "sky"} />
+                <TintIcon icon="file" tint={pending ? "sky" : "mint"} />
                 <div className="tf-upload-text">
                   <b>{f.name}</b>
                   <span>
                     {done
                       ? `${fsize(f.size)} · uploaded`
-                      : Math.round(f.progress) + "% · " + fsize(f.size)}
+                      : pending
+                        ? Math.round(f.progress) + "% · " + fsize(f.size)
+                        : fsize(f.size)}
                   </span>
-                  {!done && (
-                    <span className="tf-progress">
+                  {pending && (
+                    <span
+                      className="tf-progress"
+                      role="progressbar"
+                      aria-label={f.name}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-valuenow={Math.round(f.progress)}
+                    >
                       <span
                         style={{
                           width: f.progress + "%",
@@ -993,11 +1042,12 @@ export function FileDrop(p: FileDropProps) {
                   )}
                 </div>
                 <IconButton
-                  icon={done ? "trash" : "x"}
-                  label={done ? `Remove ${f.name}` : "Cancel upload"}
+                  icon={pending ? "x" : "trash"}
+                  label={pending ? "Cancel upload" : `Remove ${f.name}`}
                   size="sm"
                   onClick={() => {
                     files[1](files[0].filter((x) => x.id !== f.id));
+                    p.onRemove?.(f);
                   }}
                 />
               </div>

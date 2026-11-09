@@ -720,13 +720,34 @@ export interface UploadFile {
   id: string;
   name: string;
   size: number;
+  /** Upload progress 0–100: a bar while below 100, "uploaded" at 100. */
   progress: number;
+  /** The picked or dropped file (set by FileDrop for files it adds). */
+  file?: File;
 }
 export interface FileDropProps extends BaseProps {
+  /** The listed files (controlled); set `progress` per file to show real upload progress. */
   files?: UploadFile[];
+  /** The list changed: files added (with their `file`) or removed. */
   onChange?: (f: UploadFile[]) => void;
+  /**
+   * The person picked or dropped files: the real `File` objects, after `accept` and `multiple`.
+   * Upload them yourself. To show progress, control `files` and set each `progress`; an
+   * uncontrolled list shows them with their size only.
+   */
+  onFiles?: (files: File[]) => void;
+  /** Dropped files that do not match `accept` (show an inline Alert). */
+  onReject?: (files: File[]) => void;
+  /** A listed file was removed or its upload cancelled. */
+  onRemove?: (f: UploadFile) => void;
+  /**
+   * Animate made-up progress for added files, as a demo of the look. Default: on without
+   * `onFiles` (as before), off with it.
+   */
+  simulateProgress?: boolean;
   title?: string;
   hint?: string;
+  /** Accepted types, as for `<input type="file">` ("image/*,.pdf"); also checked on drop. */
   accept?: string;
   multiple?: boolean;
 }
