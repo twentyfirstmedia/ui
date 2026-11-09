@@ -1,5 +1,12 @@
 # @twentyfirstmedia/halo
 
+## 0.3.0
+
+### Patch Changes
+
+- Updated dependencies [[`bef588d`](https://github.com/twentyfirstmedia/ui/commit/bef588d0fb521a5b458113095a7952222efe3c63), [`ef1090f`](https://github.com/twentyfirstmedia/ui/commit/ef1090f32204a227ed0ad717e74ea057f6d4da90), [`ece54b1`](https://github.com/twentyfirstmedia/ui/commit/ece54b18c3594f595386608e12c93190aa41d5bb), [`4cf034a`](https://github.com/twentyfirstmedia/ui/commit/4cf034af9d2a7eafae5281252e6f7857a74f8540), [`d408a82`](https://github.com/twentyfirstmedia/ui/commit/d408a82cc5ab0acf5401c56118acf36e62516a81), [`3b0992d`](https://github.com/twentyfirstmedia/ui/commit/3b0992dd44ef4f864e96c9735d55a9dbb18b8747)]:
+  - @twentyfirstmedia/ui-core@0.3.0
+
 ## 0.2.1
 
 ### Patch Changes

@@ -1,5 +1,37 @@
 # @twentyfirstmedia/ui-core
 
+## 0.3.0
+
+### Minor Changes
+
+- [#30](https://github.com/twentyfirstmedia/ui/pull/30) [`bef588d`](https://github.com/twentyfirstmedia/ui/commit/bef588d0fb521a5b458113095a7952222efe3c63) Thanks [@robintrepte](https://github.com/robintrepte)! - `Button` and `IconButton` pass native attributes on to their `<button>` (or, with `asChild`, to the child): `id`, `name`, `value`, `form`, `title`, `tabIndex`, `autoFocus`, `aria-label`, `aria-labelledby`, `aria-describedby`, `aria-expanded`, `aria-controls`, `aria-haspopup`, `aria-pressed`, `aria-current` (documented as `NativeButtonProps`), plus any other `<button>` attribute, `data-*`, event handlers and, in React 19, `ref`. `type` also takes `"reset"`, and `IconButton` takes `type`. On `IconButton`, `aria-label` or `title` override the ones `label` sets. With `asChild`, `onClick` and the other attributes now reach the child as well.
+  
+  In `@twentyfirstmedia/elements`, `<tf-button>` and `<tf-icon-button>` take these as attributes; `aria-*` attributes move from the host to the inner button. The docs and the MCP server list them with both components.
+
+- [#28](https://github.com/twentyfirstmedia/ui/pull/28) [`ef1090f`](https://github.com/twentyfirstmedia/ui/commit/ef1090f32204a227ed0ad717e74ea057f6d4da90) Thanks [@robintrepte](https://github.com/robintrepte)! - `FileDrop` hands over the real files.
+  
+  - New `onFiles(files: File[])` with the `File` objects the person picked or dropped, after `accept` and `multiple`. Added list entries carry their `file` too, so `onChange` gets them as well.
+  - Progress only when the app reports it: with `onFiles`, nothing is simulated; set `progress` on controlled `files` to show a bar (now a labelled `progressbar`). An uncontrolled list with `onFiles` shows each file with its size only.
+  - `accept` is checked on drop as well; `onReject` receives what did not match. `onRemove` reports removed or cancelled files.
+  - `simulateProgress` keeps the old demo animation; it stays the default without `onFiles`, so existing code behaves as before. Running simulations stop on unmount.
+
+- [#31](https://github.com/twentyfirstmedia/ui/pull/31) [`ece54b1`](https://github.com/twentyfirstmedia/ui/commit/ece54b18c3594f595386608e12c93190aa41d5bb) Thanks [@robintrepte](https://github.com/robintrepte)! - `Gallery` and `BeforeAfter` load images lazily and take `loading` and `referrerPolicy`.
+  
+  - `Gallery`: the main image loads lazily by default (`loading="eager"` for a gallery at the top of the page), thumbnails always lazily, all images decode asynchronously; `referrerPolicy` applies to every image (new type `ImageReferrerPolicy`).
+  - `BeforeAfter`: the slider has an `aria-valuetext` ("Before 40%, After 60%", with `beforeLabel`/`afterLabel`), overridable with `valueText(percent)`; its accessible name is `label`. Page Up/Down, Home and End move the slider; arrow keys no longer scroll the page while it has focus. Both images take `loading` (default lazy) and `referrerPolicy`.
+
+- [#29](https://github.com/twentyfirstmedia/ui/pull/29) [`4cf034a`](https://github.com/twentyfirstmedia/ui/commit/4cf034af9d2a7eafae5281252e6f7857a74f8540) Thanks [@robintrepte](https://github.com/robintrepte)! - `Pagination` can be controlled: `page` with `onChange(page)` (1-based), or `defaultPage` with an optional `onChange` for an uncontrolled pager. `page` without `onChange` stays the start page, as before. Clicking the current page or past either end no longer reports a change.
+
+- [#33](https://github.com/twentyfirstmedia/ui/pull/33) [`d408a82`](https://github.com/twentyfirstmedia/ui/commit/d408a82cc5ab0acf5401c56118acf36e62516a81) Thanks [@robintrepte](https://github.com/robintrepte)! - Every built-in string is overridable, and numbers follow a locale.
+  
+  - `UIProvider messages`: replace any text a component shows on its own (accessible names such as "Close", "Send", "Previous image", "Select row", button texts, placeholders, status words, validation messages). Partial and nested; props such as `title` or `label` still win. English stays the default and no translations ship. `useUIStrings()`, `DEFAULT_STRINGS`, the `UIStrings` and `UIMessages` types, and one exported group per component file (`MEDIA_STRINGS` …).
+  - `UIProvider locale` (BCP 47, default `en-US`): every number, amount, percentage and date in components, calendar month and weekday names. `useFormat()` returns the helpers bound to it; `formatNumber`, `formatMoney`, `formatPercent` and `formatDate` take an optional locale as their last argument.
+  - `CountUp` and `StatTile` read string values in the provider locale ("13,05 €/m²" in de-DE counts to 13.05 instead of showing "1,305"). New helpers `parseFormatted`, `formatLike`, `numberSeparators`.
+  - `SearchField` takes `label` (accessible name).
+  - Fixed: `VoiceMode` with `stateLabel` showed "Listening…".
+
+- [#32](https://github.com/twentyfirstmedia/ui/pull/32) [`3b0992d`](https://github.com/twentyfirstmedia/ui/commit/3b0992dd44ef4f864e96c9735d55a9dbb18b8747) Thanks [@robintrepte](https://github.com/robintrepte)! - `TextField` passes native constraints to its input: `min`, `max`, `step`, `minLength`, `maxLength`, `pattern`, `inputMode`, `readOnly` and `autoFocus` (next to the existing `name`, `required` and `id`), all typed and documented. `PlanCard` takes `disabled` for its button.
+
 ## 0.2.1
 
 ### Patch Changes
