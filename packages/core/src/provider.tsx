@@ -15,6 +15,11 @@ export type Theme = "light" | "dark" | "system";
 export type Density = "compact" | "comfortable";
 /** How surfaces paint: solid (the default) or glass, translucent over what is behind them. */
 export type Surface = "solid" | "glass";
+/**
+ * How much things move: "standard" (the kit's own motion), "expressive" (longer, staggered page
+ * entrances, more travel; Pro stays crisp) or "off". A reduced-motion setting always means "off".
+ */
+export type Motion = "off" | "standard" | "expressive";
 
 export interface UIProviderProps {
   /** Which kit's CSS applies (sets `data-kit`). Only matters when both kits are loaded (`themes.css`). */
@@ -42,6 +47,12 @@ export interface UIProviderProps {
    * `surface="glass"` themselves; `surface="solid"` on one opts it out.
    */
   surface?: Surface;
+  /**
+   * Motion level for everything inside (sets `data-motion`): `"standard"` (default), `"expressive"`
+   * for orchestrated page entrances, or `"off"`, e.g. for a setting in your app. The reader's
+   * reduced-motion setting always turns motion off.
+   */
+  motion?: Motion;
   className?: string;
   style?: CSSProperties;
   children?: ReactNode;
@@ -52,6 +63,7 @@ export interface UIContextValue {
   theme: Theme | undefined;
   density: Density | undefined;
   surface: Surface | undefined;
+  motion: Motion | undefined;
   /** Element portals render into (null: document.body). */
   portalRoot: HTMLElement | null;
 }
@@ -61,6 +73,7 @@ const UIContext = createContext<UIContextValue>({
   theme: undefined,
   density: undefined,
   surface: undefined,
+  motion: undefined,
   portalRoot: null,
 });
 
@@ -101,6 +114,7 @@ export function UIProvider(p: UIProviderProps) {
   const theme = p.theme ?? parent.theme;
   const density = p.density ?? parent.density;
   const surface = p.surface ?? parent.surface;
+  const motion = p.motion ?? parent.motion;
   const perMode = !!p.tokens && isThemeInput(p.tokens);
   const dark = useDarkMode(theme, kit, perMode);
   const vars = useMemo(() => {
@@ -136,12 +150,13 @@ export function UIProvider(p: UIProviderProps) {
     set("data-theme", p.theme);
     set("data-density", p.density);
     set("data-surface", p.surface);
-  }, [scope, p.kit, p.theme, p.density, p.surface]);
+    set("data-motion", p.motion);
+  }, [scope, p.kit, p.theme, p.density, p.surface, p.motion]);
 
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
   const ctx = useMemo<UIContextValue>(
-    () => ({ kit, theme, density, surface, portalRoot }),
-    [kit, theme, density, surface, portalRoot],
+    () => ({ kit, theme, density, surface, motion, portalRoot }),
+    [kit, theme, density, surface, motion, portalRoot],
   );
   // Derived colours (glass, hover shades, Pro's scale) are worked out where data-theme sits. A
   // subtree with its own tokens needs data-theme too, or they would keep the outer values.
@@ -158,6 +173,7 @@ export function UIProvider(p: UIProviderProps) {
           data-theme={subtreeTheme}
           data-density={p.density}
           data-surface={p.surface}
+          data-motion={p.motion}
         >
           {content}
           <div ref={setPortalRoot} data-tf-portal="" />

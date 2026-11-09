@@ -118,15 +118,18 @@ export function scope(kit: Kit, css: string, from?: string): string {
       return [`${k} ${t}`];
     });
   });
-  if (frames.size) {
-    const re = new RegExp(
-      `(?<![\\w-])(${[...frames.keys()].map((n) => n.replace(/[-]/g, "\\-")).join("|")})(?![\\w-])`,
-      "g",
+  // keyframes of the kit are all `tf-…`: rename references to them in any file, plus the
+  // file's own other keyframes
+  const re = new RegExp(
+    `(?<![\\w-])(tf-(?!${kit}-)[a-z0-9-]+${frames.size ? `|${[...frames.keys()].map((n) => n.replace(/[-]/g, "\\-")).join("|")}` : ""})(?![\\w-])`,
+    "g",
+  );
+  root.walkDecls(/^(-webkit-)?animation(-name)?$/, (d) => {
+    d.value = d.value.replace(
+      re,
+      (m) => frames.get(m) ?? (m.startsWith("tf-") ? `tf-${kit}-${m.slice(3)}` : m),
     );
-    root.walkDecls(/^(-webkit-)?animation(-name)?$/, (d) => {
-      d.value = d.value.replace(re, (m) => frames.get(m) ?? m);
-    });
-  }
+  });
   return root.toString();
 }
 

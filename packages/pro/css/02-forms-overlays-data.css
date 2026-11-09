@@ -1376,6 +1376,7 @@ label.tf-menu-item {
   transform-box: fill-box;
   transform-origin: bottom;
   animation: tf-grow-y var(--dur-slow) var(--ease-out) both;
+  animation-delay: var(--enter-delay, 0ms);
   transition: opacity var(--dur-fast);
 }
 .tf-chart g.dim .tf-seg-bar {
@@ -1421,7 +1422,7 @@ label.tf-menu-item {
 .tf-area2 {
   opacity: 0;
   animation: tf-area2-in var(--dur-slow) var(--ease-out) forwards;
-  animation-delay: 400ms;
+  animation-delay: calc(var(--enter-delay, 0ms) + calc(400ms * var(--motion-time)));
 }
 @keyframes tf-area2-in {
   to {
@@ -1657,6 +1658,18 @@ label.tf-menu-item {
   .tf-toast-timer {
     display: none;
   }
+}
+/* the same for an app that turns motion off: data-motion="off" */
+[data-motion="off"] .tf-seg-bar,
+[data-motion="off"] .tf-area2,
+[data-motion="off"] .tf-heat-cell,
+[data-motion="off"] .tf-tooltip,
+[data-motion="off"] .tf-popover {
+  animation: none !important;
+  opacity: 1;
+}
+[data-motion="off"] .tf-toast-timer {
+  display: none;
 }
 @media (max-width: 640px) {
   .tf-dp {

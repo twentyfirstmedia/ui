@@ -857,19 +857,19 @@
 @keyframes tf-sheet-left {
   from {
     opacity: 0;
-    transform: translateX(-24px);
+    transform: translateX(calc(-24px * var(--motion-travel)));
   }
 }
 @keyframes tf-sheet-top {
   from {
     opacity: 0;
-    transform: translateY(-24px);
+    transform: translateY(calc(-24px * var(--motion-travel)));
   }
 }
 @keyframes tf-sheet-bottom {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(calc(24px * var(--motion-travel)));
   }
 }
 

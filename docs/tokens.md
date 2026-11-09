@@ -201,6 +201,10 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--dur-enter` | `520ms` | `{duration-base}` | Entrances: short and quiet in Pro. |
 | `--dur-slow` | `900ms` | `{duration-base}` | Count-ups, chart draw-ins and progress fills: short in Pro. |
 | `--stagger-step` | `55ms` | `0ms` | No staggered entrances in Pro. |
+| `--dur-exit` | `160ms` | `{duration-fast}` | Overlays leaving: menus, popovers, dialogs, drawers, toasts. |
+| `--motion-time` | `1` | `1` | Multiplier for choreography delays (when the dock, side panels and chart data come in). |
+| `--motion-travel` | `1` | `1` | Multiplier for how far things travel when they come in. |
+| `--motion-blur` | `0px` | `0px` | Blur things come out of as they rise (expressive Halo only). |
 | `--ease-out` | `cubic-bezier(0.22, 1, 0.36, 1)` | `{ease-standard}` | Entrances. |
 | `--ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` | `{ease-standard}` | No overshoot in Pro: the standard curve. |
 | `--ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | `{ease-standard}` | Things moving between two resting places. |

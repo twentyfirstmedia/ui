@@ -308,7 +308,10 @@ export interface StaggerProps extends BaseProps {
   as?: string;
   className?: string;
   style?: CSSProperties;
+  /** Extra delay before the first child, in ms. */
   delay?: number;
+  /** Below the fold, wait until the group scrolls into view (default true). */
+  reveal?: boolean;
   children?: ReactNode;
 }
 export interface CountUpProps extends BaseProps {
@@ -430,6 +433,8 @@ export interface ModalProps extends BaseProps {
   onClose?: () => void;
   style?: CSSProperties;
   children?: ReactNode;
+  /** Optional: with `open` the component stays mounted while it animates out; without it, render it only while open. */
+  open?: boolean;
 }
 /** Mounts a demo page with a "Replay motion" button that re-runs every entrance. */
 export interface SubNavItem {
@@ -454,6 +459,8 @@ export interface DrawerProps extends BaseProps, DrawerSide {
   width?: number | string;
   inline?: boolean;
   children?: ReactNode;
+  /** Optional: with `open` the component stays mounted while it animates out; without it, render it only while open. */
+  open?: boolean;
 }
 export interface PaletteItem {
   id?: string | number;
@@ -476,6 +483,8 @@ export interface CommandPaletteProps extends BaseProps {
   empty?: ReactNode;
   /** Called with the query as the user types, for searching on a server. */
   onQueryChange?: (query: string) => void;
+  /** Optional: with `open` the component stays mounted while it animates out; without it, render it only while open. */
+  open?: boolean;
 }
 export interface DrawerSide {
   /** Edge the sheet slides in from (default right). */

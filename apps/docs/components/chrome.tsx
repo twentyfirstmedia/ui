@@ -3,9 +3,12 @@ import {
   CommandPalette,
   Icon,
   IconButton,
+  Menu,
+  Popover,
   Segmented,
   Tooltip,
   UIProvider,
+  type Motion,
   type PaletteItem,
 } from "@twentyfirstmedia/ui-core";
 import Link from "next/link";
@@ -15,6 +18,11 @@ import { Logo } from "@/components/logo";
 import { GITHUB, KIT_LABEL, type KitName, type NavSection } from "@/lib/site";
 
 type ThemeName = "light" | "dark";
+const MOTION: { value: Motion; label: string }[] = [
+  { value: "off", label: "Off" },
+  { value: "standard", label: "Standard" },
+  { value: "expressive", label: "Expressive" },
+];
 
 function stored<T extends string>(key: string, fallback: T): T {
   try {
@@ -45,12 +53,22 @@ export function Chrome({
   // undefined until the saved theme is read: the inline script in <head> has already set it
   const [saved, setTheme] = useState<ThemeName | undefined>(undefined);
   const theme: ThemeName = saved ?? (kit === "pro" ? "dark" : "light");
+  const [motion, setMotion] = useState<Motion | undefined>(undefined);
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
 
   useEffect(() => {
     setTheme(stored<ThemeName>(`docs-theme-${kit}`, kit === "pro" ? "dark" : "light"));
   }, [kit]);
+  useEffect(() => {
+    const m = stored<Motion>("docs-motion", "standard");
+    setMotion(m === "standard" ? undefined : m);
+  }, []);
+  const chooseMotion = (m: Motion) => {
+    setMotion(m === "standard" ? undefined : m);
+    store("docs-motion", m);
+  };
+  const motionLabel = MOTION.find((m) => m.value === (motion ?? "standard"))?.label;
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -103,6 +121,29 @@ export function Chrome({
   /** Theme and GitHub: in the header on wide screens, in the menu on phones. */
   const prefs = () => (
     <>
+      <Popover
+        align="end"
+        trigger={({ toggle }) => (
+          <Tooltip label={`Motion: ${motionLabel}`}>
+            <IconButton icon="sparkle" label={`Motion: ${motionLabel}`} onClick={toggle} />
+          </Tooltip>
+        )}
+      >
+        {({ close }) => (
+          <Menu
+            label="Motion"
+            autoFocus
+            onClose={close}
+            items={MOTION.map((m) => ({
+              label: m.label,
+              type: "radio" as const,
+              group: "motion",
+              checked: (motion ?? "standard") === m.value,
+              onClick: () => chooseMotion(m.value),
+            }))}
+          />
+        )}
+      </Popover>
       <Tooltip label={theme === "dark" ? "Light theme" : "Dark theme"}>
         <IconButton
           icon={theme === "dark" ? "sun" : "moon"}
@@ -122,7 +163,7 @@ export function Chrome({
   );
 
   return (
-    <UIProvider kit={kit} theme={saved}>
+    <UIProvider kit={kit} theme={saved} motion={motion}>
       <a className="docs-skip" href="#content">
         Skip to content
       </a>

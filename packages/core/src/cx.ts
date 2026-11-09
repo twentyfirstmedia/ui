@@ -3,14 +3,31 @@ export function cx(...parts: unknown[]): string {
   return parts.filter((x): x is string => typeof x === "string" && x !== "").join(" ");
 }
 
-/** True when the user asked for reduced motion (false on the server). */
-export function reduced(): boolean {
+/**
+ * True when motion is off for `el` (or the page): the reader asked for reduced motion, or the
+ * nearest `data-motion` says "off". False on the server.
+ */
+export function reduced(el?: Element | null): boolean {
   try {
-    return (
-      typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    );
+    if (typeof window === "undefined") return false;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return true;
+    const host = (el ?? document.documentElement).closest("[data-motion]");
+    return host?.getAttribute("data-motion") === "off";
   } catch {
     return false;
+  }
+}
+
+/** The entrance delay of the card `el` sits in (Stagger, `tf-in`), in ms. */
+export function enterDelay(el?: Element | null): number {
+  try {
+    const host = el?.closest(".tf-stagger > *, .tf-in");
+    if (!host) return 0;
+    const d = getComputedStyle(host).animationDelay.split(",")[0]?.trim() ?? "";
+    const n = parseFloat(d);
+    return isNaN(n) ? 0 : d.endsWith("ms") ? n : n * 1000;
+  } catch {
+    return 0;
   }
 }
 

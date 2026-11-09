@@ -51,6 +51,7 @@
 - **Accessible.** Keyboard paths, focus rings and ARIA on every component; axe (WCAG 2.1 AA) runs on every example in both kits, light and dark.
 - **Themes like shadcn/ui.** The same variables (`--primary`, `--secondary`, `--muted`, `--accent`, `--destructive`, `--border`, `--ring`, `--radius`, charts, sidebar) restyle every component in both kits, light and dark. Paste a theme from ui.shadcn.com/themes or build one live.
 - **Glass for UI over maps, 3D and video.** `surface="glass"` and `FloatingLayout` turn panels, docks, menus and controls into translucent, blurred glass that stays readable over any backdrop, milky in Halo, dark and hairline-edged in Pro.
+- **Motion with one switch.** Choreographed page entrances, charts that draw once their card is in, layers that animate out as well as in, page transitions and reveal on scroll. `motion="off" | "standard" | "expressive"`; reduced motion always wins.
 - **Tokens only.** No colour literals in component CSS. One token file per kit feeds CSS variables and a Tailwind v4 preset with shadcn's utility names (`bg-primary`, `text-muted-foreground`).
 - **Any stack.** React first; every component also ships as a custom element for plain HTML, Vue, Svelte, Angular and Astro.
 - **Private by default.** Self-hosted fonts, no telemetry, no network requests from components. Tree-shakeable: a Button is about 3 KB.

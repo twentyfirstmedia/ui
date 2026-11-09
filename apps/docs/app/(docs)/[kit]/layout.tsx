@@ -36,7 +36,7 @@ export async function generateViewport({
 
 /** Sets the saved theme before the first paint, so dark mode does not flash. */
 const themeScript = (kit: string) =>
-  `try{var t=localStorage.getItem("docs-theme-${kit}");document.documentElement.setAttribute("data-theme",t||"${kit === "pro" ? "dark" : "light"}")}catch(e){}`;
+  `try{var t=localStorage.getItem("docs-theme-${kit}");document.documentElement.setAttribute("data-theme",t||"${kit === "pro" ? "dark" : "light"}");var m=localStorage.getItem("docs-motion");if(m==="off"||m==="expressive")document.documentElement.setAttribute("data-motion",m)}catch(e){}`;
 
 export default async function KitLayout({
   children,

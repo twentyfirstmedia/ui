@@ -2166,6 +2166,13 @@
     animation: none !important;
   }
 }
+/* the same for an app that turns motion off: data-motion="off" */
+[data-motion="off"] .tf-shape-pulse,
+[data-motion="off"] .tf-voice-wave i,
+[data-motion="off"] .tf-stage.st-running::after,
+[data-motion="off"] .tf-log-line.fresh {
+  animation: none !important;
+}
 .tf-approval-mail {
   padding: 12px 16px;
   border-radius: var(--radius-md);

@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { leaving, usePresence } from "../presence.js";
 import { moveFocus, useId } from "../hooks.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
@@ -178,8 +179,10 @@ export function Menu(p: MenuProps) {
 }
 
 export function Modal(p: ModalProps) {
+  const pr = usePresence(p.open ?? true);
+  if (!pr.mounted) return null;
   return (
-    <div className="tf-modal-wrap" style={p.style}>
+    <div {...leaving(pr.closing)} className="tf-modal-wrap" style={p.style}>
       <div className="tf-backdrop" aria-hidden />
       <div className="tf-modal" role="dialog" aria-modal="true" aria-label={p.title}>
         <span className="tf-modal-close">
@@ -277,7 +280,8 @@ export function ConfirmDialog(p: ConfirmDialogProps) {
   const titleId = useId("confirm");
   const typed = React.useState(""),
     ok = !p.confirmText || typed[0] === p.confirmText,
-    cancel = React.useRef<HTMLButtonElement>(null);
+    cancel = React.useRef<HTMLButtonElement>(null),
+    pr = usePresence(!!p.open);
   React.useEffect(() => {
     if (!p.open) return;
     typed[1]("");
@@ -292,10 +296,10 @@ export function ConfirmDialog(p: ConfirmDialogProps) {
       document.removeEventListener("keydown", k);
     };
   }, [p.open]);
-  if (!p.open) return null;
+  if (!pr.mounted) return null;
   return (
     <Portal>
-      <div className="tf-overlay">
+      <div {...leaving(pr.closing)} className="tf-overlay">
         <div className="tf-backdrop" onClick={p.onCancel} />
         <div
           className="tf-modal tf-confirm"
@@ -371,6 +375,7 @@ export function ToastItem(p: { t: ToastData }) {
   const tint = ALERT_TINT[t.tone] || "mint";
   return (
     <div
+      {...leaving(!!t.leaving)}
       className="tf-toast tf-toast-x"
       role={t.tone === "danger" ? "alert" : "status"}
       onPointerEnter={() => {

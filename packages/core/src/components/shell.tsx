@@ -73,7 +73,7 @@ function railBtn(it: RailItem, i: number) {
       type="button"
       className="tf-rail-btn"
       style={{
-        animationDelay: 200 + i * 50 + "ms",
+        animationDelay: `calc(${200 + i * 50}ms * var(--motion-time, 1))`,
       }}
       aria-label={it.count ? `${it.label}, ${it.count}` : it.label}
       title={it.label}

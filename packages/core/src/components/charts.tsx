@@ -76,7 +76,7 @@ export function BarChart(p: BarChartProps) {
                 height={bh}
                 rx={Math.min(10, bw / 2)}
                 style={{
-                  animationDelay: 120 + i * 55 + "ms",
+                  animationDelay: `calc(var(--enter-delay, 0ms) + ${120 + i * 55}ms * var(--motion-time, 1))`,
                 }}
               >
                 <title>{d.label + ": " + d.value}</title>
@@ -164,7 +164,7 @@ export function LineChart(p: LineChartProps) {
                 d={d}
                 pathLength={1}
                 style={{
-                  animationDelay: 150 + si * 200 + "ms",
+                  animationDelay: `calc(var(--enter-delay, 0ms) + ${150 + si * 200}ms * var(--motion-time, 1))`,
                 }}
               />
               <circle
@@ -430,7 +430,7 @@ export function StackedBarChart(p: StackedBarChartProps) {
                       key={si}
                       className={cx("tf-seg-bar", "tf-sf-" + (s.tint || "ink"))}
                       style={{
-                        animationDelay: 120 + i * 45 + "ms",
+                        animationDelay: `calc(var(--enter-delay, 0ms) + ${120 + i * 45}ms * var(--motion-time, 1))`,
                       }}
                       d={
                         top
@@ -715,7 +715,7 @@ export function Heatmap(p: HeatmapProps) {
                     hov[0] && hov[0][0] === ri && hov[0][1] === ci && "hov",
                   )}
                   style={{
-                    animationDelay: ci * 12 + ri * 30 + "ms",
+                    animationDelay: `calc(var(--enter-delay, 0ms) + ${ci * 12 + ri * 30}ms * var(--motion-time, 1))`,
                   }}
                   onPointerEnter={() => {
                     hov[1]([ri, ci]);

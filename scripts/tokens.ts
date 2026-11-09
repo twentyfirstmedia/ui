@@ -47,6 +47,8 @@ export interface KitTokens {
   size: Token[];
   z: Token[];
   density: Record<"compact" | "comfortable", Record<string, string>>;
+  /** Motion levels (`data-motion`): overrides of motion tokens. "off" also applies for reduced motion. */
+  motionLevels: Record<"off" | "expressive", Record<string, string>>;
 }
 
 /** Groups whose values change with the theme (or reference something that does). */
@@ -152,7 +154,29 @@ export function tokensCss(kit: Kit, t: KitTokens, scoped = false): string {
       Object.entries(t.density[d]).map(([n, v]) => `--${n}: ${ref(v)};`),
     );
   }
+  css += motionCss(t, k, self);
   css += glassFallbacks(k, self);
+  return css;
+}
+
+/**
+ * Motion levels: `data-motion="expressive"` turns up durations, staggering and travel;
+ * `data-motion="off"` (and the reader's reduced-motion setting, always) turns them to zero.
+ */
+function motionCss(t: KitTokens, k: string, self: (attr: string) => string): string {
+  const known = new Set(t.motion.map((m) => m.name));
+  const decls = (level: "off" | "expressive") =>
+    Object.entries(t.motionLevels[level]).map(([n, v]) => {
+      if (!known.has(n)) throw new Error(`motionLevels.${level}: unknown motion token "${n}"`);
+      return `--${n}: ${ref(v)};`;
+    });
+  let css = tokenBlock(self('[data-motion="expressive"]'), decls("expressive"));
+  css += tokenBlock(self('[data-motion="off"]'), decls("off"));
+  css += `@media (prefers-reduced-motion: reduce) {\n${tokenBlock(
+    [k, self("[data-motion]"), self("[data-theme]")].join(", "),
+    decls("off"),
+    "  ",
+  )}}\n`;
   return css;
 }
 

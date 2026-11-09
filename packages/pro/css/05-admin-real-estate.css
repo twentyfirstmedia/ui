@@ -339,7 +339,7 @@
 @keyframes tf-fresh {
   0% {
     background: var(--surface-sunken);
-    transform: translateY(-4px);
+    transform: translateY(calc(-4px * var(--motion-travel)));
     opacity: 0;
   }
   15% {
@@ -2242,6 +2242,13 @@ button.tf-runs-main[aria-expanded]:hover {
   .tf-livefeed-row.fresh {
     animation: none;
   }
+}
+/* the same for an app that turns motion off: data-motion="off" */
+[data-motion="off"] .tf-live-dot,
+[data-motion="off"] .tf-map-bubble.pulse::after,
+[data-motion="off"] .tf-map-pin.pulse::after,
+[data-motion="off"] .tf-livefeed-row.fresh {
+  animation: none;
 }
 .tf-map-world {
   position: absolute;

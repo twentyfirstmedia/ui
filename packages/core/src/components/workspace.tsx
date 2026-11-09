@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { leaving, usePresence } from "../presence.js";
 import { formatMoney } from "../format.js";
 import { Icon } from "../Icon.js";
 import { useScrollFocus, useTrap } from "../hooks.js";
@@ -65,9 +66,12 @@ export function SubNav(p: SubNavProps) {
 }
 export function Drawer(p: DrawerProps) {
   const ref = React.useRef<HTMLElement>(null);
+  const pr = usePresence(p.open ?? true);
   useTrap(ref, p.onClose);
+  if (!pr.mounted) return null;
   return (
     <div
+      {...leaving(pr.closing)}
       className={cx("tf-drawer-wrap", p.inline && "inline")}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget && p.onClose) p.onClose?.();
@@ -120,7 +124,8 @@ export function Drawer(p: DrawerProps) {
 export function CommandPalette(p: CommandPaletteProps) {
   const q = React.useState(""),
     idx = React.useState(0),
-    ref = React.useRef<HTMLDivElement>(null);
+    ref = React.useRef<HTMLDivElement>(null),
+    pr = usePresence(p.open ?? true);
   useTrap(ref, p.onClose);
   const ql = q[0].toLowerCase().trim(),
     all = p.items || [];
@@ -168,8 +173,10 @@ export function CommandPalette(p: CommandPaletteProps) {
       });
     groups[groups.length - 1].items.push([it, i]);
   });
+  if (!pr.mounted) return null;
   return (
     <div
+      {...leaving(pr.closing)}
       className={cx("tf-palette-wrap", p.inline && "inline")}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget && p.onClose) p.onClose?.();

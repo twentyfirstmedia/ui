@@ -5,6 +5,7 @@
  * the WAI-ARIA authoring practices.
  */
 import * as React from "react";
+import { leaving, usePresence } from "../presence.js";
 import { Icon } from "../Icon.js";
 import { cx } from "../cx.js";
 import { moveFocus, useControlled, useId, useKeepInView } from "../hooks.js";
@@ -230,6 +231,7 @@ export function HoverCard(p: HoverCardProps) {
   const [open, setOpen] = React.useState(false);
   const t = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const card = React.useRef<HTMLDivElement>(null);
+  const pr = usePresence(open);
   useKeepInView(card, open);
   const later = (v: boolean, ms: number) => {
     clearTimeout(t.current);
@@ -251,8 +253,9 @@ export function HoverCard(p: HoverCardProps) {
       }}
     >
       {p.trigger}
-      {open && (
+      {pr.mounted && (
         <div
+          {...leaving(pr.closing)}
           ref={card}
           className={cx(
             "tf-hovercard",

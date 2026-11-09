@@ -598,7 +598,7 @@ export class TfElement extends HTMLElement {
         changed = true;
       }
     if (changed) this._bump();
-    if (def.dismiss.has(ev.prop)) this.hidden = true;
+    else if (def.dismiss.has(ev.prop)) this.hidden = true;
   }
 
   private _passes(ev: EventDef): boolean {
