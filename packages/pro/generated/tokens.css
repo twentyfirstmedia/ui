@@ -245,6 +245,12 @@
   --glass-border: color-mix(in srgb, var(--foreground) 14%, transparent);
   --glass-highlight: rgba(255, 255, 255, 0.07);
   --glass-sheen: transparent;
+  --ambient-base: var(--background);
+  --ambient-1: color-mix(in oklab, var(--chart-1) 30%, var(--background));
+  --ambient-2: color-mix(in oklab, var(--chart-4) 26%, var(--background));
+  --ambient-3: color-mix(in oklab, var(--chart-2) 22%, var(--background));
+  --ambient-4: color-mix(in oklab, var(--foreground) 8%, var(--background));
+  --ambient-scrim: rgba(9, 9, 11, 0.55);
   --bg-000: var(--background);
   --bg-100: var(--card);
   --bg-200: var(--muted);
@@ -313,6 +319,7 @@
   --panel-pad: var(--space-4);
   --panel-gap: 1px;
   --glass-filter: blur(16px) saturate(120%) brightness(0.8);
+  --glass-tint: 40%;
   color-scheme: dark;
 }
 @media (prefers-color-scheme: dark) {
@@ -386,6 +393,12 @@
     --glass-border: color-mix(in srgb, var(--foreground) 14%, transparent);
     --glass-highlight: rgba(255, 255, 255, 0.07);
     --glass-sheen: transparent;
+    --ambient-base: var(--background);
+    --ambient-1: color-mix(in oklab, var(--chart-1) 30%, var(--background));
+    --ambient-2: color-mix(in oklab, var(--chart-4) 26%, var(--background));
+    --ambient-3: color-mix(in oklab, var(--chart-2) 22%, var(--background));
+    --ambient-4: color-mix(in oklab, var(--foreground) 8%, var(--background));
+    --ambient-scrim: rgba(9, 9, 11, 0.55);
     --bg-000: var(--background);
     --bg-100: var(--card);
     --bg-200: var(--muted);
@@ -454,6 +467,7 @@
     --panel-pad: var(--space-4);
     --panel-gap: 1px;
     --glass-filter: blur(16px) saturate(120%) brightness(0.8);
+    --glass-tint: 40%;
     color-scheme: dark;
   }
 }
@@ -528,6 +542,12 @@
     --glass-border: color-mix(in srgb, var(--foreground) 12%, transparent);
     --glass-highlight: rgba(255, 255, 255, 0.7);
     --glass-sheen: transparent;
+    --ambient-base: var(--background);
+    --ambient-1: color-mix(in oklab, var(--chart-1) 22%, var(--background));
+    --ambient-2: color-mix(in oklab, var(--chart-4) 18%, var(--background));
+    --ambient-3: color-mix(in oklab, var(--chart-2) 16%, var(--background));
+    --ambient-4: color-mix(in oklab, var(--foreground) 6%, var(--background));
+    --ambient-scrim: rgba(246, 246, 247, 0.4);
     --bg-000: var(--background);
     --bg-100: var(--card);
     --bg-200: var(--muted);
@@ -596,6 +616,7 @@
     --panel-pad: var(--space-4);
     --panel-gap: 1px;
     --glass-filter: blur(16px) saturate(130%) brightness(1.04);
+    --glass-tint: 40%;
     color-scheme: light;
   }
 }
@@ -669,6 +690,12 @@
   --glass-border: color-mix(in srgb, var(--foreground) 14%, transparent);
   --glass-highlight: rgba(255, 255, 255, 0.07);
   --glass-sheen: transparent;
+  --ambient-base: var(--background);
+  --ambient-1: color-mix(in oklab, var(--chart-1) 30%, var(--background));
+  --ambient-2: color-mix(in oklab, var(--chart-4) 26%, var(--background));
+  --ambient-3: color-mix(in oklab, var(--chart-2) 22%, var(--background));
+  --ambient-4: color-mix(in oklab, var(--foreground) 8%, var(--background));
+  --ambient-scrim: rgba(9, 9, 11, 0.55);
   --bg-000: var(--background);
   --bg-100: var(--card);
   --bg-200: var(--muted);
@@ -737,6 +764,7 @@
   --panel-pad: var(--space-4);
   --panel-gap: 1px;
   --glass-filter: blur(16px) saturate(120%) brightness(0.8);
+  --glass-tint: 40%;
   color-scheme: dark;
 }
 :where([data-theme="light"], .light) {
@@ -809,6 +837,12 @@
   --glass-border: color-mix(in srgb, var(--foreground) 12%, transparent);
   --glass-highlight: rgba(255, 255, 255, 0.7);
   --glass-sheen: transparent;
+  --ambient-base: var(--background);
+  --ambient-1: color-mix(in oklab, var(--chart-1) 22%, var(--background));
+  --ambient-2: color-mix(in oklab, var(--chart-4) 18%, var(--background));
+  --ambient-3: color-mix(in oklab, var(--chart-2) 16%, var(--background));
+  --ambient-4: color-mix(in oklab, var(--foreground) 6%, var(--background));
+  --ambient-scrim: rgba(246, 246, 247, 0.4);
   --bg-000: var(--background);
   --bg-100: var(--card);
   --bg-200: var(--muted);
@@ -877,6 +911,7 @@
   --panel-pad: var(--space-4);
   --panel-gap: 1px;
   --glass-filter: blur(16px) saturate(130%) brightness(1.04);
+  --glass-tint: 40%;
   color-scheme: light;
 }
 @media (pointer: coarse) {

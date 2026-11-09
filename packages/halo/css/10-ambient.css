@@ -1,0 +1,85 @@
+/* Ambient: a calm, living background for glass UI. Soft colour fields from the kit (pastels in
+ * Halo, a faint aurora in Pro) drift slowly; a photo or video can take their place under a scrim.
+ * The drift only moves (transform), stops with motion off and pauses off screen.
+ */
+:where(:has(> .tf-ambient:not(.fixed))) {
+  position: relative;
+  isolation: isolate;
+}
+.tf-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--ambient-base);
+  pointer-events: none;
+}
+.tf-ambient.fixed {
+  position: fixed;
+}
+.tf-ambient-field {
+  position: absolute;
+  width: 75%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--field), transparent);
+  animation: tf-ambient-drift 34s var(--ease-in-out) infinite alternate;
+}
+.tf-ambient-field:nth-child(1) {
+  top: -30%;
+  left: -15%;
+}
+.tf-ambient-field:nth-child(2) {
+  top: -10%;
+  right: -25%;
+  animation-duration: 41s;
+  animation-direction: alternate-reverse;
+}
+.tf-ambient-field:nth-child(3) {
+  bottom: -35%;
+  left: 10%;
+  animation-duration: 47s;
+}
+.tf-ambient-field:nth-child(4) {
+  bottom: -25%;
+  right: -10%;
+  animation-duration: 38s;
+  animation-direction: alternate-reverse;
+}
+.tf-ambient-field:nth-child(n + 5) {
+  top: 20%;
+  left: 30%;
+  width: 55%;
+  animation-duration: 52s;
+}
+@keyframes tf-ambient-drift {
+  to {
+    translate: 12% 9%;
+    scale: 1.15;
+  }
+}
+.tf-ambient.still .tf-ambient-field,
+.tf-ambient[data-paused] .tf-ambient-field {
+  animation-play-state: paused;
+}
+.tf-ambient-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.tf-ambient.media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ambient-scrim);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tf-ambient-field {
+    animation: none;
+  }
+}
+[data-motion="off"] .tf-ambient-field {
+  animation: none;
+}

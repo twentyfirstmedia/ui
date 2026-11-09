@@ -5,7 +5,15 @@ import { useState } from "react";
 import { formatMoney, formatPercent } from "./format.js";
 import { UIProvider } from "./provider.js";
 import { Portal } from "./portal.js";
-import { Card, Dock, FloatingLayout, MapView, Panel } from "./components/index.js";
+import {
+  Ambient,
+  AppShell,
+  Card,
+  Dock,
+  FloatingLayout,
+  MapView,
+  Panel,
+} from "./components/index.js";
 
 afterEach(() => {
   cleanup();
@@ -149,5 +157,50 @@ describe("UIProvider", () => {
     rerender(<FloatingLayout surface="solid" top={<b>top</b>} />);
     expect((container.querySelector(".tf-floating") as HTMLElement).dataset.surface).toBe("solid");
     expect(container.querySelector(".tf-floating-start")).toBeNull();
+  });
+
+  it("Ambient: kit fields by default, own colours, media, still or paused off screen", () => {
+    let fire: ((e: { isIntersecting: boolean }[]) => void) | undefined;
+    class IO {
+      constructor(cb: (e: { isIntersecting: boolean }[]) => void) {
+        fire = cb;
+      }
+      observe() {}
+      disconnect() {}
+    }
+    const orig = (globalThis as { IntersectionObserver?: unknown }).IntersectionObserver;
+    (globalThis as { IntersectionObserver?: unknown }).IntersectionObserver = IO;
+    const { container, rerender } = render(<Ambient />);
+    const root = container.querySelector(".tf-ambient") as HTMLElement;
+    expect(root.getAttribute("aria-hidden")).toBe("true");
+    const fields = root.querySelectorAll<HTMLElement>(".tf-ambient-field");
+    expect(fields).toHaveLength(4);
+    expect(fields[0]?.style.getPropertyValue("--field")).toBe("var(--ambient-1)");
+    act(() => fire?.([{ isIntersecting: false }]));
+    expect(root.hasAttribute("data-paused")).toBe(true);
+    act(() => fire?.([{ isIntersecting: true }]));
+    expect(root.hasAttribute("data-paused")).toBe(false);
+    rerender(<Ambient colors={["#ff8a00", "#e52e71"]} animate={false} fixed />);
+    const r2 = container.querySelector(".tf-ambient") as HTMLElement;
+    expect(r2.className).toBe("tf-ambient fixed still");
+    expect(r2.querySelectorAll(".tf-ambient-field")).toHaveLength(2);
+    rerender(<Ambient src="/beach.jpg" />);
+    expect(container.querySelector("img.tf-ambient-media")?.getAttribute("src")).toBe("/beach.jpg");
+    expect(container.querySelector(".tf-ambient")?.classList.contains("media")).toBe(true);
+    rerender(<Ambient src="/waves.mp4" video />);
+    const v = container.querySelector("video.tf-ambient-media") as HTMLVideoElement;
+    expect(v.muted).toBe(true);
+    rerender(
+      <Ambient>
+        <canvas />
+      </Ambient>,
+    );
+    expect(container.querySelector(".tf-ambient canvas")).toBeTruthy();
+    (globalThis as { IntersectionObserver?: unknown }).IntersectionObserver = orig;
+  });
+
+  it("AppShell passes className to its root", () => {
+    const { container } = render(<AppShell className="mine" dock={false} />);
+    expect(container.querySelector(".tf-shell")?.classList.contains("mine")).toBe(true);
   });
 });

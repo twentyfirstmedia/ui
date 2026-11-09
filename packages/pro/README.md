@@ -1,6 +1,6 @@
 # @twentyfirstmedia/pro
 
-**Pro**: sharp, dense and dark-first: monochrome cells on a hairline grid, square corners, Geist, and colour only for state. One of the two [Twentyfirst UI](https://ui.twentyfirst.media) kits: 215 accessible React components and 27 complete screens with exactly the same API as [Halo](https://www.npmjs.com/package/@twentyfirstmedia/halo).
+**Pro**: sharp, dense and dark-first: monochrome cells on a hairline grid, square corners, Geist, and colour only for state. One of the two [Twentyfirst UI](https://ui.twentyfirst.media) kits: 216 accessible React components and 28 complete screens with exactly the same API as [Halo](https://www.npmjs.com/package/@twentyfirstmedia/halo).
 
 [Website](https://ui.twentyfirst.media) · [Halo docs](https://ui.twentyfirst.media/halo/) · [Pro docs](https://ui.twentyfirst.media/pro/) · [GitHub](https://github.com/twentyfirstmedia/ui) · [llms.txt](https://ui.twentyfirst.media/llms.txt)
 

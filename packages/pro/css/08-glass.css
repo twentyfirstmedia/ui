@@ -18,11 +18,26 @@
 /* the surface itself */
 .tf-glass:not(.tf-solid),
 [data-surface="glass"]
-  :is(.tf-panel, .tf-card, .tf-dock, .tf-map-legend, .tf-map-ctl, .tf-map-pop):not(
+  :is(
+    .tf-panel,
+    .tf-card,
+    .tf-stat,
+    .tf-dock,
+    .tf-topbar,
+    .tf-rail,
+    .tf-sidebar,
+    .tf-map-legend,
+    .tf-map-ctl,
+    .tf-map-pop
+  ):not(
     :is(
         .tf-panel,
         .tf-card,
+        .tf-stat,
         .tf-dock,
+        .tf-topbar,
+        .tf-rail,
+        .tf-sidebar,
         .tf-popover,
         .tf-menu,
         .tf-hovercard,
@@ -49,7 +64,9 @@
   --glass-fill: var(--glass);
   background:
     linear-gradient(to bottom, var(--glass-sheen), transparent 56px) border-box,
+    linear-gradient(var(--glass-tinted), var(--glass-tinted)) border-box,
     var(--glass-fill);
+  --glass-tinted: color-mix(in srgb, var(--tint, transparent) var(--glass-tint), transparent);
   -webkit-backdrop-filter: var(--glass-filter);
   backdrop-filter: var(--glass-filter);
   border-color: var(--glass-border);
@@ -68,6 +85,9 @@
   --bg-200: var(--glass-well);
   --accent: var(--glass-hover);
   --bg-300: var(--glass-hover);
+  /* the faintest text steps up one shade: glass gives up some contrast to what is behind */
+  --ink-subtle: var(--muted-foreground);
+  --fg-300: var(--muted-foreground);
 }
 
 /* floating layers carry more text: a stronger fill */
@@ -151,6 +171,22 @@
     var(--glass);
 }
 
+/* AppShell on glass: the frame turns to glass, the sheet clears so the backdrop shows through,
+   and everything drawn on the frame (nav, user, rail) reads the glass colours */
+[data-surface="glass"] .tf-shell {
+  background: transparent;
+  box-shadow: none;
+  --frame: var(--glass);
+  --frame-hover: var(--glass-hover);
+  --frame-active: var(--glass-hover);
+  --frame-strong: var(--glass-control);
+  --on-frame: var(--foreground);
+  --on-frame-muted: var(--muted-foreground);
+}
+[data-surface="glass"] .tf-shell .tf-sheet {
+  background: transparent;
+}
+
 /* switch knobs stay solid on glass */
 .tf-glass .tf-switch::after,
 [data-surface="glass"] .tf-switch::after {
@@ -163,7 +199,18 @@
 @media (forced-colors: active) {
   .tf-glass,
   [data-surface="glass"]
-    :is(.tf-panel, .tf-card, .tf-dock, .tf-map-legend, .tf-map-ctl, .tf-map-pop) {
+    :is(
+      .tf-panel,
+      .tf-card,
+      .tf-stat,
+      .tf-dock,
+      .tf-topbar,
+      .tf-rail,
+      .tf-sidebar,
+      .tf-map-legend,
+      .tf-map-ctl,
+      .tf-map-pop
+    ) {
     outline: 1px solid CanvasText;
     outline-offset: -1px;
   }

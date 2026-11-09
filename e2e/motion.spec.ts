@@ -105,4 +105,21 @@ for (const kit of KITS)
       await group.scrollIntoViewIfNeeded();
       await expect(group).not.toHaveAttribute("data-reveal", "waiting");
     });
+
+    test("Ambient drifts, and stands still with motion off", async ({ page }) => {
+      await page.goto(`/${kit}/components/Ambient/`);
+      const field = page.locator(".docs-preview .tf-ambient-field").first();
+      await field.waitFor({ state: "attached" });
+      const moving = () =>
+        field.evaluate((el) =>
+          el
+            .getAnimations()
+            .some(
+              (a) => a.playState === "running" && a.effect?.getTiming().iterations === Infinity,
+            ),
+        );
+      expect(await moving()).toBe(true);
+      await page.evaluate(() => document.documentElement.setAttribute("data-motion", "off"));
+      await expect.poll(moving).toBe(false);
+    });
   });
