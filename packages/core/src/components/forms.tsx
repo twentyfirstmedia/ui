@@ -101,6 +101,15 @@ export function TextField(p: TextFieldProps) {
           onBlur={p.onBlur}
           required={p.required}
           disabled={p.disabled}
+          readOnly={p.readOnly}
+          min={p.min}
+          max={p.max}
+          step={p.step}
+          minLength={p.minLength}
+          maxLength={p.maxLength}
+          pattern={p.pattern}
+          inputMode={p.inputMode}
+          autoFocus={p.autoFocus}
           aria-invalid={error ? "true" : undefined}
           aria-describedby={error || p.hint ? `${id}-msg` : undefined}
           autoComplete={p.autoComplete}
