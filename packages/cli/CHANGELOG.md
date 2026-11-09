@@ -1,5 +1,11 @@
 # @twentyfirstmedia/ui
 
+## 0.1.1
+
+### Patch Changes
+
+- [#20](https://github.com/twentyfirstmedia/ui/pull/20) [`7bbd5aa`](https://github.com/twentyfirstmedia/ui/commit/7bbd5aaa789e5764558a3875edd4e972c01b9116) Thanks [@robintrepte](https://github.com/robintrepte)! - The MCP server (`twentyfirst-ui mcp`) now stops quietly when the client closes the connection, instead of crashing with an unhandled `EPIPE` error. Releases are now published with npm provenance, so every package version links back to the GitHub workflow run that built it.
+
 ## 0.1.0
 
 ### Minor Changes
