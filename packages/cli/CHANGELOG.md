@@ -1,5 +1,11 @@
 # @twentyfirstmedia/ui
 
+## 0.2.1
+
+### Patch Changes
+
+- [#26](https://github.com/twentyfirstmedia/ui/pull/26) [`863179b`](https://github.com/twentyfirstmedia/ui/commit/863179b194fcd8e43bac596039ef555cc294d03e) Thanks [@robintrepte](https://github.com/robintrepte)! - Published through npm Trusted Publishing: the release workflow no longer uses an npm token, and every package carries a provenance statement linking it to the GitHub Actions run that built it. No code changes.
+
 ## 0.2.0
 
 ### Minor Changes
