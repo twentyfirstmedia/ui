@@ -898,7 +898,8 @@ export function loadKnowledge(url: URL = new URL("./knowledge.json", import.meta
 
 /**
  * Serves newline-delimited JSON-RPC over stdin/stdout. Messages are answered in order; the
- * promise resolves when the input ends and every answer is written.
+ * promise resolves when the input ends and every answer is written, or when the client closes the
+ * output (EPIPE): then there is nobody left to answer, so the server stops quietly.
  */
 export function serveStdio(
   server: McpServer,
@@ -913,9 +914,11 @@ export function serveStdio(
   const logError = io.onError ?? ((m: string) => process.stderr.write(`${m}\n`));
   let buffer = "";
   let queue: Promise<void> = Promise.resolve();
+  let closed = false;
 
   const send = (v: unknown) =>
     new Promise<void>((resolve) => {
+      if (closed) return resolve();
       output.write(`${JSON.stringify(v)}\n`, () => resolve());
     });
 
@@ -948,6 +951,7 @@ export function serveStdio(
   };
 
   const flush = (final: boolean) => {
+    if (closed) return;
     let i: number;
     while ((i = buffer.indexOf("\n")) >= 0) {
       const line = buffer.slice(0, i).replace(/\r$/, "").trim();
@@ -980,5 +984,20 @@ export function serveStdio(
       logError(`twentyfirst-ui mcp: ${e.message}`);
       finish();
     });
+    // the client went away: drop what is pending and end without an unhandled 'error'
+    const stop = () => {
+      if (closed) return;
+      closed = true;
+      buffer = "";
+      done = true;
+      input.removeAllListeners("data");
+      resolve();
+    };
+    output.on("error", (e: NodeJS.ErrnoException) => {
+      if (e.code !== "EPIPE" && e.code !== "ERR_STREAM_DESTROYED")
+        logError(`twentyfirst-ui mcp: ${e.message}`);
+      stop();
+    });
+    output.on("close", stop);
   });
 }

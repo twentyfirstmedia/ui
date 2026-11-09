@@ -148,9 +148,11 @@ Notiz: Eine Wissensquelle für alles: `scripts/knowledge.ts` sammelt Anleitungen
 ### Phase 13: Open Source
 - [x] Lizenz MIT (Robin), Repo öffentlich, Packages öffentlich auf npmjs.com statt GitHub Packages
 - [x] README, Package-READMEs, CONTRIBUTING, SECURITY, Verhaltenskodex, Issue- und PR-Vorlagen
-- [ ] npm-Org `@twentyfirstmedia` und Secret `NPM_TOKEN` (Robin), dann erster Release 0.1.0
+- [x] npm-Org `@twentyfirstmedia` und Secret `NPM_TOKEN` (Robin), dann erster Release 0.1.0
 
 Notiz: `publishConfig` jetzt `access: public` mit `provenance` (Release-Workflow mit `id-token: write`, Registry npmjs.org, Token aus `NPM_TOKEN`); Changesets `access: public`. Die Root-`.npmrc` und der `.npmrc`-Schritt von `init` entfallen, Installation ist ein normales `npm i`. Texte, die von privaten Packages sprachen (Installation, AI-Seite, Landingpage, `llms.txt`, MCP-Anweisungen), angepasst. README mit Screenshots (Halo hell, Pro dunkel per `<picture>`), Badges, Schnellstart, MCP, Paketübersicht; jede Package-Seite auf npm hat ein eigenes README. Schriften bleiben unter ihrer OFL (Lizenzdateien liegen bei den Schriften in `dist/fonts`). Erster echter CI-Lauf: 90 Screenshot-Vergleiche wichen ab, weil der Runner Text bei gleichem Chromium (153.0.8010.12) und gleichen Schriften minimal breiter rastert; die Baselines stammen jetzt vom CI-Runner (`ubuntu-26.04`, gepinnt), neue Baselines erzeugt der Workflow „Update screenshots“.
+
+Notiz (Release 0.1.0): Alle fünf Packages sind auf npmjs.com, aber ohne Provenance: `changeset publish` ruft `pnpm publish` auf, das weder `publishConfig.provenance` noch `NPM_CONFIG_PROVENANCE` beachtet. Jetzt packt `scripts/publish.ts` jedes noch nicht veröffentlichte Package mit pnpm (löst `workspace:*` auf) und veröffentlicht den Tarball mit der npm-CLI (gepinnt 11.21.1) mit `--provenance`; Tags und „New tag:"-Zeilen wie bei Changesets, damit changesets/action Tags pusht und GitHub-Releases anlegt. Die npm-CLI kann Trusted Publishing (OIDC): ist auf npmjs.com je Package ein Trusted Publisher (`twentyfirstmedia/ui`, `release.yml`) eingetragen, braucht der Release kein Token mehr; bis dahin dient `NPM_TOKEN` als Rückfall. Der MCP-Server beendet sich jetzt still, wenn der Client die Ausgabe schließt (vorher unbehandeltes `EPIPE`); Test dazu. Release 0.1.1 mit Provenance.
 
 ### Phase 14: Theming wie shadcn/ui, Plain HTML
 - [x] shadcn-Theme-Variablen in beiden Kits, jede Komponente nutzt sie, hell und dunkel
@@ -163,6 +165,6 @@ Notiz (Theming, Robin: „volles shadcn-Theming in beiden Kits"): Die Kits benen
 Notiz (Plain HTML): `@twentyfirstmedia/elements` erzeugt aus den ui-core-Metadaten 213 Custom Elements (`<tf-button>`, `<tf-data-table>` …): Attribute und Properties werden zu Props, Callbacks zu DOM-Events, Kinder und `slot="…"` zu ReactNode-Props, verschachtelte Elemente teilen einen React-Baum (Kontext wie Form und UIProvider funktioniert). ESM und IIFE mit gebündeltem React (~150 kB gzip), Custom Elements Manifest und VS-Code-Daten. Doku „Plain HTML and frameworks", Demo `examples/html`, `e2e/elements.spec.ts` (Rendern, Events, Slots, Tastatur, axe beide Kits).
 
 ## Offen (Robin)
-- npm-Konto mit Org `twentyfirstmedia` und Automation-Token als Repo-Secret `NPM_TOKEN`; in den Repo-Einstellungen „Allow GitHub Actions to create and approve pull requests" aktivieren
+- Trusted Publisher auf npmjs.com für alle fünf Packages eintragen (Repo `twentyfirstmedia/ui`, Workflow `release.yml`), danach Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`
 - `.md`-Dateien sollten mit `Content-Type: text/markdown; charset=utf-8` ausgeliefert werden (Hosting-Einstellung)
