@@ -21,23 +21,51 @@ export interface IconProps extends BaseProps {
   label?: string;
   className?: string;
 }
-export interface ButtonProps extends BaseProps {
+/**
+ * Native attributes `Button` and `IconButton` pass to their `<button>` (or, with `asChild`, to the
+ * child). Every other attribute of `<button>` (`data-*`, events such as `onKeyDown`, `ref` in
+ * React 19) is passed on as well; these are the ones worth knowing.
+ */
+export interface NativeButtonProps {
+  id?: string;
+  /** Form field name and value, sent with the form when this button submits it. */
+  name?: string;
+  value?: string;
+  /** The id of the form this button belongs to, when it sits outside it. */
+  form?: string;
+  title?: string;
+  tabIndex?: number;
+  autoFocus?: boolean;
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
+  "aria-describedby"?: string;
+  /** For disclosure and menu triggers: whether what the button controls is open. */
+  "aria-expanded"?: boolean | "true" | "false";
+  "aria-controls"?: string;
+  "aria-haspopup"?: boolean | "true" | "false" | "menu" | "listbox" | "tree" | "grid" | "dialog";
+  /** For toggle buttons. */
+  "aria-pressed"?: boolean | "true" | "false" | "mixed";
+  "aria-current"?: boolean | "true" | "false" | "page" | "step" | "location" | "date" | "time";
+}
+export interface ButtonProps extends BaseProps, NativeButtonProps {
   variant?: "primary" | "secondary" | "soft" | "ghost" | "danger" | "danger-solid";
   size?: "md" | "sm";
   icon?: IconName;
   iconRight?: IconName;
   disabled?: boolean;
-  type?: "button" | "submit";
+  type?: "button" | "submit" | "reset";
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   children?: ReactNode;
   /** Render the single child element (a link, a router Link) with the button's look instead of a <button>. */
   asChild?: boolean;
 }
-export interface IconButtonProps extends BaseProps {
+export interface IconButtonProps extends BaseProps, NativeButtonProps {
   icon: IconName;
+  /** Accessible name and tooltip (`aria-label` and `title`); `aria-label` or `title` override them. */
   label: string;
   variant?: "soft" | "solid" | "outline" | "ghost";
   size?: "sm" | "md" | "lg";
+  type?: "button" | "submit" | "reset";
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
   /** Render the single child element (a link) with the button's look; the icon is placed inside it. */

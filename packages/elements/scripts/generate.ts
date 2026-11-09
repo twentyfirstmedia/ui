@@ -370,9 +370,19 @@ export function buildElements(): GenElement[] {
     const param = c.fn.parameters[0];
     let propsType = "{}";
     let raw: RawProp[] = [];
-    if (param?.type && ts.isTypeReferenceNode(param.type)) {
-      propsType = param.type.getText(c.sf);
-      raw = members(param.type.typeName.getText(c.sf));
+    // `NativeRest<ButtonProps>`: the documented props are the type argument (only for NativeRest;
+    // `DataTableProps<R>` keeps its own name)
+    const ref =
+      param?.type &&
+      ts.isTypeReferenceNode(param.type) &&
+      param.type.typeName.getText(c.sf) === "NativeRest" &&
+      param.type.typeArguments?.length === 1 &&
+      ts.isTypeReferenceNode(param.type.typeArguments[0] as ts.TypeNode)
+        ? (param.type.typeArguments[0] as ts.TypeReferenceNode)
+        : param?.type;
+    if (ref && ts.isTypeReferenceNode(ref)) {
+      propsType = ref.getText(c.sf);
+      raw = members(ref.typeName.getText(c.sf));
     } else if (param?.type && ts.isTypeLiteralNode(param.type)) {
       propsType = param.type.getText(c.sf).replace(/\s+/g, " ");
       raw = param.type.members.filter(ts.isPropertySignature).map((m) => ({

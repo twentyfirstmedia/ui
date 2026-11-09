@@ -28,60 +28,47 @@ function slot(
   });
 }
 
-export function Button(p: ButtonProps) {
-  const v = p.variant || "primary";
-  const cls = cx("tf-btn", "tf-btn-" + v, p.size === "sm" && "tf-btn-sm", p.className);
+/** Every native `<button>` attribute, on top of the documented props. */
+type NativeRest<P> = P & Omit<React.ComponentPropsWithRef<"button">, keyof P>;
+
+export function Button(props: NativeRest<ButtonProps>) {
+  const { variant, size, icon, iconRight, asChild, className, children, type, ...native } = props;
+  const v = variant || "primary";
+  const cls = cx("tf-btn", "tf-btn-" + v, size === "sm" && "tf-btn-sm", className);
   const content = (inner: React.ReactNode) => (
     <>
-      {p.icon && <Icon name={p.icon} size={15} />}
+      {icon && <Icon name={icon} size={15} />}
       {inner}
-      {p.iconRight && <Icon name={p.iconRight} size={15} />}
+      {iconRight && <Icon name={iconRight} size={15} />}
     </>
   );
-  if (p.asChild) {
-    const el = slot(React.Children.only(p.children), cls, { style: p.style }, content);
+  if (asChild) {
+    const el = slot(React.Children.only(children), cls, native, content);
     if (el) return el;
   }
   return (
-    <button
-      type={p.type || "button"}
-      className={cls}
-      style={p.style}
-      disabled={p.disabled}
-      onClick={p.onClick}
-    >
-      {content(p.children)}
+    <button {...native} type={type || "button"} className={cls}>
+      {content(children)}
     </button>
   );
 }
 
-export function IconButton(p: IconButtonProps) {
+export function IconButton(props: NativeRest<IconButtonProps>) {
+  const { icon, label, variant, size, asChild, className, children, type, ...native } = props;
   const cls = cx(
     "tf-iconbtn",
-    "tf-iconbtn-" + (p.variant || "soft"),
-    p.size && "tf-iconbtn-" + p.size,
-    p.className,
+    "tf-iconbtn-" + (variant || "soft"),
+    size && "tf-iconbtn-" + size,
+    className,
   );
-  if (p.asChild && p.children) {
-    const el = slot(
-      React.Children.only(p.children),
-      cls,
-      { "aria-label": p.label, title: p.label, style: p.style },
-      () => <Icon name={p.icon} />,
-    );
+  const named = { "aria-label": label, title: label, ...native };
+  if (asChild && children) {
+    const el = slot(React.Children.only(children), cls, named, () => <Icon name={icon} />);
     if (el) return el;
   }
   return (
-    <button
-      type="button"
-      aria-label={p.label}
-      title={p.label}
-      className={cls}
-      style={p.style}
-      disabled={p.disabled}
-      onClick={p.onClick}
-    >
-      <Icon name={p.icon} />
+    <button {...named} type={type || "button"} className={cls}>
+      <Icon name={icon} />
     </button>
   );
 }
