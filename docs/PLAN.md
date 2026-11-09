@@ -197,13 +197,15 @@ Notiz (Robin: „Dashboard komplett im Glass-Look mit subtle colored gradient od
 - [x] `UIProvider messages`: jeder eingebaute Text (Accessible Names, Button-Texte, Platzhalter, Status-Wörter, Validierungsmeldungen) überschreibbar, teilweise, verschachtelt; `useUIStrings()`, `DEFAULT_STRINGS`, Typen `UIStrings`/`UIMessages`
 - [x] `CountUp`/`StatTile` lesen Werte im Provider-Locale („13,05 €/m²“ in de-DE)
 - [x] Doku „Text and locale“, Tests
-- [ ] `FileDrop` gibt die echten `File`-Objekte heraus (`onFiles`), Fortschritt nur vom Aufrufer (eigener PR)
-- [ ] `Pagination` kontrolliert (`page`, `onChange`) (eigener PR)
-- [ ] `Button`/`IconButton` reichen native Attribute durch (`aria-*`, `id`, `name`, `type` …) (eigener PR)
-- [ ] `Gallery` mit `loading`/`referrerPolicy`, `BeforeAfter` mit `aria-valuetext` (eigener PR)
-- [ ] `TextField` dokumentiert `required`, `min`, `max`, `step`, `name`; `PlanCard` mit `disabled` (eigener PR)
+- [x] `FileDrop` gibt die echten `File`-Objekte heraus (`onFiles`), Fortschritt nur vom Aufrufer (#28)
+- [x] `Pagination` kontrolliert (`page`, `onChange`) (#29)
+- [x] `Button`/`IconButton` reichen native Attribute durch (`aria-*`, `id`, `name`, `type` …) (#30)
+- [x] `Gallery` mit `loading`/`referrerPolicy`, `BeforeAfter` mit `aria-valuetext` (#31)
+- [x] `TextField` dokumentiert `required`, `min`, `max`, `step`, `name`; `PlanCard` mit `disabled` (#32)
 
 Notiz (Robin: Upstream-PRs für die Lücken, die bei der ersten App-Einführung aufgefallen sind): Phase 11 hat das Label-System bewusst entfernt („nur UI-Kit“). Das bleibt so: es werden keine Übersetzungen mitgeliefert, eingebauter Text bleibt Englisch. Neu ist nur, dass jeder eingebaute Text überschreibbar ist, nicht nur die Haupttexte über Props, und dass das Locale der Formatter einstellbar ist. Die Texte liegen typisiert in `packages/core/src/strings.ts`, eine Gruppe pro Komponentendatei plus `SHARED_STRINGS`; Komponenten lesen sie mit `useStrings(GRUPPE)`. So zieht ein Bundle nur die Texte der benutzten Komponenten (Modal +0,7 KB gzip, ApprovalCard +0,9 KB, MapView +1,9 KB; ein einziges Objekt hätte jede Komponente um ~5 KB vergrößert). Kontext und Hooks liegen in `context.ts`, getrennt vom Provider, damit Komponenten kein Theming mitziehen. Texte mit Werten sind Funktionen (Wortstellung frei), Status-Wörter Gruppen nach englischem Schlüssel (eine Ebene tief gemergt). Props wie `title`/`label` gewinnen weiter. Server-Komponenten (`StatusScreen`, `AuthCard`) können den Kontext nicht lesen; ihre Texte bleiben Props. Die Beispiel-Navigation von `AppShell` (NAV, Rail, Dock) bleibt englischer Demo-Inhalt. Nebenbei behoben: `VoiceMode` zeigte mit `stateLabel` immer „Listening…“ (Operator-Vorrang). Tests: `strings.test.tsx` (Locale, Parsing, Überschreiben, Verschachtelung, Komponenten, jeder Schlüssel wird benutzt, keine englischen Accessible Names mehr hart im Code).
+
+Notiz (Review der Schwester-PRs): In #30 nahm der Elements-Generator von jedem Props-Typ mit einem Typargument dieses Argument, aus `DataTableProps<R>` wurde `R`, und `<tf-data-table>` verlor alle Props (e2e `elements.spec` rot). Jetzt wird nur `NativeRest<…>` ausgepackt; Unit-Test für DataTable. #28–#32 sind vor diesem PR gemergt; ihre neuen Texte (FileDrop, BeforeAfter) stehen hier in `strings.ts`.
 
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
