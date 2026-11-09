@@ -186,6 +186,14 @@
 [data-surface="glass"] .tf-shell .tf-sheet {
   background: transparent;
 }
+/* without the frame around them, the bars float on their own: a rounded top bar, a capsule rail */
+[data-surface="glass"] .tf-shell .tf-topbar {
+  border-radius: var(--radius-xl);
+}
+[data-surface="glass"] .tf-shell .tf-rail {
+  border-radius: var(--radius-pill);
+  padding-block: var(--space-2);
+}
 
 /* switch knobs stay solid on glass */
 .tf-glass .tf-switch::after,
