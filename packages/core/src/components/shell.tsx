@@ -1,11 +1,12 @@
 "use client";
 import * as React from "react";
 import { Icon } from "../Icon.js";
-import { cx } from "../cx.js";
+import { cx, reduced } from "../cx.js";
 import { Avatar } from "./foundation.js";
 import type {
   AppShellProps,
   DockItem,
+  AmbientProps,
   DockProps,
   FloatingLayoutProps,
   NavItem,
@@ -145,6 +146,72 @@ export function FloatingLayout(p: FloatingLayoutProps) {
   );
 }
 
+/**
+ * A calm, living background for glass UI: soft colour fields from the kit that drift slowly, or a
+ * photo or video under a scrim, or your own layer. Sits behind its container's content.
+ */
+export function Ambient(p: AmbientProps) {
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [paused, setPaused] = React.useState(false);
+  const animate = p.animate !== false && !p.src && !p.children;
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el || !animate || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver((e) => setPaused(!e.some((x) => x.isIntersecting)));
+    io.observe(el);
+    return () => io.disconnect();
+  }, [animate]);
+  const vid = React.useRef<HTMLVideoElement>(null);
+  React.useEffect(() => {
+    const v = vid.current;
+    if (v && reduced(v)) v.pause();
+  }, [p.src]);
+  const colors = p.colors?.length
+    ? p.colors
+    : ["var(--ambient-1)", "var(--ambient-2)", "var(--ambient-3)", "var(--ambient-4)"];
+  const media = !!p.src && !p.children;
+  return (
+    <div
+      ref={ref}
+      aria-hidden
+      className={cx(
+        "tf-ambient",
+        p.fixed && "fixed",
+        media && "media",
+        !animate && "still",
+        p.className,
+      )}
+      style={p.style}
+      data-paused={paused ? "" : undefined}
+    >
+      {p.children ??
+        (media ? (
+          p.video ? (
+            <video
+              ref={vid}
+              className="tf-ambient-media"
+              src={p.src}
+              muted
+              loop
+              autoPlay
+              playsInline
+            />
+          ) : (
+            <img className="tf-ambient-media" src={p.src} alt="" />
+          )
+        ) : (
+          colors.map((c, i) => (
+            <span
+              key={i}
+              className="tf-ambient-field"
+              style={{ "--field": c } as React.CSSProperties}
+            />
+          ))
+        ))}
+    </div>
+  );
+}
+
 /** Example navigation shown when `nav` is not given. */
 export const NAV = (): NavItem[] => [
   {
@@ -247,7 +314,7 @@ const DOCK = (): DockItem[] => [
 
 export function AppShell(p: AppShellProps) {
   return (
-    <div className="tf-shell" style={p.style}>
+    <div className={cx("tf-shell", p.className)} style={p.style}>
       <TopBar
         brand={p.brand}
         tag={p.tag}

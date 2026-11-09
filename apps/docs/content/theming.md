@@ -106,6 +106,24 @@ import { FloatingLayout, MapView, Panel, SearchField, UIProvider } from "@twenty
 
 See the [map pattern](/{{kit}}/patterns/MapScreen/) for a full screen.
 
+### Glass dashboards
+
+A whole app can be glass: put `Ambient` behind it and wrap it in `<UIProvider surface="glass">`. The `AppShell` turns into glass too (top bar, rail, sidebar; the sheet clears so the background shows through), and tinted tiles (`StatTile tint="sky"`, tinted Cards) lay their tint over the glass instead of an opaque block.
+
+```tsx
+import { Ambient, AppShell, StatTile, UIProvider } from "@twentyfirstmedia/{{kit}}";
+
+<UIProvider surface="glass">
+  <Ambient fixed />
+  <AppShell brand="Bloom">
+    <StatTile value="7h 42m" label="Sleep" tint="sky" />
+    …
+  </AppShell>
+</UIProvider>;
+```
+
+`Ambient` draws soft colour fields from `--ambient-1…4` (pastels in Halo, a faint aurora in Pro) that drift slowly; `colors` takes your own, `src` a photo or (with `video`) a video under a calming scrim, and children your own layer. The drift stops with motion off and pauses off screen. With `fixed`, keep `body` transparent so the background shows. On glass, the faintest text steps up one shade so secondary text stays readable. See the [wellbeing pattern](/{{kit}}/patterns/WellbeingScreen/).
+
 ## Tailwind
 
 The preset maps the variables to shadcn's utility names, so `bg-primary text-primary-foreground`, `bg-muted text-muted-foreground`, `border-border`, `ring-ring` and `bg-sidebar` work, plus the kits' own names (`bg-surface`, `text-ink`).

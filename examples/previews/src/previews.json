@@ -969,6 +969,28 @@
     ]
   },
   {
+    "name": "WellbeingScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 900,
+    "components": [
+      "Ambient",
+      "AppShell",
+      "AreaChart",
+      "BarChart",
+      "Button",
+      "Checkbox",
+      "PageHeader",
+      "Panel",
+      "ProgressRing",
+      "Stagger",
+      "StatTile",
+      "Textarea",
+      "ToggleGroup",
+      "UIProvider"
+    ]
+  },
+  {
     "name": "Table",
     "group": "Data",
     "width": 800,
@@ -1119,6 +1141,13 @@
     "width": 960,
     "height": 420,
     "components": ["Carousel", "ProductArt"]
+  },
+  {
+    "name": "Ambient",
+    "group": "Navigation",
+    "width": 1000,
+    "height": 360,
+    "components": ["Ambient", "Badge", "Button", "Panel", "StatTile", "UIProvider"]
   },
   {
     "name": "Menubar",

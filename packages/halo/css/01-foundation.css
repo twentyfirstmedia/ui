@@ -541,18 +541,23 @@ select.tf-input {
   box-shadow: none;
 }
 .tf-bg-sky {
+  --tint: var(--sky);
   background: var(--sky);
 }
 .tf-bg-mint {
+  --tint: var(--mint);
   background: var(--mint);
 }
 .tf-bg-lilac {
+  --tint: var(--lilac);
   background: var(--lilac);
 }
 .tf-bg-butter {
+  --tint: var(--butter);
   background: var(--butter);
 }
 .tf-bg-blush {
+  --tint: var(--blush);
   background: var(--blush);
 }
 .tf-bg-surface {

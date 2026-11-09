@@ -235,6 +235,20 @@ export interface FloatingLayoutProps extends BaseProps {
   label?: string;
   children?: ReactNode;
 }
+export interface AmbientProps extends BaseProps {
+  /** Colours of the soft fields (any CSS colour); default the kit's `--ambient-1…4`. */
+  colors?: string[];
+  /** A photo (or, with `video`, a video) instead of the fields, under a scrim that keeps it calm. */
+  src?: string;
+  /** Treat `src` as a video (muted, looping, still with motion off). */
+  video?: boolean;
+  /** Let the fields drift slowly (default true). Still with motion off; paused off screen. */
+  animate?: boolean;
+  /** Cover the window behind the page instead of the nearest container. */
+  fixed?: boolean;
+  /** Your own layer (a canvas, WebGL, a map) instead of fields or media. */
+  children?: ReactNode;
+}
 export interface DockItem {
   label: string;
   icon: IconName;

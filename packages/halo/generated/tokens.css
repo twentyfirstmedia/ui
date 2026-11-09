@@ -245,6 +245,12 @@
   --glass-border: rgba(255, 255, 255, 0.6);
   --glass-highlight: rgba(255, 255, 255, 0.95);
   --glass-sheen: rgba(255, 255, 255, 0.5);
+  --ambient-base: var(--background);
+  --ambient-1: color-mix(in oklab, var(--sky) 72%, var(--sky-ink));
+  --ambient-2: color-mix(in oklab, var(--mint) 72%, var(--mint-ink));
+  --ambient-3: color-mix(in oklab, var(--lilac) 72%, var(--lilac-ink));
+  --ambient-4: color-mix(in oklab, var(--butter) 72%, var(--butter-ink));
+  --ambient-scrim: rgba(255, 255, 255, 0.28);
   --bg-000: var(--canvas);
   --bg-100: var(--surface);
   --bg-200: var(--surface-sunken);
@@ -313,6 +319,7 @@
   --panel-pad: var(--space-6);
   --panel-gap: var(--space-4);
   --glass-filter: blur(24px) saturate(180%) brightness(1.05);
+  --glass-tint: 62%;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -386,6 +393,12 @@
     --glass-border: rgba(255, 255, 255, 0.1);
     --glass-highlight: rgba(255, 255, 255, 0.18);
     --glass-sheen: rgba(255, 255, 255, 0.05);
+    --ambient-base: var(--background);
+    --ambient-1: var(--sky);
+    --ambient-2: var(--mint);
+    --ambient-3: var(--lilac);
+    --ambient-4: var(--butter);
+    --ambient-scrim: rgba(10, 10, 10, 0.45);
     --bg-000: var(--canvas);
     --bg-100: var(--surface);
     --bg-200: var(--surface-sunken);
@@ -454,6 +467,7 @@
     --panel-pad: var(--space-6);
     --panel-gap: var(--space-4);
     --glass-filter: blur(24px) saturate(160%) brightness(0.85);
+    --glass-tint: 62%;
     color-scheme: dark;
   }
 }
@@ -528,6 +542,12 @@
     --glass-border: rgba(255, 255, 255, 0.1);
     --glass-highlight: rgba(255, 255, 255, 0.18);
     --glass-sheen: rgba(255, 255, 255, 0.05);
+    --ambient-base: var(--background);
+    --ambient-1: var(--sky);
+    --ambient-2: var(--mint);
+    --ambient-3: var(--lilac);
+    --ambient-4: var(--butter);
+    --ambient-scrim: rgba(10, 10, 10, 0.45);
     --bg-000: var(--canvas);
     --bg-100: var(--surface);
     --bg-200: var(--surface-sunken);
@@ -596,6 +616,7 @@
     --panel-pad: var(--space-6);
     --panel-gap: var(--space-4);
     --glass-filter: blur(24px) saturate(160%) brightness(0.85);
+    --glass-tint: 62%;
     color-scheme: dark;
   }
 }
@@ -670,6 +691,12 @@
     --glass-border: rgba(255, 255, 255, 0.6);
     --glass-highlight: rgba(255, 255, 255, 0.95);
     --glass-sheen: rgba(255, 255, 255, 0.5);
+    --ambient-base: var(--background);
+    --ambient-1: color-mix(in oklab, var(--sky) 72%, var(--sky-ink));
+    --ambient-2: color-mix(in oklab, var(--mint) 72%, var(--mint-ink));
+    --ambient-3: color-mix(in oklab, var(--lilac) 72%, var(--lilac-ink));
+    --ambient-4: color-mix(in oklab, var(--butter) 72%, var(--butter-ink));
+    --ambient-scrim: rgba(255, 255, 255, 0.28);
     --bg-000: var(--canvas);
     --bg-100: var(--surface);
     --bg-200: var(--surface-sunken);
@@ -738,6 +765,7 @@
     --panel-pad: var(--space-6);
     --panel-gap: var(--space-4);
     --glass-filter: blur(24px) saturate(180%) brightness(1.05);
+    --glass-tint: 62%;
     color-scheme: light;
   }
 }
@@ -811,6 +839,12 @@
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-highlight: rgba(255, 255, 255, 0.18);
   --glass-sheen: rgba(255, 255, 255, 0.05);
+  --ambient-base: var(--background);
+  --ambient-1: var(--sky);
+  --ambient-2: var(--mint);
+  --ambient-3: var(--lilac);
+  --ambient-4: var(--butter);
+  --ambient-scrim: rgba(10, 10, 10, 0.45);
   --bg-000: var(--canvas);
   --bg-100: var(--surface);
   --bg-200: var(--surface-sunken);
@@ -879,6 +913,7 @@
   --panel-pad: var(--space-6);
   --panel-gap: var(--space-4);
   --glass-filter: blur(24px) saturate(160%) brightness(0.85);
+  --glass-tint: 62%;
   color-scheme: dark;
 }
 :where([data-theme="light"], .light) {
@@ -951,6 +986,12 @@
   --glass-border: rgba(255, 255, 255, 0.6);
   --glass-highlight: rgba(255, 255, 255, 0.95);
   --glass-sheen: rgba(255, 255, 255, 0.5);
+  --ambient-base: var(--background);
+  --ambient-1: color-mix(in oklab, var(--sky) 72%, var(--sky-ink));
+  --ambient-2: color-mix(in oklab, var(--mint) 72%, var(--mint-ink));
+  --ambient-3: color-mix(in oklab, var(--lilac) 72%, var(--lilac-ink));
+  --ambient-4: color-mix(in oklab, var(--butter) 72%, var(--butter-ink));
+  --ambient-scrim: rgba(255, 255, 255, 0.28);
   --bg-000: var(--canvas);
   --bg-100: var(--surface);
   --bg-200: var(--surface-sunken);
@@ -1019,6 +1060,7 @@
   --panel-pad: var(--space-6);
   --panel-gap: var(--space-4);
   --glass-filter: blur(24px) saturate(180%) brightness(1.05);
+  --glass-tint: 62%;
   color-scheme: light;
 }
 :where([data-density="compact"]) {

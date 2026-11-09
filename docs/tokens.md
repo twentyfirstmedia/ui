@@ -76,6 +76,12 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--glass-border` | `rgba(255, 255, 255, 0.6)` / `rgba(255, 255, 255, 0.1)` | `color-mix(in srgb, {foreground} 12%, transparent)` / `color-mix(in srgb, {foreground} 14%, transparent)` | The hairline edge of a glass surface. |
 | `--glass-highlight` | `rgba(255, 255, 255, 0.95)` / `rgba(255, 255, 255, 0.18)` | `rgba(255, 255, 255, 0.7)` / `rgba(255, 255, 255, 0.07)` | Light catching the top edge of a glass surface. |
 | `--glass-sheen` | `rgba(255, 255, 255, 0.5)` / `rgba(255, 255, 255, 0.05)` | `transparent` | Pro glass is flat: no sheen. |
+| `--ambient-base` | `{background}` | `{background}` | Ground of the Ambient background, under the colour fields. |
+| `--ambient-1` | `color-mix(in oklab, {sky} 72%, {sky-ink})` / `{sky}` | `color-mix(in oklab, {chart-1} 22%, {background})` / `color-mix(in oklab, {chart-1} 30%, {background})` | First colour field of the Ambient gradient (a faint aurora in Pro). |
+| `--ambient-2` | `color-mix(in oklab, {mint} 72%, {mint-ink})` / `{mint}` | `color-mix(in oklab, {chart-4} 18%, {background})` / `color-mix(in oklab, {chart-4} 26%, {background})` | Second colour field of the Ambient gradient. |
+| `--ambient-3` | `color-mix(in oklab, {lilac} 72%, {lilac-ink})` / `{lilac}` | `color-mix(in oklab, {chart-2} 16%, {background})` / `color-mix(in oklab, {chart-2} 22%, {background})` | Third colour field of the Ambient gradient. |
+| `--ambient-4` | `color-mix(in oklab, {butter} 72%, {butter-ink})` / `{butter}` | `color-mix(in oklab, {foreground} 6%, {background})` / `color-mix(in oklab, {foreground} 8%, {background})` | Fourth colour field of the Ambient gradient. |
+| `--ambient-scrim` | `rgba(255, 255, 255, 0.28)` / `rgba(10, 10, 10, 0.45)` | `rgba(246, 246, 247, 0.4)` / `rgba(9, 9, 11, 0.55)` | Softens a photo or video under glass so the page keeps its calm. |
 | `--bg-000` | `{canvas}` | `{background}` | Canvas: app background, behind hairline grids, inputs on surfaces. |
 | `--bg-100` | `{surface}` | `{card}` | Surface: every grid cell, panel, table, sidebar, dialog. |
 | `--bg-200` | `{surface-sunken}` | `{muted}` | Raised: row and button hover, kbd keys, skeletons, code blocks. |
@@ -154,6 +160,7 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--panel-pad` | `{space-6}` | `{space-4}` | Inner padding of a panel. |
 | `--panel-gap` | `{space-4}` | `1px` | Gap between panels in a grid: the hairline in Pro, air between cards in Halo. |
 | `--glass-filter` | `blur(24px) saturate(180%) brightness(1.05)` / `blur(24px) saturate(160%) brightness(0.85)` | `blur(16px) saturate(130%) brightness(1.04)` / `blur(16px) saturate(120%) brightness(0.8)` | backdrop-filter of glass surfaces: blur, colour lift and a nudge towards the theme's side. |
+| `--glass-tint` | `62%` | `40%` | How strongly a tint (StatTile, tinted Card) colours the glass it sits on. |
 
 ## font
 

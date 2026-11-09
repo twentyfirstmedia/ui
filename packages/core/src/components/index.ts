@@ -192,7 +192,7 @@ export {
   EnergyClass,
 } from "./real-estate.js";
 export { RichTextEditor } from "./rich-text-editor.js";
-export { TopBar, SideRail, Dock, FloatingLayout, NAV, AppShell } from "./shell.js";
+export { TopBar, SideRail, Dock, FloatingLayout, Ambient, NAV, AppShell } from "./shell.js";
 export { ChatLauncher, CookieConsent, AnnouncementBar } from "./site.js";
 export { StatusShape, StatusIndicator } from "./status.js";
 export { StatusScreen, AuthCard } from "./system.js";
