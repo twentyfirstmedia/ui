@@ -2,6 +2,9 @@
 
 import * as React from "react";
 import { cx, durationToken, enterDelay, reduced } from "../cx.js";
+import { formatLike, parseFormatted, type FormattedNumber } from "../format.js";
+import { useFormat, useStrings } from "../context.js";
+import { DATA_DISPLAY_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { useMounted, useScrollFocus } from "../hooks.js";
 import { Avatar, IconButton, TintIcon } from "./foundation.js";
@@ -26,44 +29,24 @@ import type {
 } from "./types.js";
 
 /* ── Data ── */
-interface ParsedNumber {
-  pre: string;
-  num: number;
-  dec: number;
-  comma: boolean;
-  post: string;
-}
-function parseNum(v: string | number): ParsedNumber | null {
-  const m = /^([^0-9-]*)(-?[0-9][0-9,]*\.?[0-9]*)(.*)$/.exec(String(v));
-  if (!m) return null;
-  const raw = (m[2] as string).replace(/,/g, ""),
-    dec = (raw.split(".")[1] || "").length;
-  return {
-    pre: m[1] ?? "",
-    num: parseFloat(raw),
-    dec: dec,
-    comma: (m[2] as string).indexOf(",") > -1,
-    post: m[3] ?? "",
-  };
-}
-export function fmt(n: number, o: ParsedNumber) {
-  let s = n.toFixed(o.dec);
-  if (o.comma) {
-    const parts = s.split(".");
-    parts[0] = (parts[0] as string).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    s = parts.join(".");
-  }
-  return o.pre + s + o.post;
-}
+/**
+ * Counts up to `value`. Strings are read in the locale of the nearest `UIProvider` ("13,05 €/m²"
+ * in de-DE, "$1,305.50" in en-US): the number animates, the text around it stays, and decimals and
+ * grouping are kept. The final text is always `value` itself.
+ */
 export function CountUp(p: CountUpProps) {
-  const o = parseNum(p.value),
-    st = React.useState(o ? fmt(0, o) : String(p.value)),
+  const { locale } = useFormat();
+  const o = parseFormatted(p.value, locale),
+    fmt = (n: number, shape: FormattedNumber) => formatLike(n, shape, locale),
+    // numbers are shown in the locale too; strings end exactly as given
+    final = o && typeof p.value === "number" ? fmt(p.value, o) : String(p.value),
+    st = React.useState(o ? fmt(0, o) : final),
     last = React.useRef(0),
     first = React.useRef(true),
     el = React.useRef<HTMLSpanElement>(null);
   React.useEffect(() => {
     if (!o || reduced(el.current)) {
-      st[1](String(p.value));
+      st[1](final);
       return;
     }
     const slow = durationToken("--dur-slow", 900, el.current);
@@ -79,17 +62,20 @@ export function CountUp(p: CountUpProps) {
       if (start === null) start = t;
       const k = Math.min(1, Math.max(0, (t - start - delay) / dur));
       const e = 1 - Math.pow(1 - k, 3),
-        v = from + (target.num - from) * e;
+        v = from + (target.value - from) * e;
       last.current = v;
       st[1](fmt(v, target));
       if (k < 1) raf = requestAnimationFrame(tick);
-      else last.current = target.num;
+      else {
+        last.current = target.value;
+        st[1](final);
+      }
     }
     raf = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(raf);
     };
-  }, [p.value]);
+  }, [p.value, locale]);
   return (
     <span ref={el} className={p.className}>
       {st[0]}
@@ -160,6 +146,7 @@ const KIND: Record<string, [IconName, Tint]> = {
   incident: ["bell", "blush"],
 };
 export function EventCard(p: EventCardProps) {
+  const t = useStrings(DATA_DISPLAY_STRINGS);
   const k = KIND[p.kind || "meeting"] || (KIND.meeting as [IconName, Tint]),
     tint = p.tint || k[1];
   return (
@@ -178,9 +165,9 @@ export function EventCard(p: EventCardProps) {
         </span>
         {p.actions !== false && (
           <span className="tf-row">
-            <IconButton icon="eye" label="Open" size="sm" variant="outline" />
-            <IconButton icon="edit" label="Edit" size="sm" variant="outline" />
-            <IconButton icon="trash" label="Remove" size="sm" variant="outline" />
+            <IconButton icon="eye" label={t.open} size="sm" variant="outline" />
+            <IconButton icon="edit" label={t.edit} size="sm" variant="outline" />
+            <IconButton icon="trash" label={t.remove} size="sm" variant="outline" />
           </span>
         )}
       </div>
@@ -312,6 +299,7 @@ export function Table(p: TableProps) {
   );
 }
 export function ListRow(p: ListRowProps) {
+  const t = useStrings(DATA_DISPLAY_STRINGS);
   return (
     <button
       type="button"
@@ -331,7 +319,7 @@ export function ListRow(p: ListRowProps) {
         }}
       >
         <span className="tf-row-title">
-          {p.unread && <span className="tf-unread" role="img" aria-label="Unread" />}
+          {p.unread && <span className="tf-unread" role="img" aria-label={t.unread} />}
           {p.title}
         </span>
         {p.subtitle && (
@@ -386,6 +374,7 @@ const FT: Record<string, [IconName, Tint]> = {
   zip: ["folder", "butter"],
 };
 export function FileRow(p: FileRowProps) {
+  const strings = useStrings(DATA_DISPLAY_STRINGS);
   const t = FT[p.kind || "doc"] || (FT.doc as [IconName, Tint]);
   return (
     <div className="tf-file">
@@ -399,11 +388,12 @@ export function FileRow(p: FileRowProps) {
         <div className="tf-file-name">{p.name}</div>
         <div className="tf-file-meta">{p.meta}</div>
       </div>
-      <IconButton icon="download" label={`Download ${p.name}`} size="sm" />
+      <IconButton icon="download" label={strings.downloadItem(p.name)} size="sm" />
     </div>
   );
 }
 export function KanbanColumn(p: KanbanColumnProps) {
+  const t = useStrings(DATA_DISPLAY_STRINGS);
   return (
     <section className="tf-kanban" aria-label={p.title}>
       <div className="tf-kanban-head">
@@ -429,7 +419,7 @@ export function KanbanColumn(p: KanbanColumnProps) {
           {p.title}
           <span className="tf-kanban-count">{React.Children.count(p.children)}</span>
         </span>
-        <IconButton icon="more" label="Column options" size="sm" />
+        <IconButton icon="more" label={t.columnOptions} size="sm" />
       </div>
       <Stagger
         className="tf-col"
@@ -442,12 +432,13 @@ export function KanbanColumn(p: KanbanColumnProps) {
       </Stagger>
       <button type="button" className="tf-kanban-add" onClick={p.onAdd}>
         <Icon name="plus" size={14} />
-        {"Add card"}
+        {t.addCard}
       </button>
     </section>
   );
 }
 export function Progress(p: ProgressProps) {
+  const t = useStrings(DATA_DISPLAY_STRINGS);
   const v = Math.max(0, Math.min(100, p.value || 0));
   return (
     <div
@@ -456,7 +447,7 @@ export function Progress(p: ProgressProps) {
       aria-valuenow={v}
       aria-valuemin={0}
       aria-valuemax={100}
-      aria-label={p.label || "Progress"}
+      aria-label={p.label || t.progress}
     >
       <span
         style={{
@@ -467,6 +458,8 @@ export function Progress(p: ProgressProps) {
   );
 }
 export function ProgressRing(p: ProgressRingProps) {
+  const t = useStrings(DATA_DISPLAY_STRINGS);
+  const { formatPercent } = useFormat();
   const size = p.size || 88,
     sw = p.stroke || 9,
     r = (size - sw) / 2,
@@ -481,7 +474,7 @@ export function ProgressRing(p: ProgressRingProps) {
         height: size,
       }}
       role="img"
-      aria-label={(p.label || "Progress") + " " + v + "%"}
+      aria-label={(p.label || t.progress) + " " + formatPercent(v, { maximumFractionDigits: 2 })}
     >
       <svg width={size} height={size} viewBox={"0 0 " + size + " " + size}>
         <circle className="tf-arc-track" cx={size / 2} cy={size / 2} r={r} strokeWidth={sw} />
@@ -497,7 +490,7 @@ export function ProgressRing(p: ProgressRingProps) {
       </svg>
       <span className="tf-ring-label">
         <span>
-          <CountUp value={v + "%"} delay={150} />
+          <CountUp value={formatPercent(v, { maximumFractionDigits: 2 })} delay={150} />
           {p.caption && <small>{p.caption}</small>}
         </span>
       </span>

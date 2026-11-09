@@ -2,6 +2,8 @@
 import * as React from "react";
 import { formatNumber } from "../format.js";
 import { cx } from "../cx.js";
+import { useStrings } from "../context.js";
+import { RICH_TEXT_EDITOR_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { FormField } from "./forms.js";
 import { Popover } from "./overlays.js";
@@ -72,6 +74,7 @@ function rteClean(html: string | undefined): string {
 }
 
 export function RichTextEditor(p: RichTextEditorProps) {
+  const strings = useStrings(RICH_TEXT_EDITOR_STRINGS);
   const ref = React.useRef<HTMLDivElement>(null),
     count = React.useState(0),
     active = React.useState<Record<string, boolean>>({}),
@@ -411,7 +414,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
       () => {
         mark("B", "STRONG");
       },
-      "Bold",
+      strings.bold,
       "B",
     ],
     [
@@ -419,7 +422,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
       () => {
         mark("I", "EM");
       },
-      "Italic",
+      strings.italic,
       "I",
     ],
     [
@@ -427,7 +430,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
       () => {
         mark("U");
       },
-      "Underline",
+      strings.underline,
       "U",
     ],
     "-",
@@ -436,38 +439,38 @@ export function RichTextEditor(p: RichTextEditorProps) {
       () => {
         setBlock("H3");
       },
-      "Heading",
+      strings.heading,
     ],
     [
       "quote",
       () => {
         setBlock("BLOCKQUOTE");
       },
-      "Quote",
+      strings.quote,
     ],
     [
       "list",
       () => {
         setList("UL");
       },
-      "Bulleted list",
+      strings.bulletedList,
     ],
     [
       "olist",
       () => {
         setList("OL");
       },
-      "Numbered list",
+      strings.numberedList,
     ],
     "-",
-    ["link", openLink, "Link", "K"],
+    ["link", openLink, strings.link, "K"],
     "-",
     [
       "undo",
       () => {
         restore(-1);
       },
-      "Undo",
+      strings.undo,
       "Z",
     ],
     [
@@ -475,7 +478,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
       () => {
         restore(1);
       },
-      "Redo",
+      strings.redo,
     ],
   ];
   const over = p.maxLength && count[0] > p.maxLength,
@@ -486,7 +489,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
   return (
     <FormField label={p.label} hint={p.hint} error={p.error}>
       <div className={cx("tf-rte", over && "invalid")}>
-        <div className="tf-rte-bar" role="toolbar" aria-label="Formatting">
+        <div className="tf-rte-bar" role="toolbar" aria-label={strings.formatting}>
           {tools.map((t, i) => {
             if (t === "-") return <span key={i} className="tf-rte-sep" aria-hidden />;
             const btn = (
@@ -531,8 +534,8 @@ export function RichTextEditor(p: RichTextEditorProps) {
                     onChange={(e) => {
                       linkUrl[1](e.target.value);
                     }}
-                    placeholder="Link address"
-                    aria-label="Link address"
+                    placeholder={strings.linkAddress}
+                    aria-label={strings.linkAddress}
                     inputMode="url"
                   />
                   <div
@@ -550,11 +553,11 @@ export function RichTextEditor(p: RichTextEditorProps) {
                           applyLink(true);
                         }}
                       >
-                        {"Remove link"}
+                        {strings.removeLink}
                       </Button>
                     )}
                     <Button size="sm" type="submit">
-                      {"Apply"}
+                      {strings.apply}
                     </Button>
                   </div>
                 </form>
@@ -577,7 +580,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
                   aria-expanded={s.open}
                 >
                   {"{ }"}
-                  <span>{"Insert field"}</span>
+                  <span>{strings.insertField}</span>
                 </button>
               )}
             >
@@ -617,7 +620,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
           contentEditable={!p.disabled}
           role="textbox"
           aria-multiline="true"
-          aria-label={typeof p.label === "string" ? p.label : "Text"}
+          aria-label={typeof p.label === "string" ? p.label : strings.text}
           data-placeholder={p.placeholder || ""}
           suppressContentEditableWarning
           onInput={input}

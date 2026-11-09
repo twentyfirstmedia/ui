@@ -1,5 +1,7 @@
 "use client";
 import * as React from "react";
+import { useStrings } from "../context.js";
+import { MEDIA_STRINGS } from "../strings.js";
 import { useControlled } from "../hooks.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
@@ -17,6 +19,7 @@ import type {
 
 /* ── Media ── */
 export function ImageVariants(p: ImageVariantsProps) {
+  const t = useStrings(MEDIA_STRINGS);
   const sel = useControlled<string | number>(p.selected, p.variants?.[0]?.id ?? "", p.onSelect),
     cur: Partial<ImageVariant> = (p.variants || []).find((v) => v.id === sel[0]) || {};
   return (
@@ -40,7 +43,7 @@ export function ImageVariants(p: ImageVariantsProps) {
         )}
         {cur.label && <span className="tf-imgvar-tag">{cur.label}</span>}
       </div>
-      <div className="tf-imgvar-list" role="listbox" aria-label="Variants">
+      <div className="tf-imgvar-list" role="listbox" aria-label={t.variants}>
         {(p.variants || []).map((v) => (
           <button
             key={v.id}
@@ -89,6 +92,7 @@ export function ImageVariants(p: ImageVariantsProps) {
 }
 
 export function Gallery(p: GalleryProps) {
+  const t = useStrings(MEDIA_STRINGS);
   const items = p.items || [],
     i = React.useState(p.start || 0),
     full = React.useState(false),
@@ -129,7 +133,7 @@ export function Gallery(p: GalleryProps) {
       {n > 1 && (
         <IconButton
           icon="chevronLeft"
-          label="Previous image"
+          label={t.previousImage}
           className="tf-gallery-prev"
           onClick={() => {
             go(-1);
@@ -139,7 +143,7 @@ export function Gallery(p: GalleryProps) {
       {n > 1 && (
         <IconButton
           icon="chevronRight"
-          label="Next image"
+          label={t.nextImage}
           className="tf-gallery-next"
           onClick={() => {
             go(1);
@@ -150,7 +154,7 @@ export function Gallery(p: GalleryProps) {
       {!full[0] && p.fullscreen !== false && (
         <IconButton
           icon="expand"
-          label="Full screen"
+          label={t.fullScreen}
           className="tf-gallery-full"
           onClick={() => {
             full[1](true);
@@ -164,7 +168,7 @@ export function Gallery(p: GalleryProps) {
     <div className="tf-gallery">
       {stage}
       {p.thumbs !== false && n > 1 && (
-        <div className="tf-gallery-thumbs" role="tablist" aria-label="Images">
+        <div className="tf-gallery-thumbs" role="tablist" aria-label={t.images}>
           {items.map((it, k) => (
             <button
               key={k}
@@ -175,7 +179,7 @@ export function Gallery(p: GalleryProps) {
               onClick={() => {
                 i[1](k);
               }}
-              aria-label={it.caption || it.alt || (it.src ? `Image ${k + 1}` : undefined)}
+              aria-label={it.caption || it.alt || (it.src ? t.imageN(k + 1) : undefined)}
             >
               {pic(it, "tf-gallery-thumb")}
             </button>
@@ -184,10 +188,10 @@ export function Gallery(p: GalleryProps) {
       )}
       {full[0] && (
         <Portal>
-          <div className="tf-lightbox" role="dialog" aria-modal="true" aria-label="Images">
+          <div className="tf-lightbox" role="dialog" aria-modal="true" aria-label={t.images}>
             <IconButton
               icon="x"
-              label="Close"
+              label={t.close}
               className="tf-lightbox-close"
               onClick={() => {
                 full[1](false);
@@ -198,7 +202,7 @@ export function Gallery(p: GalleryProps) {
               {n > 1 && (
                 <IconButton
                   icon="chevronLeft"
-                  label="Previous image"
+                  label={t.previousImage}
                   className="tf-gallery-prev"
                   onClick={() => {
                     go(-1);
@@ -208,7 +212,7 @@ export function Gallery(p: GalleryProps) {
               {n > 1 && (
                 <IconButton
                   icon="chevronRight"
-                  label="Next image"
+                  label={t.nextImage}
                   className="tf-gallery-next"
                   onClick={() => {
                     go(1);
@@ -227,6 +231,7 @@ export function Gallery(p: GalleryProps) {
 }
 
 export function BeforeAfter(p: BeforeAfterProps) {
+  const t = useStrings(MEDIA_STRINGS);
   const pos = React.useState(p.start != null ? p.start : 50),
     ref = React.useRef<HTMLDivElement>(null),
     drag = React.useRef(false);
@@ -270,8 +275,8 @@ export function BeforeAfter(p: BeforeAfterProps) {
       >
         {pane(p.before, "tf-ba-img")}
       </div>
-      <span className="tf-ba-tag left">{p.beforeLabel || "Before"}</span>
-      <span className="tf-ba-tag right">{p.afterLabel || "After"}</span>
+      <span className="tf-ba-tag left">{p.beforeLabel || t.before}</span>
+      <span className="tf-ba-tag right">{p.afterLabel || t.after}</span>
       <div
         className="tf-ba-line"
         style={{
@@ -282,7 +287,7 @@ export function BeforeAfter(p: BeforeAfterProps) {
           className="tf-ba-knob"
           role="slider"
           tabIndex={0}
-          aria-label="Compare before and after"
+          aria-label={t.compareBeforeAfter}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(pos[0])}

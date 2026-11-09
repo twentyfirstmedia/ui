@@ -3,7 +3,8 @@ import * as React from "react";
 import { Icon } from "../Icon.js";
 import { cx } from "../cx.js";
 import { useScrollFocus } from "../hooks.js";
-import { formatMoney, formatPercent } from "../format.js";
+import { useFormat, useStrings } from "../context.js";
+import { OPERATIONS_STRINGS } from "../strings.js";
 import { StatusIndicator, StatusShape } from "./status.js";
 import { Meter, UptimeBar } from "./developer.js";
 import { DataTable } from "./data-table.js";
@@ -50,19 +51,15 @@ export function ConnectionCard(p: ConnectionCardProps) {
 }
 
 export function ConnectionBanner(p: ConnectionBannerProps) {
+  const t = useStrings(OPERATIONS_STRINGS);
   if (!p.state || p.state === "online") return null;
   return (
     <div className={cx("tf-connbanner", p.state)} role="status">
       <StatusShape status={p.state === "offline" ? "danger" : "warn"} />
-      <span>
-        {p.text ||
-          (p.state === "offline"
-            ? "Offline. Changes are kept and sent when you’re back."
-            : `Connection lost. Retrying in ${p.seconds != null ? p.seconds : "…"} s`)}
-      </span>
+      <span>{p.text || (p.state === "offline" ? t.offline : t.connectionLost(p.seconds))}</span>
       {p.onRetry && (
         <button type="button" className="tf-linkbtn" onClick={p.onRetry}>
-          {"Retry now"}
+          {t.retryNow}
         </button>
       )}
     </div>
@@ -70,6 +67,7 @@ export function ConnectionBanner(p: ConnectionBannerProps) {
 }
 
 export function ServerCard(p: ServerCardProps) {
+  const t = useStrings(OPERATIONS_STRINGS);
   return (
     <div className="tf-server">
       <div className="tf-server-top">
@@ -90,7 +88,7 @@ export function ServerCard(p: ServerCardProps) {
           m.value == null ? (
             <div key={m.label} className="tf-usage-top">
               <span>{m.label}</span>
-              <b>{m.unknown || "Unknown"}</b>
+              <b>{m.unknown || t.unknown}</b>
             </div>
           ) : (
             <Meter key={m.label} label={m.label} value={m.value} max={m.max} text={m.text} />
@@ -104,8 +102,9 @@ export function ServerCard(p: ServerCardProps) {
 }
 
 export function DeployPipeline(p: DeployPipelineProps) {
+  const t = useStrings(OPERATIONS_STRINGS);
   return (
-    <ol className="tf-pipeline" tabIndex={0} aria-label="Deploy pipeline">
+    <ol className="tf-pipeline" tabIndex={0} aria-label={t.deployPipeline}>
       {(p.stages || []).map((s, i) => (
         <li key={i} className={cx("tf-stage", "st-" + (s.status || "idle"))}>
           <StatusShape status={s.status === "done" ? "ok" : s.status || "idle"} />
@@ -119,6 +118,7 @@ export function DeployPipeline(p: DeployPipelineProps) {
 }
 
 export function DnsRecordTable(p: DnsRecordTableProps) {
+  const t = useStrings(OPERATIONS_STRINGS);
   return (
     <DataTable
       rows={p.records || []}
@@ -130,7 +130,7 @@ export function DnsRecordTable(p: DnsRecordTableProps) {
       columns={[
         {
           key: "type",
-          label: "Type",
+          label: t.colType,
           sortable: true,
           render: (r) => (
             <Badge tone="neutral" dot={false} className="tf-mono">
@@ -140,13 +140,13 @@ export function DnsRecordTable(p: DnsRecordTableProps) {
         },
         {
           key: "name",
-          label: "Name",
+          label: t.colName,
           sortable: true,
           render: (r) => <span className="tf-mono">{r.name}</span>,
         },
         {
           key: "content",
-          label: "Content",
+          label: t.colContent,
           render: (r) => (
             <Tooltip label={r.content}>
               <span className="tf-mono tf-trunc" tabIndex={0}>
@@ -163,14 +163,14 @@ export function DnsRecordTable(p: DnsRecordTableProps) {
         },
         {
           key: "proxy",
-          label: "Proxy",
+          label: t.colProxy,
           render: (r) =>
             r.proxy == null ? (
               "—"
             ) : (
               <StatusIndicator
                 status={r.proxy ? "ok" : "idle"}
-                label={r.proxy ? "Proxied" : "DNS only"}
+                label={r.proxy ? t.proxied : t.dnsOnly}
               />
             ),
         },
@@ -189,7 +189,7 @@ export function DnsRecordTable(p: DnsRecordTableProps) {
                   <button
                     type="button"
                     className="tf-iconbtn tf-iconbtn-ghost tf-iconbtn-sm"
-                    aria-label="Actions"
+                    aria-label={t.actions}
                     onClick={s.toggle}
                   >
                     <Icon name="more" />
@@ -219,6 +219,7 @@ export function DnsRecordTable(p: DnsRecordTableProps) {
 }
 
 export function DomainList(p: DomainListProps) {
+  const t = useStrings(OPERATIONS_STRINGS);
   return (
     <div className="tf-domains">
       {(p.items || [])
@@ -241,8 +242,8 @@ export function DomainList(p: DomainListProps) {
                 <small>{[d.registrar, d.dns].filter(Boolean).join(" · ")}</small>
               </span>
               <span className="tf-domainrow-cell">
-                <small>{"Expires"}</small>
-                <b className="tf-mono">{d.days == null ? "—" : `${d.days} days`}</b>
+                <small>{t.expires}</small>
+                <b className="tf-mono">{d.days == null ? "—" : t.daysCount(d.days)}</b>
               </span>
               <span className="tf-domainrow-cell">
                 <small>{"SSL"}</small>
@@ -256,6 +257,7 @@ export function DomainList(p: DomainListProps) {
 }
 
 export function MailAuthStatus(p: MailAuthStatusProps) {
+  const t = useStrings(OPERATIONS_STRINGS);
   const cols = p.columns || ["MX", "SPF", "DKIM", "DMARC"];
   const box = React.useRef<HTMLDivElement>(null);
   useScrollFocus(box);
@@ -264,7 +266,7 @@ export function MailAuthStatus(p: MailAuthStatusProps) {
       <table className="tf-table tf-mailauth">
         <thead>
           <tr>
-            <th>{"Domain"}</th>
+            <th>{t.domain}</th>
             {cols.map((c) => (
               <th key={c}>{c}</th>
             ))}
@@ -303,6 +305,8 @@ export function MailAuthStatus(p: MailAuthStatusProps) {
 }
 
 export function LedgerTable(p: LedgerTableProps) {
+  const t = useStrings(OPERATIONS_STRINGS);
+  const { formatMoney } = useFormat();
   const cur = p.currency;
   return (
     <DataTable
@@ -316,24 +320,24 @@ export function LedgerTable(p: LedgerTableProps) {
       columns={[
         {
           key: "date",
-          label: "Date",
+          label: t.colDate,
           sortable: true,
           render: (r) => <span className="tf-mono">{r.date}</span>,
         },
         {
           key: "ref",
-          label: "Ref.",
+          label: t.colRef,
           render: (r) => <span className="tf-mono">{r.ref}</span>,
         },
         {
           key: "text",
-          label: "Description",
+          label: t.colDescription,
           render: (r) => (
             <span className="tf-option-text">
               <b>{r.text}</b>
               {r.suggested && (
                 <small>
-                  <StatusShape status="signal" /> {`Suggested by ${r.suggested}`}
+                  <StatusShape status="signal" /> {t.suggestedBy(r.suggested)}
                 </small>
               )}
             </span>
@@ -341,7 +345,7 @@ export function LedgerTable(p: LedgerTableProps) {
         },
         {
           key: "category",
-          label: "Category",
+          label: t.colCategory,
           render: (r) =>
             p.categories ? (
               <InlineEdit
@@ -359,7 +363,7 @@ export function LedgerTable(p: LedgerTableProps) {
         },
         {
           key: "project",
-          label: "Project",
+          label: t.colProject,
           render: (r) =>
             r.project && (
               <span
@@ -376,7 +380,7 @@ export function LedgerTable(p: LedgerTableProps) {
         },
         {
           key: "net",
-          label: "Net",
+          label: t.net,
           align: "right",
           sortable: true,
           render: (r) =>
@@ -386,7 +390,7 @@ export function LedgerTable(p: LedgerTableProps) {
         },
         {
           key: "vat",
-          label: "VAT",
+          label: t.vat,
           align: "right",
           render: (r) =>
             formatMoney(r.vat || 0, cur, {
@@ -395,7 +399,7 @@ export function LedgerTable(p: LedgerTableProps) {
         },
         {
           key: "gross",
-          label: "Gross",
+          label: t.grossLabel,
           align: "right",
           sortable: true,
           render: (r) => (
@@ -408,7 +412,7 @@ export function LedgerTable(p: LedgerTableProps) {
         },
         {
           key: "status",
-          label: "Status",
+          label: t.status,
           render: (r) => <StatusIndicator status={r.status || "ok"} label={r.statusLabel} />,
         },
       ]}
@@ -417,6 +421,8 @@ export function LedgerTable(p: LedgerTableProps) {
 }
 
 export function PnLStatement(p: PnLStatementProps) {
+  const t = useStrings(OPERATIONS_STRINGS);
+  const { formatMoney } = useFormat();
   const cols = p.columns || [];
   const box = React.useRef<HTMLDivElement>(null);
   useScrollFocus(box);
@@ -431,7 +437,7 @@ export function PnLStatement(p: PnLStatementProps) {
                 {c}
               </th>
             ))}
-            {p.total !== false && <th className="tf-num">{"Total"}</th>}
+            {p.total !== false && <th className="tf-num">{t.total}</th>}
           </tr>
         </thead>
         <tbody>
@@ -467,6 +473,8 @@ export function PnLStatement(p: PnLStatementProps) {
 }
 
 export function ReceiptSuggestion(p: ReceiptSuggestionProps) {
+  const t = useStrings(OPERATIONS_STRINGS);
+  const { formatPercent } = useFormat();
   return (
     <div className="tf-receipt">
       <div className="tf-receipt-src">
@@ -504,12 +512,12 @@ export function ReceiptSuggestion(p: ReceiptSuggestionProps) {
       >
         {p.onDiscard && (
           <Button variant="ghost" size="sm" onClick={p.onDiscard}>
-            {p.discardLabel || "Not a receipt"}
+            {p.discardLabel || t.notAReceipt}
           </Button>
         )}
         {p.onConfirm && (
           <Button size="sm" icon="check" onClick={p.onConfirm}>
-            {p.confirmLabel || "Book it"}
+            {p.confirmLabel || t.bookIt}
           </Button>
         )}
       </div>

@@ -23,7 +23,7 @@ Both kits have exactly the same components, props, markup, classes and tokens. O
 - **Accessible.** Keyboard paths, focus rings and ARIA follow the WAI-ARIA practices; axe (WCAG 2.1 AA) runs on every example of both kits, light and dark.
 - **Tokens only.** No colour literals in component CSS.
 - **Private.** Fonts are self-hosted, nothing phones home and components make no requests of their own.
-- **English, formatted with Intl.** Built-in text is plain English and overridable through props; numbers, money, percentages and dates go through `formatNumber`, `formatMoney`, `formatPercent` and `formatDate`.
+- **English, formatted with Intl.** Built-in text is plain English and overridable through props or `UIProvider messages`; numbers, money, percentages and dates go through `formatNumber`, `formatMoney`, `formatPercent` and `formatDate`, in en-US or the `UIProvider locale` ([Text and locale](/{{kit}}/text/)).
 
 ## Quick start
 

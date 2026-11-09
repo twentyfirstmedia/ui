@@ -3,7 +3,9 @@ import * as React from "react";
 import { leaving, usePresence } from "../presence.js";
 import { cx } from "../cx.js";
 import { useFieldError } from "./form.js";
-import { formatDate, formatNumber, WEEK_START } from "../format.js";
+import { formatDate, WEEK_START } from "../format.js";
+import { useFormat, useStrings, type Formatters } from "../context.js";
+import { FORMS_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { useControlled, useId, useOutside } from "../hooks.js";
 import { Avatar, IconButton, TintIcon } from "./foundation.js";
@@ -223,6 +225,7 @@ export function norm(o: string | Option): Option {
 }
 
 export function Combobox(p: ComboboxProps) {
+  const t = useStrings(FORMS_STRINGS);
   const multi = !!p.multiple,
     opts = (p.options || []).map(norm),
     id = useId("cb");
@@ -310,7 +313,7 @@ export function Combobox(p: ComboboxProps) {
                 {labelOf(val)}
                 <button
                   type="button"
-                  aria-label={`Remove ${labelOf(val)}`}
+                  aria-label={t.removeItem(labelOf(val))}
                   onClick={(e) => {
                     e.stopPropagation();
                     v[1](selList.filter((x) => x !== val));
@@ -336,7 +339,7 @@ export function Combobox(p: ComboboxProps) {
                   : p.placeholder
                 : selOne != null && !q[0]
                   ? labelOf(selOne)
-                  : p.placeholder || "Select…"
+                  : p.placeholder || t.selectPlaceholder
             }
             value={q[0]}
             onChange={(e) => {
@@ -368,9 +371,7 @@ export function Combobox(p: ComboboxProps) {
             role="listbox"
             aria-multiselectable={multi || undefined}
           >
-            {list.length === 0 && !canCreate && (
-              <div className="tf-combo-empty">{"No matches"}</div>
-            )}
+            {list.length === 0 && !canCreate && <div className="tf-combo-empty">{t.noMatches}</div>}
             {list.map((o, i) => (
               <div
                 key={o.value}
@@ -411,7 +412,7 @@ export function Combobox(p: ComboboxProps) {
                 }}
               >
                 <Icon name="plus" size={15} />
-                <span className="tf-option-text">{`Create “${q[0].trim()}”`}</span>
+                <span className="tf-option-text">{t.createOption(q[0].trim())}</span>
               </div>
             )}
           </div>
@@ -422,6 +423,7 @@ export function Combobox(p: ComboboxProps) {
 }
 
 export function TagInput(p: TagInputProps) {
+  const strings = useStrings(FORMS_STRINGS);
   const v = useControlled(p.value, p.defaultValue || [], p.onChange),
     q = React.useState(""),
     id = useId("tag");
@@ -444,7 +446,7 @@ export function TagInput(p: TagInputProps) {
             {t}
             <button
               type="button"
-              aria-label={`Remove ${t}`}
+              aria-label={strings.removeItem(t)}
               onClick={() => {
                 v[1](v[0].filter((x) => x !== t));
               }}
@@ -456,7 +458,7 @@ export function TagInput(p: TagInputProps) {
         <input
           id={id}
           className="tf-combo-input"
-          placeholder={v[0].length ? "" : p.placeholder || "Type and press Enter"}
+          placeholder={v[0].length ? "" : p.placeholder || strings.tagPlaceholder}
           value={q[0]}
           onChange={(e) => {
             const s = e.target.value;
@@ -479,21 +481,30 @@ export function TagInput(p: TagInputProps) {
 }
 
 /* ── Date picker (single or range, with presets) ── */
-function monthName(d: Date) {
-  return formatDate(d, {
-    month: "long",
-    year: "numeric",
-  });
+function monthName(d: Date, locale?: string) {
+  return formatDate(
+    d,
+    {
+      month: "long",
+      year: "numeric",
+    },
+    locale,
+  );
 }
 
-export function weekdays() {
+/** Short weekday names from the first day of the week (`locale` default en-US). */
+export function weekdays(locale?: string) {
   const out: string[] = [];
   for (let i = 0; i < 7; i++) {
     const d = new Date(2024, 0, 1 + ((WEEK_START + i - 1) % 7));
     out.push(
-      formatDate(d, {
-        weekday: "short",
-      }),
+      formatDate(
+        d,
+        {
+          weekday: "short",
+        },
+        locale,
+      ),
     );
   }
   return out;
@@ -513,8 +524,8 @@ function same(a: Date | null | undefined, b: Date | null | undefined): boolean {
   );
 }
 
-function fmtD(d: Date | null | undefined) {
-  return d ? formatDate(d) : "";
+function fmtD(d: Date | null | undefined, locale?: string) {
+  return d ? formatDate(d, undefined, locale) : "";
 }
 
 function addD(d: Date, n: number) {
@@ -524,6 +535,8 @@ function addD(d: Date, n: number) {
 }
 
 export function Calendar(p: CalendarProps) {
+  const t = useStrings(FORMS_STRINGS);
+  const { locale } = useFormat();
   const range = p.range ? ((p.value as DateRange | null | undefined) ?? null) : null;
   const today = d0(p.today || new Date()),
     sv = p.range ? range && range.from : (p.value as Date | null | undefined),
@@ -544,17 +557,17 @@ export function Calendar(p: CalendarProps) {
       <div className="tf-cal-head">
         <IconButton
           icon="chevronLeft"
-          label="Previous month"
+          label={t.previousMonth}
           size="sm"
           variant="soft"
           onClick={() => {
             move(-1);
           }}
         />
-        <b>{monthName(first)}</b>
+        <b>{monthName(first, locale)}</b>
         <IconButton
           icon="chevronRight"
-          label="Next month"
+          label={t.nextMonth}
           size="sm"
           variant="soft"
           onClick={() => {
@@ -562,8 +575,8 @@ export function Calendar(p: CalendarProps) {
           }}
         />
       </div>
-      <div className="tf-cal-grid" role="group" aria-label={monthName(first)}>
-        {weekdays().map((w, i) => (
+      <div className="tf-cal-grid" role="group" aria-label={monthName(first, locale)}>
+        {weekdays(locale).map((w, i) => (
           <span key={i} className="tf-cal-wd">
             {w}
           </span>
@@ -589,7 +602,7 @@ export function Calendar(p: CalendarProps) {
                 isTo && from && "end",
               )}
               aria-pressed={isFrom || isTo}
-              aria-label={formatDate(d, { day: "numeric", month: "long", year: "numeric" })}
+              aria-label={formatDate(d, { day: "numeric", month: "long", year: "numeric" }, locale)}
               onPointerEnter={() => {
                 p.range && hov[1](d);
               }}
@@ -617,6 +630,8 @@ export function Calendar(p: CalendarProps) {
 }
 
 export function DatePicker(p: DatePickerProps) {
+  const t = useStrings(FORMS_STRINGS);
+  const { locale } = useFormat();
   const id = useId("dp"),
     v = useControlled(
       p.value,
@@ -633,18 +648,18 @@ export function DatePicker(p: DatePickerProps) {
   const presets =
     p.presets !== false && p.range
       ? [
-          ["Last 7 days", -6],
-          ["Last 30 days", -29],
-          ["Last 90 days", -89],
-          ["This year", "y"],
+          [t.lastDays(7), -6],
+          [t.lastDays(30), -29],
+          [t.lastDays(90), -89],
+          [t.thisYear, "y"],
         ]
       : null;
   const rv = p.range ? ((v[0] as DateRange | null) ?? null) : null;
   const txt = p.range
     ? rv && rv.from
-      ? fmtD(rv.from) + " – " + (rv.to ? fmtD(rv.to) : "…")
+      ? fmtD(rv.from, locale) + " – " + (rv.to ? fmtD(rv.to, locale) : "…")
       : ""
-    : fmtD(v[0] as Date | null);
+    : fmtD(v[0] as Date | null, locale);
   return (
     <FormField
       id={id}
@@ -667,7 +682,7 @@ export function DatePicker(p: DatePickerProps) {
             onClick={s.toggle}
           >
             <Icon name="calendar" size={15} />
-            <span>{txt || p.placeholder || (p.range ? "Pick a range" : "Pick a date")}</span>
+            <span>{txt || p.placeholder || (p.range ? t.pickRange : t.pickDate)}</span>
           </button>
         )}
       >
@@ -722,6 +737,7 @@ export function DatePicker(p: DatePickerProps) {
 
 /* ── Number, slider, OTP, upload ── */
 export function NumberInput(p: NumberInputProps) {
+  const t = useStrings(FORMS_STRINGS);
   const id = useId("num"),
     v = useControlled(p.value, p.defaultValue != null ? p.defaultValue : 0, p.onChange),
     step = p.step || 1;
@@ -735,7 +751,7 @@ export function NumberInput(p: NumberInputProps) {
       <div className="tf-number">
         <IconButton
           icon="minus"
-          label="Decrease"
+          label={t.decrease}
           size="sm"
           disabled={p.min != null && v[0] <= p.min}
           onClick={() => {
@@ -766,7 +782,7 @@ export function NumberInput(p: NumberInputProps) {
         {p.unit && <span className="tf-number-unit">{p.unit}</span>}
         <IconButton
           icon="plus"
-          label="Increase"
+          label={t.increase}
           size="sm"
           disabled={p.max != null && v[0] >= p.max}
           onClick={() => {
@@ -827,6 +843,7 @@ export function Slider(p: SliderProps) {
 }
 
 export function OtpInput(p: OtpInputProps) {
+  const t = useStrings(FORMS_STRINGS);
   const n = p.length || 6,
     st = React.useState(Array(n).fill("")),
     refs = React.useRef<(HTMLInputElement | null)[]>([]);
@@ -841,7 +858,7 @@ export function OtpInput(p: OtpInputProps) {
     <div
       className={cx("tf-otp", p.error && "invalid")}
       role="group"
-      aria-label={p.label || "Verification code"}
+      aria-label={p.label || t.verificationCode}
     >
       {st[0].map((c, i) => (
         <React.Fragment key={i}>
@@ -855,7 +872,7 @@ export function OtpInput(p: OtpInputProps) {
             autoComplete={i === 0 ? "one-time-code" : "off"}
             maxLength={1}
             value={c}
-            aria-label={`Digit ${i + 1}`}
+            aria-label={t.digitN(i + 1)}
             onChange={(e) => {
               set(i, e.target.value.replace(/\D/g, "").slice(-1));
             }}
@@ -882,13 +899,15 @@ export function OtpInput(p: OtpInputProps) {
   );
 }
 
-function fsize(b: number) {
+function fsize(b: number, f: Pick<Formatters, "formatNumber">) {
   return b > 1048576
-    ? `${formatNumber(b / 1048576, { maximumFractionDigits: 1 })} MB`
-    : `${formatNumber(Math.max(1, Math.round(b / 1024)))} KB`;
+    ? `${f.formatNumber(b / 1048576, { maximumFractionDigits: 1 })} MB`
+    : `${f.formatNumber(Math.max(1, Math.round(b / 1024)))} KB`;
 }
 
 export function FileDrop(p: FileDropProps) {
+  const t = useStrings(FORMS_STRINGS);
+  const fm = useFormat();
   const over = React.useState(false),
     files = useControlled(p.files, [], p.onChange),
     inp = React.useRef<HTMLInputElement>(null);
@@ -949,8 +968,8 @@ export function FileDrop(p: FileDropProps) {
         }}
       >
         <TintIcon icon="upload" tint={over[0] ? "mint" : "sky"} size={40} />
-        <b>{over[0] ? "Drop to upload" : p.title || "Drop files here or browse"}</b>
-        <span>{p.hint || "PDF, PNG or JPG up to 10 MB"}</span>
+        <b>{over[0] ? t.dropToUpload : p.title || t.dropFiles}</b>
+        <span>{p.hint || t.dropHint}</span>
         <input
           ref={inp}
           type="file"
@@ -979,8 +998,8 @@ export function FileDrop(p: FileDropProps) {
                   <b>{f.name}</b>
                   <span>
                     {done
-                      ? `${fsize(f.size)} · uploaded`
-                      : Math.round(f.progress) + "% · " + fsize(f.size)}
+                      ? t.uploaded(fsize(f.size, fm))
+                      : fm.formatPercent(Math.round(f.progress)) + " · " + fsize(f.size, fm)}
                   </span>
                   {!done && (
                     <span className="tf-progress">
@@ -994,7 +1013,7 @@ export function FileDrop(p: FileDropProps) {
                 </div>
                 <IconButton
                   icon={done ? "trash" : "x"}
-                  label={done ? `Remove ${f.name}` : "Cancel upload"}
+                  label={done ? t.removeItem(f.name) : t.cancelUpload}
                   size="sm"
                   onClick={() => {
                     files[1](files[0].filter((x) => x.id !== f.id));

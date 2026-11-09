@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { useMounted, useWidth } from "../hooks.js";
-import { formatNumber } from "../format.js";
+import { useFormat, useStrings } from "../context.js";
+import { CHARTS_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { CountUp } from "./data-display.js";
@@ -24,6 +25,7 @@ function niceMax(m: number) {
   return Math.ceil(m / p) * p;
 }
 export function BarChart(p: BarChartProps) {
+  const t = useStrings(CHARTS_STRINGS);
   const mw = useWidth(p.width, 560),
     data = p.data || [],
     W = mw[1],
@@ -43,7 +45,7 @@ export function BarChart(p: BarChartProps) {
         viewBox={"0 0 " + W + " " + (Hh + 22)}
         preserveAspectRatio="xMinYMin meet"
         role="img"
-        aria-label={p.label || "Bar chart"}
+        aria-label={p.label || t.barChart}
       >
         {ticks.map((t) => {
           const y = Hh - t * (Hh - 10);
@@ -92,6 +94,7 @@ export function BarChart(p: BarChartProps) {
   );
 }
 export function LineChart(p: LineChartProps) {
+  const t = useStrings(CHARTS_STRINGS);
   const mw = useWidth(p.width, 560),
     series = p.series || [],
     labels = p.labels || [],
@@ -122,7 +125,7 @@ export function LineChart(p: LineChartProps) {
         viewBox={"0 0 " + W + " " + (Hh + 22)}
         preserveAspectRatio="xMinYMin meet"
         role="img"
-        aria-label={p.label || "Line chart"}
+        aria-label={p.label || t.lineChart}
       >
         {[0, 0.5, 1].map((t) => {
           const y = Hh - t * (Hh - 12);
@@ -181,6 +184,7 @@ export function LineChart(p: LineChartProps) {
   );
 }
 export function Sparkline(p: SparklineProps) {
+  const t = useStrings(CHARTS_STRINGS);
   const v = p.values || [],
     W = p.width || 120,
     Hh = p.height || 36,
@@ -203,7 +207,7 @@ export function Sparkline(p: SparklineProps) {
       width={W}
       height={Hh}
       role="img"
-      aria-label={p.label || "Trend"}
+      aria-label={p.label || t.trend}
     >
       <path
         className={cx("tf-line", "tf-line-" + (p.tint || "ink"))}
@@ -217,6 +221,7 @@ export function Sparkline(p: SparklineProps) {
   );
 }
 export function Donut(p: DonutProps) {
+  const t = useStrings(CHARTS_STRINGS);
   const data = p.data || [],
     size = p.size || 168,
     sw = p.stroke || 22,
@@ -245,7 +250,7 @@ export function Donut(p: DonutProps) {
           height={size}
           viewBox={"0 0 " + size + " " + size}
           role="img"
-          aria-label={p.label || "Breakdown"}
+          aria-label={p.label || t.breakdown}
         >
           <circle className="tf-arc-track" cx={size / 2} cy={size / 2} r={r} strokeWidth={sw} />
           {data.map((d, i) => {
@@ -361,6 +366,7 @@ export function Legend(p: LegendProps) {
   );
 }
 export function StackedBarChart(p: StackedBarChartProps) {
+  const t = useStrings(CHARTS_STRINGS);
   const mw = useWidth(p.width, 560),
     W = mw[1],
     Hh = p.height || 200,
@@ -382,7 +388,7 @@ export function StackedBarChart(p: StackedBarChartProps) {
         height={Hh + 22}
         viewBox={"0 0 " + W + " " + (Hh + 22)}
         role="img"
-        aria-label={p.label || "Stacked bar chart"}
+        aria-label={p.label || t.stackedBarChart}
         onPointerLeave={() => {
           hov[1](null);
         }}
@@ -533,6 +539,7 @@ function smooth(pts: number[][]) {
   return d;
 }
 export function AreaChart(p: AreaChartProps) {
+  const t = useStrings(CHARTS_STRINGS);
   const mw = useWidth(p.width, 560),
     W = mw[1],
     Hh = p.height || 200,
@@ -573,7 +580,7 @@ export function AreaChart(p: AreaChartProps) {
         height={Hh + 22}
         viewBox={"0 0 " + W + " " + (Hh + 22)}
         role="img"
-        aria-label={p.label || "Area chart"}
+        aria-label={p.label || t.areaChart}
         onPointerMove={(e) => {
           const r = e.currentTarget.getBoundingClientRect(),
             x = ((e.clientX - r.left) * W) / r.width;
@@ -672,6 +679,7 @@ export function AreaChart(p: AreaChartProps) {
   );
 }
 export function Heatmap(p: HeatmapProps) {
+  const t = useStrings(CHARTS_STRINGS);
   const rows = p.rows || [],
     cols = p.cols || [],
     vals = p.values || [],
@@ -690,7 +698,7 @@ export function Heatmap(p: HeatmapProps) {
           gridTemplateColumns: "auto repeat(" + cols.length + ", minmax(0, 1fr))",
         }}
         role="img"
-        aria-label={p.label || "Heatmap"}
+        aria-label={p.label || t.heatmap}
         onPointerLeave={() => {
           hov[1](null);
         }}
@@ -738,17 +746,18 @@ export function Heatmap(p: HeatmapProps) {
             : p.caption || ""}
         </span>
         <span className="tf-heat-scale">
-          {"Less"}
+          {t.less}
           {[0, 1, 2, 3, 4].map((l) => (
             <i key={l} className={"tf-heat-cell l" + l} />
           ))}
-          {"More"}
+          {t.more}
         </span>
       </div>
     </div>
   );
 }
 export function Funnel(p: FunnelProps) {
+  const { formatNumber } = useFormat();
   const steps = p.steps || [],
     top = (steps[0] && steps[0].value) || 1,
     f = p.format || ((v) => formatNumber(v)),
@@ -791,6 +800,7 @@ export function Funnel(p: FunnelProps) {
   );
 }
 export function Gauge(p: GaugeProps) {
+  const t = useStrings(CHARTS_STRINGS);
   const size = p.size || 200,
     sw = p.stroke || 18,
     r = (size - sw) / 2,
@@ -819,7 +829,7 @@ export function Gauge(p: GaugeProps) {
         height={size / 2 + sw / 2}
         viewBox={"0 0 " + size + " " + (size / 2 + sw / 2)}
         role="img"
-        aria-label={`${p.label || "Gauge"}: ${v} of ${max}`}
+        aria-label={t.gaugeValue(p.label || t.gauge, v, max)}
       >
         <path
           className="tf-arc-track"

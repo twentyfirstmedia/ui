@@ -8,7 +8,7 @@ Thanks for helping. Bug reports, fixes, docs improvements and new components are
 - **Tokens only.** No colour literals in component CSS and no arbitrary Tailwind values in kit code. Tokens come from `packages/<kit>/tokens.json`; run `pnpm tokens` after changing them.
 - **Accessible.** Every interactive component needs a keyboard path, a visible focus ring and the right ARIA. axe runs on every docs example in both kits, light and dark.
 - **Mobile first.** Everything works from 320px up; the e2e suite checks for sideways scrolling and the control height scale (Halo 32/40/48px, Pro 24/28/34px).
-- **English, formatted with `Intl`.** Built-in text is plain English and overridable through props. Numbers, money, percentages and dates use `formatNumber`, `formatMoney`, `formatPercent` and `formatDate`.
+- **English, formatted with `Intl`.** Built-in text is plain English and overridable through props and `UIProvider messages`: add every new string to `packages/core/src/strings.ts` (the group of the component's file) and read it with `useStrings`. Numbers, money, percentages and dates use `useFormat()` (the provider's locale) or `formatNumber`, `formatMoney`, `formatPercent` and `formatDate`.
 - **Private by default.** No telemetry and no network requests from components. Fonts are self-hosted.
 - **TypeScript strict, ESM only.** Exact versions for fast-moving dependencies.
 

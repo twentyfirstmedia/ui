@@ -8,6 +8,8 @@ import * as React from "react";
 import { leaving, usePresence } from "../presence.js";
 import { Icon } from "../Icon.js";
 import { cx } from "../cx.js";
+import { useStrings } from "../context.js";
+import { PRIMITIVES_STRINGS } from "../strings.js";
 import { moveFocus, useControlled, useId, useKeepInView } from "../hooks.js";
 import type {
   AccordionProps,
@@ -273,6 +275,7 @@ export function HoverCard(p: HoverCardProps) {
 
 /* ── Carousel ── */
 export function Carousel(p: CarouselProps) {
+  const t = useStrings(PRIMITIVES_STRINGS);
   const slides = p.slides || [];
   const n = slides.length;
   const idx = useControlled(p.index, p.defaultIndex || 0, p.onChange);
@@ -332,8 +335,8 @@ export function Carousel(p: CarouselProps) {
             key={i}
             className="tf-carousel-slide"
             role="group"
-            aria-roledescription="slide"
-            aria-label={`${i + 1} of ${n}`}
+            aria-roledescription={t.slide}
+            aria-label={t.slideOf(i + 1, n)}
           >
             {s}
           </div>
@@ -343,7 +346,7 @@ export function Carousel(p: CarouselProps) {
         <button
           type="button"
           className="tf-iconbtn tf-iconbtn-soft tf-iconbtn-sm"
-          aria-label="Previous slide"
+          aria-label={t.previousSlide}
           disabled={!p.loop && idx[0] <= 0}
           onClick={() => go(idx[0] - 1)}
         >
@@ -356,7 +359,7 @@ export function Carousel(p: CarouselProps) {
                 key={i}
                 type="button"
                 className="tf-carousel-dot"
-                aria-label={`Go to slide ${i + 1}`}
+                aria-label={t.goToSlide(i + 1)}
                 aria-current={i === idx[0] ? "true" : undefined}
                 onClick={() => go(i)}
               />
@@ -366,7 +369,7 @@ export function Carousel(p: CarouselProps) {
         <button
           type="button"
           className="tf-iconbtn tf-iconbtn-soft tf-iconbtn-sm"
-          aria-label="Next slide"
+          aria-label={t.nextSlide}
           disabled={!p.loop && idx[0] >= last}
           onClick={() => go(idx[0] + 1)}
         >

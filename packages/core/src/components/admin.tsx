@@ -1,7 +1,8 @@
 "use client";
 import * as React from "react";
 import { useControlled, useId } from "../hooks.js";
-import { formatMoney, formatNumber } from "../format.js";
+import { useFormat, useStrings } from "../context.js";
+import { ADMIN_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { toast } from "../toast-store.js";
@@ -46,6 +47,8 @@ import type {
 
 /* ── Shared: range slider, bar list, status select, tile picker ── */
 export function RangeSlider(p: RangeSliderProps) {
+  const t = useStrings(ADMIN_STRINGS);
+  const { formatNumber } = useFormat();
   const id = useId("rs"),
     min = p.min || 0,
     max = p.max != null ? p.max : 100,
@@ -80,7 +83,7 @@ export function RangeSlider(p: RangeSliderProps) {
             max={max}
             step={step}
             value={lo}
-            aria-label="Minimum"
+            aria-label={t.minimum}
             onChange={(e) => {
               set(0, e.target.value);
             }}
@@ -91,7 +94,7 @@ export function RangeSlider(p: RangeSliderProps) {
             max={max}
             step={step}
             value={hi}
-            aria-label="Maximum"
+            aria-label={t.maximum}
             onChange={(e) => {
               set(1, e.target.value);
             }}
@@ -100,7 +103,7 @@ export function RangeSlider(p: RangeSliderProps) {
         {p.inputs !== false ? (
           <div className="tf-range-inputs">
             <label className="tf-range-num">
-              <small>{"Min"}</small>
+              <small>{t.min}</small>
               <input
                 id={id}
                 className="tf-input"
@@ -116,7 +119,7 @@ export function RangeSlider(p: RangeSliderProps) {
               –
             </span>
             <label className="tf-range-num">
-              <small>{"Max"}</small>
+              <small>{t.max}</small>
               <input
                 className="tf-input"
                 inputMode="numeric"
@@ -140,6 +143,7 @@ export function RangeSlider(p: RangeSliderProps) {
 }
 
 export function BarList(p: BarListProps) {
+  const { formatNumber } = useFormat();
   const items = p.items || [],
     max = Math.max.apply(null, items.map((i) => i.value).concat([1])),
     f = p.format || formatNumber;
@@ -319,6 +323,8 @@ export function TilePicker(p: TilePickerProps) {
 
 /* ── Live feed ── */
 export function LiveFeed(p: LiveFeedProps) {
+  const t = useStrings(ADMIN_STRINGS);
+  const { formatMoney } = useFormat();
   const paused = useControlled(p.paused, false, p.onPause),
     held = React.useRef<LiveFeedItem[] | null>(null),
     filter = React.useState<string | null>(null);
@@ -334,7 +340,7 @@ export function LiveFeed(p: LiveFeedProps) {
       <div className="tf-livefeed-head">
         <span className={cx("tf-live", paused[0] && "off")}>
           <span className="tf-live-dot" aria-hidden />
-          {paused[0] ? "Paused" : "Live"}
+          {paused[0] ? t.paused : t.live}
         </span>
         {types.length > 0 && (
           <div
@@ -349,7 +355,7 @@ export function LiveFeed(p: LiveFeedProps) {
                 filter[1](null);
               }}
             >
-              {"All"}
+              {t.all}
             </Chip>
             {types.map((t) => (
               <Chip
@@ -377,13 +383,13 @@ export function LiveFeed(p: LiveFeedProps) {
               paused[1](false);
             }}
           >
-            {`${waiting} new`}
+            {t.newCount(waiting)}
           </button>
         )}
         <IconButton
           icon={paused[0] ? "play" : "pause"}
           size="sm"
-          label={paused[0] ? "Resume" : "Pause"}
+          label={paused[0] ? t.resume : t.pause}
           onClick={() => {
             paused[1](!paused[0]);
           }}
@@ -408,7 +414,7 @@ export function LiveFeed(p: LiveFeedProps) {
               padding: 16,
             }}
           >
-            {p.emptyText || "Waiting for events…"}
+            {p.emptyText || t.waitingForEvents}
           </p>
         ) : (
           shown.map((it) => (
@@ -463,6 +469,8 @@ export function WorldDots() {
 
 /* ── Map with pins (background is yours: tiles, an SVG, an image) ── */
 export function MapView(p: MapViewProps) {
+  const t = useStrings(ADMIN_STRINGS);
+  const { formatNumber } = useFormat();
   const b = p.bounds || {
       n: 84,
       s: -60,
@@ -487,7 +495,7 @@ export function MapView(p: MapViewProps) {
         height: Hh,
       }}
       role="region"
-      aria-label={p.label || "Map"}
+      aria-label={p.label || t.viewMap}
     >
       {p.background || (!p.bounds ? <WorldDots /> : null) || (
         <svg className="tf-map-grid" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
@@ -569,6 +577,8 @@ export function MapView(p: MapViewProps) {
 
 /* ── Money and operations for admins ── */
 export function BalanceCard(p: BalanceCardProps) {
+  const t = useStrings(ADMIN_STRINGS);
+  const { formatMoney } = useFormat();
   const days = p.perDay && p.perDay > 0 ? Math.floor(p.balance / p.perDay) : null,
     low = p.low != null && p.balance <= p.low,
     st = p.status || (p.balance <= 0 ? "danger" : low ? "warn" : "ok");
@@ -582,7 +592,9 @@ export function BalanceCard(p: BalanceCardProps) {
         </div>
         <StatusIndicator
           status={st}
-          label={p.statusLabel || (st === "danger" ? "Empty" : low ? "Low" : "OK")}
+          label={
+            p.statusLabel || (st === "danger" ? t.balanceEmpty : low ? t.balanceLow : t.balanceOk)
+          }
           size="sm"
         />
       </div>
@@ -600,16 +612,14 @@ export function BalanceCard(p: BalanceCardProps) {
           </span>
           <span className="tf-balance-meta">
             {[
-              p.perDay != null && `${formatMoney(p.perDay, p.currency)} per day`,
-              days != null && p.balance > 0 && `lasts about ${days} days`,
+              p.perDay != null && t.perDay(formatMoney(p.perDay, p.currency)),
+              days != null && p.balance > 0 && t.lastsAbout(days),
             ]
               .filter(Boolean)
               .join(" · ")}
           </span>
           {p.low != null && (
-            <span className="tf-balance-meta">
-              {`Warns below ${formatMoney(p.low, p.currency)}`}
-            </span>
+            <span className="tf-balance-meta">{t.warnsBelow(formatMoney(p.low, p.currency))}</span>
           )}
         </div>
         {p.spark && (
@@ -631,7 +641,7 @@ export function BalanceCard(p: BalanceCardProps) {
           {p.action}
           {p.onTopUp && (
             <Button size="sm" variant={low ? "primary" : "soft"} icon="plus" onClick={p.onTopUp}>
-              {p.topUpLabel || "Top up"}
+              {p.topUpLabel || t.topUp}
             </Button>
           )}
         </div>
@@ -641,6 +651,7 @@ export function BalanceCard(p: BalanceCardProps) {
 }
 
 export function ServiceMonitor(p: ServiceMonitorProps) {
+  const { formatNumber } = useFormat();
   return (
     <div className="tf-svcmon" role="list" aria-label={p.label}>
       {(p.items || []).map((s) => (
@@ -676,6 +687,7 @@ export function ServiceMonitor(p: ServiceMonitorProps) {
 }
 
 export function RunHistory(p: RunHistoryProps) {
+  const { formatNumber } = useFormat();
   const open = React.useState<string | number | null>(null);
   return (
     <div className="tf-runs" role="list" aria-label={p.label}>
@@ -718,6 +730,8 @@ export function RunHistory(p: RunHistoryProps) {
 }
 
 export function WebhookEndpoint(p: WebhookEndpointProps) {
+  const t = useStrings(ADMIN_STRINGS);
+  const { formatNumber } = useFormat();
   const open = React.useState(!!p.defaultOpen);
   return (
     <div className="tf-hook">
@@ -743,12 +757,12 @@ export function WebhookEndpoint(p: WebhookEndpointProps) {
           </span>
         )}
         {p.onToggle && (
-          <Switch checked={p.enabled !== false} onChange={p.onToggle} label="Enabled" />
+          <Switch checked={p.enabled !== false} onChange={p.onToggle} label={t.enabled} />
         )}
         {p.menu && (
           <Popover
             width={200}
-            trigger={(s) => <IconButton icon="more" size="sm" label="More" onClick={s.toggle} />}
+            trigger={(s) => <IconButton icon="more" size="sm" label={t.more} onClick={s.toggle} />}
           >
             {() => <Menu items={p.menu || []} />}
           </Popover>
@@ -757,7 +771,7 @@ export function WebhookEndpoint(p: WebhookEndpointProps) {
       {p.secret && p.secret}
       {(p.deliveries || []).length > 0 && (
         <Collapsible
-          title="Recent deliveries"
+          title={t.recentDeliveries}
           meta={formatNumber((p.deliveries || []).length)}
           open={open[0]}
           onOpenChange={open[1]}
@@ -782,7 +796,7 @@ export function WebhookEndpoint(p: WebhookEndpointProps) {
                         p.onRetry?.(d);
                       }}
                     >
-                      {"Retry"}
+                      {t.retry}
                     </Button>
                   )}
                 </div>
@@ -796,6 +810,7 @@ export function WebhookEndpoint(p: WebhookEndpointProps) {
 }
 
 export function BackupList(p: BackupListProps) {
+  const t = useStrings(ADMIN_STRINGS);
   return (
     <div className="tf-backups" role="list" aria-label={p.label}>
       {(p.items || []).map((b) => (
@@ -816,7 +831,7 @@ export function BackupList(p: BackupListProps) {
               <IconButton
                 icon="download"
                 size="sm"
-                label="Download"
+                label={t.download}
                 onClick={() => {
                   p.onDownload?.(b);
                 }}
@@ -830,7 +845,7 @@ export function BackupList(p: BackupListProps) {
                   p.onRestore?.(b);
                 }}
               >
-                {"Restore"}
+                {t.restore}
               </Button>
             )}
           </span>
@@ -842,6 +857,7 @@ export function BackupList(p: BackupListProps) {
 }
 
 export function BlockList(p: BlockListProps) {
+  const t = useStrings(ADMIN_STRINGS);
   const q = React.useState("");
   const list = (p.items || []).filter(
     (b) =>
@@ -856,7 +872,7 @@ export function BlockList(p: BlockListProps) {
     >
       <div className="tf-filterbar">
         <SearchField
-          placeholder={p.searchPlaceholder || "Search blocked entries"}
+          placeholder={p.searchPlaceholder || t.searchBlocked}
           value={q[0]}
           onChange={(e) => {
             q[1](e.target.value);
@@ -868,12 +884,12 @@ export function BlockList(p: BlockListProps) {
         />
         {p.onAdd && (
           <Button size="sm" icon="plus" onClick={p.onAdd}>
-            {p.addLabel || "Block"}
+            {p.addLabel || t.block}
           </Button>
         )}
       </div>
       {list.length === 0 ? (
-        <p className="tf-card-desc">{p.emptyText || "Nothing blocked."}</p>
+        <p className="tf-card-desc">{p.emptyText || t.nothingBlocked}</p>
       ) : (
         <div className="tf-blocks" role="list">
           {list.map((b) => (
@@ -889,7 +905,7 @@ export function BlockList(p: BlockListProps) {
                 <small>{[b.kind, b.reason].filter(Boolean).join(" · ")}</small>
               </span>
               <span className="tf-blocks-meta">
-                {[b.by, b.until ? `until ${b.until}` : "permanent"].filter(Boolean).join(" · ")}
+                {[b.by, b.until ? t.until(b.until) : t.permanent].filter(Boolean).join(" · ")}
               </span>
               {p.onRemove && (
                 <Button
@@ -899,7 +915,7 @@ export function BlockList(p: BlockListProps) {
                     p.onRemove?.(b);
                   }}
                 >
-                  {p.removeLabel || "Unblock"}
+                  {p.removeLabel || t.unblock}
                 </Button>
               )}
             </div>
@@ -914,14 +930,15 @@ export function BlockList(p: BlockListProps) {
 
 /* ── Reviews and coupons ── */
 export function ReviewCard(p: ReviewCardProps) {
+  const t = useStrings(ADMIN_STRINGS);
   const reply = React.useState(false),
     txt = React.useState(p.reply || "");
   const st = (
     {
-      pending: ["signal", "Waiting"],
-      published: ["ok", "Published"],
-      hidden: ["idle", "Hidden"],
-      flagged: ["warn", "Flagged"],
+      pending: ["signal", t.reviewState.pending],
+      published: ["ok", t.reviewState.published],
+      hidden: ["idle", t.reviewState.hidden],
+      flagged: ["warn", t.reviewState.flagged],
     } as Record<string, [Status, string]>
   )[p.state || "pending"] as [Status, string];
   return (
@@ -939,7 +956,7 @@ export function ReviewCard(p: ReviewCardProps) {
             {p.verified && (
               <span className="tf-review-ver">
                 {" · "}
-                {"Verified purchase"}
+                {t.verifiedPurchase}
               </span>
             )}
           </b>
@@ -952,7 +969,7 @@ export function ReviewCard(p: ReviewCardProps) {
       <p className="tf-review-text">{p.highlight ? markWords(p.text, p.highlight) : p.text}</p>
       {p.reply && !reply[0] && (
         <div className="tf-review-reply">
-          <small>{p.replyLabel || "Your reply"}</small>
+          <small>{p.replyLabel || t.yourReply}</small>
           {p.reply}
         </div>
       )}
@@ -970,8 +987,8 @@ export function ReviewCard(p: ReviewCardProps) {
             onChange={(e) => {
               txt[1](e.target.value);
             }}
-            placeholder="Write a public reply"
-            aria-label="Reply"
+            placeholder={t.writeReply}
+            aria-label={t.reply}
           />
           <div
             className="tf-row"
@@ -986,7 +1003,7 @@ export function ReviewCard(p: ReviewCardProps) {
                 reply[1](false);
               }}
             >
-              {"Cancel"}
+              {t.cancel}
             </Button>
             <Button
               size="sm"
@@ -996,7 +1013,7 @@ export function ReviewCard(p: ReviewCardProps) {
                 reply[1](false);
               }}
             >
-              {"Post reply"}
+              {t.postReply}
             </Button>
           </div>
         </div>
@@ -1005,12 +1022,12 @@ export function ReviewCard(p: ReviewCardProps) {
         <div className="tf-review-actions">
           {p.state !== "published" && p.onPublish && (
             <Button size="sm" icon="check" onClick={p.onPublish}>
-              {"Publish"}
+              {t.publish}
             </Button>
           )}
           {p.state !== "hidden" && p.onHide && (
             <Button size="sm" variant="secondary" icon="eye" onClick={p.onHide}>
-              {"Hide"}
+              {t.hide}
             </Button>
           )}
           {p.onReply && (
@@ -1022,7 +1039,7 @@ export function ReviewCard(p: ReviewCardProps) {
                 reply[1](true);
               }}
             >
-              {p.reply ? "Edit reply" : "Reply"}
+              {p.reply ? t.editReply : t.reply}
             </Button>
           )}
         </div>
@@ -1042,6 +1059,8 @@ function markWords(text: string, words: string[]) {
 }
 
 export function CouponCard(p: CouponCardProps) {
+  const t = useStrings(ADMIN_STRINGS);
+  const { formatMoney, formatNumber } = useFormat();
   const used = p.used || 0,
     st = p.status || (p.limit && used >= p.limit ? "idle" : "ok");
   return (
@@ -1066,7 +1085,7 @@ export function CouponCard(p: CouponCardProps) {
           <button
             type="button"
             className="tf-coupon-code"
-            title="Copy"
+            title={t.copy}
             onClick={() => {
               try {
                 navigator.clipboard.writeText(p.code);
@@ -1075,7 +1094,7 @@ export function CouponCard(p: CouponCardProps) {
               }
               toast &&
                 toast({
-                  text: "Copied",
+                  text: t.copied,
                 });
               p.onCopy && p.onCopy();
             }}
@@ -1091,8 +1110,8 @@ export function CouponCard(p: CouponCardProps) {
           max={p.limit || Math.max(used, 1)}
           text={
             p.limit
-              ? `${formatNumber(used)} of ${formatNumber(p.limit)} used`
-              : `${formatNumber(used)} used`
+              ? t.usedOf(formatNumber(used), formatNumber(p.limit))
+              : t.used(formatNumber(used))
           }
           tone="sky"
           warn={101}
@@ -1100,9 +1119,9 @@ export function CouponCard(p: CouponCardProps) {
         />
         <span className="tf-coupon-foot">
           {[
-            p.until && `Valid until ${p.until}`,
-            p.min != null && `from ${formatMoney(p.min, p.currency)}`,
-            p.revenue != null && `${formatMoney(p.revenue, p.currency)} revenue`,
+            p.until && t.validUntil(p.until),
+            p.min != null && t.fromAmount(formatMoney(p.min, p.currency)),
+            p.revenue != null && t.revenue(formatMoney(p.revenue, p.currency)),
           ]
             .filter(Boolean)
             .join(" · ")}
@@ -1111,7 +1130,7 @@ export function CouponCard(p: CouponCardProps) {
       {p.menu && (
         <Popover
           width={200}
-          trigger={(s) => <IconButton icon="more" size="sm" label="More" onClick={s.toggle} />}
+          trigger={(s) => <IconButton icon="more" size="sm" label={t.more} onClick={s.toggle} />}
         >
           {() => <Menu items={p.menu || []} />}
         </Popover>
@@ -1122,6 +1141,7 @@ export function CouponCard(p: CouponCardProps) {
 
 /* ── Locale, workspace and translations ── */
 export function LocaleField(p: LocaleFieldProps) {
+  const t = useStrings(ADMIN_STRINGS);
   const locs = p.locales || [],
     v = useControlled(p.value, p.defaultValue || {}, p.onChange),
     cur = React.useState(p.active || (locs[0] && locs[0].code)),
@@ -1137,7 +1157,7 @@ export function LocaleField(p: LocaleFieldProps) {
   return (
     <FormField id={id} label={p.label} hint={p.hint} error={p.error}>
       <div className="tf-locfield">
-        <div className="tf-locfield-tabs" role="tablist" aria-label="Languages">
+        <div className="tf-locfield-tabs" role="tablist" aria-label={t.languages}>
           {locs.map((l) => {
             const has = (v[0][l.code] || "").trim();
             return (
@@ -1153,11 +1173,11 @@ export function LocaleField(p: LocaleFieldProps) {
               >
                 {l.flag && <span aria-hidden>{l.flag}</span>}
                 {l.label || l.code.toUpperCase()}
-                {!has && <span className="tf-locfield-miss" title="Missing" />}
+                {!has && <span className="tf-locfield-miss" title={t.missing} />}
               </button>
             );
           })}
-          <span className="tf-locfield-done">{`${done} of ${locs.length}`}</span>
+          <span className="tf-locfield-done">{t.doneOf(done, locs.length)}</span>
         </div>
         {p.multiline ? (
           <textarea
@@ -1196,7 +1216,7 @@ export function LocaleField(p: LocaleFieldProps) {
                 set(v[0][base] || "");
               }}
             >
-              {`Copy from ${(locs.find((l) => l.code === base) || {}).label || base}`}
+              {t.copyFrom((locs.find((l) => l.code === base) || {}).label || base)}
             </Button>
             {p.onTranslate && (
               <Button
@@ -1209,7 +1229,7 @@ export function LocaleField(p: LocaleFieldProps) {
                   });
                 }}
               >
-                {"Translate"}
+                {t.translate}
               </Button>
             )}
           </div>
@@ -1220,6 +1240,7 @@ export function LocaleField(p: LocaleFieldProps) {
 }
 
 export function LocaleSwitcher(p: LocaleSwitcherProps) {
+  const t = useStrings(ADMIN_STRINGS);
   const lang = useControlled(
       p.language,
       p.languages && p.languages[0] && p.languages[0].code,
@@ -1238,7 +1259,7 @@ export function LocaleSwitcher(p: LocaleSwitcherProps) {
           aria-haspopup="dialog"
           aria-expanded={s.open}
           onClick={s.toggle}
-          title="Language and currency"
+          title={t.languageAndCurrency}
         >
           {L0.flag ? <span>{L0.flag}</span> : <Icon name="globe" size={15} />}
           <span>{(L0.short || lang[0] || "").toUpperCase()}</span>
@@ -1267,7 +1288,7 @@ export function LocaleSwitcher(p: LocaleSwitcherProps) {
                   padding: "0 8px",
                 }}
               >
-                {"Language"}
+                {t.language}
               </span>
               <div
                 className="tf-menu"
@@ -1312,7 +1333,7 @@ export function LocaleSwitcher(p: LocaleSwitcherProps) {
                   padding: "0 8px",
                 }}
               >
-                {"Currency"}
+                {t.currency}
               </span>
               <Segmented size="sm" block value={cur[0]} onChange={cur[1]} options={p.currencies} />
             </div>
@@ -1417,6 +1438,8 @@ export function WorkspaceSwitcher(p: WorkspaceSwitcherProps) {
 
 /* ── Export and 2FA ── */
 export function ExportDialog(p: ExportDialogProps) {
+  const t = useStrings(ADMIN_STRINGS);
+  const { formatNumber, formatPercent } = useFormat();
   const fmt = React.useState(p.format || (p.formats || ["csv"])[0]),
     cols = React.useState((p.columns || []).filter((c) => c.default !== false).map((c) => c.key)),
     range = React.useState<DateRange | null>(p.range || null),
@@ -1446,25 +1469,25 @@ export function ExportDialog(p: ExportDialogProps) {
       className="tf-modal tf-export"
       role="dialog"
       aria-modal={p.inline ? undefined : "true"}
-      aria-label={p.title || "Export"}
+      aria-label={p.title || t.export}
     >
       <span className="tf-modal-close">
-        <IconButton icon="x" label="Close" size="sm" onClick={p.onClose} />
+        <IconButton icon="x" label={t.close} size="sm" onClick={p.onClose} />
       </span>
       <div>
-        <h2 className="tf-modal-title">{p.title || "Export"}</h2>
+        <h2 className="tf-modal-title">{p.title || t.export}</h2>
         <p
           className="tf-modal-text"
           style={{
             marginTop: 6,
           }}
         >
-          {p.text || `${formatNumber(p.count || 0)} rows match your filters.`}
+          {p.text || t.rowsMatch(formatNumber(p.count || 0), p.count || 0)}
         </p>
       </div>
       {st[0] === "form" ? (
         <React.Fragment>
-          <FormField label="Format">
+          <FormField label={t.format}>
             <Segmented
               block
               value={fmt[0]}
@@ -1477,15 +1500,15 @@ export function ExportDialog(p: ExportDialogProps) {
           </FormField>
           {p.ranges !== false && (
             <DatePicker
-              label="Period"
+              label={t.period}
               range
               value={range[0]}
               onChange={(r) => range[1](r as DateRange | null)}
-              placeholder="All time"
+              placeholder={t.allTime}
             />
           )}
           {(p.columns || []).length > 0 && (
-            <FormField label="Columns" hint={`${cols[0].length} selected`}>
+            <FormField label={t.columns} hint={t.selectedCount(cols[0].length)}>
               <div className="tf-export-cols">
                 {(p.columns || []).map((c) => {
                   const on = cols[0].indexOf(c.key) > -1;
@@ -1518,14 +1541,14 @@ export function ExportDialog(p: ExportDialogProps) {
           )}
           <div className="tf-modal-foot">
             <Button variant="ghost" onClick={p.onClose}>
-              {"Cancel"}
+              {t.cancel}
             </Button>
             <Button
               icon="download"
               disabled={!cols[0].length && (p.columns || []).length > 0}
               onClick={start}
             >
-              {"Export"}
+              {t.export}
             </Button>
           </div>
         </React.Fragment>
@@ -1536,14 +1559,14 @@ export function ExportDialog(p: ExportDialogProps) {
             gap: 8,
           }}
         >
-          <Progress value={prog[0]} label="Export progress" />
+          <Progress value={prog[0]} label={t.exportProgress} />
           <span className="tf-card-desc">
-            {"Preparing the file…" + " " + Math.round(prog[0]) + "%"}
+            {t.preparingFile + " " + formatPercent(Math.round(prog[0]))}
           </span>
         </div>
       ) : (
         <React.Fragment>
-          <StatusIndicator status="ok" label={p.doneText || "Your file is ready."} />
+          <StatusIndicator status="ok" label={p.doneText || t.fileReady} />
           <div className="tf-modal-foot">
             <Button
               variant="ghost"
@@ -1551,11 +1574,11 @@ export function ExportDialog(p: ExportDialogProps) {
                 st[1]("form");
               }}
             >
-              {"New export"}
+              {t.newExport}
             </Button>
             {p.download || (
               <Button icon="download" onClick={p.onDownload}>
-                {"Download"}
+                {t.download}
               </Button>
             )}
           </div>
@@ -1576,10 +1599,11 @@ export function ExportDialog(p: ExportDialogProps) {
 }
 
 export function TwoFactorSetup(p: TwoFactorSetupProps) {
+  const t = useStrings(ADMIN_STRINGS);
   const step = React.useState(p.step || 0),
     err = React.useState<string | null>(null),
     saved = React.useState(false);
-  const steps = ["Scan", "Confirm", "Save codes"];
+  const steps = t.twoFactorSteps;
   return (
     <div className="tf-2fa">
       <ol className="tf-2fa-steps">
@@ -1592,7 +1616,7 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
       </ol>
       {step[0] === 0 && (
         <div className="tf-2fa-scan">
-          <div className="tf-2fa-qr" role="img" aria-label="QR code">
+          <div className="tf-2fa-qr" role="img" aria-label={t.qrCode}>
             {p.qr || <Icon name="grid" size={48} />}
           </div>
           <div
@@ -1608,8 +1632,7 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
                 margin: 0,
               }}
             >
-              {p.scanText ||
-                "Scan the code with your authenticator app. If you can't scan it, enter the key by hand."}
+              {p.scanText || t.scanText}
             </p>
             <button
               type="button"
@@ -1620,7 +1643,7 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
                 } catch {
                   /* clipboard unavailable */
                 }
-                toast && toast({ text: "Copied" });
+                toast && toast({ text: t.copied });
               }}
             >
               <span className="tf-mono">{(p.secret || "").replace(/(.{4})/g, "$1 ").trim()}</span>
@@ -1632,7 +1655,7 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
                   step[1](1);
                 }}
               >
-                {"Next"}
+                {t.next}
               </Button>
             </div>
           </div>
@@ -1651,7 +1674,7 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
               margin: 0,
             }}
           >
-            {"Enter the 6-digit code from the app."}
+            {t.enterCode}
           </p>
           <OtpInput
             error={!!err[0]}
@@ -1660,7 +1683,7 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
                 if (ok) {
                   err[1](null);
                   step[1](2);
-                } else err[1]("That code didn't work. Try the current one.");
+                } else err[1](t.codeFailed);
               });
             }}
           />
@@ -1672,7 +1695,7 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
                 step[1](0);
               }}
             >
-              {"Back"}
+              {t.back}
             </Button>
           </div>
         </div>
@@ -1690,8 +1713,7 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
               margin: 0,
             }}
           >
-            {p.codesText ||
-              "Each code works once if you lose your phone. Keep them somewhere safe."}
+            {p.codesText || t.codesText}
           </p>
           <div className="tf-2fa-codes">
             {(p.codes || []).map((c) => (
@@ -1708,14 +1730,14 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
                 } catch {
                   /* clipboard unavailable */
                 }
-                toast && toast({ text: "Copied" });
+                toast && toast({ text: t.copied });
               }}
             >
-              {"Copy"}
+              {t.copy}
             </Button>
             {p.onDownload && (
               <Button variant="secondary" icon="download" onClick={p.onDownload}>
-                {"Download"}
+                {t.download}
               </Button>
             )}
           </div>
@@ -1725,11 +1747,11 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
               saved[1](!saved[0]);
             }}
           >
-            {"I saved the recovery codes"}
+            {t.savedCodes}
           </Checkbox>
           <div>
             <Button icon="check" disabled={!saved[0]} onClick={p.onDone}>
-              {"Turn on two-factor"}
+              {t.turnOnTwoFactor}
             </Button>
           </div>
         </div>
@@ -1741,6 +1763,8 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
 /* ── Media ── */
 
 export function ColorField(p: ColorFieldProps) {
+  const t = useStrings(ADMIN_STRINGS);
+  const { formatNumber } = useFormat();
   const id = useId("cf"),
     v = useControlled(p.value, p.defaultValue || "#000000", p.onChange);
   function lum(hx: string) {
@@ -1771,12 +1795,12 @@ export function ColorField(p: ColorFieldProps) {
             onChange={(e) => {
               v[1](e.target.value);
             }}
-            aria-label="Pick a colour"
+            aria-label={t.pickColour}
           />
         </label>
         <input
           id={id}
-          aria-label={p.label ? undefined : "Pick a colour"}
+          aria-label={p.label ? undefined : t.pickColour}
           className="tf-input tf-mono"
           value={v[0]}
           onChange={(e) => {
@@ -1787,13 +1811,13 @@ export function ColorField(p: ColorFieldProps) {
         {ratio != null && p.against !== false && (
           <span
             className={cx("tf-colorf-ratio", ratio >= 4.5 ? "ok" : ratio >= 3 ? "warn" : "bad")}
-            title={`Contrast against ${p.against || "#ffffff"}`}
+            title={t.contrastAgainst(p.against || "#ffffff")}
           >
             {formatNumber(ratio, {
               maximumFractionDigits: 1,
             }) +
               ":1 " +
-              (ratio >= 4.5 ? "AA" : ratio >= 3 ? "AA large" : "Fails")}
+              (ratio >= 4.5 ? t.contrastAA : ratio >= 3 ? t.contrastAALarge : t.contrastFails)}
           </span>
         )}
       </div>

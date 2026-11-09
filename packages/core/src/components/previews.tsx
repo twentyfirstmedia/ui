@@ -1,5 +1,7 @@
 "use client";
 import * as React from "react";
+import { useStrings } from "../context.js";
+import { PREVIEWS_STRINGS } from "../strings.js";
 import { useControlled } from "../hooks.js";
 import { cx } from "../cx.js";
 import { Avatar } from "./foundation.js";
@@ -10,6 +12,7 @@ import type { EmailPreviewProps, SearchAdPreviewProps } from "./types.js";
 
 /* ── Email and ad previews ── */
 export function EmailPreview(p: EmailPreviewProps) {
+  const t = useStrings(PREVIEWS_STRINGS);
   const dev = useControlled<string>(p.device, "desktop", p.onDevice);
   return (
     <div className="tf-mailprev">
@@ -19,7 +22,7 @@ export function EmailPreview(p: EmailPreviewProps) {
           <div className="tf-option-text">
             <b>{p.fromName || p.from}</b>
             <span className="tf-mailprev-subj">
-              <b>{p.subject || "(No subject)"}</b>
+              <b>{p.subject || t.noSubject}</b>
               {p.preheader && <span>{" — " + p.preheader}</span>}
             </span>
           </div>
@@ -28,15 +31,15 @@ export function EmailPreview(p: EmailPreviewProps) {
           size="sm"
           value={dev[0]}
           onChange={dev[1]}
-          label="Device"
+          label={t.device}
           options={[
             {
               value: "desktop",
-              label: "Desktop",
+              label: t.desktop,
             },
             {
               value: "mobile",
-              label: "Mobile",
+              label: t.mobile,
             },
           ]}
         />
@@ -44,7 +47,7 @@ export function EmailPreview(p: EmailPreviewProps) {
       <div className={cx("tf-mailprev-stage", dev[0])}>
         <div className="tf-mailprev-frame">
           {p.html != null ? (
-            <iframe title="Email preview" sandbox="" srcDoc={p.html} />
+            <iframe title={t.emailPreview} sandbox="" srcDoc={p.html} />
           ) : (
             <div className="tf-mailprev-body">{p.children}</div>
           )}
@@ -62,6 +65,7 @@ export function EmailPreview(p: EmailPreviewProps) {
 }
 
 export function SearchAdPreview(p: SearchAdPreviewProps) {
+  const t = useStrings(PREVIEWS_STRINGS);
   const dev = useControlled<string>(p.device, "mobile", p.onDevice),
     hl = (p.headlines || []).filter(Boolean).slice(0, 3),
     ds = (p.descriptions || []).filter(Boolean).slice(0, 2);
@@ -75,9 +79,7 @@ export function SearchAdPreview(p: SearchAdPreviewProps) {
     (p[x[0]] || []).forEach((s, i) => {
       if (s && s.length > x[1])
         warn.push(
-          `${
-            x[0] === "headlines" ? "Headline" : x[0] === "descriptions" ? "Description" : "Path"
-          } ${i + 1} is ${s.length} characters, the limit is ${x[1]}`,
+          t.adTooLong(x[0] as "headlines" | "descriptions" | "paths", i + 1, s.length, x[1]),
         );
     });
   });
@@ -101,21 +103,21 @@ export function SearchAdPreview(p: SearchAdPreviewProps) {
             padding: 0,
           }}
         >
-          {"Preview"}
+          {t.preview}
         </span>
         <Segmented
           size="sm"
           value={dev[0]}
           onChange={dev[1]}
-          label="Device"
+          label={t.device}
           options={[
             {
               value: "mobile",
-              label: "Mobile",
+              label: t.mobile,
             },
             {
               value: "desktop",
-              label: "Desktop",
+              label: t.desktop,
             },
           ]}
         />
@@ -129,7 +131,7 @@ export function SearchAdPreview(p: SearchAdPreviewProps) {
             <b>{p.name || p.domain}</b>
             <small>{url}</small>
           </div>
-          <span className="tf-adprev-tag">{p.sponsoredLabel || "Sponsored"}</span>
+          <span className="tf-adprev-tag">{p.sponsoredLabel || t.sponsored}</span>
         </div>
         <a
           className="tf-adprev-hl"
@@ -138,9 +140,9 @@ export function SearchAdPreview(p: SearchAdPreviewProps) {
             e.preventDefault();
           }}
         >
-          {hl.join(" | ") || "Your headline"}
+          {hl.join(" | ") || t.yourHeadline}
         </a>
-        <p className="tf-adprev-desc">{ds.join(" ") || "Your description"}</p>
+        <p className="tf-adprev-desc">{ds.join(" ") || t.yourDescription}</p>
         {p.sitelinks && p.sitelinks.length > 0 && (
           <div className="tf-adprev-links">
             {p.sitelinks.map((s, i) => (

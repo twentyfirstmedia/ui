@@ -1,5 +1,7 @@
 "use client";
 import * as React from "react";
+import { useStrings } from "../context.js";
+import { DATA_TABLE_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { cx } from "../cx.js";
 import { SearchField } from "./inputs.js";
@@ -9,6 +11,7 @@ import type { DataTableProps, FilterBarProps, FilterDef } from "./types.js";
 
 /* ── Data table: sort, select + bulk bar, column toggles, sticky head, expandable rows ── */
 export function FilterBar(p: FilterBarProps) {
+  const t = useStrings(DATA_TABLE_STRINGS);
   const active = p.value || {},
     keys = Object.keys(active).filter((k) => active[k] != null && active[k] !== "");
   function set(k: string, val: string | null) {
@@ -54,7 +57,7 @@ export function FilterBar(p: FilterBarProps) {
                 <button
                   type="button"
                   className="x"
-                  aria-label={`Remove filter ${f.label}`}
+                  aria-label={t.removeFilter(f.label)}
                   onClick={() => {
                     set(k, null);
                   }}
@@ -86,7 +89,7 @@ export function FilterBar(p: FilterBarProps) {
           trigger={(s) => (
             <button type="button" className="tf-chip tf-chip-dashed" onClick={s.toggle}>
               <Icon name="plus" size={14} />
-              {"Filter"}
+              {t.addFilter}
             </button>
           )}
         >
@@ -109,7 +112,7 @@ export function FilterBar(p: FilterBarProps) {
             p.onChange?.({});
           }}
         >
-          {"Clear all"}
+          {t.clearAll}
         </button>
       )}
       {p.right && <div className="tf-filterbar-right">{p.right}</div>}
@@ -121,6 +124,7 @@ export function AddFilterMenu(p: {
   avail: FilterDef[];
   onPick?: (key: string, option: string) => void;
 }) {
+  const t = useStrings(DATA_TABLE_STRINGS);
   const step = React.useState<FilterDef | null>(null);
   const cur = step[0];
   if (cur)
@@ -128,7 +132,7 @@ export function AddFilterMenu(p: {
       <Menu
         items={[
           {
-            label: "Back",
+            label: t.back,
             icon: "chevronLeft",
             onClick: () => {
               step[1](null);
@@ -161,6 +165,7 @@ export function AddFilterMenu(p: {
 export function DataTable<R extends Record<string, any> = Record<string, any>>(
   p: DataTableProps<R>,
 ) {
+  const t = useStrings(DATA_TABLE_STRINGS);
   const cols = p.columns || [],
     rk = p.rowKey || "id";
   const sort = React.useState<{ key: string; dir: "asc" | "desc" } | null>(p.defaultSort || null),
@@ -229,11 +234,11 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
               width={220}
               flush
               trigger={(s) => (
-                <Tooltip label="Columns">
+                <Tooltip label={t.columns}>
                   <button
                     type="button"
                     className="tf-iconbtn tf-iconbtn-soft"
-                    aria-label="Choose columns"
+                    aria-label={t.chooseColumns}
                     onClick={s.toggle}
                   >
                     <Icon name="grid" />
@@ -242,7 +247,7 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
               )}
             >
               <div className="tf-menu tf-menu-static">
-                <div className="tf-menu-label">{"Columns"}</div>
+                <div className="tf-menu-label">{t.columns}</div>
                 {cols
                   .filter((c) => c.hideable !== false && c.label)
                   .map((c) => {
@@ -287,12 +292,12 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
                     () => {
                       sel[1](all ? [] : ids);
                     },
-                    "Select all rows",
+                    t.selectAllRows,
                     some,
                   )}
                 </th>
               )}
-              {p.renderExpanded && <th className="tf-dt-exp" aria-label="Expand" />}
+              {p.renderExpanded && <th className="tf-dt-exp" aria-label={t.expand} />}
               {vis.map((c) => {
                 const s = sort[0] && sort[0].key === c.key ? sort[0].dir : null;
                 return (
@@ -347,7 +352,7 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
             {rows.length === 0 ? (
               <tr>
                 <td colSpan={span} className="tf-dt-empty">
-                  {p.empty || "Nothing matches these filters."}
+                  {p.empty || t.nothingMatchesFilters}
                 </td>
               </tr>
             ) : (
@@ -365,7 +370,7 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
                             () => {
                               toggle(id);
                             },
-                            "Select row",
+                            t.selectRow,
                           )}
                         </td>
                       )}
@@ -375,7 +380,7 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
                             type="button"
                             className={cx("tf-dt-toggle", ex && "open")}
                             aria-expanded={ex}
-                            aria-label={ex ? "Collapse row" : "Expand row"}
+                            aria-label={ex ? t.collapseRow : t.expandRow}
                             onClick={() => {
                               const n = Object.assign({}, open[0]);
                               n[String(id)] = !ex;
@@ -407,8 +412,8 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
         </table>
       </div>
       {p.selectable && selected.length > 0 && (
-        <div className="tf-bulkbar" role="toolbar" aria-label="Bulk actions">
-          <b>{`${selected.length} selected`}</b>
+        <div className="tf-bulkbar" role="toolbar" aria-label={t.bulkActions}>
+          <b>{t.selectedCount(selected.length)}</b>
           <button
             type="button"
             className="tf-linkbtn on-frame"
@@ -416,7 +421,7 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
               sel[1]([]);
             }}
           >
-            {"Clear"}
+            {t.clear}
           </button>
           <div className="tf-bulkbar-actions">
             {(p.bulkActions || []).map((a) => (

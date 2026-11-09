@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { cx } from "../cx.js";
-import { formatMoney } from "../format.js";
+import { useFormat, useStrings } from "../context.js";
+import { AGENTS_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { useControlled } from "../hooks.js";
 import { AgentMark, TypingDots } from "./chat.js";
@@ -38,6 +39,7 @@ import type {
 
 /* ── Agents ── */
 export function AgentCard(p: AgentCardProps) {
+  const t = useStrings(AGENTS_STRINGS);
   return (
     <div
       className={cx("tf-agentcard", p.onClick && "click")}
@@ -53,7 +55,7 @@ export function AgentCard(p: AgentCardProps) {
         {p.onChat && (
           <IconButton
             icon="mail"
-            label={`Chat with ${p.name}`}
+            label={t.chatWith(p.name)}
             size="sm"
             onClick={(e) => {
               e.stopPropagation();
@@ -67,9 +69,9 @@ export function AgentCard(p: AgentCardProps) {
         dense
         items={
           [
-            ["Model", p.model],
-            ["Cost today", p.cost, true],
-            ["Last action", p.last],
+            [t.model, p.model],
+            [t.costToday, p.cost, true],
+            [t.lastAction, p.last],
           ].filter((r) => r[1] != null) as KeyValueItem[]
         }
       />
@@ -104,6 +106,7 @@ export function AgentDetails(p: AgentDetailsProps) {
   );
 }
 export function ChatList(p: ChatListProps) {
+  const t = useStrings(AGENTS_STRINGS);
   const q = React.useState("");
   const groups = (p.groups || [])
     .map((g) =>
@@ -118,7 +121,7 @@ export function ChatList(p: ChatListProps) {
   return (
     <div className="tf-chatlist">
       <SearchField
-        placeholder={p.searchPlaceholder || "Search chats"}
+        placeholder={p.searchPlaceholder || t.searchChats}
         value={q[0]}
         onChange={(e) => {
           q[1](e.target.value);
@@ -134,7 +137,7 @@ export function ChatList(p: ChatListProps) {
               padding: 12,
             }}
           >
-            {"No chats match"}
+            {t.noChatsMatch}
           </p>
         ) : (
           groups.map((g) => (
@@ -191,10 +194,11 @@ export function ChatWorkspace(p: ChatWorkspaceProps) {
   );
 }
 export function SearchHits(p: SearchHitsProps) {
+  const t = useStrings(AGENTS_STRINGS);
   return (
     <div className="tf-hits">
       {(p.items || []).length === 0 ? (
-        <EmptyState icon="search" title="Nothing found" text={p.emptyText} />
+        <EmptyState icon="search" title={t.nothingFound} text={p.emptyText} />
       ) : (
         p.items.map((x) => {
           const parts = String(x.text).split(
@@ -225,14 +229,16 @@ export function SearchHits(p: SearchHitsProps) {
   );
 }
 export function ThinkingLine(p: ThinkingLineProps) {
+  const t = useStrings(AGENTS_STRINGS);
   return (
     <div className="tf-thinking" role="status">
       <TypingDots />
-      <span>{p.text || "Thinking…"}</span>
+      <span>{p.text || t.thinking}</span>
     </div>
   );
 }
 export function FeedbackRating(p: FeedbackRatingProps) {
+  const t = useStrings(AGENTS_STRINGS);
   const v = useControlled<"up" | "down" | null>(p.value, null, (x) => {
       if (x) p.onRate?.(x);
     }),
@@ -242,7 +248,7 @@ export function FeedbackRating(p: FeedbackRatingProps) {
     return (
       <span className="tf-feedback-done">
         <Icon name="check" size={13} />
-        {p.thanks || "Thanks, noted"}
+        {p.thanks || t.thanksNoted}
       </span>
     );
   return (
@@ -259,7 +265,7 @@ export function FeedbackRating(p: FeedbackRatingProps) {
           type="button"
           className={cx("tf-msg-act", v[0] === "up" && "on")}
           aria-pressed={v[0] === "up"}
-          aria-label="Good"
+          aria-label={t.good}
           onClick={() => {
             v[1]("up");
             if (!p.askOnUp) {
@@ -274,7 +280,7 @@ export function FeedbackRating(p: FeedbackRatingProps) {
           type="button"
           className={cx("tf-msg-act", v[0] === "down" && "on")}
           aria-pressed={v[0] === "down"}
-          aria-label="Not good"
+          aria-label={t.notGood}
           onClick={() => {
             v[1]("down");
           }}
@@ -294,14 +300,14 @@ export function FeedbackRating(p: FeedbackRatingProps) {
           <input
             className="tf-input"
             autoFocus
-            placeholder={p.placeholder || "What should be different?"}
+            placeholder={p.placeholder || t.whatShouldBeDifferent}
             value={c[0]}
             onChange={(e) => {
               c[1](e.target.value);
             }}
           />
           <Button type="submit" size="sm">
-            {"Send"}
+            {t.send}
           </Button>
         </form>
       )}
@@ -341,6 +347,7 @@ export function ActivityFeed(p: ActivityFeedProps) {
   );
 }
 export function DailyBriefing(p: DailyBriefingProps) {
+  const t = useStrings(AGENTS_STRINGS);
   return (
     <div className="tf-briefing">
       <div className="tf-briefing-head">
@@ -364,7 +371,7 @@ export function DailyBriefing(p: DailyBriefingProps) {
               padding: 0,
             }}
           >
-            {p.attentionTitle || "Needs you"}
+            {p.attentionTitle || t.needsYou}
           </span>
           {p.attention.map((a, i) => (
             <button key={i} type="button" className="tf-briefing-item" onClick={a.onClick}>
@@ -388,7 +395,7 @@ export function DailyBriefing(p: DailyBriefingProps) {
               padding: 0,
             }}
           >
-            {p.suggestionsTitle || "Suggestions"}
+            {p.suggestionsTitle || t.suggestions}
           </span>
           <ul className="tf-briefing-sugg">
             {p.suggestions.map((s, i) => (
@@ -401,24 +408,25 @@ export function DailyBriefing(p: DailyBriefingProps) {
   );
 }
 export function BudgetStop(p: BudgetStopProps) {
+  const t = useStrings(AGENTS_STRINGS);
+  const { formatMoney } = useFormat();
   return (
     <div className="tf-budgetstop">
       <Alert
         tone="danger"
-        title={p.title || "Budget used up · agents paused"}
+        title={p.title || t.budgetUsedUp}
         action={
           p.onRaise && (
             <Button size="sm" variant="secondary" onClick={p.onRaise}>
-              {p.actionLabel || "Raise budget"}
+              {p.actionLabel || t.raiseBudget}
             </Button>
           )
         }
       >
-        {p.text ||
-          "Everything is kept. Agents continue where they stopped once the budget allows it."}
+        {p.text || t.budgetText}
       </Alert>
       <Meter
-        label="Spent this month"
+        label={t.spentThisMonth}
         value={p.spent}
         max={p.budget}
         text={formatMoney(p.spent) + " / " + formatMoney(p.budget)}
@@ -428,8 +436,8 @@ export function BudgetStop(p: BudgetStopProps) {
         <KeyValue
           dense
           items={[
-            ["Paused", p.paused],
-            ["Still running", p.running || "Nothing"],
+            [t.paused, p.paused],
+            [t.stillRunning, p.running || t.nothing],
           ]}
         />
       )}
@@ -437,6 +445,7 @@ export function BudgetStop(p: BudgetStopProps) {
   );
 }
 export function MemoryViewer(p: MemoryViewerProps) {
+  const t = useStrings(AGENTS_STRINGS);
   const q = React.useState(""),
     scope = React.useState<string | null>(null);
   const scopes: string[] = [];
@@ -452,7 +461,7 @@ export function MemoryViewer(p: MemoryViewerProps) {
     <div className="tf-memory">
       <div className="tf-filterbar">
         <SearchField
-          placeholder="Search memory"
+          placeholder={t.searchMemory}
           value={q[0]}
           onChange={(e) => {
             q[1](e.target.value);
@@ -475,7 +484,7 @@ export function MemoryViewer(p: MemoryViewerProps) {
         ))}
       </div>
       {list.length === 0 ? (
-        <p className="tf-card-desc">{"Nothing remembered here yet."}</p>
+        <p className="tf-card-desc">{t.nothingRemembered}</p>
       ) : (
         list.map((m) => (
           <div key={m.id} className="tf-memitem">
@@ -497,7 +506,7 @@ export function MemoryViewer(p: MemoryViewerProps) {
                 {p.onEdit && (
                   <IconButton
                     icon="edit"
-                    label="Edit"
+                    label={t.edit}
                     size="sm"
                     variant="ghost"
                     onClick={() => {
@@ -508,7 +517,7 @@ export function MemoryViewer(p: MemoryViewerProps) {
                 {p.onDelete && (
                   <IconButton
                     icon="trash"
-                    label="Forget"
+                    label={t.forget}
                     size="sm"
                     variant="ghost"
                     onClick={() => {
@@ -525,6 +534,7 @@ export function MemoryViewer(p: MemoryViewerProps) {
   );
 }
 export function OverrideDiff(p: OverrideDiffProps) {
+  const t = useStrings(AGENTS_STRINGS);
   const a = String(p.before || "").split("\n"),
     b = String(p.after || "").split("\n"),
     rows = [];
@@ -561,12 +571,12 @@ export function OverrideDiff(p: OverrideDiffProps) {
         >
           {p.onDiscard && (
             <Button size="sm" variant="ghost" onClick={p.onDiscard}>
-              {p.discardLabel || "Discard override"}
+              {p.discardLabel || t.discardOverride}
             </Button>
           )}
           {p.onPromote && (
             <Button size="sm" variant="soft" icon="branch" onClick={p.onPromote}>
-              {p.promoteLabel || "Move to code"}
+              {p.promoteLabel || t.moveToCode}
             </Button>
           )}
         </span>
@@ -590,6 +600,7 @@ const TRIGGER_ICON: Record<string, IconName> = {
   mail: "mail",
 };
 export function TriggerList(p: TriggerListProps) {
+  const strings = useStrings(AGENTS_STRINGS);
   return (
     <div className="tf-triggers">
       {(p.items || []).map((t) => (
@@ -616,11 +627,11 @@ export function TriggerList(p: TriggerListProps) {
             />
           )}
           {p.onRun && (
-            <Tooltip label="Run now">
+            <Tooltip label={strings.runNow}>
               <button
                 type="button"
                 className="tf-iconbtn tf-iconbtn-soft tf-iconbtn-sm"
-                aria-label="Run now"
+                aria-label={strings.runNow}
                 onClick={() => {
                   p.onRun?.(t);
                 }}
@@ -635,11 +646,12 @@ export function TriggerList(p: TriggerListProps) {
   );
 }
 export function ScheduleCalendar(p: ScheduleCalendarProps) {
+  const { locale } = useFormat();
   const from = p.from != null ? p.from : 6,
     to = p.to != null ? p.to : 22,
     hours = [];
   for (let i = from; i < to; i++) hours.push(i);
-  const days = p.days || weekdays(),
+  const days = p.days || weekdays(locale),
     rowH = 32;
   return (
     <div
@@ -729,6 +741,7 @@ export function OrgChart(p: OrgChartProps) {
   );
 }
 export function VoiceMode(p: VoiceModeProps) {
+  const t = useStrings(AGENTS_STRINGS);
   const st = p.state || "listening",
     bars = [];
   for (let i = 0; i < 24; i++) bars.push(i);
@@ -737,13 +750,14 @@ export function VoiceMode(p: VoiceModeProps) {
       <AgentMark tint={p.tint || "lilac"} size={72} live={st !== "idle"} />
       <b className="tf-voice-name">{p.name}</b>
       <span className="tf-voice-state">
-        {p.stateLabel || st === "listening"
-          ? "Listening…"
-          : st === "thinking"
-            ? "Thinking…"
-            : st === "speaking"
-              ? "Speaking…"
-              : "Paused"}
+        {p.stateLabel ||
+          (st === "listening"
+            ? t.listening
+            : st === "thinking"
+              ? t.thinking
+              : st === "speaking"
+                ? t.speaking
+                : t.paused)}
       </span>
       <div className="tf-voice-wave" aria-hidden>
         {bars.map((b) => (
@@ -766,7 +780,7 @@ export function VoiceMode(p: VoiceModeProps) {
         {p.onMute && (
           <IconButton
             icon={p.muted ? "x" : "user"}
-            label={p.muted ? "Unmute" : "Mute"}
+            label={p.muted ? t.unmute : t.mute}
             variant="soft"
             size="lg"
             onClick={p.onMute}
@@ -777,7 +791,7 @@ export function VoiceMode(p: VoiceModeProps) {
             type="button"
             className="tf-voice-end"
             onClick={p.onEnd}
-            aria-label="End conversation"
+            aria-label={t.endConversation}
           >
             <Icon name="x" size={20} />
           </button>

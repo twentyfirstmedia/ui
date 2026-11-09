@@ -1,5 +1,7 @@
 "use client";
 import * as React from "react";
+import { useStrings } from "../context.js";
+import { APP_CHROME_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { Badge, TintIcon } from "./foundation.js";
@@ -15,8 +17,9 @@ import type {
 
 /* ── App chrome ── */
 export function MobileTabBar(p: MobileTabBarProps) {
+  const t = useStrings(APP_CHROME_STRINGS);
   return (
-    <nav className="tf-tabbar" aria-label={p.label || "Main"}>
+    <nav className="tf-tabbar" aria-label={p.label || t.mainNavigation}>
       {(p.items || []).map((it) => {
         const on = it.id === p.active;
         return (
@@ -123,6 +126,7 @@ export function ConfigPRSummary(p: ConfigPRSummaryProps) {
 }
 
 export function ModuleRegistry(p: ModuleRegistryProps) {
+  const t = useStrings(APP_CHROME_STRINGS);
   return (
     <div className="tf-modules">
       {(p.items || []).map((m) => (
@@ -147,7 +151,7 @@ export function ModuleRegistry(p: ModuleRegistryProps) {
             </span>
           )}
           {m.core ? (
-            <Tooltip label={p.coreLabel || "Core module, always on"}>
+            <Tooltip label={p.coreLabel || t.coreModule}>
               <span className="tf-module-lock" tabIndex={0}>
                 <Icon name="lock" size={14} />
               </span>
