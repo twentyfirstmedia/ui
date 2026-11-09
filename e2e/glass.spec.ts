@@ -17,8 +17,8 @@ const PAGES = [
   },
   {
     path: "patterns/WellbeingScreen",
-    glass: ".docs-preview .tf-shell :is(.tf-topbar, .tf-rail, .tf-stat, .tf-panel, .tf-dock)",
-    min: 10,
+    glass: ".docs-preview .tf-shell, .docs-preview .tf-shell :is(.tf-stat, .tf-panel, .tf-dock)",
+    min: 9,
   },
 ];
 

@@ -6,4 +6,4 @@
 "@twentyfirstmedia/elements": patch
 ---
 
-Glass app shell: without the frame around them, the top bar is fully rounded and the rail is a capsule, so both float on the background instead of looking cut off. A `ToggleGroup` is only as wide as its items.
+Glass app shell: it keeps the layout of the solid shell and turns its frame into glass, with the top bar and rail sitting on it as they sit on the solid frame (they no longer float as separate pieces). A `ToggleGroup` is only as wide as its items.

@@ -22,8 +22,6 @@
     .tf-card,
     .tf-stat,
     .tf-dock,
-    .tf-topbar,
-    .tf-rail,
     .tf-sidebar,
     .tf-map-legend,
     .tf-map-ctl,
@@ -34,8 +32,6 @@
         .tf-card,
         .tf-stat,
         .tf-dock,
-        .tf-topbar,
-        .tf-rail,
         .tf-sidebar,
         .tf-popover,
         .tf-menu,
@@ -140,7 +136,8 @@
         .tf-drawer,
         .tf-glass,
         .tf-btngroup,
-        .tf-map-ctl
+        .tf-map-ctl,
+        .tf-topbar
       )
       *
   ):not(.tf-solid) {
@@ -170,11 +167,19 @@
     var(--glass);
 }
 
-/* AppShell on glass: the frame turns to glass, the sheet clears so the backdrop shows through,
+/* AppShell on glass: the same layout as the solid shell, the frame turned to glass. Top bar and
+   rail sit on it without a fill of their own, the sheet clears so the backdrop shows through,
    and everything drawn on the frame (nav, user, rail) reads the glass colours */
 [data-surface="glass"] .tf-shell {
-  background: transparent;
-  box-shadow: none;
+  background:
+    linear-gradient(to bottom, var(--glass-sheen), transparent 56px) border-box,
+    var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow:
+    inset 0 1px 0 0 var(--glass-highlight),
+    inset 0 0 0 1px var(--glass-border),
+    var(--shadow-glass);
   --frame: var(--glass);
   --frame-hover: var(--glass-hover);
   --frame-active: var(--glass-hover);
@@ -185,13 +190,8 @@
 [data-surface="glass"] .tf-shell .tf-sheet {
   background: transparent;
 }
-/* without the frame around them, the bars float on their own: a rounded top bar, a capsule rail */
 [data-surface="glass"] .tf-shell .tf-topbar {
-  border-radius: var(--radius-xl);
-}
-[data-surface="glass"] .tf-shell .tf-rail {
-  border-radius: var(--radius-pill);
-  padding-block: var(--space-2);
+  background: transparent;
 }
 
 /* switch knobs stay solid on glass */
@@ -211,8 +211,6 @@
       .tf-card,
       .tf-stat,
       .tf-dock,
-      .tf-topbar,
-      .tf-rail,
       .tf-sidebar,
       .tf-map-legend,
       .tf-map-ctl,
