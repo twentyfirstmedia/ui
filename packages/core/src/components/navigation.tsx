@@ -121,9 +121,15 @@ export function Breadcrumb(p: BreadcrumbProps) {
 }
 
 export function Pagination(p: PaginationProps) {
-  const total = p.total || 1,
-    st = React.useState(p.page || 1),
-    cur = st[0],
+  const total = Math.max(1, p.total || 1),
+    // `page` is controlled once someone listens; `page` alone stays the start page (as before)
+    controlled = p.page !== undefined && p.onChange !== undefined,
+    v = useControlled(controlled ? p.page : undefined, p.defaultPage ?? p.page ?? 1, p.onChange),
+    cur = Math.min(total, Math.max(1, v[0])),
+    go = (n: number) => {
+      const next = Math.min(total, Math.max(1, n));
+      if (next !== cur) v[1](next);
+    },
     pages: (number | "…")[] = [];
   for (let i = 1; i <= total; i++) {
     if (i === 1 || i === total || Math.abs(i - cur) <= 1) pages.push(i);
@@ -136,7 +142,7 @@ export function Pagination(p: PaginationProps) {
         label="Previous page"
         size="sm"
         onClick={() => {
-          st[1](Math.max(1, cur - 1));
+          go(cur - 1);
         }}
       />
       {pages.map((n, i) =>
@@ -151,7 +157,7 @@ export function Pagination(p: PaginationProps) {
             className="tf-page"
             aria-current={n === cur ? "page" : undefined}
             onClick={() => {
-              st[1](n);
+              go(n);
             }}
           >
             {n}
@@ -163,7 +169,7 @@ export function Pagination(p: PaginationProps) {
         label="Next page"
         size="sm"
         onClick={() => {
-          st[1](Math.min(total, cur + 1));
+          go(cur + 1);
         }}
       />
     </nav>
