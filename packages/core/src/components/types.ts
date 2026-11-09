@@ -616,6 +616,7 @@ export interface FormFieldProps extends BaseProps {
   children?: ReactNode;
 }
 export interface TextFieldProps extends Omit<FormFieldProps, "children"> {
+  /** Input type (`"text"` by default): `"email"`, `"number"`, `"tel"`, `"url"`, `"password"` … */
   type?: string;
   icon?: IconName;
   suffix?: ReactNode;
@@ -623,7 +624,23 @@ export interface TextFieldProps extends Omit<FormFieldProps, "children"> {
   defaultValue?: string;
   placeholder?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   autoComplete?: string;
+  autoFocus?: boolean;
+  /** Smallest value for `type="number"`, `"date"` and the like (native `min`). */
+  min?: number | string;
+  /** Largest value (native `max`). */
+  max?: number | string;
+  /** Step between valid values (native `step`), e.g. `1` for whole numbers or `"any"`. */
+  step?: number | string;
+  /** Fewest characters (native `minlength`). */
+  minLength?: number;
+  /** Most characters (native `maxlength`). */
+  maxLength?: number;
+  /** Pattern the value must match (native `pattern`). */
+  pattern?: string;
+  /** Virtual keyboard on touch devices (native `inputmode`), e.g. `"numeric"` or `"decimal"`. */
+  inputMode?: "none" | "text" | "tel" | "url" | "email" | "numeric" | "decimal" | "search";
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -1144,6 +1161,8 @@ export interface PlanCardProps extends BaseProps {
   flag?: string;
   current?: boolean;
   cta?: string;
+  /** Disable the button, e.g. while a checkout starts or when the plan cannot be picked. */
+  disabled?: boolean;
   onPick?: () => void;
 }
 
