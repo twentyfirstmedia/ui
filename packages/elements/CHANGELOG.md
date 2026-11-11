@@ -1,5 +1,11 @@
 # @twentyfirstmedia/elements
 
+## 0.3.1
+
+### Patch Changes
+
+- [#35](https://github.com/twentyfirstmedia/ui/pull/35) [`3a25cd6`](https://github.com/twentyfirstmedia/ui/commit/3a25cd6e9162a69465a5e7794b2f38c970f4ff08) Thanks [@robintrepte](https://github.com/robintrepte)! - `FloatingLayout` on a phone keeps the height it is given: the stacked slot grid counts its padding into the inherited height (`box-sizing: border-box`). Before, the layout grew by twice the padding, and with a fixed height the bottom slot was cut off at the edge. Apps that worked around it with `.tf-floating-ui { box-sizing: border-box; }` can drop that rule.
+
 ## 0.3.0
 
 ### Minor Changes
