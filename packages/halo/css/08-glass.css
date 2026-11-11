@@ -288,6 +288,8 @@
   /* on a phone the layout grows with its slots and the background fills behind them */
   .tf-floating-ui {
     position: relative;
+    /* the padding counts into the height it inherits, so the bottom slot stays inside */
+    box-sizing: border-box;
     min-height: inherit;
     overflow: visible;
     grid-template-columns: minmax(0, 1fr);
