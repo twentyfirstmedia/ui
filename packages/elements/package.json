@@ -1,6 +1,6 @@
 {
   "name": "@twentyfirstmedia/elements",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Every Twentyfirst UI component as a custom element: <tf-button>, <tf-data-table> … for plain HTML, Vue, Svelte, Angular, Astro and server templates.",
   "license": "MIT",
   "author": "Twentyfirst Media (https://twentyfirst.media)",
