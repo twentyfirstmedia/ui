@@ -208,3 +208,52 @@ for (const kit of KITS)
         expect(filter).toContain("blur");
       });
     });
+
+/**
+ * FloatingLayout on a phone: the slots stack and the layout grows with them. The slot grid takes
+ * the layout's min-height, so its padding must not push the bottom slot past the clipped edge.
+ */
+for (const kit of KITS)
+  test(`${kit}: FloatingLayout keeps its bottom slot inside on a phone`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${kit}/components/FloatingLayout/`);
+    const layout = page.locator(".docs-preview .tf-floating").first();
+    await layout.waitFor();
+    const out = await layout.evaluate((el) => {
+      const node = el as HTMLElement;
+      const host = node.parentElement as HTMLElement;
+      // measure the new size at once, not a size transition on its way there
+      node.style.transition = "none";
+      // [min-height, height, parent height, expected height, case]: the example (height 520), a
+      // layout given a fixed height, and height="100%" in a fixed-height parent
+      const cases: [string, string, string, number, string][] = [
+        ["", "", "", 520, "the example"],
+        ["560px", "560px", "", 560, "fixed height"],
+        ["100%", "", "640px", 640, "height 100% in a 640px parent"],
+      ];
+      return cases.map(([min, height, parent, want, name]) => {
+        if (min) node.style.minHeight = min;
+        node.style.height = height;
+        host.style.height = parent;
+        const outer = node.getBoundingClientRect();
+        const ui = node.querySelector(".tf-floating-ui")!;
+        const bottom = node.querySelector(".tf-floating-bottom")!.getBoundingClientRect();
+        return {
+          name,
+          want,
+          phone: getComputedStyle(ui).position === "relative",
+          height: Math.round(outer.height),
+          uiBottom: Math.round(ui.getBoundingClientRect().bottom - outer.bottom),
+          slotBottom: Math.round(bottom.bottom - outer.bottom),
+        };
+      });
+    });
+    for (const c of out) {
+      expect(c.phone, c.name).toBe(true);
+      // the slots fit, so the layout keeps the height it was given …
+      expect(c.height, c.name).toBe(c.want);
+      // … and the slot grid and the bottom slot end inside it (it clips overflow)
+      expect(c.uiBottom, c.name).toBeLessThanOrEqual(0);
+      expect(c.slotBottom, c.name).toBeLessThanOrEqual(0);
+    }
+  });
