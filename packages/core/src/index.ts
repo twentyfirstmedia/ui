@@ -97,6 +97,17 @@ export {
   type ToastData,
   type ToastTone,
 } from "./toast-store.js";
-export { ICON_PATHS, ICON_NAMES, type IconName } from "./icons.js";
+export {
+  ICON_PATHS,
+  ICON_NAMES,
+  registerIcons,
+  iconData,
+  type IconName,
+  type KitIconName,
+  type IconData,
+  type FilledIcon,
+  type CustomIcons,
+} from "./icons.js";
+export type { LibraryIconName } from "./icon-library.js";
 export { Icon, type IconProps } from "./Icon.js";
 export * from "./components/index.js";

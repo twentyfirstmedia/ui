@@ -34,7 +34,7 @@ A stdio MCP server with the bundled docs of this version: offline, no account, n
 | `get_pattern` | A complete screen with its code |
 | `get_guide` | Installation, CLI, theming, AI agents, status and approvals |
 | `get_tokens` | Token names with Halo and Pro values |
-| `list_icons` | Every valid icon name |
+| `list_icons` | Every valid icon name: the built-in set and the icon library |
 | `check_usage` | Unknown components, props or icons, missing required props, colour literals |
 
 Every page is also a resource (`twentyfirst-ui://components/DataTable`), and the prompts `build_screen` and `review_ui` start the two most common jobs. Docs: [AI agents and MCP](https://ui.twentyfirst.media/halo/ai/).

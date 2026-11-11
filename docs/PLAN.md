@@ -209,6 +209,14 @@ Notiz (Robin: Upstream-PRs für die Lücken, die bei der ersten App-Einführung 
 
 Notiz (Review der Schwester-PRs): In #30 nahm der Elements-Generator von jedem Props-Typ mit einem Typargument dieses Argument, aus `DataTableProps<R>` wurde `R`, und `<tf-data-table>` verlor alle Props (e2e `elements.spec` rot). Jetzt wird nur `NativeRest<…>` ausgepackt; Unit-Test für DataTable. #28–#32 sind vor diesem PR gemergt; ihre neuen Texte (FileDrop, BeforeAfter) stehen hier in `strings.ts`.
 
+### Phase 19: Icon-Bibliothek
+- [x] Bibliothek mit 567 Icons im Kit-Stil (Lucide, ISC; Markenlogos von Simple Icons, CC0), erzeugt von `scripts/icons.ts`, auf dem 24-px-Raster zentriert
+- [x] `registerIcons` (tree-shakeable, `@twentyfirstmedia/<kit>/icons`), eigene Icons über `CustomIcons`, Warnung bei unbekannten Namen
+- [x] Passkeys (`fingerprint`, `scanFace`, `keyRound` …), Social- und Markenlogos (`brandX`, `brandInstagram`, `brandGithub` …)
+- [x] Doku-Seite „Icons“ mit Suche (inkl. Schlagwörtern), Kategorien, Filter und Kopieren per Klick; Custom Elements haben alle registriert; MCP `list_icons`/`check_usage` kennen die Bibliothek
+
+Notiz (Robin: „Fingerabdruck für Passkey fehlt, Social-Media-Icons und viele mehr, mach das Paket deutlich kompletter“): Die 93 eingebauten Icons bleiben unverändert und ohne Einrichtung nutzbar, denn die Komponenten brauchen sie. Die Bibliothek fest einzubauen hätte jede Komponente um ~43 KB gzip vergrößert (Budget `Button` < 4 KB); deshalb werden Bibliotheks-Icons einmal mit `registerIcons` angemeldet, und nur die angemeldeten landen im Bundle. Linien-Icons kommen aus Lucide 1.70.0 (gleicher Stil: 24-px-Raster, 2 px, runde Enden). Kreise, Rechtecke, Linien und Polygone werden zu einem Pfad, jeder Teilpfad absolut (ein führendes relatives `m` hätte sonst am vorigen Teil angesetzt). Markenlogos sind gefüllt und auf 20/24 skaliert, damit sie optisch so groß wirken wie die Linien-Icons. Lucide 1.72.0 war erst wenige Stunden alt und fiel unter `minimumReleaseAge`; statt einer Ausnahme ist 1.70.0 gepinnt. LinkedIn, Microsoft, Slack, Teams, Skype, Windows und OpenAI gibt es bei Simple Icons nicht (Markeninhaber verbieten es); Apps können die offiziellen Dateien selbst registrieren. Lizenzhinweise in `packages/core/ICONS-LICENSE`. `@twentyfirstmedia/elements` registriert die ganze Bibliothek (158 → 203 KB gzip), damit Plain HTML ohne Build-Schritt alle Namen kennt. Tests: Unit (Registrierung, gefüllte Logos, Warnung, Kategorien vollständig, Generator aktuell), MCP, e2e (alle 658 Icons zentriert, Galerie sucht, filtert und kopiert).
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`

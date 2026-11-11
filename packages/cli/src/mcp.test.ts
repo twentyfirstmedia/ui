@@ -240,6 +240,25 @@ describe("mcp tools", () => {
     const r = await tool("list_icons");
     for (const i of k.icons.slice(0, 5)) expect(r.text).toContain(i);
     expect(r.text).toContain(`${k.icons.length} icons`);
+    // the library, by category, with how to register it
+    for (const i of ["fingerprint", "scanFace", "brandGithub", "brandInstagram"])
+      expect(r.text).toContain(i);
+    expect(r.text).toContain("registerIcons");
+  });
+
+  it("check_usage knows library icons and reminds to register them", async () => {
+    const code = [
+      'import { Button, Icon } from "@twentyfirstmedia/halo";',
+      'export const A = () => <Button icon="fingerprint">Sign in with a passkey</Button>;',
+      'export const B = () => <Icon name="brandGithub" label="GitHub" />;',
+    ];
+    const r = await tool("check_usage", { code: code.join("\n") });
+    expect(r.text).not.toContain("Unknown icon");
+    expect(r.text).toContain('- Line 2 · warning: "fingerprint" is a library icon');
+    const registered = await tool("check_usage", {
+      code: [...code, "registerIcons({ fingerprint, brandGithub });"].join("\n"),
+    });
+    expect(registered.text).toContain("No problems found");
   });
 
   it("check_usage reports findings with line numbers", async () => {

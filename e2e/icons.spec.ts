@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { ICON_LIBRARY } from "../packages/core/dist/icon-library.js";
 import { ICON_PATHS } from "../packages/core/dist/icons.js";
 import { KITS, previewPages } from "./pages";
 
@@ -31,9 +32,39 @@ test("every icon drawing is centred on the 24px grid", async ({ page }) => {
       }
       return out;
     },
-    ICON_PATHS as Record<string, string>,
+    {
+      ...(ICON_PATHS as Record<string, string>),
+      // the icon library (line icons and filled brand logos) is centred the same way
+      ...Object.fromEntries(
+        Object.entries(ICON_LIBRARY).map(([n, d]) => [n, typeof d === "string" ? d : d.d]),
+      ),
+    },
   );
   expect(off).toEqual([]);
+});
+
+test("the icon gallery finds icons and copies their names", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/halo/icons/");
+  const tiles = page.locator(".docs-icon-tile");
+  await tiles.first().waitFor();
+  // every built-in and library icon, none of them drawn as the placeholder of an unknown name
+  const total = Object.keys(ICON_PATHS).length + Object.keys(ICON_LIBRARY).length;
+  await expect(tiles).toHaveCount(total);
+  await page.getByRole("searchbox", { name: "Search icons" }).fill("passkey");
+  await expect(page.getByRole("button", { name: /^fingerprint/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /^scanFace/ })).toBeVisible();
+  await page.getByRole("searchbox", { name: "Search icons" }).fill("");
+  await page.getByRole("combobox", { name: "Category" }).selectOption("Brands");
+  await expect(page.getByRole("button", { name: /^brandGithub/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /^truck/ })).toHaveCount(0);
+  await page.getByRole("button", { name: /^brandGithub/ }).click();
+  await expect(page.locator(".docs-icons-count")).toHaveText("Copied “brandGithub”");
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("brandGithub");
+  // brand logos are filled, line icons stroked
+  const github = page.getByRole("button", { name: /^brandGithub/ }).locator("svg");
+  await expect(github).toHaveAttribute("fill", "currentColor");
+  await expect(github).toHaveAttribute("stroke", "none");
 });
 
 for (const kit of KITS)

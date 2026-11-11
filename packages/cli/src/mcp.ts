@@ -31,6 +31,8 @@ import {
   type Entry,
   type KitName,
   type Knowledge,
+  libraryIcons,
+  ICON_LIBRARY_HOWTO,
 } from "./knowledge.js";
 
 export const SERVER_NAME = "twentyfirst-ui";
@@ -406,7 +408,7 @@ export function createServer(k: Knowledge, options: ServerOptions): McpServer {
     tool(
       "list_icons",
       "List icons",
-      `List every valid icon name for \`<Icon name>\` and the \`icon\` props of ${PRODUCT} components.`,
+      `List every valid icon name for \`<Icon name>\` and the \`icon\` props of ${PRODUCT} components: the kit's own set and the icon library (passkeys, social and brand logos and more, registered once with registerIcons).`,
       {},
     ),
     tool(
@@ -571,10 +573,15 @@ export function createServer(k: Knowledge, options: ServerOptions): McpServer {
     },
 
     list_icons() {
+      const lib = Object.entries(k.iconLibrary ?? {});
       return [
         `${k.icons.length} icons. Use them as \`<Icon name="…" />\` or in the \`icon\` prop of components; icon-only buttons need a \`label\`.`,
         "",
         k.icons.join(", "),
+        "",
+        `Icon library: ${libraryIcons(k).length} more. ${ICON_LIBRARY_HOWTO}`,
+        "",
+        ...lib.map(([cat, names]) => `- ${cat}: ${names.join(", ")}`),
       ].join("\n");
     },
 

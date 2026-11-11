@@ -13,3 +13,4 @@ e2e/__screenshots__/
 packages/pro/css/0*.css
 out/
 .claude/
+packages/core/src/icon-library.ts
