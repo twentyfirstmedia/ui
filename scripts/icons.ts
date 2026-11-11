@@ -5,6 +5,8 @@
  * - line icons from Lucide (ISC): 24px grid, 2px round-capped strokes, `currentColor`, the same
  *   drawing rules as the kit's own set. Circles, rectangles, lines and polygons become one path.
  * - brand logos from Simple Icons (CC0): filled, scaled to the optical size of the line icons.
+ * - a few brand logos Simple Icons may not carry (LinkedIn, Microsoft, Slack …) from Font Awesome
+ *   Free (CC BY 4.0), fitted the same way.
  *
  * Every drawing is centred on the 24px grid (as the kit's own icons are). Names are camelCase;
  * brands start with `brand`. The kit's own 93 icons (packages/core/src/icons.ts) stay as they are
@@ -95,6 +97,7 @@ const CATEGORIES: Record<string, string[]> = {
     "hand",
     "move",
     "power",
+    "scan-search",
   ],
   "Navigation and layout": [
     "arrowUp",
@@ -147,6 +150,12 @@ const CATEGORIES: Record<string, string[]> = {
     "sliders-vertical",
     "toggle-left",
     "toggle-right",
+    "panel-left-close",
+    "arrow-down-up",
+    "arrow-right-left",
+    "chevrons-down-up",
+    "grid-3x3",
+    "square-split-horizontal",
   ],
   "Status and alerts": [
     "help",
@@ -176,6 +185,12 @@ const CATEGORIES: Record<string, string[]> = {
     "star-half",
     "flag-triangle-right",
     "siren",
+    "circle-check-big",
+    "octagon-x",
+    "circle-slash",
+    "star-off",
+    "dot",
+    "life-buoy",
   ],
   "Security and identity": [
     "user",
@@ -214,6 +229,8 @@ const CATEGORIES: Record<string, string[]> = {
     "vault",
     "file-lock",
     "venetian-mask",
+    "circle-user",
+    "shield-question-mark",
   ],
   Communication: [
     "mail",
@@ -258,6 +275,13 @@ const CATEGORIES: Record<string, string[]> = {
     "angry=face-angry",
     "languages",
     "heart-handshake",
+    "message-square-plus",
+    "message-square-off",
+    "message-square-dashed",
+    "mail-minus",
+    "forward",
+    "reply-all",
+    "phone-off",
   ],
   "Files and documents": [
     "file",
@@ -302,6 +326,11 @@ const CATEGORIES: Record<string, string[]> = {
     "cloud-off",
     "signature",
     "file-badge",
+    "folder-input",
+    "folder-kanban",
+    "folder-cog",
+    "file-question-mark",
+    "book-check",
   ],
   "Editing and text": [
     "bold",
@@ -345,6 +374,9 @@ const CATEGORIES: Record<string, string[]> = {
     "text-quote",
     "baseline",
     "image-plus",
+    "letter-b",
+    "diamond",
+    "shapes",
   ],
   Media: [
     "image",
@@ -380,6 +412,9 @@ const CATEGORIES: Record<string, string[]> = {
     "captions",
     "audio-lines",
     "list-music",
+    "image-off",
+    "image-up",
+    "image-down",
   ],
   "Devices and connectivity": [
     "monitor",
@@ -454,6 +489,19 @@ const CATEGORIES: Record<string, string[]> = {
     "square-terminal",
     "plug-zap",
     "rocket",
+    "database-zap",
+    "brain-cog",
+    "circuit-board",
+    "scan-text",
+    "text-search",
+    "message-square-code",
+    "infinity",
+    "orbit",
+    "telescope",
+    "git-graph",
+    "bot-off",
+    "square-dashed-mouse-pointer",
+    "mouse-pointer-2",
   ],
   "Charts and data": [
     "chart",
@@ -474,6 +522,7 @@ const CATEGORIES: Record<string, string[]> = {
     "kanban",
     "table-properties",
     "sheet",
+    "chart-no-axes-column-increasing",
   ],
   "Time and calendar": [
     "calendar",
@@ -538,6 +587,8 @@ const CATEGORIES: Record<string, string[]> = {
     "gem",
     "circle-dollar-sign",
     "tags",
+    "package-search",
+    "gavel",
   ],
   "Places and travel": [
     "map",
@@ -635,6 +686,7 @@ const CATEGORIES: Record<string, string[]> = {
     "tornado",
     "waves=waves-horizontal",
     "earth-lock",
+    "rabbit",
   ],
   "Health and people": [
     "heart-pulse",
@@ -661,6 +713,42 @@ const CATEGORIES: Record<string, string[]> = {
     "thermometer-sun",
     "weight",
     "salad",
+  ],
+  "Maps and 3D": [
+    "drafting-compass",
+    "crosshair",
+    "satellite",
+    "rotate-3d",
+    "axis-3d",
+    "move-3d",
+    "scale-3d",
+    "frame",
+    "spline",
+    "square-dashed",
+    "lasso",
+    "layers-2",
+    "magnet",
+  ],
+  Games: [
+    "swords",
+    "sword",
+    "castle",
+    "pickaxe",
+    "axe",
+    "dices",
+    "dice-5",
+    "skull",
+    "ghost",
+    "joystick",
+    "bomb",
+    "heart-crack",
+    "shield-half",
+    "chess-king",
+    "chess-queen",
+    "chess-rook",
+    "chess-bishop",
+    "chess-knight",
+    "chess-pawn",
   ],
 };
 
@@ -739,6 +827,56 @@ const BRANDS: Record<string, string> = {
   brandAirbnb: "airbnb",
   brandTripadvisor: "tripadvisor",
   brandYelp: "yelp",
+  brandMeta: "meta",
+  brandGoogleads: "googleads",
+  brandGoogleanalytics: "googleanalytics",
+  brandGooglesearchconsole: "googlesearchconsole",
+  brandTrustpilot: "trustpilot",
+  brandGooglegemini: "googlegemini",
+  brandMistralai: "mistralai",
+  brandPerplexity: "perplexity",
+  brandOllama: "ollama",
+  brandDeepseek: "deepseek",
+  brandCursor: "cursor",
+  brandGithubcopilot: "githubcopilot",
+  brandOpenrouter: "openrouter",
+  brandReplicate: "replicate",
+  brandElevenlabs: "elevenlabs",
+  brandLangchain: "langchain",
+  brandModelcontextprotocol: "modelcontextprotocol",
+  brandWoocommerce: "woocommerce",
+  brandShopify: "shopify",
+  brandWordpress: "wordpress",
+  brandCloudflare: "cloudflare",
+  brandHetzner: "hetzner",
+  brandSupabase: "supabase",
+  brandPostgresql: "postgresql",
+  brandN8n: "n8n",
+  brandMake: "make",
+  brandZapier: "zapier",
+  brandBitcoin: "bitcoin",
+  brandEthereum: "ethereum",
+  brandTether: "tether",
+  brandCoinbase: "coinbase",
+  brandBinance: "binance",
+  brandRevolut: "revolut",
+  brandKick: "kick",
+  brandKaspersky: "kaspersky",
+  brandVirustotal: "virustotal",
+};
+
+/**
+ * Brand logos Simple Icons may not carry (their owners asked it to remove them), from Font Awesome
+ * Free (CC BY 4.0): kit name → Font Awesome export.
+ */
+const FA_BRANDS: Record<string, string> = {
+  brandLinkedin: "faLinkedin",
+  brandMicrosoft: "faMicrosoft",
+  brandWindows: "faWindows",
+  brandSlack: "faSlack",
+  brandSkype: "faSkype",
+  brandAmazon: "faAmazon",
+  brandOpenai: "faOpenai",
 };
 
 type Node = [string, Record<string, string | number>];
@@ -859,6 +997,27 @@ export function build(): string {
       `export const ${kitName}: FilledIcon = { d: "${centre(icon.path, 20 / 24)}", filled: true };`,
     );
   }
+  const fa = require("@fortawesome/free-brands-svg-icons") as Record<
+    string,
+    { iconName: string; icon: [number, number, string[], string, string | string[]] }
+  >;
+  for (const [kitName, exportName] of Object.entries(FA_BRANDS)) {
+    const icon = fa[exportName];
+    if (!icon) {
+      missing.push(`font-awesome:${exportName}`);
+      continue;
+    }
+    const [w, h, , , data] = icon.icon;
+    const d = Array.isArray(data) ? data.join(" ") : data;
+    brands.push(kitName);
+    names.push(kitName);
+    addWords(kitName, [...icon.iconName.split("-"), "brand", "logo", "social"]);
+    // Font Awesome draws on its own grid (e.g. 448×512): fit the longer side to 20 of the 24
+    const fitted = svgpath(d)
+      .scale(20 / Math.max(w, h))
+      .toString();
+    lines.push(`export const ${kitName}: FilledIcon = { d: "${centre(fitted)}", filled: true };`);
+  }
   categories["Brands"] = brands;
   if (missing.length) throw new Error(`not found: ${missing.join(", ")}`);
   for (const c of core) if (!seen.has(c)) throw new Error(`kit icon ${c} has no category`);
@@ -868,7 +1027,13 @@ export function build(): string {
   const siVersion = (
     JSON.parse(readFileSync(join(siDir, "package.json"), "utf8")) as { version: string }
   ).version;
-  return `/* Generated by scripts/icons.ts from lucide-static ${lucideVersion} (ISC) and simple-icons ${siVersion} (CC0); do not edit. */
+  const faDir = require
+    .resolve("@fortawesome/free-brands-svg-icons")
+    .replace(/free-brands-svg-icons[\\/].*$/, "free-brands-svg-icons");
+  const faVersion = (
+    JSON.parse(readFileSync(join(faDir, "package.json"), "utf8")) as { version: string }
+  ).version;
+  return `/* Generated by scripts/icons.ts from lucide-static ${lucideVersion} (ISC), simple-icons ${siVersion} (CC0) and @fortawesome/free-brands-svg-icons ${faVersion} (CC BY 4.0); do not edit. */
 /**
  * The icon library: ${names.length} icons on top of the kit's own set, in the kit's style (24px grid,
  * 2px round-capped strokes, \`currentColor\`); brand logos (\`brand…\`) are filled.
@@ -883,8 +1048,9 @@ export function build(): string {
  * \`<Icon name="fingerprint" />\`, \`<Button icon="brandGithub">\`.
  *
  * Line icons: Lucide, ISC License, Copyright (c) Lucide Icons and Contributors (see ICONS-LICENSE).
- * Brand logos: Simple Icons, CC0 1.0. Logos are trademarks of their owners; follow each brand's
- * guidelines (e.g. link to the brand's own page).
+ * Brand logos: Simple Icons, CC0 1.0; LinkedIn, Microsoft, Windows, Slack, Skype, Amazon and OpenAI
+ * from Font Awesome Free, CC BY 4.0 (https://fontawesome.com/license/free). Logos are trademarks of
+ * their owners; follow each brand's guidelines (e.g. link to the brand's own page).
  */
 import type { FilledIcon } from "./icons.js";
 

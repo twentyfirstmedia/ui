@@ -56,13 +56,13 @@ test("the icon gallery finds icons and copies their names", async ({ page, conte
   await expect(page.getByRole("button", { name: /^scanFace/ })).toBeVisible();
   await page.getByRole("searchbox", { name: "Search icons" }).fill("");
   await page.getByRole("combobox", { name: "Category" }).selectOption("Brands");
-  await expect(page.getByRole("button", { name: /^brandGithub/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: "brandGithub", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: /^truck/ })).toHaveCount(0);
-  await page.getByRole("button", { name: /^brandGithub/ }).click();
+  await page.getByRole("button", { name: "brandGithub", exact: true }).click();
   await expect(page.locator(".docs-icons-count")).toHaveText("Copied “brandGithub”");
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("brandGithub");
   // brand logos are filled, line icons stroked
-  const github = page.getByRole("button", { name: /^brandGithub/ }).locator("svg");
+  const github = page.getByRole("button", { name: "brandGithub", exact: true }).locator("svg");
   await expect(github).toHaveAttribute("fill", "currentColor");
   await expect(github).toHaveAttribute("stroke", "none");
 });

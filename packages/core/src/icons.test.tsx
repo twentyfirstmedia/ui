@@ -20,7 +20,7 @@ const path = (c: HTMLElement) => c.querySelector("path")?.getAttribute("d");
 describe("icon library", () => {
   it("adds names next to the kit's own, without replacing any", () => {
     for (const name of Object.keys(ICON_LIBRARY)) expect(name in ICON_PATHS, name).toBe(false);
-    expect(Object.keys(ICON_LIBRARY).length).toBeGreaterThan(500);
+    expect(Object.keys(ICON_LIBRARY).length).toBeGreaterThan(680);
   });
 
   it("lists every kit and library icon in exactly one category", () => {
@@ -44,6 +44,18 @@ describe("icon library", () => {
       "brandTiktok",
       "brandWhatsapp",
       "brandGithub",
+      // round two: what the product apps use, games, AI, maps and 3D, more brands
+      "panelLeftClose",
+      "replyAll",
+      "swords",
+      "chessKing",
+      "brainCog",
+      "rotate3d",
+      "brandLinkedin",
+      "brandOpenai",
+      "brandGooglegemini",
+      "brandMeta",
+      "brandWoocommerce",
     ])
       expect(name in ICON_LIBRARY, name).toBe(true);
   });

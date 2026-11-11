@@ -178,7 +178,7 @@ For any other LLM: [`/llms.txt`](https://ui.twentyfirst.media/llms.txt), [`/llms
 | **Charts** | LineChart, AreaChart, BarChart, StackedBarChart, Funnel, Gauge, Heatmap |
 | **Overlays** | Modal, Drawer (sheet on any side), Popover, HoverCard, Menu, Toaster, ConfirmDialog |
 | **AI** | ChatMessage, Composer, ToolCall, Reasoning, AgentCard, ApprovalCard, RunTrace, VoiceMode |
-| **Icons** | 93 built in, plus a library of 567 more: passkeys, social and brand logos, files, media, commerce, places |
+| **Icons** | 93 built in, plus a library of 690 more: passkeys, AI, social and brand logos, files, media, commerce, maps and 3D, games |
 | **Commerce** | ProductCard, VariantPicker, OrderSummary, PlanCard, CouponCard |
 | **Admin** | SettingsLayout, TwoFactorSetup, WebhookEndpoint, ExportDialog, ServiceMonitor |
 | **Real estate and media** | ListingCard, MapView, ValuationCard, Gallery, Carousel |
