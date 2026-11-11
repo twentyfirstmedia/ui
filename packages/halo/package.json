@@ -36,6 +36,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./icons": {
+      "types": "./dist/icons.d.ts",
+      "default": "./dist/icons.js"
+    },
     "./styles.css": "./dist/styles.css",
     "./scoped.css": "./dist/scoped.css",
     "./tokens.css": "./dist/tokens.css",

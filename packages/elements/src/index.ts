@@ -3,6 +3,7 @@
  * `<tf-data-table>` …) for plain HTML and any framework. Importing this module defines them all.
  */
 import * as core from "@twentyfirstmedia/ui-core";
+import { ICON_LIBRARY } from "@twentyfirstmedia/ui-core/icons";
 import type { ComponentType } from "react";
 import { elementClass, TfElement } from "./element.js";
 import { DEFS } from "./generated/registry.js";
@@ -14,7 +15,11 @@ export {
   formatMoney,
   formatNumber,
   formatPercent,
+  registerIcons,
 } from "@twentyfirstmedia/ui-core";
+
+// plain HTML has no build step to pick icons: every icon of the library works by name
+core.registerIcons(ICON_LIBRARY);
 
 declare const __VERSION__: string;
 export const VERSION: string = typeof __VERSION__ === "string" ? __VERSION__ : "0.0.0";

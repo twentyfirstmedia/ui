@@ -71,8 +71,20 @@ export interface Knowledge {
   exports: Record<string, string[]>;
   /** Everything else the packages export: provider, hooks, formatters, Icon. */
   utilities: string[];
+  /** The kit's own icons: usable by name everywhere, no setup. */
   icons: string[];
+  /** The icon library by category: usable by name once registered with `registerIcons`. */
+  iconLibrary: Record<string, string[]>;
 }
+
+/** Every icon name of the library. */
+export function libraryIcons(k: Knowledge): string[] {
+  return Object.values(k.iconLibrary ?? {}).flat();
+}
+
+/** How to use library icons, for agents and the docs. */
+export const ICON_LIBRARY_HOWTO =
+  'Library icons need one registration before use: `import { registerIcons } from "@twentyfirstmedia/<kit>"; import { fingerprint, brandGithub } from "@twentyfirstmedia/<kit>/icons"; registerIcons({ fingerprint, brandGithub });` (or `registerIcons(ICON_LIBRARY)` for all). Custom elements (`@twentyfirstmedia/elements`) have them all registered.';
 
 export const PRODUCT = "Twentyfirst UI";
 export const TOKEN_GROUPS: { group: string; title: string }[] = [
@@ -280,6 +292,8 @@ export function componentsIndexMarkdown(k: Knowledge, kit: KitName): string {
     "",
     `\`Icon name\` and every \`icon\` prop take one of: ${k.icons.map((i) => `\`${i}\``).join(", ")}.`,
     "",
+    `The icon library adds ${libraryIcons(k).length} more (passkeys, social and brand logos, files, media, commerce …); see the Icons guide. ${ICON_LIBRARY_HOWTO}`,
+    "",
   );
   return out.join("\n");
 }
@@ -360,7 +374,20 @@ export function llmsFull(k: Knowledge): string {
   for (const e of k.components) parts.push(demote(entryMarkdown(k, e, kit)), "");
   parts.push("# Patterns", "");
   for (const e of k.patterns) parts.push(`- [${e.title}](${mdUrl(k, kit, e.path)}): ${e.summary}`);
-  parts.push("", "# Icons", "", k.icons.join(", "), "");
+  parts.push(
+    "",
+    "# Icons",
+    "",
+    k.icons.join(", "),
+    "",
+    "## Icon library",
+    "",
+    ICON_LIBRARY_HOWTO,
+    "",
+  );
+  for (const [cat, names] of Object.entries(k.iconLibrary ?? {}))
+    parts.push(`- ${cat}: ${names.join(", ")}`);
+  parts.push("");
   return parts.join("\n");
 }
 
@@ -473,6 +500,21 @@ export function search(k: Knowledge, query: string, limit = 10): Hit[] {
         score: s * 0.5,
       });
   }
+  for (const [cat, names] of Object.entries(k.iconLibrary ?? {}))
+    for (const i of names) {
+      const s = score(terms, [
+        [i, 3],
+        [cat, 1],
+      ]);
+      if (s > 0)
+        hits.push({
+          kind: "icon",
+          name: i,
+          title: `Icon "${i}" (library: ${cat})`,
+          summary: `registerIcons({ ${i} }) once, then <Icon name="${i}" />`,
+          score: s * 0.45,
+        });
+    }
   return hits.sort((a, b) => b.score - a.score || a.name.localeCompare(b.name)).slice(0, limit);
 }
 
@@ -542,6 +584,8 @@ export function checkUsage(k: Knowledge, code: string): Finding[] {
   const lineAt = (i: number) => code.slice(0, i).split("\n").length;
   const exported = exportedNames(k);
   const icons = new Set(k.icons);
+  const library = new Set(libraryIcons(k));
+  const registers = /\bregisterIcons\s*\(/.test(code);
   const imported = new Map<string, string>(); // local → exported name
   for (const m of code.matchAll(
     /import\s+(?:type\s+)?\{([^}]*)\}\s+from\s+["']@twentyfirstmedia\/(halo|pro|ui-core)["']/g,
@@ -611,7 +655,14 @@ export function checkUsage(k: Knowledge, code: string): Finding[] {
     const tagStart = code.lastIndexOf("<", m.index ?? 0);
     const tag = /^<(\w+)/.exec(code.slice(tagStart))?.[1] ?? "";
     if (m[1] === "name" && imported.get(tag) !== "Icon") continue;
-    if (!icons.has(m[2] as string))
+    if (library.has(m[2] as string)) {
+      if (!registers)
+        findings.push({
+          line: lineAt(m.index ?? 0),
+          severity: "warning",
+          message: `"${m[2]}" is a library icon: make sure the app registers it once with registerIcons({ ${m[2]} }) (from "@twentyfirstmedia/<kit>/icons").`,
+        });
+    } else if (!icons.has(m[2] as string))
       findings.push({
         line: lineAt(m.index ?? 0),
         severity: "error",

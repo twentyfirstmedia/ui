@@ -35,6 +35,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./icons": {
+      "types": "./dist/icon-library.d.ts",
+      "default": "./dist/icon-library.js"
+    },
     "./themes.css": "./dist/themes.css",
     "./fonts/*": "./dist/fonts/*",
     "./themes/*": "./dist/themes/*",
@@ -42,6 +46,7 @@
   },
   "files": [
     "dist",
+    "ICONS-LICENSE",
     "src",
     "!src/**/*.test.ts",
     "!src/**/*.test.tsx"

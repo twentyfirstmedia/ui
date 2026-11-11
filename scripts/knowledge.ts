@@ -7,6 +7,8 @@
  *
  * The docs build imports buildKnowledge() directly.
  */
+import { ICON_CATEGORIES, ICON_LIBRARY } from "../packages/core/src/icon-library.ts";
+import { ICON_PATHS } from "../packages/core/src/icons.ts";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -35,6 +37,7 @@ export const GUIDE_ORDER = [
   "theming",
   "themes",
   "motion",
+  "icons",
   "text",
   "ai",
   "html",
@@ -193,8 +196,18 @@ function readUtilities(): string[] {
 }
 
 function readIcons(): string[] {
-  const src = readFileSync(join(ROOT, "packages/core/src/icons.ts"), "utf8");
-  return [...src.matchAll(/^ {2}(\w+):/gm)].map((m) => m[1] as string);
+  return Object.keys(ICON_PATHS);
+}
+
+/** Library icons by category (registered with `registerIcons` before use). */
+function readIconLibrary(): Record<string, string[]> {
+  const kit = new Set(Object.keys(ICON_PATHS));
+  const out: Record<string, string[]> = {};
+  for (const [cat, names] of Object.entries(ICON_CATEGORIES)) {
+    const extra = names.filter((n) => !kit.has(n) && n in ICON_LIBRARY);
+    if (extra.length) out[cat] = extra;
+  }
+  return out;
 }
 
 // ── guides ──
@@ -312,6 +325,7 @@ export function buildKnowledge(): Knowledge {
     exports: readExports(),
     utilities: readUtilities(),
     icons: readIcons(),
+    iconLibrary: readIconLibrary(),
   };
 }
 

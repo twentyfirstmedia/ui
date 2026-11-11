@@ -74,6 +74,7 @@ export const GUIDES: NavLink[] = [
   { href: "theming", label: "Theming and tokens" },
   { href: "themes", label: "Theme builder" },
   { href: "motion", label: "Motion" },
+  { href: "icons", label: "Icons" },
   { href: "text", label: "Text and locale" },
   { href: "ai", label: "AI agents and MCP" },
   { href: "html", label: "Plain HTML and frameworks" },

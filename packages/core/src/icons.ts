@@ -1,3 +1,5 @@
+import type { LibraryIconName } from "./icon-library.js";
+
 /** Halo line icon set: 24px grid, 2px round-capped strokes, `currentColor`. Paths from the reference. */
 export const ICON_PATHS = {
   thumbUp:
@@ -109,7 +111,46 @@ export const ICON_PATHS = {
     "M10.67 8.24a3.5 3.5 0 1 1 5.5 2.9L18.67 15.74M8.67 19.24a3.5 3.5 0 0 1-1-6.8M18.67 19.24H11.67M7.67 12.44L11.17 6.74",
 } as const;
 
-export type IconName = keyof typeof ICON_PATHS;
+/** A name from the kit's own set: always available, no registration needed. */
+export type KitIconName = keyof typeof ICON_PATHS;
 
-/** Every icon name, in set order. */
-export const ICON_NAMES = Object.keys(ICON_PATHS) as IconName[];
+/**
+ * Your own icons: add the names you register to this interface to type them, e.g.
+ * `declare module "@twentyfirstmedia/ui-core" { interface CustomIcons { logo: true } }`.
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface CustomIcons {}
+
+/** An icon name: the kit's own set, the icon library, or one of your own (`CustomIcons`). */
+export type IconName = KitIconName | LibraryIconName | Extract<keyof CustomIcons, string>;
+
+/** A filled drawing on the 24px grid (brand logos): painted with `currentColor`, not stroked. */
+export interface FilledIcon {
+  d: string;
+  filled: true;
+}
+
+/** A drawing for `registerIcons`: a path on the 24px grid, stroked like the kit's icons, or filled. */
+export type IconData = string | FilledIcon;
+
+/** Every name of the kit's own set, in set order. */
+export const ICON_NAMES = Object.keys(ICON_PATHS) as KitIconName[];
+
+const registered = new Map<string, IconData>();
+
+/**
+ * Makes icons available by name to `Icon` and every `icon` prop: from the icon library
+ * (`@twentyfirstmedia/halo/icons`, `registerIcons({ fingerprint, brandGithub })` or
+ * `registerIcons(ICON_LIBRARY)`) or your own drawings on the 24px grid. Call it once, before
+ * rendering, in a module both your server and client code import. The kit's own names cannot be
+ * replaced.
+ */
+export function registerIcons(icons: Readonly<Record<string, IconData>>): void {
+  for (const [name, data] of Object.entries(icons))
+    if (!(name in ICON_PATHS)) registered.set(name, data);
+}
+
+/** The drawing for a name: the kit's own set first, then registered icons. */
+export function iconData(name: string): IconData | undefined {
+  return (ICON_PATHS as Record<string, string>)[name] ?? registered.get(name);
+}
