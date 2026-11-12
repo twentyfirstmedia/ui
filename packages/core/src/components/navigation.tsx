@@ -619,7 +619,7 @@ export function Sidebar(p: SidebarProps) {
             disabled={it.disabled}
             onChange={(e) => it.onCheckedChange?.(e.currentTarget.checked)}
           />
-          <span className={cx("tf-sidebar-mark", single && "round")} aria-hidden>
+          <span className={cx("tf-sidebar-mark", single && "radio")} aria-hidden>
             {!single && (
               <svg
                 viewBox="0 0 24 24"
