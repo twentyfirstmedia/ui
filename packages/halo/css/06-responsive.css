@@ -66,6 +66,13 @@
   .tf-sheet > .tf-main ~ :not(.tf-dock-float) {
     grid-column: 2;
   }
+  /* with the sidebar there is no rail column: asides go below the main column */
+  .tf-sheet.tf-sheet-norail:not(.tf-sheet-2) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tf-sheet-norail > .tf-main ~ :not(.tf-dock-float) {
+    grid-column: 1;
+  }
   /* the dock floats over the end of the sheet, not of the main column (asides follow it) */
   .tf-main-dock {
     padding-bottom: 0;
@@ -472,5 +479,13 @@
   ):not([type="checkbox"], [type="radio"]) {
     /* max() keeps the Pro derivation (16px → 14px) from shrinking it */
     font-size: max(16px, 1em);
+  }
+}
+
+/* AppShell with a sidebar on phones: the sidebar's bar on top of the frame, the sheet below */
+@media (max-width: 760px) {
+  .tf-shell.tf-shell-sidebar {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0 8px 8px;
   }
 }

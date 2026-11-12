@@ -157,7 +157,15 @@ export {
   AttachmentPreview,
 } from "./mail.js";
 export { ImageVariants, Gallery, BeforeAfter } from "./media.js";
-export { Tabs, Breadcrumb, Pagination, Menubar, NavigationMenu, Sidebar } from "./navigation.js";
+export {
+  Tabs,
+  Breadcrumb,
+  Pagination,
+  Menubar,
+  NavigationMenu,
+  Sidebar,
+  UserMenu,
+} from "./navigation.js";
 export {
   ConnectionCard,
   ConnectionBanner,

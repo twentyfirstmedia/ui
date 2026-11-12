@@ -5,6 +5,8 @@ import { SHELL_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { cx, reduced } from "../cx.js";
 import { Avatar } from "./foundation.js";
+import { Sidebar, UserMenu } from "./navigation.js";
+import { WorkspaceSwitcher } from "./admin.js";
 import type {
   AppShellProps,
   DockItem,
@@ -318,6 +320,66 @@ const DOCK = (): DockItem[] => [
 ];
 
 export function AppShell(p: AppShellProps) {
+  if (p.navigation === "sidebar") {
+    const groups = p.sidebarGroups || [
+      {
+        items: (p.nav || NAV()).map((n) => ({
+          id: n.label,
+          label: n.label,
+          icon: n.icon,
+          count: n.count,
+        })),
+      },
+    ];
+    const brand = (collapsed: boolean) =>
+      p.workspaces ? (
+        <WorkspaceSwitcher variant="frame" {...p.workspaces} compact={collapsed} />
+      ) : p.brand ? (
+        <span className={cx("tf-brand", collapsed && "tf-brand-mini")}>
+          {collapsed ? p.brand.slice(0, 1) : p.brand}
+          <span className="tf-brand-dot" aria-hidden />
+          {p.tag && !collapsed && <span className="tf-brand-tag">{p.tag}</span>}
+        </span>
+      ) : null;
+    return (
+      <div className={cx("tf-shell", "tf-shell-sidebar", p.className)} style={p.style}>
+        <Sidebar
+          variant="shell"
+          groups={groups}
+          current={p.active}
+          onPick={p.onNavigate}
+          header={({ collapsed }) => brand(collapsed)}
+          footer={({ collapsed }) =>
+            p.user ? (
+              <UserMenu
+                name={p.user.name}
+                email={p.user.email}
+                items={p.userMenu}
+                compact={collapsed}
+              />
+            ) : null
+          }
+          {...p.sidebar}
+        />
+        <div
+          className={cx("tf-sheet", !p.railTop && "tf-sheet-norail", !p.side && "tf-sheet-2")}
+          style={p.sheetStyle}
+        >
+          {p.railTop && <SideRail top={p.railTop} bottom={p.railBottom} />}
+          <main key={p.contentKey} className={cx("tf-main", p.dock !== false && "tf-main-dock")}>
+            {p.topExtra && <div className="tf-shell-tools">{p.topExtra}</div>}
+            {p.children}
+          </main>
+          {p.side || null}
+          {p.dock !== false && (
+            <div className="tf-dock-float">
+              <Dock items={p.dockItems || DOCK()} />
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={cx("tf-shell", p.className)} style={p.style}>
       <TopBar

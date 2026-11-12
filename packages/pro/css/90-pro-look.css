@@ -413,6 +413,14 @@ select.tf-input {
   gap: var(--line-width);
   box-shadow: 0 0 0 var(--line-width) var(--line);
 }
+/* with the sidebar, the sidebar and the sheet sit side by side on the same hairline */
+.tf-shell.tf-shell-sidebar {
+  padding: 0;
+  gap: var(--line-width);
+}
+.tf-shell-sidebar > .tf-sidebar.shell {
+  border-radius: 0;
+}
 .tf-topbar,
 .tf-shell .tf-topbar {
   border-radius: 0;

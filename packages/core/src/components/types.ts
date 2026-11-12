@@ -1,4 +1,4 @@
-import type { ChangeEvent, CSSProperties, MouseEvent, ReactNode } from "react";
+import type { ChangeEvent, CSSProperties, ElementType, MouseEvent, ReactNode } from "react";
 import type { IconName } from "../icons.js";
 import type { ToastOptions } from "../toast-store.js";
 import type { Surface } from "../provider.js";
@@ -355,6 +355,19 @@ export interface AppShellProps extends BaseProps {
   dockItems?: DockProps["items"];
   railTop?: RailItem[];
   railBottom?: RailItem[];
+  /**
+   * `top` (default): navigation in the top bar, tools in the side rail. `sidebar`: a labelled
+   * sidebar on the frame, with groups, nesting and a drawer on phones.
+   */
+  navigation?: "top" | "sidebar";
+  /** With `navigation="sidebar"`: groups instead of the flat `nav` list. */
+  sidebarGroups?: SidebarGroup[];
+  /** With `navigation="sidebar"`: more sidebar props (collapsed, storageKey, shortcut, linkAs …). */
+  sidebar?: Partial<Omit<SidebarProps, "variant" | "groups">>;
+  /** With `navigation="sidebar"`: the workspace switcher at the top instead of the brand. */
+  workspaces?: WorkspaceSwitcherProps;
+  /** The account menu's entries (with `navigation="sidebar"` at the foot of the sidebar). */
+  userMenu?: (MenuItem | "-")[];
   children?: ReactNode;
 }
 export interface StaggerProps extends BaseProps {
@@ -2134,6 +2147,8 @@ export interface WorkspaceSwitcherProps extends BaseProps {
   footer?: ReactNode;
   variant?: "frame";
   width?: number;
+  /** Only the workspace's mark, its name as the accessible name (a collapsed sidebar). */
+  compact?: boolean;
 }
 export interface ExportDialogProps extends BaseProps {
   open?: boolean;
@@ -2553,28 +2568,70 @@ export interface SidebarItem {
   label: string;
   icon: IconName;
   count?: number;
-  /** One level of nested pages, shown when the item is open. */
+  /** A small marker instead of a number: `"dot"` for new activity, or a short word such as "New". */
+  badge?: string;
+  /** Renders the item as a link to this address (with `linkAs` for a router's link, e.g. Next.js `Link`). */
+  href?: string;
+  /** Opens `href` in a new tab and says so. */
+  external?: boolean;
+  disabled?: boolean;
+  /** A menu behind a "…" button on the item (rename, share, remove …). */
+  actions?: (MenuItem | "-")[];
+  /** One level of nested pages, shown when the item is open (as a flyout when the sidebar is collapsed). */
   items?: Omit<SidebarItem, "items">[];
 }
 export interface SidebarGroup {
+  id?: string;
   label?: string;
   items: SidebarItem[];
+  /** The label folds the group open and shut. */
+  collapsible?: boolean;
+  /** For a collapsible group: starts open (default true). */
+  defaultOpen?: boolean;
+  /** A small button next to the label, e.g. "+" to add a project. */
+  action?: { label: string; icon?: IconName; onClick?: () => void };
 }
 export interface SidebarProps extends BaseProps {
   groups: SidebarGroup[];
   /** Id (or label) of the current page. */
   current?: string;
   onPick?: (id: string) => void;
+  /**
+   * `floating` (default): a card with rounded corners and a shadow. `attached`: full height, flush
+   * with the edge of the screen, divided by a line. `shell`: on the dark frame of `AppShell`.
+   */
+  variant?: "floating" | "attached" | "shell";
   /** Icons only. */
   collapsed?: boolean;
   defaultCollapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
-  /** Top of the sidebar (brand, workspace switcher). */
-  header?: ReactNode;
-  /** Bottom of the sidebar (account, settings). */
-  footer?: ReactNode;
+  /** Remember the collapsed state in the browser under this key. */
+  storageKey?: string;
+  /** ⌘B (Ctrl+B) collapses and expands the sidebar, except while typing in a field. */
+  shortcut?: boolean;
+  /** The element items with an `href` render as (default `a`), e.g. Next.js `Link`. */
+  linkAs?: ElementType;
+  /** On phones (up to 760px wide): whether the drawer is open (controlled). */
+  mobileOpen?: boolean;
+  onMobileOpenChange?: (open: boolean) => void;
+  /** Top of the sidebar (brand, `WorkspaceSwitcher`); a function gets the collapsed state. */
+  header?: ReactNode | ((state: { collapsed: boolean }) => ReactNode);
+  /** Bottom of the sidebar (`UserMenu`, settings); a function gets the collapsed state. */
+  footer?: ReactNode | ((state: { collapsed: boolean }) => ReactNode);
   /** Accessible name of the navigation. */
   label?: string;
+}
+export interface UserMenuProps extends BaseProps {
+  name: string;
+  email?: string;
+  /** Picture URL; initials otherwise. */
+  avatar?: string;
+  /** The menu: profile, settings, sign out … */
+  items?: (MenuItem | "-")[];
+  /** Only the avatar (a collapsed sidebar). */
+  compact?: boolean;
+  /** Where the menu opens (default `top`, for the foot of a sidebar). */
+  side?: "top" | "bottom";
 }
 
 /* ── ResizablePanels ── */

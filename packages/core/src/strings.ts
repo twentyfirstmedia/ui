@@ -104,6 +104,18 @@ export interface UIStrings {
   sidebar: string;
   expandSidebar: string;
   collapseSidebar: string;
+  /** The menu button that opens the sidebar on phones. */
+  openNavigation: string;
+  closeNavigation: string;
+  /** The "…" button of a sidebar item. */
+  moreActionsFor: (label: string) => string;
+  /** Said after a link that opens in a new tab. */
+  opensInNewTab: string;
+  /** Said for the dot marker on a sidebar item. */
+  newActivity: string;
+  switchWorkspace: string;
+  /** The account menu (UserMenu). */
+  account: string;
   /* Carousel */
   /** aria-roledescription of a carousel slide. */
   slide: string;
@@ -621,7 +633,9 @@ export const ADMIN_STRINGS: Pick<
   | "contrastAA"
   | "contrastAALarge"
   | "contrastFails"
+  | "switchWorkspace"
 > = {
+  switchWorkspace: "Switch workspace",
   minimum: "Minimum",
   maximum: "Maximum",
   min: "Min",
@@ -1128,6 +1142,12 @@ export const NAVIGATION_STRINGS: Pick<
   | "sidebar"
   | "expandSidebar"
   | "collapseSidebar"
+  | "openNavigation"
+  | "closeNavigation"
+  | "moreActionsFor"
+  | "opensInNewTab"
+  | "newActivity"
+  | "account"
 > = {
   breadcrumb: "Breadcrumb",
   pagination: "Pagination",
@@ -1136,6 +1156,12 @@ export const NAVIGATION_STRINGS: Pick<
   sidebar: "Sidebar",
   expandSidebar: "Expand sidebar",
   collapseSidebar: "Collapse sidebar",
+  openNavigation: "Open navigation",
+  closeNavigation: "Close navigation",
+  moreActionsFor: (label) => `More actions for ${label}`,
+  opensInNewTab: "(opens in a new tab)",
+  newActivity: "New activity",
+  account: "Account",
 };
 
 /** Strings of the components in `operations.tsx`. */
