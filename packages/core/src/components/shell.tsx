@@ -241,7 +241,15 @@ function useSafeArea(root: React.RefObject<HTMLDivElement | null>) {
       );
       el.style.setProperty(
         "--floating-safe-bottom",
-        px(bottom ? r.bottom - bottom.getBoundingClientRect().top : 0),
+        // the bottom bar, or the end slot while it is a bottom sheet (phones)
+        px(
+          Math.max(
+            bottom ? r.bottom - bottom.getBoundingClientRect().top : 0,
+            end && getComputedStyle(end).position === "absolute"
+              ? r.bottom - end.getBoundingClientRect().top
+              : 0,
+          ),
+        ),
       );
     };
     const ro = new ResizeObserver(measure);
