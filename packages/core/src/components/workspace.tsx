@@ -31,7 +31,11 @@ import type {
 export function SubNav(p: SubNavProps) {
   const t = useStrings(WORKSPACE_STRINGS);
   return (
-    <nav className="tf-subnav" aria-label={t.sectionPages(p.eyebrow)}>
+    <nav
+      style={p.style}
+      className={cx("tf-subnav", p.className)}
+      aria-label={t.sectionPages(p.eyebrow)}
+    >
       <div className="tf-subnav-head">
         {p.eyebrow && <span className="tf-subnav-eyebrow">{p.eyebrow}</span>}
         {p.action && (
@@ -74,8 +78,9 @@ export function Drawer(p: DrawerProps) {
   if (!pr.mounted) return null;
   return (
     <div
+      style={p.style}
       {...leaving(pr.closing)}
-      className={cx("tf-drawer-wrap", p.inline && "inline")}
+      className={cx("tf-drawer-wrap", p.inline && "inline", p.className)}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget && p.onClose) p.onClose?.();
       }}
@@ -180,8 +185,9 @@ export function CommandPalette(p: CommandPaletteProps) {
   if (!pr.mounted) return null;
   return (
     <div
+      style={p.style}
       {...leaving(pr.closing)}
-      className={cx("tf-palette-wrap", p.inline && "inline")}
+      className={cx("tf-palette-wrap", p.inline && "inline", p.className)}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget && p.onClose) p.onClose?.();
       }}
@@ -273,7 +279,12 @@ export function NotificationList(p: NotificationListProps) {
   const f = React.useState<"all" | "unread">("all"),
     items = (p.items || []).filter((n) => f[0] === "all" || n.unread);
   return (
-    <div className="tf-notes" role="region" aria-label={t.notifications}>
+    <div
+      style={p.style}
+      className={cx("tf-notes", p.className)}
+      role="region"
+      aria-label={t.notifications}
+    >
       <div
         className="tf-header"
         style={{
@@ -353,12 +364,13 @@ export function Flow(p: FlowProps) {
   const t = useStrings(WORKSPACE_STRINGS);
   return (
     <ol
-      className="tf-flow tf-stagger"
-      style={
-        {
+      className={cx("tf-flow tf-stagger", p.className)}
+      style={{
+        ...({
           "--base": "120ms",
-        } as React.CSSProperties
-      }
+        } as React.CSSProperties),
+        ...p.style,
+      }}
     >
       {(p.steps || []).map((s, i) => {
         const steps = STEP(),
@@ -467,7 +479,7 @@ export function FileThumb(p: FileThumbProps) {
       </span>
     );
   return (
-    <span className="tf-t-doc">
+    <span style={p.style} className={cx("tf-t-doc", p.className)}>
       <b>{(p.title || "").replace(/\.[^.]+$/, "")}</b>
       {Array.from(
         {
@@ -489,7 +501,12 @@ export function FileCard(p: FileCardProps) {
   const t = useStrings(WORKSPACE_STRINGS);
   const k = FILE_KIND[p.kind] || FILE_KIND.doc;
   return (
-    <button type="button" className="tf-filecard" onClick={p.onClick}>
+    <button
+      style={p.style}
+      type="button"
+      className={cx("tf-filecard", p.className)}
+      onClick={p.onClick}
+    >
       <span className={"tf-thumb tf-bg-" + k[1]}>
         <FileThumb kind={p.kind} title={p.name} />
       </span>
@@ -507,7 +524,12 @@ export function Wizard(p: WizardProps) {
     cur = p.current || 0,
     done = p.done || {};
   return (
-    <div className="tf-wizard" role="group" aria-label={p.label || t.setup}>
+    <div
+      style={p.style}
+      className={cx("tf-wizard", p.className)}
+      role="group"
+      aria-label={p.label || t.setup}
+    >
       <aside className="tf-wizard-rail">
         {p.brand && (
           <span
@@ -570,7 +592,7 @@ export function PermissionMatrix(p: PermissionMatrixProps) {
   const box = React.useRef<HTMLDivElement>(null);
   useScrollFocus(box);
   return (
-    <div ref={box} className="tf-scroll">
+    <div style={p.style} ref={box} className={cx("tf-scroll", p.className)}>
       <table className="tf-table tf-perm">
         <thead>
           <tr>
@@ -648,7 +670,7 @@ export function InvoicePreview(p: InvoicePreviewProps) {
   });
   const fmt = p.format || money2;
   return (
-    <div className="tf-paper">
+    <div style={p.style} className={cx("tf-paper", p.className)}>
       <div className="tf-paper-top">
         <div>
           {p.brand && (
@@ -720,7 +742,7 @@ export function TransactionRow(p: TransactionRowProps) {
   const open = React.useState(false),
     inc = p.amount > 0;
   return (
-    <div className={cx("tf-tx", !p.matched && "unmatched")}>
+    <div style={p.style} className={cx("tf-tx", !p.matched && "unmatched", p.className)}>
       <div className="tf-tx-row">
         <TintIcon icon={inc ? "download" : "send"} tint={inc ? "mint" : "plain"} />
         <div className="tf-tx-text">

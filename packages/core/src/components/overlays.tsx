@@ -52,7 +52,11 @@ export function Popover(p: PopoverProps) {
       </span>
     );
   return (
-    <span ref={ref} className={cx("tf-pop-anchor", p.block && "block", p.className)}>
+    <span
+      style={p.style}
+      ref={ref}
+      className={cx("tf-pop-anchor", p.block && "block", p.className)}
+    >
       {trigger}
       {pr.mounted && (
         <div
@@ -108,7 +112,8 @@ export function Tooltip(p: TooltipProps) {
   const child = React.Children.only(p.children) as React.ReactElement<Record<string, unknown>>;
   return (
     <span
-      className="tf-tip-anchor"
+      style={p.style}
+      className={cx("tf-tip-anchor", p.className)}
       onPointerEnter={show}
       onPointerLeave={hide}
       onFocus={() => {

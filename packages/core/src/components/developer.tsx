@@ -38,6 +38,7 @@ export function LogView(p: LogViewProps) {
       className={cx("tf-log", p.className)}
       style={{
         maxHeight: p.maxHeight,
+        ...p.style,
       }}
     >
       {p.title && (
@@ -90,7 +91,7 @@ export function SecretField(p: SecretFieldProps) {
     copied = React.useState(false);
   const masked = (p.prefix || "") + "••••••••" + (p.last4 || "");
   return (
-    <div className="tf-secret">
+    <div style={p.style} className={cx("tf-secret", p.className)}>
       <Icon name="key" size={15} />
       <span className="tf-mono tf-secret-val">{shown[0] && p.value ? p.value : masked}</span>
       {p.meta && <span className="tf-secret-meta">{p.meta}</span>}
@@ -173,7 +174,15 @@ export function MoneyInput(p: MoneyInputProps) {
   }
   const sym = formatMoney(0, p.currency).replace(/[\d.,\s]/g, "");
   return (
-    <FormField id={id} label={p.label} hint={p.hint} error={p.error} required={p.required}>
+    <FormField
+      style={p.style}
+      className={p.className}
+      id={id}
+      label={p.label}
+      hint={p.hint}
+      error={p.error}
+      required={p.required}
+    >
       <div className="tf-money">
         <span
           className="tf-inputwrap"
@@ -248,7 +257,7 @@ export function MoneyInput(p: MoneyInputProps) {
 
 export function SettingsLayout(p: SettingsLayoutProps) {
   return (
-    <div className="tf-settings">
+    <div style={p.style} className={cx("tf-settings", p.className)}>
       {(p.sections || []).map((s, i) => (
         <section key={s.id || i} className="tf-settings-row">
           <div className="tf-settings-label">
@@ -321,7 +330,7 @@ export function StatCell(p: StatCellProps) {
   const up = p.delta != null && p.delta >= 0,
     good = p.invert ? !up : up;
   return (
-    <div className={cx("tf-statcell", p.tint && "tf-bg-" + p.tint, p.className)}>
+    <div style={p.style} className={cx("tf-statcell", p.tint && "tf-bg-" + p.tint, p.className)}>
       <div className="tf-statcell-top">
         <span className="tf-statcell-label">{p.label}</span>
         {p.icon && <TintIcon icon={p.icon} tint={p.iconTint || "plain"} />}
@@ -363,7 +372,7 @@ export function UptimeBar(p: UptimeBarProps) {
   const days = (p.days || []).map((d) => (typeof d === "string" ? { status: d } : d)),
     hov = React.useState<number | null>(null);
   return (
-    <div className="tf-uptime">
+    <div style={p.style} className={cx("tf-uptime", p.className)}>
       <div
         className="tf-uptime-bar"
         onPointerLeave={() => {
@@ -408,7 +417,7 @@ export function Meter(p: MeterProps) {
     tone =
       p.tone || (pct >= (p.danger || 90) ? "blush" : pct >= (p.warn || 75) ? "butter" : "mint");
   return (
-    <div className="tf-meter">
+    <div style={p.style} className={cx("tf-meter", p.className)}>
       <div className="tf-usage-top">
         <span>{p.label}</span>
         <b>{p.text || formatPercent(pct)}</b>

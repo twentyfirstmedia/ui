@@ -15,6 +15,7 @@ const STATUS = {
 export function StatusShape(p: StatusShapeProps) {
   return (
     <span
+      style={p.style}
       className={cx(
         "tf-shape",
         "tf-shape-" + (STATUS[p.status] || "ring"),
@@ -29,6 +30,7 @@ export function StatusShape(p: StatusShapeProps) {
 export function StatusIndicator(p: StatusIndicatorProps) {
   return (
     <span
+      style={p.style}
       className={cx("tf-status", p.size === "sm" && "sm", p.className)}
       role={p.label ? undefined : "img"}
       aria-label={p.label ? undefined : p.status}

@@ -75,6 +75,8 @@ export function TextField(p: TextFieldProps) {
   const error = p.error || fromForm;
   return (
     <FormField
+      style={p.style}
+      className={p.className}
       id={id}
       label={p.label}
       required={p.required}
@@ -139,7 +141,7 @@ export function RadioGroup(p: RadioGroupProps) {
   const name = useId("rg"),
     v = useControlled(p.value, p.defaultValue, p.onChange);
   return (
-    <fieldset className={cx("tf-radiogroup", p.cards && "cards", p.className)}>
+    <fieldset style={p.style} className={cx("tf-radiogroup", p.cards && "cards", p.className)}>
       {p.label && <legend className="tf-field-label">{p.label}</legend>}
       <div className="tf-radiogroup-items">
         {(p.options || []).map((o) => {
@@ -189,6 +191,7 @@ export function Segmented(p: SegmentedProps) {
     name = useId("seg");
   return (
     <div
+      style={p.style}
       className={cx("tf-seg", p.size === "sm" && "sm", p.block && "block", p.className)}
       role="radiogroup"
       aria-label={p.label}
@@ -213,7 +216,7 @@ export function Segmented(p: SegmentedProps) {
               }}
             />
             {opt.icon && <Icon name={opt.icon} size={14} />}
-            {opt.label}
+            <span className="tf-seg-label">{opt.label}</span>
           </label>
         );
       })}
@@ -301,6 +304,7 @@ export function Combobox(p: ComboboxProps) {
   };
   return (
     <FormField
+      style={p.style}
       id={id}
       label={p.label}
       required={p.required}
@@ -442,7 +446,14 @@ export function TagInput(p: TagInputProps) {
     q[1]("");
   }
   return (
-    <FormField id={id} label={p.label} hint={p.hint} error={p.error}>
+    <FormField
+      style={p.style}
+      className={p.className}
+      id={id}
+      label={p.label}
+      hint={p.hint}
+      error={p.error}
+    >
       <div
         className="tf-combo-box tf-tags"
         onClick={(e) => {
@@ -562,7 +573,7 @@ export function Calendar(p: CalendarProps) {
     m[1](new Date(first.getFullYear(), first.getMonth() + n, 1));
   }
   return (
-    <div className="tf-cal">
+    <div style={p.style} className={cx("tf-cal", p.className)}>
       <div className="tf-cal-head">
         <IconButton
           icon="chevronLeft"
@@ -671,6 +682,7 @@ export function DatePicker(p: DatePickerProps) {
     : fmtD(v[0] as Date | null, locale);
   return (
     <FormField
+      style={p.style}
       id={id}
       label={p.label}
       required={p.required}
@@ -756,7 +768,14 @@ export function NumberInput(p: NumberInputProps) {
     v[1](Math.round(n * 1000) / 1000);
   }
   return (
-    <FormField id={id} label={p.label} hint={p.hint} error={p.error}>
+    <FormField
+      style={p.style}
+      className={p.className}
+      id={id}
+      label={p.label}
+      hint={p.hint}
+      error={p.error}
+    >
       <div className="tf-number">
         <IconButton
           icon="minus"
@@ -811,7 +830,7 @@ export function Slider(p: SliderProps) {
   const pct = ((v[0] - min) / (max - min)) * 100,
     f = p.format || String;
   return (
-    <FormField id={id} label={p.label} hint={p.hint}>
+    <FormField style={p.style} className={p.className} id={id} label={p.label} hint={p.hint}>
       <div className="tf-slider">
         <div className="tf-slider-track">
           <input
@@ -865,7 +884,8 @@ export function OtpInput(p: OtpInputProps) {
   }
   return (
     <div
-      className={cx("tf-otp", p.error && "invalid")}
+      style={p.style}
+      className={cx("tf-otp", p.error && "invalid", p.className)}
       role="group"
       aria-label={p.label || t.verificationCode}
     >
@@ -983,9 +1003,10 @@ export function FileDrop(p: FileDropProps) {
   }
   return (
     <div
-      className="tf-col"
+      className={cx("tf-col", p.className)}
       style={{
         gap: 12,
+        ...p.style,
       }}
     >
       <div

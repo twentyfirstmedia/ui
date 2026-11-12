@@ -110,14 +110,34 @@ export function Tabs(p: TabsProps) {
 
 export function Breadcrumb(p: BreadcrumbProps) {
   const t = useStrings(NAVIGATION_STRINGS);
-  const items = p.items || [];
+  const items = (p.items || []).map((it) => (typeof it === "string" ? { label: it } : it));
+  const Link = (p.linkAs || "a") as React.ElementType;
   return (
-    <nav className="tf-crumbs" aria-label={t.breadcrumb}>
+    <nav
+      style={p.style}
+      className={cx("tf-crumbs", p.className)}
+      aria-label={p.label || t.breadcrumb}
+    >
       {items.map((it, i) => {
         const last = i === items.length - 1;
+        const click = it.onClick || (p.onNavigate ? () => p.onNavigate?.(i) : undefined);
         return (
           <React.Fragment key={i}>
-            {last ? <span aria-current="page">{it}</span> : <a href="#">{it}</a>}
+            {last ? (
+              <span className="tf-crumb" aria-current="page">
+                {it.label}
+              </span>
+            ) : it.href ? (
+              <Link className="tf-crumb" href={it.href} onClick={it.onClick}>
+                {it.label}
+              </Link>
+            ) : click ? (
+              <button type="button" className="tf-crumb" onClick={click}>
+                {it.label}
+              </button>
+            ) : (
+              <span className="tf-crumb">{it.label}</span>
+            )}
             {!last && <Icon name="chevronRight" size={13} />}
           </React.Fragment>
         );
@@ -142,21 +162,40 @@ export function Pagination(p: PaginationProps) {
     if (i === 1 || i === total || Math.abs(i - cur) <= 1) pages.push(i);
     else if (pages[pages.length - 1] !== "…") pages.push("…");
   }
+  const Link = (p.linkAs || "a") as React.ElementType;
+  const step = (to: number, icon: "chevronLeft" | "chevronRight", label: string) => {
+    const off = to < 1 || to > total;
+    // links cannot be disabled: at the ends the arrow is a disabled button
+    return p.href && !off ? (
+      <IconButton icon={icon} label={label} size="sm" asChild>
+        <Link href={p.href(to)} onClick={() => go(to)} />
+      </IconButton>
+    ) : (
+      <IconButton icon={icon} label={label} size="sm" disabled={off} onClick={() => go(to)} />
+    );
+  };
   return (
-    <nav className="tf-pager" aria-label={t.pagination}>
-      <IconButton
-        icon="chevronLeft"
-        label={t.previousPage}
-        size="sm"
-        onClick={() => {
-          go(cur - 1);
-        }}
-      />
+    <nav
+      style={p.style}
+      className={cx("tf-pager", p.className)}
+      aria-label={p.label || t.pagination}
+    >
+      {step(cur - 1, "chevronLeft", t.previousPage)}
       {pages.map((n, i) =>
         n === "…" ? (
           <span key={"e" + i} className="tf-page" aria-hidden>
             …
           </span>
+        ) : p.href ? (
+          <Link
+            key={n}
+            href={p.href(n)}
+            className="tf-page"
+            aria-current={n === cur ? "page" : undefined}
+            onClick={() => go(n)}
+          >
+            {n}
+          </Link>
         ) : (
           <button
             key={n}
@@ -171,14 +210,7 @@ export function Pagination(p: PaginationProps) {
           </button>
         ),
       )}
-      <IconButton
-        icon="chevronRight"
-        label={t.nextPage}
-        size="sm"
-        onClick={() => {
-          go(cur + 1);
-        }}
-      />
+      {step(cur + 1, "chevronRight", t.nextPage)}
     </nav>
   );
 }

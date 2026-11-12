@@ -15,7 +15,10 @@ export function ChatLauncher(p: ChatLauncherProps) {
   const t = useStrings(SITE_STRINGS);
   const open = useControlled(p.open, false, p.onOpenChange);
   return (
-    <div className={cx("tf-launch", open[0] && "open", p.inline && "inline")}>
+    <div
+      style={p.style}
+      className={cx("tf-launch", open[0] && "open", p.inline && "inline", p.className)}
+    >
       {open[0] && (
         <div className="tf-launch-panel" role="dialog" aria-label={p.title || t.assistant}>
           <div className="tf-launch-head">
@@ -79,7 +82,8 @@ export function CookieConsent(p: CookieConsentProps) {
   }
   return (
     <div
-      className={cx("tf-cookie", p.inline && "inline")}
+      style={p.style}
+      className={cx("tf-cookie", p.inline && "inline", p.className)}
       role="dialog"
       aria-label={p.title || t.privacySettings}
     >
@@ -184,7 +188,11 @@ export function AnnouncementBar(p: AnnouncementBarProps) {
   const shut = React.useState(false);
   if (shut[0]) return null;
   return (
-    <div className={cx("tf-announce", "tf-t-" + (p.tint || "butter"))} role="status">
+    <div
+      style={p.style}
+      className={cx("tf-announce", "tf-t-" + (p.tint || "butter"), p.className)}
+      role="status"
+    >
       {p.icon !== false && <Icon name={p.icon || "sparkle"} size={15} />}
       <span>{p.children}</span>
       {p.action}

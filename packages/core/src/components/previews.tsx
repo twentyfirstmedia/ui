@@ -15,7 +15,7 @@ export function EmailPreview(p: EmailPreviewProps) {
   const t = useStrings(PREVIEWS_STRINGS);
   const dev = useControlled<string>(p.device, "desktop", p.onDevice);
   return (
-    <div className="tf-mailprev">
+    <div style={p.style} className={cx("tf-mailprev", p.className)}>
       <div className="tf-mailprev-head">
         <div className="tf-mailprev-inbox">
           <Avatar name={p.fromName || p.from || ""} size={36} />
@@ -90,7 +90,7 @@ export function SearchAdPreview(p: SearchAdPreviewProps) {
       .map((x) => " › " + x)
       .join("");
   return (
-    <div className="tf-adprev">
+    <div style={p.style} className={cx("tf-adprev", p.className)}>
       <div
         className="tf-row"
         style={{

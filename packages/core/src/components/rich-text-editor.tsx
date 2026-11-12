@@ -487,7 +487,13 @@ export function RichTextEditor(p: RichTextEditorProps) {
         ? "⌘"
         : "Ctrl+";
   return (
-    <FormField label={p.label} hint={p.hint} error={p.error}>
+    <FormField
+      style={p.style}
+      className={p.className}
+      label={p.label}
+      hint={p.hint}
+      error={p.error}
+    >
       <div className={cx("tf-rte", over && "invalid")}>
         <div className="tf-rte-bar" role="toolbar" aria-label={strings.formatting}>
           {tools.map((t, i) => {

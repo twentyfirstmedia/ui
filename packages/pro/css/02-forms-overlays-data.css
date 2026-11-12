@@ -205,7 +205,7 @@
   display: flex;
 }
 .tf-seg.block .tf-seg-item {
-  flex: 1;
+  flex: 1 1 0;
 }
 .tf-seg-item {
   position: relative;
@@ -879,6 +879,7 @@ label.tf-menu-item {
 /* Alert, confirm, toaster */
 .tf-alert {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: 12px;
   padding: 12px 12px 12px 16px;
@@ -922,7 +923,8 @@ label.tf-menu-item {
   color: var(--lilac-ink);
 }
 .tf-alert-body {
-  flex: 1;
+  /* when the alert is too narrow for text and actions, the actions move to their own line */
+  flex: 1 1 200px;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -938,8 +940,11 @@ label.tf-menu-item {
 .tf-alert-actions {
   flex: none;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 4px;
+  max-width: 100%;
+  margin-left: auto;
 }
 .tf-alert .tf-iconbtn-ghost {
   background: transparent;

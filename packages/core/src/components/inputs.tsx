@@ -146,7 +146,7 @@ export function SearchField(p: SearchFieldProps) {
 
 export function Checkbox(p: CheckboxProps) {
   return (
-    <label className="tf-check">
+    <label style={p.style} className={cx("tf-check", p.className)}>
       <span className="tf-checkbox">
         <input
           type="checkbox"
@@ -182,15 +182,16 @@ export function Checkbox(p: CheckboxProps) {
 export function Switch(p: SwitchProps) {
   return (
     <label
-      className="tf-check"
-      style={
-        p.spread
+      className={cx("tf-check", p.className)}
+      style={{
+        ...(p.spread
           ? {
               justifyContent: "space-between",
               width: "100%",
             }
-          : undefined
-      }
+          : undefined),
+        ...p.style,
+      }}
     >
       {p.spread && p.children}
       <input

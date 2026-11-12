@@ -23,7 +23,7 @@ export function ImageVariants(p: ImageVariantsProps) {
   const sel = useControlled<string | number>(p.selected, p.variants?.[0]?.id ?? "", p.onSelect),
     cur: Partial<ImageVariant> = (p.variants || []).find((v) => v.id === sel[0]) || {};
   return (
-    <div className="tf-imgvar">
+    <div style={p.style} className={cx("tf-imgvar", p.className)}>
       <div
         className="tf-imgvar-stage"
         style={
@@ -172,7 +172,7 @@ export function Gallery(p: GalleryProps) {
     </div>
   );
   return (
-    <div className="tf-gallery">
+    <div style={p.style} className={cx("tf-gallery", p.className)}>
       {stage}
       {p.thumbs !== false && n > 1 && (
         <div className="tf-gallery-thumbs" role="tablist" aria-label={t.images}>
@@ -268,9 +268,10 @@ export function BeforeAfter(p: BeforeAfterProps) {
   return (
     <div
       ref={ref}
-      className="tf-ba"
+      className={cx("tf-ba", p.className)}
       style={{
         aspectRatio: p.ratio || "3 / 2",
+        ...p.style,
       }}
       onPointerDown={(e) => {
         drag.current = true;

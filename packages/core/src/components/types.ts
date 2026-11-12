@@ -214,7 +214,10 @@ export interface PanelProps extends BaseProps {
   surface?: Surface;
 }
 export interface PageHeaderProps extends BaseProps {
-  crumbs?: string[];
+  /** A breadcrumb above the title (see `Breadcrumb`): labels, or items with `href`/`onClick`. */
+  crumbs?: (string | Crumb)[];
+  /** The element crumb links render as, e.g. Next.js `Link`. */
+  crumbLinkAs?: ElementType;
   title: string;
   subtitle?: string;
   actions?: ReactNode[];
@@ -225,7 +228,8 @@ export interface NavItem {
   count?: number;
 }
 export interface TopBarProps extends BaseProps {
-  brand?: string;
+  /** The product name, or a node (a logo mark with the name). */
+  brand?: ReactNode;
   tag?: string;
   items: NavItem[];
   active?: string;
@@ -245,6 +249,14 @@ export interface RailItem {
 export interface SideRailProps extends BaseProps {
   top?: RailItem[];
   bottom?: RailItem[];
+  /** Names next to the icons (controlled); every button has a tooltip while collapsed. */
+  expanded?: boolean;
+  defaultExpanded?: boolean;
+  onExpandedChange?: (expanded: boolean) => void;
+  /** A button at the foot that expands and collapses the rail. */
+  toggle?: boolean;
+  /** Accessible name of the rail (default "Tools"). */
+  label?: string;
 }
 export interface FloatingLayoutProps extends BaseProps {
   /** What the UI floats over, filling the layout: a map, a 3D canvas, a video, a photo. */
@@ -304,6 +316,11 @@ export interface TableProps extends BaseProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rows are app data
   rows: Record<string, any>[];
   animate?: boolean;
+  /**
+   * Cards instead of columns when the table's box is narrow (up to 600px): every row stacks its
+   * cells, each with its column label. Without it narrow tables scroll sideways.
+   */
+  stack?: boolean;
 }
 export interface ProgressProps extends BaseProps {
   value: number;
@@ -324,8 +341,21 @@ export interface EmptyStateProps extends BaseProps {
   tint?: Tint;
   action?: ReactNode;
 }
+/** A breadcrumb: a plain label, or one with an address or a handler. */
+export interface Crumb {
+  label: string;
+  href?: string;
+  onClick?: () => void;
+}
 export interface BreadcrumbProps extends BaseProps {
-  items: string[];
+  /** The trail; the last one is the current page. Items with `href` are links, with `onClick` buttons. */
+  items: (string | Crumb)[];
+  /** The element links render as (default `a`), e.g. Next.js `Link`. */
+  linkAs?: ElementType;
+  /** Makes every crumb but the last a button; receives its index. */
+  onNavigate?: (index: number) => void;
+  /** Accessible name of the navigation (default "Breadcrumb"). */
+  label?: string;
 }
 export interface PaginationProps extends BaseProps {
   /** Number of pages. */
@@ -339,10 +369,17 @@ export interface PaginationProps extends BaseProps {
   defaultPage?: number;
   /** A page was picked (previous, next or a number); receives the new 1-based page. */
   onChange?: (page: number) => void;
+  /** Link mode for server-rendered lists: the address of a page; pages become links. */
+  href?: (page: number) => string;
+  /** The element links render as (default `a`), e.g. Next.js `Link`. */
+  linkAs?: ElementType;
+  /** Accessible name of the navigation (default "Pagination"), e.g. "Search results pages". */
+  label?: string;
 }
 export interface AppShellProps extends BaseProps {
   active?: string;
-  brand?: string;
+  /** The product name, or a node (a logo mark with the name; collapsed sidebars show it whole). */
+  brand?: ReactNode;
   tag?: string;
   nav?: NavItem[];
   user?: { name: string; email?: string };
@@ -398,6 +435,18 @@ export interface ListRowProps extends BaseProps {
   unread?: boolean;
   active?: boolean;
   onClick?: () => void;
+  /** Makes the row a link (with `linkAs` for a router's link). */
+  href?: string;
+  linkAs?: ElementType;
+  /**
+   * Buttons of the row's own (rename, remove …), outside the clickable area so nothing interactive
+   * is nested. Without `onClick` and `href` the row is not interactive at all.
+   */
+  actions?: ReactNode;
+  /** Lines the title may take before it ends in an ellipsis (default: it wraps freely). */
+  titleLines?: number;
+  /** Lines the subtitle may take (default 1); badges and facts wrap within them. */
+  subtitleLines?: number;
 }
 export interface TimelineProps extends BaseProps {
   items: {
@@ -975,6 +1024,8 @@ export interface LegendProps extends BaseProps {
 /* ── Kit 3: AI chat & agents ── */
 export interface Source {
   title: string;
+  /** More about the source in a tooltip: dataset, publisher, date ("Stand") … */
+  detail?: ReactNode;
   icon?: IconName;
   url?: string;
   onClick?: () => void;
@@ -1188,6 +1239,11 @@ export interface CheckoutStepsProps extends BaseProps {
   steps?: string[];
   current?: number;
   onPick?: (i: number) => void;
+  /**
+   * Numbers only, with the label of the current step (screen readers still hear every label).
+   * Narrow containers (up to 560px) get this on their own.
+   */
+  compact?: boolean;
 }
 export interface OrderTimelineProps extends BaseProps {
   status: "Placed" | "Paid" | "Packed" | "Shipped" | "Delivered" | "Refunded" | "Cancelled";
@@ -2447,6 +2503,8 @@ export interface ToggleGroupProps extends BaseProps {
   /** Accessible name of the group. */
   label: string;
   size?: "sm" | "md";
+  /** Fills the width and shares it evenly; labels end in an ellipsis when space runs short. */
+  block?: boolean;
 }
 export interface ButtonGroupProps extends BaseProps {
   /** Accessible name of the group. */
@@ -2530,6 +2588,8 @@ export interface SelectMenuProps extends FieldProps, BaseProps {
   onChange?: (value: string) => void;
   placeholder?: string;
   disabled?: boolean;
+  /** `sm`: a compact trigger, e.g. a sort menu next to a heading. */
+  size?: "sm" | "md";
 }
 
 /* ── Navigation ── */

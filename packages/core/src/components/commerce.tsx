@@ -39,14 +39,15 @@ export function ProductArt(p: ProductArtProps) {
   return (
     <span
       className={cx("tf-art", "tf-bg-" + (p.tint || "sky"), p.className)}
-      style={
-        size
+      style={{
+        ...(size
           ? {
               width: size,
               height: size,
             }
-          : undefined
-      }
+          : undefined),
+        ...p.style,
+      }}
       role={p.label ? "img" : undefined}
       aria-label={p.label}
       aria-hidden={p.label ? undefined : true}
@@ -82,7 +83,7 @@ export function Price(p: PriceProps) {
   const { formatPercent } = useFormat();
   const sale = p.compareAt && p.compareAt > p.value;
   return (
-    <span className={cx("tf-price", p.size && "tf-price-" + p.size)}>
+    <span style={p.style} className={cx("tf-price", p.size && "tf-price-" + p.size, p.className)}>
       <b>{money(p.value, p.currency)}</b>
       {sale && <s>{money(p.compareAt ?? 0, p.currency)}</s>}
       {sale && p.showSave !== false && (
@@ -100,7 +101,12 @@ export function Rating(p: RatingProps) {
   const v = p.value || 0,
     shown = formatNumber(v, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   return (
-    <span className="tf-rating" role="img" aria-label={t.ratingLabel(shown, p.count)}>
+    <span
+      style={p.style}
+      className={cx("tf-rating", p.className)}
+      role="img"
+      aria-label={t.ratingLabel(shown, p.count)}
+    >
       <span className="tf-stars" aria-hidden>
         {[0, 1, 2, 3, 4].map((i) => {
           const f = Math.max(0, Math.min(1, v - i));
@@ -141,7 +147,7 @@ export function StockBadge(p: StockBadgeProps) {
 export function ProductCard(p: ProductCardProps) {
   const t = useStrings(COMMERCE_STRINGS);
   return (
-    <div className={cx("tf-product", p.className)} onClick={p.onClick}>
+    <div style={p.style} className={cx("tf-product", p.className)} onClick={p.onClick}>
       <div className="tf-product-media">
         <ProductArt kind={p.art} tint={p.tint} />
         {p.badge && (
@@ -202,7 +208,7 @@ export function VariantPicker(p: VariantPickerProps) {
     color = p.type === "color";
   const cur = opts.find((o) => o.value === v[0]);
   return (
-    <fieldset className="tf-variants">
+    <fieldset style={p.style} className={cx("tf-variants", p.className)}>
       <legend className="tf-field-label">
         {p.label}
         {cur && <span className="tf-variants-cur">{cur.label || cur.value}</span>}
@@ -247,7 +253,7 @@ export function VariantPicker(p: VariantPickerProps) {
 export function CartLine(p: CartLineProps) {
   const t = useStrings(COMMERCE_STRINGS);
   return (
-    <div className="tf-cartline">
+    <div style={p.style} className={cx("tf-cartline", p.className)}>
       <ProductArt kind={p.art} tint={p.tint} size={64} />
       <div className="tf-cartline-text">
         <b>{p.name}</b>
@@ -302,7 +308,7 @@ export function OrderSummary(p: OrderSummaryProps) {
     err = React.useState<string | null>(null),
     toFree = (p.freeShippingFrom || 75) - (sub - disc);
   return (
-    <div className="tf-summary">
+    <div style={p.style} className={cx("tf-summary", p.className)}>
       {p.title !== false && <b className="tf-summary-title">{p.title || t.orderSummary}</b>}
       {p.showLines && (
         <div
@@ -425,7 +431,11 @@ export function CheckoutSteps(p: CheckoutStepsProps) {
   const steps = p.steps || t.checkoutSteps,
     cur = p.current || 0;
   return (
-    <ol className="tf-csteps" aria-label={t.checkoutProgress}>
+    <ol
+      style={p.style}
+      className={cx("tf-csteps", p.compact && "compact", p.className)}
+      aria-label={t.checkoutProgress}
+    >
       {steps.map((s, i) => (
         <li
           key={s}
@@ -440,7 +450,7 @@ export function CheckoutSteps(p: CheckoutStepsProps) {
             }}
           >
             <span className="tf-cstep-n">{i < cur ? <Icon name="check" size={12} /> : i + 1}</span>
-            {s}
+            <span className="tf-cstep-label">{s}</span>
           </button>
         </li>
       ))}
@@ -458,7 +468,7 @@ export function OrderTimeline(p: OrderTimelineProps) {
     times = p.times || {},
     cancelled = p.status === "Cancelled" || p.status === "Refunded";
   return (
-    <div className={cx("tf-otl", cancelled && "cancelled")}>
+    <div style={p.style} className={cx("tf-otl", cancelled && "cancelled", p.className)}>
       {ORDER_STEPS.map((s, i) => {
         const done = !cancelled && i <= cur;
         return (
@@ -491,7 +501,10 @@ export function PlanCard(p: PlanCardProps) {
   const t = useStrings(COMMERCE_STRINGS);
   const money = useMoney();
   return (
-    <div className={cx("tf-plan", p.featured && "featured", p.current && "current")}>
+    <div
+      style={p.style}
+      className={cx("tf-plan", p.featured && "featured", p.current && "current", p.className)}
+    >
       {p.featured && <span className="tf-plan-flag">{p.flag || t.mostPopular}</span>}
       <div className="tf-plan-head">
         <b>{p.name}</b>

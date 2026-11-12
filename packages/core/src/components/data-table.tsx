@@ -7,7 +7,7 @@ import { cx } from "../cx.js";
 import { SearchField } from "./inputs.js";
 import { Popover, Tooltip } from "./overlays.js";
 import { Menu } from "./feedback.js";
-import type { DataTableProps, FilterBarProps, FilterDef } from "./types.js";
+import type { BaseProps, DataTableProps, FilterBarProps, FilterDef } from "./types.js";
 
 /* ── Data table: sort, select + bulk bar, column toggles, sticky head, expandable rows ── */
 export function FilterBar(p: FilterBarProps) {
@@ -22,7 +22,7 @@ export function FilterBar(p: FilterBarProps) {
   }
   const avail = (p.filters || []).filter((f) => keys.indexOf(f.key) < 0);
   return (
-    <div className="tf-filterbar">
+    <div style={p.style} className={cx("tf-filterbar", p.className)}>
       {p.search && (
         <SearchField
           placeholder={p.search}
@@ -120,10 +120,12 @@ export function FilterBar(p: FilterBarProps) {
   );
 }
 
-export function AddFilterMenu(p: {
-  avail: FilterDef[];
-  onPick?: (key: string, option: string) => void;
-}) {
+export function AddFilterMenu(
+  p: BaseProps & {
+    avail: FilterDef[];
+    onPick?: (key: string, option: string) => void;
+  },
+) {
   const t = useStrings(DATA_TABLE_STRINGS);
   const step = React.useState<FilterDef | null>(null);
   const cur = step[0];
@@ -150,6 +152,8 @@ export function AddFilterMenu(p: {
     );
   return (
     <Menu
+      style={p.style}
+      className={p.className}
       items={p.avail.map((f) => ({
         label: f.label,
         icon: f.icon || "filter",
@@ -224,7 +228,7 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
   const span = vis.length + (p.selectable ? 1 : 0) + (p.renderExpanded ? 1 : 0);
   const selRows = rows.filter((r) => selected.indexOf(r[rk]) >= 0);
   return (
-    <div className={cx("tf-dt", p.className)}>
+    <div className={cx("tf-dt", p.className)} style={p.style}>
       {(p.toolbar || p.columnToggle !== false) && (
         <div className="tf-dt-toolbar">
           {p.toolbar}

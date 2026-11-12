@@ -76,6 +76,7 @@ export function IconButton(props: NativeRest<IconButtonProps>) {
 export function Chip(p: ChipProps) {
   return (
     <button
+      style={p.style}
       type="button"
       className={cx("tf-chip", p.className)}
       aria-pressed={p.selected ? "true" : "false"}
@@ -101,6 +102,7 @@ export function Badge(p: BadgeProps) {
   const tone = (p.tone && TONE_ALIAS[p.tone]) || p.tone || "neutral";
   return (
     <span
+      style={p.style}
       className={cx(
         "tf-badge",
         "tf-badge-" + tone,
@@ -120,14 +122,15 @@ export function TintIcon(p: TintIconProps) {
       className={cx("tf-tinticon", "tf-t-" + (p.tint || "plain"), p.className)}
       aria-hidden={p.label ? undefined : true}
       title={p.label}
-      style={
-        p.size
+      style={{
+        ...(p.size
           ? {
               width: p.size,
               height: p.size,
             }
-          : undefined
-      }
+          : undefined),
+        ...p.style,
+      }}
     >
       <Icon name={p.icon} />
     </span>
@@ -148,6 +151,7 @@ export function Avatar(p: AvatarProps) {
         // a custom property, so a kit can recolour avatars (Pro keeps them monochrome)
         ["--av" as string]: "var(--" + t + ")",
         fontSize: Math.round(size * 0.36),
+        ...p.style,
       }}
       title={p.name}
     >
@@ -161,7 +165,7 @@ export function AvatarStack(p: AvatarStackProps) {
     max = p.max || 4,
     extra = names.length - max;
   return (
-    <span className="tf-avatar-stack">
+    <span style={p.style} className={cx("tf-avatar-stack", p.className)}>
       {names.slice(0, max).map((n) => (
         <Avatar key={n} name={n} size={p.size || 28} />
       ))}

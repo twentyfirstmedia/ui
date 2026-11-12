@@ -77,7 +77,7 @@ export function CountUp(p: CountUpProps) {
     };
   }, [p.value, locale]);
   return (
-    <span ref={el} className={p.className}>
+    <span style={p.style} ref={el} className={p.className}>
       {st[0]}
     </span>
   );
@@ -86,6 +86,7 @@ export function StatTile(p: StatTileProps) {
   const tint = p.tint || "sky";
   return (
     <div
+      style={p.style}
       className={cx(
         "tf-stat",
         tint === "placeholder" ? "tf-stat-placeholder" : "tf-bg-" + tint,
@@ -150,7 +151,7 @@ export function EventCard(p: EventCardProps) {
   const k = KIND[p.kind || "meeting"] || (KIND.meeting as [IconName, Tint]),
     tint = p.tint || k[1];
   return (
-    <div className={cx("tf-event", "tf-bg-" + tint, p.className)}>
+    <div style={p.style} className={cx("tf-event", "tf-bg-" + tint, p.className)}>
       <div className="tf-event-head">
         <span className="tf-event-kind">
           <Icon name={p.icon || k[0]} size={14} />
@@ -195,7 +196,7 @@ export function Panel(p: PanelProps) {
 }
 export function PageHeader(p: PageHeaderProps) {
   return (
-    <header className="tf-header">
+    <header style={p.style} className={cx("tf-header", p.className)}>
       <div>
         {p.crumbs && (
           <div
@@ -203,7 +204,7 @@ export function PageHeader(p: PageHeaderProps) {
               marginBottom: 8,
             }}
           >
-            <Breadcrumb items={p.crumbs} />
+            <Breadcrumb items={p.crumbs} linkAs={p.crumbLinkAs} />
           </div>
         )}
         <h1 className="tf-header-title">{p.title}</h1>
@@ -255,8 +256,12 @@ export function Table(p: TableProps) {
   const box = React.useRef<HTMLDivElement>(null);
   useScrollFocus(box);
   return (
-    <div ref={box} className="tf-table-scroll">
-      <table className="tf-table">
+    <div
+      style={p.style}
+      ref={box}
+      className={cx("tf-table-scroll", p.stack && "tf-table-stackbox", p.className)}
+    >
+      <table className={cx("tf-table", p.stack && "stack")}>
         <thead>
           <tr>
             {cols.map((c) => (
@@ -287,7 +292,11 @@ export function Table(p: TableProps) {
           {(p.rows || []).map((r, i) => (
             <tr key={i}>
               {cols.map((c) => (
-                <td key={c.key} className={c.align === "right" ? "tf-num" : undefined}>
+                <td
+                  key={c.key}
+                  className={c.align === "right" ? "tf-num" : undefined}
+                  data-label={p.stack ? c.label : undefined}
+                >
                   {c.render ? c.render(r) : r[c.key]}
                 </td>
               ))}
@@ -300,34 +309,42 @@ export function Table(p: TableProps) {
 }
 export function ListRow(p: ListRowProps) {
   const t = useStrings(DATA_DISPLAY_STRINGS);
-  return (
-    <button
-      type="button"
-      className="tf-row-item"
-      aria-current={p.active ? "true" : undefined}
-      onClick={p.onClick}
-    >
+  const Link = (p.linkAs || "a") as React.ElementType;
+  const interactive = !!(p.onClick || p.href);
+  const lines = (n: number | undefined) =>
+    n ? ({ "--lines": n } as React.CSSProperties) : undefined;
+  const title = (
+    <span className={cx("tf-row-title", p.titleLines && "clamp")} style={lines(p.titleLines)}>
+      {p.unread && <span className="tf-unread" role="img" aria-label={t.unread} />}
+      {p.titleLines ? <span className="tf-row-clamp">{p.title}</span> : p.title}
+    </span>
+  );
+  const content = (hit: boolean) => (
+    <>
       {p.leading ||
         (p.avatar ? (
           <Avatar name={p.avatar} size={36} />
         ) : (
           <TintIcon icon={p.icon || "mail"} tint={p.tint || "plain"} size={36} />
         ))}
-      <span
-        style={{
-          minWidth: 0,
-        }}
-      >
-        <span className="tf-row-title">
-          {p.unread && <span className="tf-unread" role="img" aria-label={t.unread} />}
-          {p.title}
-        </span>
+      <span className="tf-row-text">
+        {hit && interactive ? (
+          p.href ? (
+            <Link className="tf-row-hit" href={p.href} onClick={p.onClick}>
+              {title}
+            </Link>
+          ) : (
+            <button type="button" className="tf-row-hit" onClick={p.onClick}>
+              {title}
+            </button>
+          )
+        ) : (
+          title
+        )}
         {p.subtitle && (
           <span
-            className="tf-row-sub"
-            style={{
-              display: "block",
-            }}
+            className={cx("tf-row-sub", (p.subtitleLines || 1) > 1 && "clamp")}
+            style={lines(p.subtitleLines)}
           >
             {p.subtitle}
           </span>
@@ -337,18 +354,59 @@ export function ListRow(p: ListRowProps) {
         {p.meta}
         {p.trailing}
       </span>
+      {p.actions && <span className="tf-row-actions">{p.actions}</span>}
+    </>
+  );
+  // own buttons, or nothing to click: a plain row (with a stretched hit area when interactive)
+  if (p.actions || !interactive)
+    return (
+      <div
+        style={p.style}
+        className={cx(
+          "tf-row-item",
+          interactive ? "has-hit" : "static",
+          p.actions && "has-actions",
+          p.className,
+        )}
+        aria-current={p.active ? "true" : undefined}
+      >
+        {content(true)}
+      </div>
+    );
+  if (p.href)
+    return (
+      <Link
+        href={p.href}
+        style={p.style}
+        className={cx("tf-row-item", p.className)}
+        aria-current={p.active ? "true" : undefined}
+        onClick={p.onClick}
+      >
+        {content(false)}
+      </Link>
+    );
+  return (
+    <button
+      style={p.style}
+      type="button"
+      className={cx("tf-row-item", p.className)}
+      aria-current={p.active ? "true" : undefined}
+      onClick={p.onClick}
+    >
+      {content(false)}
     </button>
   );
 }
 export function Timeline(p: TimelineProps) {
   return (
     <ol
-      className="tf-timeline tf-stagger"
-      style={
-        {
+      className={cx("tf-timeline tf-stagger", p.className)}
+      style={{
+        ...({
           "--base": (p.delay || 200) + "ms",
-        } as React.CSSProperties
-      }
+        } as React.CSSProperties),
+        ...p.style,
+      }}
     >
       {(p.items || []).map((it, i) => (
         <li key={i} className="tf-tl-item">
@@ -377,7 +435,7 @@ export function FileRow(p: FileRowProps) {
   const strings = useStrings(DATA_DISPLAY_STRINGS);
   const t = FT[p.kind || "doc"] || (FT.doc as [IconName, Tint]);
   return (
-    <div className="tf-file">
+    <div style={p.style} className={cx("tf-file", p.className)}>
       <TintIcon icon={t[0]} tint={t[1]} />
       <div
         style={{
@@ -395,7 +453,7 @@ export function FileRow(p: FileRowProps) {
 export function KanbanColumn(p: KanbanColumnProps) {
   const t = useStrings(DATA_DISPLAY_STRINGS);
   return (
-    <section className="tf-kanban" aria-label={p.title}>
+    <section style={p.style} className={cx("tf-kanban", p.className)} aria-label={p.title}>
       <div className="tf-kanban-head">
         <span
           className="tf-row"
@@ -442,7 +500,8 @@ export function Progress(p: ProgressProps) {
   const v = Math.max(0, Math.min(100, p.value || 0));
   return (
     <div
-      className={cx("tf-progress", p.tint && "tf-progress-" + p.tint)}
+      style={p.style}
+      className={cx("tf-progress", p.tint && "tf-progress-" + p.tint, p.className)}
       role="progressbar"
       aria-valuenow={v}
       aria-valuemin={0}
@@ -468,10 +527,11 @@ export function ProgressRing(p: ProgressRingProps) {
     on = useMounted(150);
   return (
     <div
-      className="tf-ring"
+      className={cx("tf-ring", p.className)}
       style={{
         width: size,
         height: size,
+        ...p.style,
       }}
       role="img"
       aria-label={(p.label || t.progress) + " " + formatPercent(v, { maximumFractionDigits: 2 })}

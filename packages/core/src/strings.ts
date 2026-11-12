@@ -192,6 +192,10 @@ export interface UIStrings {
   /* Shell: SideRail, Dock */
   tools: string;
   quickActions: string;
+  /** SideRail toggle: show the names next to the icons */
+  expandRail: string;
+  /** SideRail toggle: back to icons only */
+  collapseRail: string;
   /* Site: ChatLauncher, CookieConsent */
   assistant: string;
   openAssistant: string;
@@ -1355,9 +1359,14 @@ export const SELECT_MENU_STRINGS: Pick<UIStrings, "options"> = {
 };
 
 /** Strings of the components in `shell.tsx`. */
-export const SHELL_STRINGS: Pick<UIStrings, "tools" | "quickActions"> = {
+export const SHELL_STRINGS: Pick<
+  UIStrings,
+  "tools" | "quickActions" | "expandRail" | "collapseRail"
+> = {
   tools: "Tools",
   quickActions: "Quick actions",
+  expandRail: "Show names",
+  collapseRail: "Icons only",
 };
 
 /** Strings of the components in `site.tsx`. */

@@ -38,6 +38,7 @@ export function Skeleton(p: SkeletonProps) {
       style={{
         width: p.width,
         height: p.height || (v === "circle" ? p.width : undefined),
+        ...p.style,
       }}
     />
   );
@@ -185,7 +186,7 @@ export function Modal(p: ModalProps) {
   const pr = usePresence(p.open ?? true);
   if (!pr.mounted) return null;
   return (
-    <div {...leaving(pr.closing)} className="tf-modal-wrap" style={p.style}>
+    <div {...leaving(pr.closing)} className={cx("tf-modal-wrap", p.className)} style={p.style}>
       <div className="tf-backdrop" aria-hidden />
       <div className="tf-modal" role="dialog" aria-modal="true" aria-label={p.title}>
         <span className="tf-modal-close">
@@ -214,7 +215,7 @@ export function Modal(p: ModalProps) {
 
 export function Toast(p: ToastProps) {
   return (
-    <div className="tf-toast" role="status">
+    <div style={p.style} className={cx("tf-toast", p.className)} role="status">
       <TintIcon icon={p.icon || "check"} tint={p.tint || "mint"} />
       {p.children}
       {p.action && (
@@ -228,7 +229,7 @@ export function Toast(p: ToastProps) {
 
 export function EmptyState(p: EmptyStateProps) {
   return (
-    <div className="tf-empty tf-in">
+    <div style={p.style} className={cx("tf-empty tf-in", p.className)}>
       <TintIcon icon={p.icon || "sparkle"} tint={p.tint || "sky"} size={44} />
       <p className="tf-empty-title">{p.title}</p>
       {p.text && <p className="tf-empty-text">{p.text}</p>}
@@ -258,6 +259,7 @@ export function Alert(p: AlertProps) {
   const tone = p.tone || "info";
   return (
     <div
+      style={p.style}
       className={cx("tf-alert", "tf-alert-" + tone, p.className)}
       role={tone === "danger" || tone === "warning" ? "alert" : "status"}
     >

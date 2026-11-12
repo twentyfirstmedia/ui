@@ -99,6 +99,22 @@
   padding-bottom: 10px;
   color: var(--ink-muted);
 }
+/* in a narrow column (a filter sidebar) the number fields give their padding to the digits */
+.tf-range {
+  container: tf-range / inline-size;
+}
+@container tf-range (max-width: 280px) {
+  .tf-range-inputs {
+    gap: 4px;
+  }
+  .tf-range-num .tf-input {
+    padding-left: 10px;
+    padding-right: 24px;
+  }
+  .tf-range-num > span {
+    right: 10px;
+  }
+}
 .tf-range-vals {
   display: flex;
   justify-content: space-between;
