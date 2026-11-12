@@ -26,6 +26,13 @@ export default function Preview() {
       label="Shipments"
       height={520}
       background={<MapView label="Shipments by hub" bubbles points={hubs} height="100%" />}
+      controls={
+        <div className="tf-col" style={{ gap: 8 }}>
+          <IconButton icon="plus" label="Zoom in" variant="outline" />
+          <IconButton icon="minus" label="Zoom out" variant="outline" />
+        </div>
+      }
+      attribution="© OpenStreetMap contributors"
       top={
         <>
           <SearchField placeholder="Search hubs" style={{ flex: "1 1 220px", maxWidth: 360 }} />

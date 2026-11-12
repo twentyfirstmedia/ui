@@ -53,11 +53,13 @@ export function ListingCard(p: ListingCardProps) {
   const x = p.listing || p;
   return (
     <article
+      style={p.style}
       className={cx(
         "tf-listing",
         p.layout === "row" && "row",
         p.selected && "selected",
         x.status === "unread" && "unread",
+        p.className,
       )}
       onClick={
         p.onOpen &&
@@ -168,7 +170,7 @@ export function ResultsToolbar(p: ResultsToolbarProps) {
   const all = p.total > 0 && p.selected === p.total,
     some = (p.selected ?? 0) > 0 && !all;
   return (
-    <div className="tf-results">
+    <div style={p.style} className={cx("tf-results", p.className)}>
       {p.onSelectAll && (
         <label className="tf-check">
           {cbox({
@@ -248,7 +250,7 @@ export function SavedSearch(p: SavedSearchProps) {
   const t = useStrings(REAL_ESTATE_STRINGS);
   const { formatNumber } = useFormat();
   return (
-    <div className={cx("tf-saved", p.enabled === false && "off")}>
+    <div style={p.style} className={cx("tf-saved", p.enabled === false && "off", p.className)}>
       <div className="tf-saved-head">
         <TintIcon icon={p.icon || "search"} tint={p.tint || "sky"} size={36} />
         <div
@@ -318,7 +320,7 @@ export function ValuationCard(p: ValuationCardProps) {
             ? ["warn", t.mediumConfidence]
             : ["danger", t.lowConfidence];
   return (
-    <div className="tf-valuation">
+    <div style={p.style} className={cx("tf-valuation", p.className)}>
       <div className="tf-valuation-head">
         <span
           className="tf-menu-label"
@@ -403,7 +405,8 @@ export function EnergyClass(p: EnergyClassProps) {
     i = scale.indexOf(p.value);
   return (
     <div
-      className="tf-energy"
+      style={p.style}
+      className={cx("tf-energy", p.className)}
       role="img"
       aria-label={
         t.energyClass(p.value) + (p.kwh != null ? ", " + formatNumber(p.kwh) + " kWh/(m²·a)" : "")

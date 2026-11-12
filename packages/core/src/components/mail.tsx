@@ -30,6 +30,8 @@ export function AccountSwitcher(p: AccountSwitcherProps) {
   const cur = (p.accounts || []).find((a) => a.address === p.value);
   return (
     <Popover
+      style={p.style}
+      className={p.className}
       width={320}
       trigger={(s) => (
         <button
@@ -103,7 +105,7 @@ export function AccountSwitcher(p: AccountSwitcherProps) {
 export function InboxList(p: InboxListProps) {
   const t = useStrings(MAIL_STRINGS);
   return (
-    <div className="tf-inboxlist" role="list">
+    <div style={p.style} className={cx("tf-inboxlist", p.className)} role="list">
       {(p.items || []).map((m) => (
         <button
           key={m.id}
@@ -149,7 +151,7 @@ export function MailThread(p: MailThreadProps) {
     (p.messages || []).length ? [p.messages[p.messages.length - 1].id] : [],
   );
   return (
-    <div className="tf-thread">
+    <div style={p.style} className={cx("tf-thread", p.className)}>
       {p.subject && <h3 className="tf-thread-subject">{p.subject}</h3>}
       {(p.messages || []).map((m) => {
         const o = open[0].indexOf(m.id) > -1;
@@ -213,7 +215,7 @@ export function SignatureEditor(p: SignatureEditorProps) {
     v[1](n);
   }
   return (
-    <div className="tf-sig">
+    <div style={p.style} className={cx("tf-sig", p.className)}>
       <div
         className="tf-col"
         style={{
@@ -257,6 +259,8 @@ export function SignatureEditor(p: SignatureEditorProps) {
 export function AttachmentPreview(p: AttachmentPreviewProps) {
   return (
     <Drawer
+      style={p.style}
+      className={p.className}
       title={p.name}
       subtitle={p.meta}
       onClose={p.onClose}

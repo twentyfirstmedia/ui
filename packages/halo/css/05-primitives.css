@@ -207,6 +207,14 @@
 .tf-togglegroup .tf-toggle {
   height: 32px;
 }
+.tf-togglegroup.block {
+  display: flex;
+  flex-wrap: nowrap;
+  width: auto;
+}
+.tf-togglegroup.block .tf-toggle {
+  flex: 1 1 0;
+}
 .tf-togglegroup .tf-toggle.icon {
   width: 32px;
 }
@@ -416,6 +424,11 @@
   width: 100%;
   text-align: left;
   cursor: pointer;
+}
+.tf-selectmenu.sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
 }
 .tf-selectmenu.empty .tf-selectmenu-value {
   color: var(--ink-subtle);

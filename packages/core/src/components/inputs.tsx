@@ -129,24 +129,60 @@ export function Textarea(p: TextareaProps) {
 
 export function SearchField(p: SearchFieldProps) {
   const t = useStrings();
+  const input = React.useRef<HTMLInputElement>(null);
+  // ⌘K / Ctrl+K: the last character of the hint is the key
+  const key = p.bindShortcut && p.shortcut ? p.shortcut.trim().slice(-1).toLowerCase() : "";
+  React.useEffect(() => {
+    if (!key) return;
+    const k = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || e.altKey || e.key.toLowerCase() !== key) return;
+      const el = e.target as HTMLElement | null;
+      const typing =
+        !!el &&
+        el !== input.current &&
+        (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
+      if (typing) return;
+      e.preventDefault();
+      input.current?.focus();
+      input.current?.select();
+    };
+    document.addEventListener("keydown", k);
+    return () => document.removeEventListener("keydown", k);
+  }, [key]);
   return (
     <label className={cx("tf-search", p.className)} style={p.style}>
       <Icon name="search" size={15} />
       <input
+        ref={input}
         type="search"
+        id={p.id}
+        name={p.name}
+        autoFocus={p.autoFocus}
         placeholder={p.placeholder || t.search}
         aria-label={p.label || p.placeholder || t.search}
+        aria-keyshortcuts={
+          key ? `Meta+${key.toUpperCase()} Control+${key.toUpperCase()}` : undefined
+        }
         value={p.value}
+        defaultValue={p.defaultValue}
         onChange={p.onChange}
+        onKeyDown={p.onKeyDown}
+        onFocus={p.onFocus}
+        onBlur={p.onBlur}
+        {...p.inputProps}
       />
-      {p.shortcut && <span className="tf-kbd">{p.shortcut}</span>}
+      {p.shortcut && (
+        <span className="tf-kbd" aria-hidden>
+          {p.shortcut}
+        </span>
+      )}
     </label>
   );
 }
 
 export function Checkbox(p: CheckboxProps) {
   return (
-    <label className="tf-check">
+    <label style={p.style} className={cx("tf-check", p.className)}>
       <span className="tf-checkbox">
         <input
           type="checkbox"
@@ -182,15 +218,16 @@ export function Checkbox(p: CheckboxProps) {
 export function Switch(p: SwitchProps) {
   return (
     <label
-      className="tf-check"
-      style={
-        p.spread
+      className={cx("tf-check", p.className)}
+      style={{
+        ...(p.spread
           ? {
               justifyContent: "space-between",
               width: "100%",
             }
-          : undefined
-      }
+          : undefined),
+        ...p.style,
+      }}
     >
       {p.spread && p.children}
       <input

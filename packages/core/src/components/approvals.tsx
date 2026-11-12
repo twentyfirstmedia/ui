@@ -109,6 +109,7 @@ export function ApprovalCard(p: ApprovalCardProps) {
   }
   return (
     <div
+      style={p.style}
       ref={ref}
       className={cx("tf-approval", p.compact && "compact", p.className)}
       tabIndex={0}
@@ -219,7 +220,8 @@ export function ApprovalInbox(p: ApprovalInboxProps) {
   const items = (p.items || []).slice().sort((a, b) => (b.ageMin || 0) - (a.ageMin || 0));
   return (
     <div
-      className="tf-inbox"
+      style={p.style}
+      className={cx("tf-inbox", p.className)}
       role="listbox"
       aria-label={p.label || t.approvals}
       onKeyDown={(e) => {

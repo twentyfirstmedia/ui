@@ -38,7 +38,7 @@ export function ConnectionCard(p: ConnectionCardProps) {
       } as Record<string, Status>
     )[p.status] || "idle";
   return (
-    <div className="tf-conn">
+    <div style={p.style} className={cx("tf-conn", p.className)}>
       <span className="tf-conn-ico">{p.logo || <Icon name={p.icon || "link"} size={18} />}</span>
       <span className="tf-option-text">
         <b>{p.name}</b>
@@ -54,7 +54,7 @@ export function ConnectionBanner(p: ConnectionBannerProps) {
   const t = useStrings(OPERATIONS_STRINGS);
   if (!p.state || p.state === "online") return null;
   return (
-    <div className={cx("tf-connbanner", p.state)} role="status">
+    <div style={p.style} className={cx("tf-connbanner", p.state, p.className)} role="status">
       <StatusShape status={p.state === "offline" ? "danger" : "warn"} />
       <span>{p.text || (p.state === "offline" ? t.offline : t.connectionLost(p.seconds))}</span>
       {p.onRetry && (
@@ -69,7 +69,7 @@ export function ConnectionBanner(p: ConnectionBannerProps) {
 export function ServerCard(p: ServerCardProps) {
   const t = useStrings(OPERATIONS_STRINGS);
   return (
-    <div className="tf-server">
+    <div style={p.style} className={cx("tf-server", p.className)}>
       <div className="tf-server-top">
         <span className="tf-conn-ico">{p.logo || <Icon name="server" size={18} />}</span>
         <span className="tf-option-text">
@@ -104,7 +104,12 @@ export function ServerCard(p: ServerCardProps) {
 export function DeployPipeline(p: DeployPipelineProps) {
   const t = useStrings(OPERATIONS_STRINGS);
   return (
-    <ol className="tf-pipeline" tabIndex={0} aria-label={t.deployPipeline}>
+    <ol
+      style={p.style}
+      className={cx("tf-pipeline", p.className)}
+      tabIndex={0}
+      aria-label={t.deployPipeline}
+    >
       {(p.stages || []).map((s, i) => (
         <li key={i} className={cx("tf-stage", "st-" + (s.status || "idle"))}>
           <StatusShape status={s.status === "done" ? "ok" : s.status || "idle"} />
@@ -121,6 +126,8 @@ export function DnsRecordTable(p: DnsRecordTableProps) {
   const t = useStrings(OPERATIONS_STRINGS);
   return (
     <DataTable
+      style={p.style}
+      className={p.className}
       rows={p.records || []}
       rowKey="id"
       columnToggle={false}
@@ -221,7 +228,7 @@ export function DnsRecordTable(p: DnsRecordTableProps) {
 export function DomainList(p: DomainListProps) {
   const t = useStrings(OPERATIONS_STRINGS);
   return (
-    <div className="tf-domains">
+    <div style={p.style} className={cx("tf-domains", p.className)}>
       {(p.items || [])
         .slice()
         .sort((a, b) => (a.days == null ? 9999 : a.days) - (b.days == null ? 9999 : b.days))
@@ -262,7 +269,7 @@ export function MailAuthStatus(p: MailAuthStatusProps) {
   const box = React.useRef<HTMLDivElement>(null);
   useScrollFocus(box);
   return (
-    <div ref={box} className="tf-scroll-x">
+    <div style={p.style} ref={box} className={cx("tf-scroll-x", p.className)}>
       <table className="tf-table tf-mailauth">
         <thead>
           <tr>
@@ -310,6 +317,8 @@ export function LedgerTable(p: LedgerTableProps) {
   const cur = p.currency;
   return (
     <DataTable
+      style={p.style}
+      className={p.className}
       rows={p.rows || []}
       selectable={p.selectable}
       bulkActions={p.bulkActions}
@@ -427,7 +436,7 @@ export function PnLStatement(p: PnLStatementProps) {
   const box = React.useRef<HTMLDivElement>(null);
   useScrollFocus(box);
   return (
-    <div ref={box} className="tf-scroll-x">
+    <div style={p.style} ref={box} className={cx("tf-scroll-x", p.className)}>
       <table className="tf-table tf-pnl">
         <thead>
           <tr>
@@ -476,7 +485,7 @@ export function ReceiptSuggestion(p: ReceiptSuggestionProps) {
   const t = useStrings(OPERATIONS_STRINGS);
   const { formatPercent } = useFormat();
   return (
-    <div className="tf-receipt">
+    <div style={p.style} className={cx("tf-receipt", p.className)}>
       <div className="tf-receipt-src">
         <TintIcon icon="paperclip" tint="sky" />
         <span className="tf-option-text">

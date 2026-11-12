@@ -8,6 +8,7 @@ import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { CountUp } from "./data-display.js";
 import type {
+  BaseProps,
   AreaChartProps,
   BarChartProps,
   DonutProps,
@@ -37,7 +38,7 @@ export function BarChart(p: BarChartProps) {
     bw = Math.max(1, Math.min(p.barWidth || 28, gw * 0.62)),
     ticks = [0, 0.5, 1];
   return (
-    <div ref={mw[0]} className="tf-chart-wrap">
+    <div style={p.style} ref={mw[0]} className={cx("tf-chart-wrap", p.className)}>
       <svg
         className="tf-chart"
         width={W}
@@ -117,7 +118,7 @@ export function LineChart(p: LineChartProps) {
     return vals.map((v, i) => (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1)).join(" ");
   }
   return (
-    <div ref={mw[0]} className="tf-chart-wrap">
+    <div style={p.style} ref={mw[0]} className={cx("tf-chart-wrap", p.className)}>
       <svg
         className="tf-chart"
         width={W}
@@ -202,7 +203,8 @@ export function Sparkline(p: SparklineProps) {
     .join(" ");
   return (
     <svg
-      className="tf-chart"
+      style={p.style}
+      className={cx("tf-chart", p.className)}
       viewBox={"0 0 " + W + " " + Hh}
       width={W}
       height={Hh}
@@ -233,9 +235,10 @@ export function Donut(p: DonutProps) {
   const gap = data.length > 1 ? 6 : 0;
   return (
     <div
-      className="tf-donut"
+      className={cx("tf-donut", p.className)}
       style={{
         gap: 24,
+        ...p.style,
       }}
     >
       <div
@@ -323,7 +326,7 @@ export function Donut(p: DonutProps) {
 }
 
 /* ── More charts ── */
-export interface ChartTipProps {
+export interface ChartTipProps extends BaseProps {
   x: number;
   y: number;
   title: React.ReactNode;
@@ -336,10 +339,11 @@ export interface ChartTipProps {
 export function ChartTip(p: ChartTipProps) {
   return (
     <div
-      className="tf-chart-tip"
+      className={cx("tf-chart-tip", p.className)}
       style={{
         left: p.x,
         top: p.y,
+        ...p.style,
       }}
     >
       <b>{p.title}</b>
@@ -355,7 +359,7 @@ export function ChartTip(p: ChartTipProps) {
 }
 export function Legend(p: LegendProps) {
   return (
-    <div className="tf-legend">
+    <div style={p.style} className={cx("tf-legend", p.className)}>
       {(p.items || []).map((s) => (
         <span key={s.name || s.label}>
           <i className={"tf-sw tf-sw-" + (s.tint || "ink")} />
@@ -381,7 +385,7 @@ export function StackedBarChart(p: StackedBarChartProps) {
     gw = Math.max(1, (W - pad) / n),
     bw = Math.max(1, Math.min(p.barWidth || 28, gw * 0.62));
   return (
-    <div ref={mw[0]} className="tf-chart-wrap tf-chart-hover">
+    <div style={p.style} ref={mw[0]} className={cx("tf-chart-wrap tf-chart-hover", p.className)}>
       <svg
         className="tf-chart"
         width={W}
@@ -573,7 +577,7 @@ export function AreaChart(p: AreaChartProps) {
     return Hh - (v / max) * (Hh - 12);
   }
   return (
-    <div ref={mw[0]} className="tf-chart-wrap tf-chart-hover">
+    <div style={p.style} ref={mw[0]} className={cx("tf-chart-wrap tf-chart-hover", p.className)}>
       <svg
         className="tf-chart"
         width={W}
@@ -691,7 +695,7 @@ export function Heatmap(p: HeatmapProps) {
     return v <= 0 ? 0 : Math.min(4, Math.ceil((v / max) * 4));
   }
   return (
-    <div className="tf-heat-wrap">
+    <div style={p.style} className={cx("tf-heat-wrap", p.className)}>
       <div
         className="tf-heat"
         style={{
@@ -763,7 +767,7 @@ export function Funnel(p: FunnelProps) {
     f = p.format || ((v) => formatNumber(v)),
     on = useMounted(120);
   return (
-    <div className="tf-funnel">
+    <div style={p.style} className={cx("tf-funnel", p.className)}>
       {steps.map((s, i) => {
         const pct = (s.value / top) * 100,
           conv = i ? (s.value / (steps[i - 1].value || 1)) * 100 : null;
@@ -819,9 +823,10 @@ export function Gauge(p: GaugeProps) {
       : "ink");
   return (
     <div
-      className="tf-gauge"
+      className={cx("tf-gauge", p.className)}
       style={{
         width: size,
+        ...p.style,
       }}
     >
       <svg

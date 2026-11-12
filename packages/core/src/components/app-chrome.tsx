@@ -19,7 +19,11 @@ import type {
 export function MobileTabBar(p: MobileTabBarProps) {
   const t = useStrings(APP_CHROME_STRINGS);
   return (
-    <nav className="tf-tabbar" aria-label={p.label || t.mainNavigation}>
+    <nav
+      style={p.style}
+      className={cx("tf-tabbar", p.className)}
+      aria-label={p.label || t.mainNavigation}
+    >
       {(p.items || []).map((it) => {
         const on = it.id === p.active;
         return (
@@ -36,7 +40,7 @@ export function MobileTabBar(p: MobileTabBarProps) {
               <Icon name={it.icon} size={20} />
               {it.count ? <span className="tf-dotcount">{it.count}</span> : null}
             </span>
-            <span>{it.label}</span>
+            <span className="tf-tabbar-label">{it.label}</span>
           </button>
         );
       })}
@@ -46,7 +50,7 @@ export function MobileTabBar(p: MobileTabBarProps) {
 
 export function PushNotification(p: PushNotificationProps) {
   return (
-    <div className="tf-push">
+    <div style={p.style} className={cx("tf-push", p.className)}>
       <div className="tf-push-top">
         <span className="tf-push-app">{p.app}</span>
         <small>{p.time}</small>
@@ -76,7 +80,7 @@ export function ConfigPRSummary(p: ConfigPRSummaryProps) {
     file: "file",
   };
   return (
-    <div className="tf-prsum">
+    <div style={p.style} className={cx("tf-prsum", p.className)}>
       <div className="tf-prsum-head">
         <TintIcon icon="branch" tint="lilac" />
         <span className="tf-option-text">
@@ -128,7 +132,7 @@ export function ConfigPRSummary(p: ConfigPRSummaryProps) {
 export function ModuleRegistry(p: ModuleRegistryProps) {
   const t = useStrings(APP_CHROME_STRINGS);
   return (
-    <div className="tf-modules">
+    <div style={p.style} className={cx("tf-modules", p.className)}>
       {(p.items || []).map((m) => (
         <div key={m.id} className="tf-module">
           <TintIcon

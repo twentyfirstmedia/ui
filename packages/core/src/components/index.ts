@@ -21,6 +21,7 @@ export {
   TwoFactorSetup,
   ColorField,
 } from "./admin.js";
+export { QrCode } from "./qr-code.js";
 export {
   AgentCard,
   AgentDetails,

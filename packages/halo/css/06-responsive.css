@@ -58,7 +58,7 @@
 /* Tablet: asides move below the main column, nav labels and the page nav shrink to icons */
 @container tf-shell (max-width: 1180px) {
   .tf-sheet:not(.tf-sheet-2):not(.tf-sheet-nav) {
-    grid-template-columns: 44px minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr);
   }
   .tf-sheet-nav.tf-sheet-aside {
     grid-template-columns: 208px minmax(0, 1fr);
@@ -103,7 +103,7 @@
 @container tf-shell (max-width: 1040px) {
   .tf-sheet-nav,
   .tf-sheet-nav.tf-sheet-aside {
-    grid-template-columns: 44px minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr);
   }
   .tf-subnav-eyebrow {
     display: none;
@@ -200,6 +200,21 @@
   .tf-rail-group {
     flex-direction: row;
   }
+  /* on phones the rail is a row of icons, expanded or not */
+  .tf-rail.expanded {
+    width: auto;
+  }
+  .tf-rail.expanded .tf-rail-btn {
+    display: grid;
+    width: 40px;
+    padding: 0;
+  }
+  .tf-rail.expanded .tf-rail-label {
+    display: none;
+  }
+  .tf-rail.expanded .tf-dotcount {
+    position: absolute;
+  }
   .tf-main {
     gap: var(--space-4);
   }
@@ -291,6 +306,56 @@
   max-width: 100%;
   overflow-x: auto;
 }
+/* Table stack: narrow boxes show every row as a card, each cell with its column label */
+.tf-table-stackbox {
+  container: tf-table / inline-size;
+}
+@container tf-table (max-width: 600px) {
+  .tf-table.stack thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .tf-table.stack,
+  .tf-table.stack tbody,
+  .tf-table.stack tr {
+    display: block;
+  }
+  .tf-table.stack tr {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .tf-table.stack tr:last-child {
+    border-bottom: 0;
+  }
+  .tf-table.stack td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: auto;
+    min-height: 32px;
+    padding: 4px 0;
+    border-bottom: 0;
+    text-align: right;
+    white-space: normal;
+  }
+  .tf-table.stack td::before {
+    content: attr(data-label);
+    flex: none;
+    max-width: 50%;
+    text-align: left;
+    font: 600 11px/14px var(--font-sans);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .tf-table.stack tbody tr:hover td {
+    background: transparent;
+  }
+}
 
 /* ── Phone: components ── */
 @media (max-width: 760px) {
@@ -325,15 +390,15 @@
     height: 52px;
   }
 
-  /* segmented controls and tabs scroll sideways when the labels do not fit */
-  .tf-seg,
-  .tf-tabs {
+  /* segmented controls and tabs scroll sideways when the labels do not fit (block ones shrink) */
+  .tf-seg:not(.block),
+  .tf-tabs:not(.tf-tabs-block) {
     max-width: 100%;
     overflow-x: auto;
     scrollbar-width: none;
   }
-  .tf-seg-item,
-  .tf-tab {
+  .tf-seg:not(.block) .tf-seg-item,
+  .tf-tabs:not(.tf-tabs-block) .tf-tab {
     flex: none;
   }
   .tf-seg,
@@ -487,5 +552,31 @@
   .tf-shell.tf-shell-sidebar {
     grid-template-columns: minmax(0, 1fr);
     padding: 0 8px 8px;
+  }
+}
+
+/* Fluid at every width: segmented controls, tabs and toggle groups never push past their
+   container. When space runs short the items shrink and their labels end in an ellipsis. */
+.tf-tabs {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.tf-seg-item,
+.tf-tab,
+.tf-togglegroup .tf-toggle {
+  min-width: 0;
+}
+.tf-seg-label,
+.tf-tab,
+.tf-toggle-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* key hints mean nothing on touch screens */
+@media (pointer: coarse) {
+  .tf-search .tf-kbd {
+    display: none;
   }
 }

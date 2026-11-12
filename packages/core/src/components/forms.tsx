@@ -10,6 +10,11 @@ import { Icon } from "../Icon.js";
 import { useControlled, useId, useOutside } from "../hooks.js";
 import { Avatar, IconButton, TintIcon } from "./foundation.js";
 import { Popover } from "./overlays.js";
+import { registerIcons } from "../icons.js";
+import { eyeOff } from "../icon-library.js";
+
+// the password field's "hide" state needs this one library icon
+registerIcons({ eyeOff });
 import type {
   CalendarProps,
   ComboboxProps,
@@ -69,12 +74,30 @@ export function FormField(p: FormFieldProps) {
 }
 
 export function TextField(p: TextFieldProps) {
+  const t = useStrings(FORMS_STRINGS);
+  const [shown, setShown] = React.useState(false);
+  const password = p.type === "password";
+  const action =
+    p.action ??
+    (password && p.reveal !== false ? (
+      <IconButton
+        icon={shown ? "eyeOff" : "eye"}
+        label={shown ? t.hidePassword : t.showPassword}
+        size="sm"
+        variant="ghost"
+        aria-pressed={shown}
+        disabled={p.disabled}
+        onClick={() => setShown(!shown)}
+      />
+    ) : null);
   const auto = useId("tf");
   const id = p.id || auto;
   const fromForm = useFieldError(p.name);
   const error = p.error || fromForm;
   return (
     <FormField
+      style={p.style}
+      className={p.className}
       id={id}
       label={p.label}
       required={p.required}
@@ -88,6 +111,7 @@ export function TextField(p: TextFieldProps) {
           "tf-inputwrap",
           p.icon && "has-icon",
           (error || p.success || p.suffix) && "has-suffix",
+          action && "has-action",
         )}
       >
         {p.icon && <Icon name={p.icon} size={15} className="tf-input-icon" />}
@@ -95,12 +119,13 @@ export function TextField(p: TextFieldProps) {
           id={id}
           name={p.name}
           className={cx("tf-input", p.success && "is-valid")}
-          type={p.type || "text"}
+          type={password && shown ? "text" : p.type || "text"}
           placeholder={p.placeholder}
           value={p.value}
           defaultValue={p.defaultValue}
           onChange={p.onChange}
           onBlur={p.onBlur}
+          onKeyDown={p.onKeyDown}
           required={p.required}
           disabled={p.disabled}
           readOnly={p.readOnly}
@@ -127,6 +152,7 @@ export function TextField(p: TextFieldProps) {
         ) : (
           p.suffix && <span className="tf-input-suffix">{p.suffix}</span>
         )}
+        {action && <span className="tf-input-action">{action}</span>}
       </span>
     </FormField>
   );
@@ -139,7 +165,7 @@ export function RadioGroup(p: RadioGroupProps) {
   const name = useId("rg"),
     v = useControlled(p.value, p.defaultValue, p.onChange);
   return (
-    <fieldset className={cx("tf-radiogroup", p.cards && "cards", p.className)}>
+    <fieldset style={p.style} className={cx("tf-radiogroup", p.cards && "cards", p.className)}>
       {p.label && <legend className="tf-field-label">{p.label}</legend>}
       <div className="tf-radiogroup-items">
         {(p.options || []).map((o) => {
@@ -189,6 +215,7 @@ export function Segmented(p: SegmentedProps) {
     name = useId("seg");
   return (
     <div
+      style={p.style}
       className={cx("tf-seg", p.size === "sm" && "sm", p.block && "block", p.className)}
       role="radiogroup"
       aria-label={p.label}
@@ -204,16 +231,20 @@ export function Segmented(p: SegmentedProps) {
           on = v[0] === opt.value;
         return (
           <label key={opt.value} className={cx("tf-seg-item", on && "on")}>
-            <input
-              type="radio"
-              name={name}
-              checked={on}
-              onChange={() => {
-                v[1](opt.value);
-              }}
-            />
             {opt.icon && <Icon name={opt.icon} size={14} />}
-            {opt.label}
+            {/* the radio covers the whole segment (positioned on the label); inside the text's
+                span, a click on the text and a click on the radio hit the same target */}
+            <span className="tf-seg-label">
+              <input
+                type="radio"
+                name={name}
+                checked={on}
+                onChange={() => {
+                  v[1](opt.value);
+                }}
+              />
+              {opt.label}
+            </span>
           </label>
         );
       })}
@@ -301,6 +332,7 @@ export function Combobox(p: ComboboxProps) {
   };
   return (
     <FormField
+      style={p.style}
       id={id}
       label={p.label}
       required={p.required}
@@ -442,7 +474,14 @@ export function TagInput(p: TagInputProps) {
     q[1]("");
   }
   return (
-    <FormField id={id} label={p.label} hint={p.hint} error={p.error}>
+    <FormField
+      style={p.style}
+      className={p.className}
+      id={id}
+      label={p.label}
+      hint={p.hint}
+      error={p.error}
+    >
       <div
         className="tf-combo-box tf-tags"
         onClick={(e) => {
@@ -562,7 +601,7 @@ export function Calendar(p: CalendarProps) {
     m[1](new Date(first.getFullYear(), first.getMonth() + n, 1));
   }
   return (
-    <div className="tf-cal">
+    <div style={p.style} className={cx("tf-cal", p.className)}>
       <div className="tf-cal-head">
         <IconButton
           icon="chevronLeft"
@@ -671,6 +710,7 @@ export function DatePicker(p: DatePickerProps) {
     : fmtD(v[0] as Date | null, locale);
   return (
     <FormField
+      style={p.style}
       id={id}
       label={p.label}
       required={p.required}
@@ -756,7 +796,14 @@ export function NumberInput(p: NumberInputProps) {
     v[1](Math.round(n * 1000) / 1000);
   }
   return (
-    <FormField id={id} label={p.label} hint={p.hint} error={p.error}>
+    <FormField
+      style={p.style}
+      className={p.className}
+      id={id}
+      label={p.label}
+      hint={p.hint}
+      error={p.error}
+    >
       <div className="tf-number">
         <IconButton
           icon="minus"
@@ -811,7 +858,7 @@ export function Slider(p: SliderProps) {
   const pct = ((v[0] - min) / (max - min)) * 100,
     f = p.format || String;
   return (
-    <FormField id={id} label={p.label} hint={p.hint}>
+    <FormField style={p.style} className={p.className} id={id} label={p.label} hint={p.hint}>
       <div className="tf-slider">
         <div className="tf-slider-track">
           <input
@@ -856,6 +903,16 @@ export function OtpInput(p: OtpInputProps) {
   const n = p.length || 6,
     st = React.useState(Array(n).fill("")),
     refs = React.useRef<(HTMLInputElement | null)[]>([]);
+  const reset = React.useCallback(() => {
+    st[1](Array(n).fill(""));
+    refs.current[0]?.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- st[1] is stable
+  }, [n]);
+  React.useImperativeHandle(p.ref, () => ({ reset }), [reset]);
+  // a wrong code: empty the cells for the next try
+  React.useEffect(() => {
+    if (p.error && p.clearOnError !== false) reset();
+  }, [p.error, p.clearOnError, reset]);
   function set(i: number, ch: string) {
     const nx = st[0].slice();
     nx[i] = ch;
@@ -865,7 +922,8 @@ export function OtpInput(p: OtpInputProps) {
   }
   return (
     <div
-      className={cx("tf-otp", p.error && "invalid")}
+      style={p.style}
+      className={cx("tf-otp", p.error && "invalid", p.className)}
       role="group"
       aria-label={p.label || t.verificationCode}
     >
@@ -932,6 +990,19 @@ function acceptsFile(file: { name: string; type: string }, accept?: string): boo
   );
 }
 
+/** A hidden file input that carries the listed files into a surrounding form. */
+function FormFiles(p: { name: string; files: UploadFile[] }) {
+  const ref = React.useRef<HTMLInputElement>(null);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof DataTransfer === "undefined") return;
+    const dt = new DataTransfer();
+    p.files.forEach((f) => f.file && dt.items.add(f.file));
+    el.files = dt.files;
+  }, [p.files]);
+  return <input ref={ref} type="file" name={p.name} multiple hidden tabIndex={-1} />;
+}
+
 export function FileDrop(p: FileDropProps) {
   const t = useStrings(FORMS_STRINGS);
   const fm = useFormat();
@@ -955,8 +1026,11 @@ export function FileDrop(p: FileDropProps) {
     picked = picked.filter((f) => acceptsFile(f, p.accept));
     if (p.multiple === false) picked = picked.slice(0, 1);
     if (rejected.length) p.onReject?.(rejected);
+    if (!picked.length || p.disabled) return;
+    const kept = p.onFiles?.(picked);
+    if (kept === false) return;
+    if (Array.isArray(kept)) picked = kept;
     if (!picked.length) return;
-    p.onFiles?.(picked);
     const add: UploadFile[] = picked.map((f) => ({
       name: f.name,
       size: f.size,
@@ -983,27 +1057,29 @@ export function FileDrop(p: FileDropProps) {
   }
   return (
     <div
-      className="tf-col"
+      className={cx("tf-col", p.className)}
       style={{
         gap: 12,
+        ...p.style,
       }}
     >
       <div
-        className={cx("tf-drop", over[0] && "over")}
+        className={cx("tf-drop", over[0] && "over", p.disabled && "disabled")}
         role="button"
-        tabIndex={0}
+        tabIndex={p.disabled ? -1 : 0}
+        aria-disabled={p.disabled || undefined}
         onClick={() => {
-          inp.current?.click();
+          if (!p.disabled) inp.current?.click();
         }}
         onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
+          if (!p.disabled && (e.key === "Enter" || e.key === " ")) {
             e.preventDefault();
             inp.current?.click();
           }
         }}
         onDragOver={(e) => {
           e.preventDefault();
-          over[1](true);
+          if (!p.disabled) over[1](true);
         }}
         onDragLeave={() => {
           over[1](false);
@@ -1023,11 +1099,13 @@ export function FileDrop(p: FileDropProps) {
           hidden
           multiple={p.multiple !== false}
           accept={p.accept}
+          disabled={p.disabled}
           onChange={(e) => {
             take(e.target.files);
             e.target.value = "";
           }}
         />
+        {p.name && <FormFiles name={p.name} files={files[0]} />}
       </div>
       {files[0].length > 0 && (
         <div

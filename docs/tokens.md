@@ -99,6 +99,11 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--chart-lilac` | `{lilac}` / `{lilac-ink}` | `{fg-300}` | Chart series tinted lilac: a step of the monochrome ramp (charts carry no decorative colour). |
 | `--chart-butter` | `{butter}` / `{butter-ink}` | `{fg-200}` | Chart series tinted butter: a step of the monochrome ramp (charts carry no decorative colour). |
 | `--chart-blush` | `{blush}` / `{blush-ink}` | `{line-300}` | Chart series tinted blush: a step of the monochrome ramp (charts carry no decorative colour). |
+| `--ramp-1` | `color-mix(in oklab, {chart-1} 12%, {background})` | `color-mix(in oklab, {chart-1} 12%, {background})` | Map and heatmap ramp, step 1 of 5 (lightest): calm sequential colours for values such as price per m² or density, mixed from `chart-1` and the background. |
+| `--ramp-2` | `color-mix(in oklab, {chart-1} 28%, {background})` | `color-mix(in oklab, {chart-1} 28%, {background})` | Map and heatmap ramp, step 2 of 5 (middle): calm sequential colours for values such as price per m² or density, mixed from `chart-1` and the background. |
+| `--ramp-3` | `color-mix(in oklab, {chart-1} 46%, {background})` | `color-mix(in oklab, {chart-1} 46%, {background})` | Map and heatmap ramp, step 3 of 5 (middle): calm sequential colours for values such as price per m² or density, mixed from `chart-1` and the background. |
+| `--ramp-4` | `color-mix(in oklab, {chart-1} 66%, {background})` | `color-mix(in oklab, {chart-1} 66%, {background})` | Map and heatmap ramp, step 4 of 5 (middle): calm sequential colours for values such as price per m² or density, mixed from `chart-1` and the background. |
+| `--ramp-5` | `color-mix(in oklab, {chart-1} 88%, {background})` | `color-mix(in oklab, {chart-1} 88%, {background})` | Map and heatmap ramp, step 5 of 5 (strongest): calm sequential colours for values such as price per m² or density, mixed from `chart-1` and the background. |
 | `--ok` | `#2f5d16` / `#a8db86` | `#177447` / `#5cc28f` | Success / done / healthy: text and status shapes (circle). On bg-000 to bg-300. |
 | `--ok-bg` | `#d6efc3` / `#24401a` | `rgba(23,116,71,0.09)` / `rgba(92,194,143,0.12)` | Tint behind ok badges, banners and diff additions. |
 | `--info` | `#1f4f8a` / `#9cc6f7` | `#2856b0` / `#7aa7f5` | Running / in progress / neutral notices. Shape: pulsing dot. |

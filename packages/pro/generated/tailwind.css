@@ -95,6 +95,11 @@
   --color-chart-lilac: var(--chart-lilac);
   --color-chart-butter: var(--chart-butter);
   --color-chart-blush: var(--chart-blush);
+  --color-ramp-1: var(--ramp-1);
+  --color-ramp-2: var(--ramp-2);
+  --color-ramp-3: var(--ramp-3);
+  --color-ramp-4: var(--ramp-4);
+  --color-ramp-5: var(--ramp-5);
   --color-ok: var(--ok);
   --color-ok-bg: var(--ok-bg);
   --color-info: var(--info);

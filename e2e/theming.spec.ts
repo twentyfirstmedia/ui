@@ -142,7 +142,7 @@ function snapshot(page: Page, outside: string[]): Promise<string[][]> {
           !!el.closest(
             // paper is white like a default card and the before/after slider sits on a photo, so they are
             // named here instead of matched
-            ".tf-colorf-sw, iframe, .tf-mailprev-frame, .tf-adprev-card, .tf-2fa-qr, [class*='paper'], [class^='tf-ba-']",
+            ".tf-colorf-sw, iframe, .tf-mailprev-frame, .tf-adprev-card, .tf-2fa-qr, .tf-qr, [class*='paper'], [class^='tf-ba-']",
           );
         const cls = (el.getAttribute("class") || el.tagName.toLowerCase())
           .split(" ")

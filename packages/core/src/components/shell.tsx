@@ -5,6 +5,8 @@ import { SHELL_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { cx, reduced } from "../cx.js";
 import { Avatar } from "./foundation.js";
+import { Tooltip } from "./overlays.js";
+import { useControlled } from "../hooks.js";
 import { Sidebar, UserMenu } from "./navigation.js";
 import { WorkspaceSwitcher } from "./admin.js";
 import type {
@@ -19,10 +21,43 @@ import type {
   TopBarProps,
 } from "./types.js";
 
+/** True while the nav's labelled width does not fit the space the bar leaves it. */
+function useTight(nav: React.RefObject<HTMLDivElement | null>, key: string) {
+  const [tight, setTight] = React.useState(false);
+  const full = React.useRef(0);
+  React.useLayoutEffect(() => {
+    const el = nav.current,
+      bar = el?.parentElement;
+    if (!el || !bar || typeof ResizeObserver === "undefined") return;
+    const check = () => {
+      const cs = getComputedStyle(bar);
+      const kids = Array.from(bar.children) as HTMLElement[];
+      const others = kids.reduce((s, k) => (k === el ? s : s + k.offsetWidth), 0);
+      const gaps = (parseFloat(cs.columnGap) || 0) * (kids.length - 1);
+      const avail =
+        bar.clientWidth -
+        (parseFloat(cs.paddingLeft) || 0) -
+        (parseFloat(cs.paddingRight) || 0) -
+        others -
+        gaps;
+      if (!el.classList.contains("tight")) full.current = el.scrollWidth;
+      setTight(full.current > avail + 1);
+    };
+    const ro = new ResizeObserver(check);
+    ro.observe(bar);
+    check();
+    return () => ro.disconnect();
+  }, [nav, key]);
+  return tight;
+}
+
 export function TopBar(p: TopBarProps) {
   const t = useStrings(SHELL_STRINGS);
+  const navRef = React.useRef<HTMLDivElement>(null);
+  // labels give way to icons when the bar runs out of room, before anything scrolls
+  const tight = useTight(navRef, (p.items || []).map((it) => it.label).join("|"));
   return (
-    <nav className="tf-topbar" aria-label={t.mainNavigation}>
+    <nav style={p.style} className={cx("tf-topbar", p.className)} aria-label={t.mainNavigation}>
       {p.brand && (
         <span className="tf-brand">
           {p.brand}
@@ -30,7 +65,7 @@ export function TopBar(p: TopBarProps) {
           {p.tag && <span className="tf-brand-tag">{p.tag}</span>}
         </span>
       )}
-      <div className="tf-nav">
+      <div ref={navRef} className={cx("tf-nav", tight && "tight")}>
         {(p.items || []).map((it) => {
           const active = it.label === p.active;
           return (
@@ -58,6 +93,7 @@ export function TopBar(p: TopBarProps) {
           className="tf-user"
           aria-haspopup="menu"
           aria-expanded={p.userOpen ? "true" : "false"}
+          title={p.user.email ? `${p.user.name} · ${p.user.email}` : p.user.name}
           onClick={p.onUser}
         >
           <Avatar name={p.user.name} size={28} />
@@ -72,8 +108,8 @@ export function TopBar(p: TopBarProps) {
   );
 }
 
-function railBtn(it: RailItem, i: number) {
-  return (
+function railBtn(it: RailItem, i: number, expanded: boolean) {
+  const btn = (
     <button
       key={it.label}
       type="button"
@@ -82,22 +118,69 @@ function railBtn(it: RailItem, i: number) {
         animationDelay: `calc(${200 + i * 50}ms * var(--motion-time, 1))`,
       }}
       aria-label={it.count ? `${it.label}, ${it.count}` : it.label}
-      title={it.label}
       aria-current={it.active ? "page" : undefined}
       onClick={it.onClick}
     >
       <Icon name={it.icon} />
+      {expanded && (
+        <span className="tf-rail-label" aria-hidden>
+          {it.label}
+        </span>
+      )}
       {it.count ? <span className="tf-dotcount">{it.count}</span> : null}
     </button>
+  );
+  return expanded ? (
+    btn
+  ) : (
+    <Tooltip key={it.label} label={it.label} side="right">
+      {btn}
+    </Tooltip>
   );
 }
 
 export function SideRail(p: SideRailProps) {
   const t = useStrings(SHELL_STRINGS);
+  const [expanded, setExpanded] = useControlled(
+    p.expanded,
+    !!p.defaultExpanded,
+    p.onExpandedChange,
+  );
+  const toggleLabel = expanded ? t.collapseRail : t.expandRail;
+  const toggle = (
+    <button
+      type="button"
+      className="tf-rail-btn tf-rail-toggle"
+      aria-label={toggleLabel}
+      aria-expanded={expanded}
+      onClick={() => setExpanded(!expanded)}
+    >
+      <Icon name={expanded ? "chevronLeft" : "chevronRight"} />
+      {expanded && (
+        <span className="tf-rail-label" aria-hidden>
+          {toggleLabel}
+        </span>
+      )}
+    </button>
+  );
   return (
-    <aside className="tf-rail" aria-label={t.tools}>
-      <div className="tf-rail-group">{(p.top || []).map(railBtn)}</div>
-      <div className="tf-rail-group">{(p.bottom || []).map((it, i) => railBtn(it, i + 3))}</div>
+    <aside
+      style={p.style}
+      className={cx("tf-rail", expanded && "expanded", p.className)}
+      aria-label={p.label || t.tools}
+    >
+      <div className="tf-rail-group">{(p.top || []).map((it, i) => railBtn(it, i, expanded))}</div>
+      <div className="tf-rail-group">
+        {(p.bottom || []).map((it, i) => railBtn(it, i + 3, expanded))}
+        {p.toggle &&
+          (expanded ? (
+            toggle
+          ) : (
+            <Tooltip label={toggleLabel} side="right">
+              {toggle}
+            </Tooltip>
+          ))}
+      </div>
     </aside>
   );
 }
@@ -131,12 +214,72 @@ export function Dock(p: DockProps) {
  * UI floating over a full-bleed background (a map, a 3D scene, a video): four slots along the
  * edges, glass by default. The background stays interactive wherever no slot sits on it.
  */
+/** Measures how far the slots reach into the layout and publishes it as CSS variables. */
+function useSafeArea(root: React.RefObject<HTMLDivElement | null>) {
+  React.useLayoutEffect(() => {
+    const el = root.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const slot = (c: string) => el.querySelector<HTMLElement>(`:scope > .tf-floating-ui > .${c}`);
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      const top = slot("tf-floating-top"),
+        start = slot("tf-floating-start"),
+        end = slot("tf-floating-end"),
+        bottom = slot("tf-floating-bottom");
+      const px = (n: number) => `${Math.max(0, Math.round(n))}px`;
+      el.style.setProperty(
+        "--floating-safe-top",
+        px(top ? top.getBoundingClientRect().bottom - r.top : 0),
+      );
+      el.style.setProperty(
+        "--floating-safe-start",
+        px(start ? start.getBoundingClientRect().right - r.left : 0),
+      );
+      el.style.setProperty(
+        "--floating-safe-end",
+        px(end ? r.right - end.getBoundingClientRect().left : 0),
+      );
+      el.style.setProperty(
+        "--floating-safe-bottom",
+        // the bottom bar, or the end slot while it is a bottom sheet (phones)
+        px(
+          Math.max(
+            bottom ? r.bottom - bottom.getBoundingClientRect().top : 0,
+            end && getComputedStyle(end).position === "absolute"
+              ? r.bottom - end.getBoundingClientRect().top
+              : 0,
+          ),
+        ),
+      );
+    };
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    el.querySelectorAll(":scope > .tf-floating-ui > *").forEach((c) => ro.observe(c));
+    measure();
+    return () => ro.disconnect();
+  });
+}
+
 export function FloatingLayout(p: FloatingLayoutProps) {
+  const t = useStrings(SHELL_STRINGS);
   const surface = p.surface ?? "glass";
+  const root = React.useRef<HTMLDivElement>(null);
+  const [sheetFull, setSheetFull] = React.useState(false);
+  const sheet = p.end != null && p.endSheet !== false;
+  useSafeArea(root);
+  const size = (v: number | string | undefined) => (typeof v === "number" ? `${v}px` : v);
   return (
     <div
-      className={cx("tf-floating", p.className)}
-      style={{ minHeight: p.height ?? 640, ...p.style }}
+      ref={root}
+      className={cx("tf-floating", sheet && "has-sheet", sheetFull && "sheet-full", p.className)}
+      style={
+        {
+          minHeight: p.height ?? 640,
+          ...(p.startWidth != null ? { "--floating-start": size(p.startWidth) } : null),
+          ...(p.endWidth != null ? { "--floating-end": size(p.endWidth) } : null),
+          ...p.style,
+        } as React.CSSProperties
+      }
       role="region"
       aria-label={p.label}
       data-surface={surface}
@@ -145,7 +288,28 @@ export function FloatingLayout(p: FloatingLayoutProps) {
       <div className="tf-floating-ui">
         {p.top != null && <div className="tf-floating-top">{p.top}</div>}
         {p.start != null && <div className="tf-floating-start">{p.start}</div>}
-        {p.end != null && <div className="tf-floating-end">{p.end}</div>}
+        {(p.controls != null || p.attribution != null) && (
+          <div className="tf-floating-controls">
+            {p.controls}
+            {p.attribution != null && (
+              <div className="tf-floating-attribution">{p.attribution}</div>
+            )}
+          </div>
+        )}
+        {p.end != null && (
+          <div className="tf-floating-end">
+            {sheet && (
+              <button
+                type="button"
+                className="tf-floating-handle"
+                aria-expanded={sheetFull}
+                aria-label={sheetFull ? t.collapsePanel : t.expandPanel}
+                onClick={() => setSheetFull(!sheetFull)}
+              />
+            )}
+            {p.end}
+          </div>
+        )}
         {p.bottom != null && <div className="tf-floating-bottom">{p.bottom}</div>}
       </div>
       {p.children}
@@ -336,7 +500,7 @@ export function AppShell(p: AppShellProps) {
         <WorkspaceSwitcher variant="frame" {...p.workspaces} compact={collapsed} />
       ) : p.brand ? (
         <span className={cx("tf-brand", collapsed && "tf-brand-mini")}>
-          {collapsed ? p.brand.slice(0, 1) : p.brand}
+          {collapsed && typeof p.brand === "string" ? p.brand.slice(0, 1) : p.brand}
           <span className="tf-brand-dot" aria-hidden />
           {p.tag && !collapsed && <span className="tf-brand-tag">{p.tag}</span>}
         </span>

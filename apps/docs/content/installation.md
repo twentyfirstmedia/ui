@@ -50,6 +50,22 @@ import { UIProvider } from "@twentyfirstmedia/{{kit}}";
 <UIProvider kit={userPrefersPro ? "pro" : "halo"}>{children}</UIProvider>;
 ```
 
+## Fonts for share images
+
+Tools that cannot read woff2 or variable fonts, such as `next/og` (Satori) or PDF generators, get static WOFF files under `fonts/og/`: Halo ships Plus Jakarta Sans (400–800) and IBM Plex Mono (500, 600), Pro ships Geist (400–700) and Geist Mono (500, 600), latin subset.
+
+```tsx
+// app/opengraph-image.tsx
+import { readFile } from "node:fs/promises";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const font = await readFile(
+  require.resolve("@twentyfirstmedia/halo/fonts/og/plus-jakarta-sans-latin-700-normal.woff"),
+);
+// new ImageResponse(<div>…</div>, { fonts: [{ name: "Plus Jakarta Sans", data: font, weight: 700 }] })
+```
+
 ## Coding agents
 
 Give Claude Code, Cursor or VS Code the kit's docs with the MCP server, see [AI agents and MCP](/{{kit}}/ai/):

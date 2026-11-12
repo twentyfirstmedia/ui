@@ -24,7 +24,7 @@ import type {
 export function Kbd(p: KbdProps) {
   const keys = p.keys || [p.children];
   return (
-    <span className="tf-kbds">
+    <span style={p.style} className={cx("tf-kbds", p.className)}>
       {keys.map((k, i) => (
         <kbd key={i} className="tf-kbd2">
           {k}
@@ -35,7 +35,7 @@ export function Kbd(p: KbdProps) {
 }
 export function KeyValue(p: KeyValueProps) {
   return (
-    <dl className={cx("tf-kv", p.dense && "dense", p.className)}>
+    <dl style={p.style} className={cx("tf-kv", p.dense && "dense", p.className)}>
       {(p.items || []).map((it, i) => {
         const r = Array.isArray(it)
           ? {
@@ -60,7 +60,8 @@ export function Spinner(p: SpinnerProps) {
   const t = useStrings(BUILDING_BLOCKS_STRINGS);
   return (
     <span
-      className={cx("tf-spinner", p.size === "lg" && "lg")}
+      style={p.style}
+      className={cx("tf-spinner", p.size === "lg" && "lg", p.className)}
       role="status"
       aria-label={p.label || t.loading}
     />
@@ -69,7 +70,7 @@ export function Spinner(p: SpinnerProps) {
 export function Collapsible(p: CollapsibleProps) {
   const o = useControlled(p.open, !!p.defaultOpen, p.onOpenChange);
   return (
-    <div className={cx("tf-collapse", o[0] && "open", p.className)}>
+    <div style={p.style} className={cx("tf-collapse", o[0] && "open", p.className)}>
       <button
         type="button"
         className="tf-collapse-head"
@@ -106,8 +107,9 @@ export function ContextMenu(p: ContextMenuProps) {
   }
   return (
     <div
+      style={p.style}
       ref={ref}
-      className="tf-ctx"
+      className={cx("tf-ctx", p.className)}
       onContextMenu={(e) => {
         e.preventDefault();
         openAt(e.clientX, e.clientY);
@@ -191,11 +193,12 @@ export function SplitPane(p: SplitPaneProps) {
     <div
       ref={wrap}
       className={cx("tf-split", p.className)}
-      style={
-        {
+      style={{
+        ...({
           "--split": size[0] + "px",
-        } as React.CSSProperties
-      }
+        } as React.CSSProperties),
+        ...p.style,
+      }}
     >
       <div className="tf-split-a">{p.left}</div>
       <div
@@ -264,7 +267,7 @@ export function TreeView(p: TreeViewProps) {
     );
   }
   return (
-    <ul className="tf-tree" role="tree" aria-label={p.label}>
+    <ul style={p.style} className={cx("tf-tree", p.className)} role="tree" aria-label={p.label}>
       {(p.items || []).map((n) => node(n, 0))}
     </ul>
   );
@@ -279,7 +282,13 @@ export function InlineEdit(p: InlineEditProps) {
   if (!ed[0])
     return (
       <span
-        className={cx("tf-inline", p.mono && "tf-mono", p.align === "right" && "right")}
+        className={cx(
+          "tf-inline",
+          p.mono && "tf-mono",
+          p.align === "right" && "right",
+          p.className,
+        )}
+        style={p.style}
         tabIndex={0}
         role="button"
         aria-label={p.label}
@@ -300,7 +309,8 @@ export function InlineEdit(p: InlineEditProps) {
     );
   return p.options ? (
     <select
-      className="tf-input tf-inline-input"
+      className={cx("tf-input tf-inline-input", p.className)}
+      style={p.style}
       autoFocus
       value={v[0]}
       onChange={(e) => {
@@ -320,7 +330,8 @@ export function InlineEdit(p: InlineEditProps) {
     </select>
   ) : (
     <input
-      className={cx("tf-input tf-inline-input", p.mono && "tf-mono")}
+      className={cx("tf-input tf-inline-input", p.mono && "tf-mono", p.className)}
+      style={p.style}
       autoFocus
       value={v[0]}
       type={p.type || "text"}

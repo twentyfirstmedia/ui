@@ -244,11 +244,13 @@
   inset: 0;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 320px) minmax(0, 1fr) minmax(0, 340px);
+  grid-template-columns:
+    minmax(0, var(--floating-start, 320px)) minmax(0, 1fr)
+    minmax(0, var(--floating-end, 340px));
   grid-template-rows: auto minmax(0, 1fr) auto;
   grid-template-areas:
     "top top top"
-    "start . end"
+    "start controls end"
     "bottom bottom bottom";
   gap: var(--space-4);
   padding: var(--space-4);
@@ -279,6 +281,32 @@
   grid-area: bottom;
   justify-self: center;
 }
+/* background controls and source notes: the free corner, clear of the panels and the dock */
+.tf-floating-ui > .tf-floating-controls {
+  grid-area: controls;
+  align-self: end;
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+  pointer-events: none;
+}
+.tf-floating-controls > * {
+  pointer-events: auto;
+}
+.tf-floating-attribution {
+  max-width: 100%;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink-muted);
+  font: 500 11px/16px var(--font-sans);
+  overflow-wrap: anywhere;
+}
+.tf-floating-handle {
+  display: none;
+}
 .tf-floating-ui > :is(.tf-floating-top, .tf-floating-bottom) {
   pointer-events: none;
 }
@@ -304,4 +332,73 @@
     gap: var(--space-3);
     padding: var(--space-3);
   }
+  .tf-floating-ui > .tf-floating-controls {
+    grid-area: auto;
+    grid-row: 3;
+  }
+  /* the end slot as a bottom sheet over the background: a peek, or most of the height */
+  .tf-floating.has-sheet .tf-floating-ui {
+    grid-template-rows: auto auto minmax(120px, 1fr) auto;
+    grid-template-areas:
+      "top"
+      "start"
+      "."
+      "bottom";
+    padding-bottom: calc(var(--space-3) + 96px);
+  }
+  .tf-floating.has-sheet .tf-floating-end {
+    position: absolute;
+    left: var(--space-3);
+    right: var(--space-3);
+    bottom: 0;
+    z-index: 2;
+    max-height: 96px;
+    overflow: hidden;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: var(--surface);
+    box-shadow: 0 0 0 var(--line-width) var(--line);
+    transition: max-height var(--dur-base) var(--ease-out);
+  }
+  [data-surface="glass"].tf-floating.has-sheet .tf-floating-end {
+    background: var(--glass);
+    -webkit-backdrop-filter: var(--glass-filter);
+    backdrop-filter: var(--glass-filter);
+  }
+  .tf-floating.has-sheet.sheet-full .tf-floating-end {
+    max-height: 75%;
+    overflow-y: auto;
+  }
+  .tf-floating.has-sheet .tf-floating-handle {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    height: 24px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  .tf-floating.has-sheet .tf-floating-handle::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 4px;
+    margin: 10px auto;
+    border-radius: var(--radius-pill);
+    background: var(--line-strong);
+  }
+  .tf-floating.has-sheet .tf-floating-handle:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+}
+
+/* in a glass layout the attribution is glass too */
+[data-surface="glass"] .tf-floating-attribution {
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
 }

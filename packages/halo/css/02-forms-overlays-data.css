@@ -45,6 +45,23 @@
   font: 600 13px/18px var(--font-sans);
   pointer-events: none;
 }
+/* an interactive control at the end (reveal password, clear, copy) */
+.tf-input-action {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+}
+.tf-inputwrap.has-action .tf-input {
+  padding-right: 44px;
+}
+.tf-inputwrap.has-action.has-suffix .tf-input {
+  padding-right: 72px;
+}
+.tf-inputwrap.has-action .tf-input-suffix {
+  right: 44px;
+}
 .tf-input-suffix.err {
   color: var(--blush-ink);
 }
@@ -204,7 +221,7 @@
   display: flex;
 }
 .tf-seg.block .tf-seg-item {
-  flex: 1;
+  flex: 1 1 0;
 }
 .tf-seg-item {
   position: relative;
@@ -816,6 +833,10 @@ label.tf-menu-item {
     border-color var(--dur-fast) ease,
     background-color var(--dur-fast) ease;
 }
+.tf-drop.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .tf-drop b {
   font: 600 14px/20px var(--font-sans);
   margin-top: 4px;
@@ -878,6 +899,7 @@ label.tf-menu-item {
 /* Alert, confirm, toaster */
 .tf-alert {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: 12px;
   padding: 12px 12px 12px 16px;
@@ -921,7 +943,8 @@ label.tf-menu-item {
   color: var(--lilac-ink);
 }
 .tf-alert-body {
-  flex: 1;
+  /* when the alert is too narrow for text and actions, the actions move to their own line */
+  flex: 1 1 200px;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -937,8 +960,11 @@ label.tf-menu-item {
 .tf-alert-actions {
   flex: none;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 4px;
+  max-width: 100%;
+  margin-left: auto;
 }
 .tf-alert .tf-iconbtn-ghost {
   background: transparent;

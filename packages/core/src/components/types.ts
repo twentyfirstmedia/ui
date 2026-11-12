@@ -1,4 +1,14 @@
-import type { ChangeEvent, CSSProperties, ElementType, MouseEvent, ReactNode } from "react";
+import type {
+  ChangeEvent,
+  CSSProperties,
+  ElementType,
+  FocusEvent,
+  InputHTMLAttributes,
+  KeyboardEvent,
+  MouseEvent,
+  ReactNode,
+  Ref,
+} from "react";
 import type { IconName } from "../icons.js";
 import type { ToastOptions } from "../toast-store.js";
 import type { Surface } from "../provider.js";
@@ -137,9 +147,21 @@ export interface SearchFieldProps extends BaseProps {
   placeholder?: string;
   /** Accessible name (default: the placeholder, or "Search"). */
   label?: string;
+  /** The key hint, e.g. "⌘K" (hidden on touch screens). */
   shortcut?: string;
+  /** ⌘/Ctrl + the hint's last key (K for "⌘K") focuses the field, except while typing elsewhere. */
+  bindShortcut?: boolean;
   value?: string;
+  defaultValue?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
+  onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
+  id?: string;
+  name?: string;
+  autoFocus?: boolean;
+  /** For a search with suggestions (combobox): role, aria-controls, aria-activedescendant … */
+  inputProps?: InputHTMLAttributes<HTMLInputElement>;
 }
 export interface CheckboxProps extends BaseProps {
   name?: string;
@@ -214,7 +236,10 @@ export interface PanelProps extends BaseProps {
   surface?: Surface;
 }
 export interface PageHeaderProps extends BaseProps {
-  crumbs?: string[];
+  /** A breadcrumb above the title (see `Breadcrumb`): labels, or items with `href`/`onClick`. */
+  crumbs?: (string | Crumb)[];
+  /** The element crumb links render as, e.g. Next.js `Link`. */
+  crumbLinkAs?: ElementType;
   title: string;
   subtitle?: string;
   actions?: ReactNode[];
@@ -225,7 +250,8 @@ export interface NavItem {
   count?: number;
 }
 export interface TopBarProps extends BaseProps {
-  brand?: string;
+  /** The product name, or a node (a logo mark with the name). */
+  brand?: ReactNode;
   tag?: string;
   items: NavItem[];
   active?: string;
@@ -245,6 +271,14 @@ export interface RailItem {
 export interface SideRailProps extends BaseProps {
   top?: RailItem[];
   bottom?: RailItem[];
+  /** Names next to the icons (controlled); every button has a tooltip while collapsed. */
+  expanded?: boolean;
+  defaultExpanded?: boolean;
+  onExpandedChange?: (expanded: boolean) => void;
+  /** A button at the foot that expands and collapses the rail. */
+  toggle?: boolean;
+  /** Accessible name of the rail (default "Tools"). */
+  label?: string;
 }
 export interface FloatingLayoutProps extends BaseProps {
   /** What the UI floats over, filling the layout: a map, a 3D canvas, a video, a photo. */
@@ -257,7 +291,23 @@ export interface FloatingLayoutProps extends BaseProps {
   end?: ReactNode;
   /** Bar along the bottom edge (dock, playback, a summary). */
   bottom?: ReactNode;
-  /** Height of the layout (default 640). Below 720px of width the slots stack: top, start, end, bottom. */
+  /** Controls of the background (zoom, compass, locate) in the free corner above the bottom bar. */
+  controls?: ReactNode;
+  /** Source notes of the background (map attribution), under `controls`, clear of every slot. */
+  attribution?: ReactNode;
+  /** Width of the start column (default 320px) and of the end column (default 340px). */
+  startWidth?: number | string;
+  endWidth?: number | string;
+  /**
+   * Below 720px of width the end slot becomes a bottom sheet over the background, with a handle
+   * that expands and collapses it (default true). `false` stacks it with the others.
+   */
+  endSheet?: boolean;
+  /**
+   * Height of the layout (default 640). Below 720px of width the slots stack: top, start, end,
+   * bottom. The layout sets `--floating-safe-top/-start/-end/-bottom` (px) to the space its
+   * slots take, so map libraries can keep their own controls clear of them.
+   */
   height?: number | string;
   /** Glass for every surface in the slots (default) or solid surfaces. */
   surface?: Surface;
@@ -304,6 +354,11 @@ export interface TableProps extends BaseProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- rows are app data
   rows: Record<string, any>[];
   animate?: boolean;
+  /**
+   * Cards instead of columns when the table's box is narrow (up to 600px): every row stacks its
+   * cells, each with its column label. Without it narrow tables scroll sideways.
+   */
+  stack?: boolean;
 }
 export interface ProgressProps extends BaseProps {
   value: number;
@@ -324,8 +379,21 @@ export interface EmptyStateProps extends BaseProps {
   tint?: Tint;
   action?: ReactNode;
 }
+/** A breadcrumb: a plain label, or one with an address or a handler. */
+export interface Crumb {
+  label: string;
+  href?: string;
+  onClick?: () => void;
+}
 export interface BreadcrumbProps extends BaseProps {
-  items: string[];
+  /** The trail; the last one is the current page. Items with `href` are links, with `onClick` buttons. */
+  items: (string | Crumb)[];
+  /** The element links render as (default `a`), e.g. Next.js `Link`. */
+  linkAs?: ElementType;
+  /** Makes every crumb but the last a button; receives its index. */
+  onNavigate?: (index: number) => void;
+  /** Accessible name of the navigation (default "Breadcrumb"). */
+  label?: string;
 }
 export interface PaginationProps extends BaseProps {
   /** Number of pages. */
@@ -339,10 +407,17 @@ export interface PaginationProps extends BaseProps {
   defaultPage?: number;
   /** A page was picked (previous, next or a number); receives the new 1-based page. */
   onChange?: (page: number) => void;
+  /** Link mode for server-rendered lists: the address of a page; pages become links. */
+  href?: (page: number) => string;
+  /** The element links render as (default `a`), e.g. Next.js `Link`. */
+  linkAs?: ElementType;
+  /** Accessible name of the navigation (default "Pagination"), e.g. "Search results pages". */
+  label?: string;
 }
 export interface AppShellProps extends BaseProps {
   active?: string;
-  brand?: string;
+  /** The product name, or a node (a logo mark with the name; collapsed sidebars show it whole). */
+  brand?: ReactNode;
   tag?: string;
   nav?: NavItem[];
   user?: { name: string; email?: string };
@@ -385,6 +460,8 @@ export interface CountUpProps extends BaseProps {
   duration?: number;
   delay?: number;
   className?: string;
+  /** `false`: show the value without counting (it is always the value on the server). */
+  animate?: boolean;
 }
 export interface ListRowProps extends BaseProps {
   avatar?: string;
@@ -398,6 +475,18 @@ export interface ListRowProps extends BaseProps {
   unread?: boolean;
   active?: boolean;
   onClick?: () => void;
+  /** Makes the row a link (with `linkAs` for a router's link). */
+  href?: string;
+  linkAs?: ElementType;
+  /**
+   * Buttons of the row's own (rename, remove …), outside the clickable area so nothing interactive
+   * is nested. Without `onClick` and `href` the row is not interactive at all.
+   */
+  actions?: ReactNode;
+  /** Lines the title may take before it ends in an ellipsis (default: it wraps freely). */
+  titleLines?: number;
+  /** Lines the subtitle may take (default 1); badges and facts wrap within them. */
+  subtitleLines?: number;
 }
 export interface TimelineProps extends BaseProps {
   items: {
@@ -686,6 +775,14 @@ export interface TextFieldProps extends Omit<FormFieldProps, "children"> {
   inputMode?: "none" | "text" | "tel" | "url" | "email" | "numeric" | "decimal" | "search";
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
+  /**
+   * An interactive control at the end of the field (an `IconButton`: clear, copy, locate …). Unlike
+   * `suffix` it can be clicked, and it stays when the field shows an error or success mark.
+   */
+  action?: ReactNode;
+  /** For `type="password"`: a button that shows and hides the password (default true). */
+  reveal?: boolean;
 }
 export interface RadioGroupProps extends BaseProps {
   label?: string;
@@ -779,10 +876,18 @@ export interface SliderProps extends BaseProps {
   marks?: boolean;
   hint?: string;
 }
+export interface OtpInputHandle {
+  /** Empties every cell and focuses the first. */
+  reset: () => void;
+}
 export interface OtpInputProps extends BaseProps {
   length?: number;
   onComplete?: (code: string) => void;
   error?: boolean;
+  /** Empties the cells when `error` turns on, ready for the next try (default true). */
+  clearOnError?: boolean;
+  /** `ref.current.reset()` empties the cells on demand. */
+  ref?: Ref<OtpInputHandle>;
   label?: string;
 }
 export interface UploadFile {
@@ -802,9 +907,10 @@ export interface FileDropProps extends BaseProps {
   /**
    * The person picked or dropped files: the real `File` objects, after `accept` and `multiple`.
    * Upload them yourself. To show progress, control `files` and set each `progress`; an
-   * uncontrolled list shows them with their size only.
+   * uncontrolled list shows them with their size only. Return `false` to list none of them, or
+   * the files to list (for example after checking their size).
    */
-  onFiles?: (files: File[]) => void;
+  onFiles?: (files: File[]) => void | boolean | File[];
   /** Dropped files that do not match `accept` (show an inline Alert). */
   onReject?: (files: File[]) => void;
   /** A listed file was removed or its upload cancelled. */
@@ -819,6 +925,10 @@ export interface FileDropProps extends BaseProps {
   /** Accepted types, as for `<input type="file">` ("image/*,.pdf"); also checked on drop. */
   accept?: string;
   multiple?: boolean;
+  /** No picking or dropping; the list stays visible. */
+  disabled?: boolean;
+  /** Takes part in a surrounding form under this name: the listed files are submitted with it. */
+  name?: string;
 }
 export interface TooltipProps extends BaseProps {
   label: ReactNode;
@@ -975,6 +1085,8 @@ export interface LegendProps extends BaseProps {
 /* ── Kit 3: AI chat & agents ── */
 export interface Source {
   title: string;
+  /** More about the source in a tooltip: dataset, publisher, date ("Stand") … */
+  detail?: ReactNode;
   icon?: IconName;
   url?: string;
   onClick?: () => void;
@@ -1188,6 +1300,11 @@ export interface CheckoutStepsProps extends BaseProps {
   steps?: string[];
   current?: number;
   onPick?: (i: number) => void;
+  /**
+   * Numbers only, with the label of the current step (screen readers still hear every label).
+   * Narrow containers (up to 560px) get this on their own.
+   */
+  compact?: boolean;
 }
 export interface OrderTimelineProps extends BaseProps {
   status: "Placed" | "Paid" | "Packed" | "Shipped" | "Delivered" | "Refunded" | "Cancelled";
@@ -1196,7 +1313,15 @@ export interface OrderTimelineProps extends BaseProps {
 export interface PlanCardProps extends BaseProps {
   name: string;
   text?: string;
-  price: number | null;
+  /**
+   * A number is formatted as money (0 = "Free", null = "Let's talk"); any other node is shown as
+   * it is, e.g. a placeholder ("—") or a price the app formatted itself.
+   */
+  price: number | null | ReactNode;
+  /** Before the price, e.g. "from". */
+  pricePrefix?: ReactNode;
+  /** Under the price: net or gross, billed yearly, VAT note … */
+  priceNote?: ReactNode;
   was?: number;
   per?: string;
   features?: string[];
@@ -1207,6 +1332,9 @@ export interface PlanCardProps extends BaseProps {
   /** Disable the button, e.g. while a checkout starts or when the plan cannot be picked. */
   disabled?: boolean;
   onPick?: () => void;
+  /** The action as a link (checkout or sign-up page), with `linkAs` for a router's link. */
+  href?: string;
+  linkAs?: ElementType;
 }
 
 /* ── Kit 3: system screens ── */
@@ -1898,6 +2026,8 @@ export interface TilePickerProps extends BaseProps {
   multiple?: boolean;
   min?: number;
   label?: string;
+  /** `list`: one compact row per option (small picture or icon beside the label), e.g. on phones. */
+  layout?: "grid" | "list";
 }
 export interface ColorFieldProps extends BaseProps {
   label?: ReactNode;
@@ -2173,6 +2303,12 @@ export interface ExportDialogProps extends BaseProps {
 }
 export interface TwoFactorSetupProps extends BaseProps {
   qr?: ReactNode;
+  /** The otpauth:// link: the kit draws its QR code (instead of `qr`). */
+  qrValue?: string;
+  /** A "Trust this device" checkbox under the code field; a string replaces its label. */
+  trustDevice?: boolean | string;
+  /** The trust checkbox changed. */
+  onTrustChange?: (trusted: boolean) => void;
   secret: string;
   onVerify?: (code: string) => boolean | Promise<boolean>;
   codes?: string[];
@@ -2229,7 +2365,13 @@ export interface GalleryProps extends BaseProps {
   loading?: "lazy" | "eager";
   /** `referrerPolicy` of every image, e.g. `"no-referrer"` for photos from other hosts. */
   referrerPolicy?: ImageReferrerPolicy;
+  /** First image when uncontrolled. */
   start?: number;
+  /** The shown image (controlled, 0-based), with `onIndexChange`. */
+  index?: number;
+  onIndexChange?: (index: number) => void;
+  /** Accessible name of the gallery (default "Images"), e.g. the listing's title. */
+  label?: string;
   ratio?: string;
   thumbs?: boolean;
   fullscreen?: boolean;
@@ -2371,13 +2513,21 @@ export interface CookieConsentProps extends BaseProps {
   categories?: {
     id: string;
     label: string;
-    text?: string;
+    /** What the category covers; may hold a link to the details. */
+    text?: ReactNode;
     required?: boolean;
     default?: boolean;
   }[];
   onSave?: (choices: Record<string, boolean>) => void;
   open?: boolean;
   inline?: boolean;
+  /**
+   * "Only necessary" and "Accept all" with the same weight (both secondary buttons), as German
+   * data protection authorities expect on the first layer.
+   */
+  equalChoice?: boolean;
+  /** Id of the banner (its text is referenced by `aria-describedby`). */
+  id?: string;
 }
 export interface AnnouncementBarProps extends BaseProps {
   children: ReactNode;
@@ -2447,6 +2597,8 @@ export interface ToggleGroupProps extends BaseProps {
   /** Accessible name of the group. */
   label: string;
   size?: "sm" | "md";
+  /** Fills the width and shares it evenly; labels end in an ellipsis when space runs short. */
+  block?: boolean;
 }
 export interface ButtonGroupProps extends BaseProps {
   /** Accessible name of the group. */
@@ -2530,6 +2682,8 @@ export interface SelectMenuProps extends FieldProps, BaseProps {
   onChange?: (value: string) => void;
   placeholder?: string;
   disabled?: boolean;
+  /** `sm`: a compact trigger, e.g. a sort menu next to a heading. */
+  size?: "sm" | "md";
 }
 
 /* ── Navigation ── */
@@ -2664,4 +2818,18 @@ export interface ResizablePanelsProps extends BaseProps {
   storageKey?: string;
   /** Accessible names of the panels, used for the resize handles. */
   labels?: string[];
+}
+
+/* ── QrCode ── */
+export interface QrCodeProps extends BaseProps {
+  /** The text to encode: an otpauth:// link, a URL … */
+  value: string;
+  /** Error correction: L, M (default), Q or H. */
+  level?: "L" | "M" | "Q" | "H";
+  /** Width and height (default: the width of its container). */
+  size?: number | string;
+  /** Light modules around the code (default 4, the standard quiet zone). */
+  quiet?: number;
+  /** Accessible name (default "QR code"). */
+  label?: string;
 }

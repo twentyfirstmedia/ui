@@ -103,7 +103,7 @@ export function SelectMenu(p: SelectMenuProps) {
             ref={btn}
             id={id}
             type="button"
-            className={cx("tf-input", "tf-selectmenu", !cur && "empty")}
+            className={cx("tf-input", "tf-selectmenu", p.size === "sm" && "sm", !cur && "empty")}
             role="combobox"
             aria-haspopup="listbox"
             aria-expanded={open}

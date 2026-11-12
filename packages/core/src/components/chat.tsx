@@ -8,6 +8,7 @@ import { useControlled } from "../hooks.js";
 import { Avatar, Badge, TintIcon } from "./foundation.js";
 import { Popover, Tooltip } from "./overlays.js";
 import type {
+  BaseProps,
   AgentMarkProps,
   AgentStatusProps,
   ChatMessageProps,
@@ -123,7 +124,7 @@ export function RichText(p: RichTextProps) {
     });
   });
   return (
-    <div className={cx("tf-rt", p.className)}>
+    <div style={p.style} className={cx("tf-rt", p.className)}>
       {blocks}
       {p.streaming && <span className="tf-caret" aria-hidden />}
     </div>
@@ -167,7 +168,7 @@ export function CodeBlock(p: CodeBlockProps) {
     }, 1400);
   }
   return (
-    <div className="tf-code">
+    <div style={p.style} className={cx("tf-code", p.className)}>
       <div className="tf-code-head">
         <span>{p.lang || "text"}</span>
         <button type="button" className="tf-code-copy" onClick={copy} aria-label={t.copyCode}>
@@ -192,10 +193,15 @@ export function CodeBlock(p: CodeBlockProps) {
 }
 
 /* ── Chat building blocks ── */
-export function TypingDots(p: { label?: string }) {
+export function TypingDots(p: BaseProps & { label?: string }) {
   const t = useStrings(CHAT_STRINGS);
   return (
-    <span className="tf-typing" role="status" aria-label={p.label || t.working}>
+    <span
+      style={p.style}
+      className={cx("tf-typing", p.className)}
+      role="status"
+      aria-label={p.label || t.working}
+    >
       <i />
       <i />
       <i />
@@ -211,6 +217,7 @@ export function AgentMark(p: AgentMarkProps) {
       style={{
         width: s,
         height: s,
+        ...p.style,
       }}
       aria-hidden
     >
@@ -242,7 +249,7 @@ export function ChatMessage(p: ChatMessageProps) {
     }, 1400);
   }
   return (
-    <div className={cx("tf-msg", me ? "me" : "ai", p.className)}>
+    <div style={p.style} className={cx("tf-msg", me ? "me" : "ai", p.className)}>
       {me ? (
         <Avatar name={p.name || t.you} size={32} />
       ) : (
@@ -282,25 +289,35 @@ export function ChatMessage(p: ChatMessageProps) {
         )}
         {p.sources && p.sources.length > 0 && (
           <div className="tf-msg-sources">
-            {p.sources.map((s, i) => (
-              <a
-                key={i}
-                className="tf-source"
-                href={s.url || "#"}
-                onClick={
-                  s.onClick
-                    ? (e) => {
-                        e.preventDefault();
-                        s.onClick?.();
-                      }
-                    : undefined
-                }
-              >
-                <span className="tf-source-n">{i + 1}</span>
-                <Icon name={s.icon || "book"} size={12} />
-                {s.title}
-              </a>
-            ))}
+            {p.sources.map((s, i) => {
+              const chip = (
+                <a
+                  key={i}
+                  className="tf-source"
+                  href={s.url || "#"}
+                  title={s.detail ? undefined : s.title}
+                  onClick={
+                    s.onClick
+                      ? (e) => {
+                          e.preventDefault();
+                          s.onClick?.();
+                        }
+                      : undefined
+                  }
+                >
+                  <span className="tf-source-n">{i + 1}</span>
+                  <Icon name={s.icon || "book"} size={12} />
+                  <span className="tf-source-title">{s.title}</span>
+                </a>
+              );
+              return s.detail ? (
+                <Tooltip key={i} label={s.detail}>
+                  {chip}
+                </Tooltip>
+              ) : (
+                chip
+              );
+            })}
           </div>
         )}
         {!me && !p.streaming && p.actions !== false && (
@@ -371,7 +388,7 @@ export function ToolCall(p: ToolCallProps) {
   const open = React.useState(!!p.defaultOpen),
     st = p.status || "done";
   return (
-    <div className={cx("tf-tool", "is-" + st, open[0] && "open")}>
+    <div style={p.style} className={cx("tf-tool", "is-" + st, open[0] && "open", p.className)}>
       <button
         type="button"
         className="tf-tool-head"
@@ -419,7 +436,10 @@ export function Reasoning(p: ReasoningProps) {
   const t = useStrings(CHAT_STRINGS);
   const open = React.useState(!!p.defaultOpen);
   return (
-    <div className={cx("tf-reason", open[0] && "open", p.streaming && "live")}>
+    <div
+      style={p.style}
+      className={cx("tf-reason", open[0] && "open", p.streaming && "live", p.className)}
+    >
       <button
         type="button"
         className="tf-reason-head"
@@ -451,7 +471,7 @@ export function Reasoning(p: ReasoningProps) {
 
 export function PromptStarters(p: PromptStartersProps) {
   return (
-    <div className="tf-starters">
+    <div style={p.style} className={cx("tf-starters", p.className)}>
       {(p.items || []).map((s, i) => (
         <button
           key={i}
@@ -481,6 +501,8 @@ export function ModelPicker(p: ModelPickerProps) {
     cur = models.find((m) => m.id === p.value) || models[0] || {};
   return (
     <Popover
+      style={p.style}
+      className={p.className}
       side={p.side || "top"}
       width={300}
       flush
@@ -555,7 +577,8 @@ export function Composer(p: ComposerProps) {
   }
   return (
     <div
-      className={cx("tf-composer", p.busy && "busy")}
+      style={p.style}
+      className={cx("tf-composer", p.busy && "busy", p.className)}
       onDragOver={(e) => {
         if (p.onAttach) e.preventDefault();
       }}
@@ -723,7 +746,7 @@ export function AgentStatus(p: AgentStatusProps) {
   const t = useStrings(CHAT_STRINGS);
   const s = p.status || "Idle";
   return (
-    <span className="tf-agentstatus">
+    <span style={p.style} className={cx("tf-agentstatus", p.className)}>
       <Badge tone={AGENT_TONE[s] || "neutral"} live={s === "Running" || s === "Thinking"}>
         {t.agentStatus[s] ?? s}
       </Badge>
@@ -754,7 +777,7 @@ export function RunTrace(p: RunTraceProps) {
       : `${formatNumber(ms)} ms`;
   }
   return (
-    <div className="tf-trace">
+    <div style={p.style} className={cx("tf-trace", p.className)}>
       <div className="tf-trace-head">
         <span>{t.step}</span>
         <span>{t.timeline(fms(total))}</span>
@@ -807,7 +830,7 @@ export function UsageMeter(p: UsageMeterProps) {
   const pct = Math.min(100, ((p.used || 0) / (p.limit || 1)) * 100),
     tone = pct >= 90 ? "blush" : pct >= 70 ? "butter" : "mint";
   return (
-    <div className="tf-usage">
+    <div style={p.style} className={cx("tf-usage", p.className)}>
       <div className="tf-usage-top">
         <span>{p.label || t.context}</span>
         <b>{(p.format || String)(p.used) + " / " + (p.format || String)(p.limit)}</b>

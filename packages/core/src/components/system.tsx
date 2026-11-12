@@ -1,4 +1,5 @@
 import * as React from "react";
+import { cx } from "../cx.js";
 import { Button, TintIcon } from "./foundation.js";
 import type { AuthCardProps, IconName, StatusScreenProps, Tint } from "./types.js";
 
@@ -40,7 +41,7 @@ export function StatusScreen(p: StatusScreenProps) {
     } as Record<string, [string, string, IconName, Tint]>
   )[code] || [p.title, p.text, "sparkle", "sky"];
   return (
-    <div className="tf-status-screen">
+    <div style={p.style} className={cx("tf-status-screen", p.className)}>
       <div className="tf-status-art" aria-hidden>
         {/^\d+$/.test(code) && <span className="tf-status-code">{code}</span>}
         <TintIcon icon={p.icon || d[2]} tint={p.tint || d[3]} size={56} />
@@ -70,7 +71,7 @@ export function StatusScreen(p: StatusScreenProps) {
 
 export function AuthCard(p: AuthCardProps) {
   return (
-    <div className="tf-auth">
+    <div style={p.style} className={cx("tf-auth", p.className)}>
       {p.brand && (
         <div className="tf-auth-brand">
           <span className="tf-brand-word">{p.brand}</span>

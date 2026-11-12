@@ -8,6 +8,7 @@ import { Icon } from "../Icon.js";
 import { toast } from "../toast-store.js";
 import { Portal } from "../portal.js";
 import { DatePicker, FormField, OtpInput, Segmented } from "./forms.js";
+import { QrCode } from "./qr-code.js";
 import { Popover } from "./overlays.js";
 import { StatusIndicator, StatusShape } from "./status.js";
 import { Avatar, Button, Chip, IconButton, TintIcon } from "./foundation.js";
@@ -68,7 +69,7 @@ export function RangeSlider(p: RangeSliderProps) {
     v[1](n);
   }
   return (
-    <FormField id={id} label={p.label} hint={p.hint}>
+    <FormField style={p.style} className={p.className} id={id} label={p.label} hint={p.hint}>
       <div className="tf-range">
         <div className="tf-range-track">
           <span
@@ -148,7 +149,7 @@ export function BarList(p: BarListProps) {
     max = Math.max.apply(null, items.map((i) => i.value).concat([1])),
     f = p.format || formatNumber;
   return (
-    <div className="tf-barlist" role="list" aria-label={p.label}>
+    <div style={p.style} className={cx("tf-barlist", p.className)} role="list" aria-label={p.label}>
       {items.map((it, i) => (
         <div
           key={it.id || (typeof it.label === "string" ? it.label : i)}
@@ -202,6 +203,8 @@ export function StatusSelect(p: StatusSelectProps) {
     cur = opts.find((o) => o.value === v[0]) || opts[0] || {};
   return (
     <Popover
+      style={p.style}
+      className={p.className}
       width={p.width || 220}
       trigger={(s) => (
         <button
@@ -269,11 +272,14 @@ export function TilePicker(p: TilePickerProps) {
   }
   return (
     <div
-      className="tf-tiles"
+      className={cx("tf-tiles", p.layout === "list" && "list", p.className)}
       role={multi ? "group" : "radiogroup"}
       aria-label={p.label}
       style={{
-        gridTemplateColumns: "repeat(auto-fill, minmax(" + (p.min || 120) + "px, 1fr))",
+        ...(p.layout === "list"
+          ? null
+          : { gridTemplateColumns: "repeat(auto-fill, minmax(" + (p.min || 120) + "px, 1fr))" }),
+        ...p.style,
       }}
     >
       {(p.options || []).map((o) => (
@@ -336,7 +342,7 @@ export function LiveFeed(p: LiveFeedProps) {
     waiting = paused[0] ? Math.max(0, (p.items || []).length - heldItems.length) : 0;
   const types = p.types || [];
   return (
-    <div className="tf-livefeed">
+    <div style={p.style} className={cx("tf-livefeed", p.className)}>
       <div className="tf-livefeed-head">
         <span className={cx("tf-live", paused[0] && "off")}>
           <span className="tf-live-dot" aria-hidden />
@@ -493,6 +499,7 @@ export function MapView(p: MapViewProps) {
       className={cx("tf-map", p.className)}
       style={{
         height: Hh,
+        ...p.style,
       }}
       role="region"
       aria-label={p.label || t.viewMap}
@@ -583,7 +590,7 @@ export function BalanceCard(p: BalanceCardProps) {
     low = p.low != null && p.balance <= p.low,
     st = p.status || (p.balance <= 0 ? "danger" : low ? "warn" : "ok");
   return (
-    <div className={cx("tf-balance", "is-" + st)}>
+    <div style={p.style} className={cx("tf-balance", "is-" + st, p.className)}>
       <div className="tf-balance-head">
         {p.logo || <TintIcon icon={p.icon || "wallet"} tint={p.tint || "butter"} size={36} />}
         <div className="tf-option-text">
@@ -653,7 +660,7 @@ export function BalanceCard(p: BalanceCardProps) {
 export function ServiceMonitor(p: ServiceMonitorProps) {
   const { formatNumber } = useFormat();
   return (
-    <div className="tf-svcmon" role="list" aria-label={p.label}>
+    <div style={p.style} className={cx("tf-svcmon", p.className)} role="list" aria-label={p.label}>
       {(p.items || []).map((s) => (
         <div key={s.id || s.name} role="listitem" className="tf-svcmon-row">
           <StatusShape status={s.status} />
@@ -690,7 +697,7 @@ export function RunHistory(p: RunHistoryProps) {
   const { formatNumber } = useFormat();
   const open = React.useState<string | number | null>(null);
   return (
-    <div className="tf-runs" role="list" aria-label={p.label}>
+    <div style={p.style} className={cx("tf-runs", p.className)} role="list" aria-label={p.label}>
       {(p.items || []).map((r) => {
         const on = open[0] === r.id;
         return (
@@ -734,7 +741,7 @@ export function WebhookEndpoint(p: WebhookEndpointProps) {
   const { formatNumber } = useFormat();
   const open = React.useState(!!p.defaultOpen);
   return (
-    <div className="tf-hook">
+    <div style={p.style} className={cx("tf-hook", p.className)}>
       <div className="tf-hook-head">
         <TintIcon icon="webhook" tint="lilac" size={36} />
         <div
@@ -812,7 +819,7 @@ export function WebhookEndpoint(p: WebhookEndpointProps) {
 export function BackupList(p: BackupListProps) {
   const t = useStrings(ADMIN_STRINGS);
   return (
-    <div className="tf-backups" role="list" aria-label={p.label}>
+    <div style={p.style} className={cx("tf-backups", p.className)} role="list" aria-label={p.label}>
       {(p.items || []).map((b) => (
         <div key={b.id} role="listitem" className="tf-backups-row">
           <StatusShape status={b.status || "ok"} />
@@ -865,9 +872,10 @@ export function BlockList(p: BlockListProps) {
   );
   return (
     <div
-      className="tf-col"
+      className={cx("tf-col", p.className)}
       style={{
         gap: 12,
+        ...p.style,
       }}
     >
       <div className="tf-filterbar">
@@ -942,7 +950,10 @@ export function ReviewCard(p: ReviewCardProps) {
     } as Record<string, [Status, string]>
   )[p.state || "pending"] as [Status, string];
   return (
-    <article className={cx("tf-review", "is-" + (p.state || "pending"))}>
+    <article
+      style={p.style}
+      className={cx("tf-review", "is-" + (p.state || "pending"), p.className)}
+    >
       <div className="tf-review-head">
         <Avatar name={p.author} size={36} />
         <div
@@ -1064,7 +1075,7 @@ export function CouponCard(p: CouponCardProps) {
   const used = p.used || 0,
     st = p.status || (p.limit && used >= p.limit ? "idle" : "ok");
   return (
-    <div className={cx("tf-coupon", st !== "ok" && "off")}>
+    <div style={p.style} className={cx("tf-coupon", st !== "ok" && "off", p.className)}>
       <div className="tf-coupon-val">
         <b>
           {p.kind === "fixed"
@@ -1155,7 +1166,14 @@ export function LocaleField(p: LocaleFieldProps) {
   }
   const done = locs.filter((l) => (v[0][l.code] || "").trim()).length;
   return (
-    <FormField id={id} label={p.label} hint={p.hint} error={p.error}>
+    <FormField
+      style={p.style}
+      className={p.className}
+      id={id}
+      label={p.label}
+      hint={p.hint}
+      error={p.error}
+    >
       <div className="tf-locfield">
         <div className="tf-locfield-tabs" role="tablist" aria-label={t.languages}>
           {locs.map((l) => {
@@ -1251,6 +1269,8 @@ export function LocaleSwitcher(p: LocaleSwitcherProps) {
     (p.languages || []).find((l) => l.code === lang[0]) || {};
   return (
     <Popover
+      style={p.style}
+      className={p.className}
       width={280}
       trigger={(s) => (
         <button
@@ -1351,6 +1371,8 @@ export function WorkspaceSwitcher(p: WorkspaceSwitcherProps) {
     cur: Partial<WorkspaceSwitcherProps["items"][number]> = items.find((x) => x.id === v[0]) || {};
   return (
     <Popover
+      style={p.style}
+      className={p.className}
       width={p.width || 300}
       trigger={(s) => (
         <button
@@ -1611,7 +1633,7 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
     saved = React.useState(false);
   const steps = t.twoFactorSteps;
   return (
-    <div className="tf-2fa">
+    <div style={p.style} className={cx("tf-2fa", p.className)}>
       <ol className="tf-2fa-steps">
         {steps.map((s, i) => (
           <li key={i} className={cx(i === step[0] && "on", i < step[0] && "done")}>
@@ -1623,7 +1645,12 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
       {step[0] === 0 && (
         <div className="tf-2fa-scan">
           <div className="tf-2fa-qr" role="img" aria-label={t.qrCode}>
-            {p.qr || <Icon name="grid" size={48} />}
+            {p.qr ||
+              (p.qrValue ? (
+                <QrCode value={p.qrValue} quiet={2} label={t.qrCode} />
+              ) : (
+                <Icon name="grid" size={48} />
+              ))}
           </div>
           <div
             className="tf-col"
@@ -1685,6 +1712,8 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
           <OtpInput
             error={!!err[0]}
             onComplete={(c) => {
+              // a second wrong code turns the error on again, which empties the cells
+              err[1](null);
               Promise.resolve(p.onVerify ? p.onVerify(c) : true).then((ok) => {
                 if (ok) {
                   err[1](null);
@@ -1694,6 +1723,14 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
             }}
           />
           {err[0] && <span className="tf-field-error">{err[0]}</span>}
+          {p.trustDevice && (
+            <Checkbox
+              defaultChecked={false}
+              onChange={(e) => p.onTrustChange?.(e.currentTarget.checked)}
+            >
+              {typeof p.trustDevice === "string" ? p.trustDevice : t.trustDevice}
+            </Checkbox>
+          )}
           <div>
             <Button
               variant="ghost"
@@ -1787,7 +1824,7 @@ export function ColorField(p: ColorFieldProps) {
     b = lum(p.against || "#ffffff"),
     ratio = a != null && b != null ? (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) : null;
   return (
-    <FormField id={id} label={p.label} hint={p.hint}>
+    <FormField style={p.style} className={p.className} id={id} label={p.label} hint={p.hint}>
       <div className="tf-colorf">
         <label
           className="tf-colorf-sw"

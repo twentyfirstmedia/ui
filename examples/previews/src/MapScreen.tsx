@@ -143,40 +143,41 @@ export default function Preview() {
           <Switch>Bike lanes</Switch>
         </Panel>
       }
+      controls={
+        <ButtonGroup orientation="vertical" label="Zoom">
+          <IconButton icon="plus" label="Zoom in" variant="outline" />
+          <IconButton icon="minus" label="Zoom out" variant="outline" />
+        </ButtonGroup>
+      }
+      attribution="Map data © OpenStreetMap contributors"
       end={
-        <div style={{ display: "grid", gap: 12 }}>
-          <ButtonGroup orientation="vertical" label="Zoom" style={{ justifySelf: "end" }}>
-            <IconButton icon="plus" label="Zoom in" variant="outline" />
-            <IconButton icon="minus" label="Zoom out" variant="outline" />
-          </ButtonGroup>
-          {place && (
-            <Panel
-              title={place.label}
-              subtitle={typeof place.sub === "string" ? place.sub : undefined}
-              action={
-                <Badge tone="success" dot>
-                  Open
-                </Badge>
-              }
-            >
-              <KeyValue
-                items={[
-                  ["Walk", "12 min"],
-                  ["Distance", "850 m"],
-                  ["Rating", "4.7 of 5"],
-                ]}
-              />
-              <div className="tf-row" style={{ gap: 8 }}>
-                <Button variant="primary" icon="send">
-                  Directions
-                </Button>
-                <Button variant="secondary" icon="star">
-                  Save
-                </Button>
-              </div>
-            </Panel>
-          )}
-        </div>
+        place && (
+          <Panel
+            title={place.label}
+            subtitle={typeof place.sub === "string" ? place.sub : undefined}
+            action={
+              <Badge tone="success" dot>
+                Open
+              </Badge>
+            }
+          >
+            <KeyValue
+              items={[
+                ["Walk", "12 min"],
+                ["Distance", "850 m"],
+                ["Rating", "4.7 of 5"],
+              ]}
+            />
+            <div className="tf-row" style={{ gap: 8 }}>
+              <Button variant="primary" icon="send">
+                Directions
+              </Button>
+              <Button variant="secondary" icon="star">
+                Save
+              </Button>
+            </div>
+          </Panel>
+        )
       }
       bottom={
         <Dock

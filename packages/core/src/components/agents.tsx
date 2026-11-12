@@ -42,7 +42,8 @@ export function AgentCard(p: AgentCardProps) {
   const t = useStrings(AGENTS_STRINGS);
   return (
     <div
-      className={cx("tf-agentcard", p.onClick && "click")}
+      style={p.style}
+      className={cx("tf-agentcard", p.onClick && "click", p.className)}
       onClick={p.onClick}
       tabIndex={p.onClick ? 0 : undefined}
     >
@@ -80,7 +81,7 @@ export function AgentCard(p: AgentCardProps) {
 }
 export function AgentDetails(p: AgentDetailsProps) {
   return (
-    <div className="tf-agentdetails">
+    <div style={p.style} className={cx("tf-agentdetails", p.className)}>
       <div className="tf-agentdetails-id">
         <AgentMark tint={p.tint} size={56} live={p.status === "running"} />
         <b>{p.name}</b>
@@ -119,7 +120,7 @@ export function ChatList(p: ChatListProps) {
     )
     .filter((g) => g.items.length);
   return (
-    <div className="tf-chatlist">
+    <div style={p.style} className={cx("tf-chatlist", p.className)}>
       <SearchField
         placeholder={p.searchPlaceholder || t.searchChats}
         value={q[0]}
@@ -186,7 +187,7 @@ export function ChatList(p: ChatListProps) {
 }
 export function ChatWorkspace(p: ChatWorkspaceProps) {
   return (
-    <div className={cx("tf-chatws", p.details && "with-details", p.className)}>
+    <div style={p.style} className={cx("tf-chatws", p.details && "with-details", p.className)}>
       <div className="tf-chatws-list">{p.list}</div>
       <div className="tf-chatws-thread">{p.thread}</div>
       {p.details && <div className="tf-chatws-details">{p.details}</div>}
@@ -196,7 +197,7 @@ export function ChatWorkspace(p: ChatWorkspaceProps) {
 export function SearchHits(p: SearchHitsProps) {
   const t = useStrings(AGENTS_STRINGS);
   return (
-    <div className="tf-hits">
+    <div style={p.style} className={cx("tf-hits", p.className)}>
       {(p.items || []).length === 0 ? (
         <EmptyState icon="search" title={t.nothingFound} text={p.emptyText} />
       ) : (
@@ -231,7 +232,7 @@ export function SearchHits(p: SearchHitsProps) {
 export function ThinkingLine(p: ThinkingLineProps) {
   const t = useStrings(AGENTS_STRINGS);
   return (
-    <div className="tf-thinking" role="status">
+    <div style={p.style} className={cx("tf-thinking", p.className)} role="status">
       <TypingDots />
       <span>{p.text || t.thinking}</span>
     </div>
@@ -252,7 +253,7 @@ export function FeedbackRating(p: FeedbackRatingProps) {
       </span>
     );
   return (
-    <div className="tf-feedback">
+    <div style={p.style} className={cx("tf-feedback", p.className)}>
       <div
         className="tf-row"
         style={{
@@ -316,7 +317,7 @@ export function FeedbackRating(p: FeedbackRatingProps) {
 }
 export function ActivityFeed(p: ActivityFeedProps) {
   return (
-    <div className="tf-activity">
+    <div style={p.style} className={cx("tf-activity", p.className)}>
       {(
         p.groups || [
           {
@@ -349,7 +350,7 @@ export function ActivityFeed(p: ActivityFeedProps) {
 export function DailyBriefing(p: DailyBriefingProps) {
   const t = useStrings(AGENTS_STRINGS);
   return (
-    <div className="tf-briefing">
+    <div style={p.style} className={cx("tf-briefing", p.className)}>
       <div className="tf-briefing-head">
         <AgentMark tint={p.tint || "lilac"} size={40} />
         <div className="tf-option-text">
@@ -411,7 +412,7 @@ export function BudgetStop(p: BudgetStopProps) {
   const t = useStrings(AGENTS_STRINGS);
   const { formatMoney } = useFormat();
   return (
-    <div className="tf-budgetstop">
+    <div style={p.style} className={cx("tf-budgetstop", p.className)}>
       <Alert
         tone="danger"
         title={p.title || t.budgetUsedUp}
@@ -458,7 +459,7 @@ export function MemoryViewer(p: MemoryViewerProps) {
       (!q[0] || m.text.toLowerCase().indexOf(q[0].toLowerCase()) > -1),
   );
   return (
-    <div className="tf-memory">
+    <div style={p.style} className={cx("tf-memory", p.className)}>
       <div className="tf-filterbar">
         <SearchField
           placeholder={t.searchMemory}
@@ -557,7 +558,7 @@ export function OverrideDiff(p: OverrideDiffProps) {
     }
   }
   return (
-    <div className="tf-diff">
+    <div style={p.style} className={cx("tf-diff", p.className)}>
       <div className="tf-diff-head">
         <div className="tf-option-text">
           <b>{p.title}</b>
@@ -602,7 +603,7 @@ const TRIGGER_ICON: Record<string, IconName> = {
 export function TriggerList(p: TriggerListProps) {
   const strings = useStrings(AGENTS_STRINGS);
   return (
-    <div className="tf-triggers">
+    <div style={p.style} className={cx("tf-triggers", p.className)}>
       {(p.items || []).map((t) => (
         <div key={t.id} className={cx("tf-trigger", t.enabled === false && "off")}>
           <TintIcon
@@ -655,13 +656,14 @@ export function ScheduleCalendar(p: ScheduleCalendarProps) {
     rowH = 32;
   return (
     <div
-      className="tf-sched"
-      style={
-        {
+      className={cx("tf-sched", p.className)}
+      style={{
+        ...({
           "--rows": hours.length,
           "--row-h": rowH + "px",
-        } as React.CSSProperties
-      }
+        } as React.CSSProperties),
+        ...p.style,
+      }}
     >
       <span />
       {days.map((d, i) => (
@@ -726,7 +728,7 @@ export function OrgChart(p: OrgChartProps) {
     );
   }
   return (
-    <div className="tf-org">
+    <div style={p.style} className={cx("tf-org", p.className)}>
       <ul>
         {node(
           Object.assign(
@@ -746,7 +748,7 @@ export function VoiceMode(p: VoiceModeProps) {
     bars = [];
   for (let i = 0; i < 24; i++) bars.push(i);
   return (
-    <div className={cx("tf-voice", "is-" + st)}>
+    <div style={p.style} className={cx("tf-voice", "is-" + st, p.className)}>
       <AgentMark tint={p.tint || "lilac"} size={72} live={st !== "idle"} />
       <b className="tf-voice-name">{p.name}</b>
       <span className="tf-voice-state">

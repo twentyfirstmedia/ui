@@ -2,7 +2,7 @@
 import * as React from "react";
 import { useStrings } from "../context.js";
 import { SITE_STRINGS } from "../strings.js";
-import { useControlled } from "../hooks.js";
+import { useControlled, useId } from "../hooks.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { AgentMark } from "./chat.js";
@@ -15,7 +15,10 @@ export function ChatLauncher(p: ChatLauncherProps) {
   const t = useStrings(SITE_STRINGS);
   const open = useControlled(p.open, false, p.onOpenChange);
   return (
-    <div className={cx("tf-launch", open[0] && "open", p.inline && "inline")}>
+    <div
+      style={p.style}
+      className={cx("tf-launch", open[0] && "open", p.inline && "inline", p.className)}
+    >
       {open[0] && (
         <div className="tf-launch-panel" role="dialog" aria-label={p.title || t.assistant}>
           <div className="tf-launch-head">
@@ -61,6 +64,8 @@ export function ChatLauncher(p: ChatLauncherProps) {
 
 export function CookieConsent(p: CookieConsentProps) {
   const t = useStrings(SITE_STRINGS);
+  const auto = useId("cookie");
+  const id = p.id || auto;
   const more = React.useState(false),
     cats = React.useState(
       (p.categories || []).reduce<Record<string, boolean>>((a, c) => {
@@ -79,9 +84,12 @@ export function CookieConsent(p: CookieConsentProps) {
   }
   return (
     <div
-      className={cx("tf-cookie", p.inline && "inline")}
+      style={p.style}
+      id={id}
+      className={cx("tf-cookie", p.inline && "inline", p.className)}
       role="dialog"
       aria-label={p.title || t.privacySettings}
+      aria-describedby={`${id}-text`}
     >
       <div
         className="tf-row"
@@ -100,6 +108,7 @@ export function CookieConsent(p: CookieConsentProps) {
         >
           <b>{p.title || t.privacySettings}</b>
           <p
+            id={`${id}-text`}
             className="tf-card-desc"
             style={{
               margin: 0,
@@ -168,6 +177,7 @@ export function CookieConsent(p: CookieConsentProps) {
           {t.onlyNecessary}
         </Button>
         <Button
+          variant={p.equalChoice ? "secondary" : undefined}
           onClick={() => {
             done(true);
           }}
@@ -184,7 +194,11 @@ export function AnnouncementBar(p: AnnouncementBarProps) {
   const shut = React.useState(false);
   if (shut[0]) return null;
   return (
-    <div className={cx("tf-announce", "tf-t-" + (p.tint || "butter"))} role="status">
+    <div
+      style={p.style}
+      className={cx("tf-announce", "tf-t-" + (p.tint || "butter"), p.className)}
+      role="status"
+    >
       {p.icon !== false && <Icon name={p.icon || "sparkle"} size={15} />}
       <span>{p.children}</span>
       {p.action}

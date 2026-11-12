@@ -161,7 +161,7 @@ export function ToggleGroup(p: ToggleGroupProps) {
   return (
     <div
       ref={root}
-      className={cx("tf-togglegroup", p.size === "sm" && "sm", p.className)}
+      className={cx("tf-togglegroup", p.size === "sm" && "sm", p.block && "block", p.className)}
       style={p.style}
       role="group"
       aria-label={p.label}
@@ -191,7 +191,7 @@ export function ToggleGroup(p: ToggleGroupProps) {
             }
           >
             {o.icon && <Icon name={o.icon} />}
-            {o.label}
+            {o.label && <span className="tf-toggle-label">{o.label}</span>}
           </button>
         );
       })}

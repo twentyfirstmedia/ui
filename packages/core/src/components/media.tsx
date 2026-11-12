@@ -2,7 +2,7 @@
 import * as React from "react";
 import { useFormat, useStrings } from "../context.js";
 import { MEDIA_STRINGS } from "../strings.js";
-import { useControlled } from "../hooks.js";
+import { moveFocus, useControlled } from "../hooks.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { Portal } from "../portal.js";
@@ -23,7 +23,7 @@ export function ImageVariants(p: ImageVariantsProps) {
   const sel = useControlled<string | number>(p.selected, p.variants?.[0]?.id ?? "", p.onSelect),
     cur: Partial<ImageVariant> = (p.variants || []).find((v) => v.id === sel[0]) || {};
   return (
-    <div className="tf-imgvar">
+    <div style={p.style} className={cx("tf-imgvar", p.className)}>
       <div
         className="tf-imgvar-stage"
         style={
@@ -94,19 +94,52 @@ export function ImageVariants(p: ImageVariantsProps) {
 export function Gallery(p: GalleryProps) {
   const t = useStrings(MEDIA_STRINGS);
   const items = p.items || [],
-    i = React.useState(p.start || 0),
+    i = useControlled(p.index, p.start || 0, p.onIndexChange),
     full = React.useState(false),
     n = items.length,
     cur: GalleryItem = items[i[0]] || {};
+  const box = React.useRef<HTMLDivElement>(null),
+    thumbs = React.useRef<HTMLDivElement>(null),
+    opener = React.useRef<HTMLButtonElement>(null);
   function go(d: number) {
     i[1]((i[0] + d + n) % n);
   }
+  const restore = React.useRef(false);
+  function close() {
+    full[1](false);
+    restore.current = true;
+  }
+  // the full-screen button comes back after the lightbox closes: focus returns to it
+  React.useEffect(() => {
+    if (!full[0] && restore.current) {
+      restore.current = false;
+      opener.current?.focus();
+    }
+  }, [full[0]]);
+  // focus moves into the lightbox when it appears (the portal mounts a render later)
+  const attachBox = React.useCallback((n: HTMLDivElement | null) => {
+    box.current = n;
+    n?.querySelector<HTMLElement>("button")?.focus();
+  }, []);
   React.useEffect(() => {
     if (!full[0]) return;
+    const lb = box.current;
     function k(e: KeyboardEvent) {
-      if (e.key === "Escape") full[1](false);
+      if (e.key === "Escape") close();
       if (e.key === "ArrowRight") go(1);
       if (e.key === "ArrowLeft") go(-1);
+      if (e.key === "Tab" && lb) {
+        const els = Array.from(lb.querySelectorAll<HTMLElement>("button"));
+        const a = els[0],
+          z = els[els.length - 1];
+        if (e.shiftKey && document.activeElement === a) {
+          e.preventDefault();
+          z?.focus();
+        } else if (!e.shiftKey && document.activeElement === z) {
+          e.preventDefault();
+          a?.focus();
+        }
+      }
     }
     document.addEventListener("keydown", k);
     return () => {
@@ -132,6 +165,19 @@ export function Gallery(p: GalleryProps) {
   const stage = (
     <div
       className="tf-gallery-stage"
+      role="group"
+      aria-label={t.imageN(i[0] + 1)}
+      tabIndex={n > 1 ? 0 : undefined}
+      onKeyDown={(e) => {
+        if (e.target !== e.currentTarget) return;
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          go(1);
+        } else if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          go(-1);
+        }
+      }}
       style={{
         aspectRatio: p.ratio || "3 / 2",
       }}
@@ -160,6 +206,7 @@ export function Gallery(p: GalleryProps) {
       <span className="tf-gallery-count">{i[0] + 1 + " / " + n}</span>
       {!full[0] && p.fullscreen !== false && (
         <IconButton
+          ref={opener}
           icon="expand"
           label={t.fullScreen}
           className="tf-gallery-full"
@@ -172,16 +219,35 @@ export function Gallery(p: GalleryProps) {
     </div>
   );
   return (
-    <div className="tf-gallery">
+    <div
+      style={p.style}
+      className={cx("tf-gallery", p.className)}
+      role="group"
+      aria-label={p.label || t.images}
+    >
       {stage}
       {p.thumbs !== false && n > 1 && (
-        <div className="tf-gallery-thumbs" role="tablist" aria-label={t.images}>
+        <div
+          ref={thumbs}
+          className="tf-gallery-thumbs"
+          role="tablist"
+          aria-label={p.label || t.images}
+          onKeyDown={(e) => {
+            if (moveFocus(e, thumbs.current, '[role="tab"]', "horizontal")) {
+              const k = Array.from(thumbs.current?.querySelectorAll('[role="tab"]') || []).indexOf(
+                document.activeElement as Element,
+              );
+              if (k > -1) i[1](k);
+            }
+          }}
+        >
           {items.map((it, k) => (
             <button
               key={k}
               type="button"
               role="tab"
               aria-selected={k === i[0]}
+              tabIndex={k === i[0] ? 0 : -1}
               className={cx(k === i[0] && "on")}
               onClick={() => {
                 i[1](k);
@@ -195,15 +261,14 @@ export function Gallery(p: GalleryProps) {
       )}
       {full[0] && (
         <Portal>
-          <div className="tf-lightbox" role="dialog" aria-modal="true" aria-label={t.images}>
-            <IconButton
-              icon="x"
-              label={t.close}
-              className="tf-lightbox-close"
-              onClick={() => {
-                full[1](false);
-              }}
-            />
+          <div
+            ref={attachBox}
+            className="tf-lightbox"
+            role="dialog"
+            aria-modal="true"
+            aria-label={p.label || t.images}
+          >
+            <IconButton icon="x" label={t.close} className="tf-lightbox-close" onClick={close} />
             <div className="tf-lightbox-stage">
               {pic(cur, "tf-gallery-img", "eager")}
               {n > 1 && (
@@ -268,9 +333,10 @@ export function BeforeAfter(p: BeforeAfterProps) {
   return (
     <div
       ref={ref}
-      className="tf-ba"
+      className={cx("tf-ba", p.className)}
       style={{
         aspectRatio: p.ratio || "3 / 2",
+        ...p.style,
       }}
       onPointerDown={(e) => {
         drag.current = true;
@@ -281,6 +347,12 @@ export function BeforeAfter(p: BeforeAfterProps) {
         if (drag.current) at(e);
       }}
       onPointerUp={() => {
+        drag.current = false;
+      }}
+      onPointerCancel={() => {
+        drag.current = false;
+      }}
+      onLostPointerCapture={() => {
         drag.current = false;
       }}
     >
