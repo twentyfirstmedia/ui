@@ -1,5 +1,46 @@
 # @twentyfirstmedia/elements
 
+## 0.6.0
+
+### Minor Changes
+
+- [#42](https://github.com/twentyfirstmedia/ui/pull/42) [`caae958`](https://github.com/twentyfirstmedia/ui/commit/caae958f805737b53dfd465140be42877e3349db) Thanks [@robintrepte](https://github.com/robintrepte)! - Forms, media, maps and fonts.
+  
+  - `TextField`: `type="password"` gets a show/hide button (`reveal={false}` turns it off), an interactive `action` slot that stays next to error marks, `onKeyDown`.
+  - `Checkbox`: a 24px hit area around the same box (WCAG 2.2 target size).
+  - `SearchField`: forwards `id`, `name`, `defaultValue`, `onKeyDown`, `onFocus`, `onBlur`, `autoFocus` and `inputProps` (combobox ARIA); `bindShortcut` focuses it with ⌘/Ctrl + the hint's key; the hint is hidden on touch screens.
+  - `FileDrop`: `disabled`, `name` (the listed files take part in a form), `onFiles` can return `false` or the files to list.
+  - `OtpInput`: empties its cells when `error` turns on (`clearOnError`), `ref.current.reset()`.
+  - New `QrCode` (encoded on the device, no service); `TwoFactorSetup` draws it from `qrValue` and offers `trustDevice`.
+  - `TilePicker layout="list"`.
+  - `CookieConsent`: `equalChoice`, `id`, `aria-describedby` on its text, category texts may hold links.
+  - `Gallery`: controlled `index`/`onIndexChange`, `label`, arrow keys on the stage and the thumbnails, focus moves into the lightbox and back.
+  - `BeforeAfter`: the page scrolls vertically over it on touch screens, drags end on pointer cancel.
+  - `CountUp`: renders its final value on the server and counts up on the client; `animate={false}`.
+  - `PlanCard`: `price` takes any node, `pricePrefix`, `priceNote`, `href`/`linkAs` for the action, a "Current plan" badge.
+  - `FloatingLayout`: `controls` and `attribution` in the free corner, `startWidth`/`endWidth`, `--floating-safe-*` variables with the space its slots take, the `end` slot as a bottom sheet below 720px (`endSheet`).
+  - Tokens `ramp-1`…`ramp-5` in both kits: a calm sequential ramp for maps and heatmaps.
+  - Static WOFF fonts under `fonts/og/` for share images (`next/og`) and PDF tools.
+
+- [#42](https://github.com/twentyfirstmedia/ui/pull/42) [`caae958`](https://github.com/twentyfirstmedia/ui/commit/caae958f805737b53dfd465140be42877e3349db) Thanks [@robintrepte](https://github.com/robintrepte)! - Fluid layouts and root props.
+  
+  - Every component now puts `className` and `style` on its root element (about 160 ignored one or both); a test renders every reference preview and checks it.
+  - Nothing pushes past its container: segmented controls, tabs and toggle groups shrink with ellipsis labels (`ToggleGroup block` is new); `MobileTabBar` shares its width evenly; the `TopBar` nav switches to icons as soon as its labels no longer fit, the account button cuts name and address with an ellipsis (the full text in `title`) and the search field shrinks; `CheckoutSteps` stay on one row and show numbers only when narrow (`compact` forces it); an `Alert`'s actions move under the text when narrow; chat source chips grow to two lines and take a `detail` tooltip; `RangeSlider` fields fit narrow columns.
+  - `TopBar` and `AppShell` take a node as `brand` (a logo mark with the name).
+  - `SideRail`: `expanded`/`defaultExpanded`/`onExpandedChange` show names next to the icons, `toggle` adds the button, every button has a real tooltip while collapsed.
+  - `Breadcrumb` (and `PageHeader crumbs`): items with `href` (with `linkAs`) or `onClick`, `onNavigate`, `label`; plain labels are no longer fake `#` links; 24px targets.
+  - `Pagination`: link mode (`href` per page, `linkAs`), `label`, previous/next disabled at the ends.
+  - `ListRow`: `href`/`linkAs`, `actions` outside the clickable area (no nested buttons), a non-interactive row without `onClick`/`href`, `titleLines`/`subtitleLines`.
+  - `SelectMenu size="sm"`; `Table stack` shows rows as labelled cards when the table is narrow.
+
+- [#41](https://github.com/twentyfirstmedia/ui/pull/41) [`ce11edd`](https://github.com/twentyfirstmedia/ui/commit/ce11eddd4524ce9998b1f03453a58f6b7a684131) Thanks [@robintrepte](https://github.com/robintrepte)! - Sidebar overhaul and an app shell with a sidebar.
+  
+  - `Sidebar`: `variant` (`floating`, `attached`, `shell`); links with `href`, `linkAs` and `external`; `badge` (`"dot"` or a word), `disabled`, item `actions` ("…" menu); collapsible groups with an `action`; tooltips and flyouts when collapsed; `storageKey` and `shortcut` (⌘B / Ctrl+B); an off-canvas drawer on phones (`mobileOpen`, `onMobileOpenChange`); `header`/`footer` as a function of `{ collapsed }`.
+  - Fixed: more room between a group heading and a selected first item; counts no longer jump to the corner in narrow shells.
+  - Filters: `as="aside"` makes the sidebar a complementary region; items with `checked` are checkbox options (radios in a group with `select: "single"`), a group's `content` holds any control, `collapsible` turns the icons-only mode off.
+  - New `UserMenu`; `WorkspaceSwitcher` takes `compact`.
+  - `AppShell navigation="sidebar"` with `sidebarGroups`, `workspaces`, `userMenu` and `sidebar`.
+
 ## 0.5.0
 
 ### Minor Changes
