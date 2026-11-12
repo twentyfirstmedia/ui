@@ -1345,6 +1345,7 @@ export function LocaleSwitcher(p: LocaleSwitcherProps) {
 }
 
 export function WorkspaceSwitcher(p: WorkspaceSwitcherProps) {
+  const t = useStrings(ADMIN_STRINGS);
   const items = p.items || [],
     v = useControlled(p.value, items[0] && items[0].id, p.onChange),
     cur: Partial<WorkspaceSwitcherProps["items"][number]> = items.find((x) => x.id === v[0]) || {};
@@ -1354,9 +1355,10 @@ export function WorkspaceSwitcher(p: WorkspaceSwitcherProps) {
       trigger={(s) => (
         <button
           type="button"
-          className={cx("tf-wssw", p.variant === "frame" && "on-frame")}
+          className={cx("tf-wssw", p.variant === "frame" && "on-frame", p.compact && "compact")}
           aria-haspopup="listbox"
           aria-expanded={s.open}
+          aria-label={p.compact ? `${t.switchWorkspace}: ${cur.name || ""}` : undefined}
           onClick={s.toggle}
         >
           {cur.logo || (
@@ -1364,11 +1366,15 @@ export function WorkspaceSwitcher(p: WorkspaceSwitcherProps) {
               {(cur.name || "?").charAt(0)}
             </span>
           )}
-          <span className="tf-option-text">
-            <b>{cur.name}</b>
-            {cur.sub && <small>{cur.sub}</small>}
-          </span>
-          <Icon name="chevronDown" size={14} />
+          {!p.compact && (
+            <>
+              <span className="tf-option-text">
+                <b>{cur.name}</b>
+                {cur.sub && <small>{cur.sub}</small>}
+              </span>
+              <Icon name="chevronDown" size={14} />
+            </>
+          )}
         </button>
       )}
     >

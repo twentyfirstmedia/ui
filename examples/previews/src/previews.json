@@ -1173,9 +1173,16 @@
   {
     "name": "Sidebar",
     "group": "Navigation",
-    "width": 960,
-    "height": 420,
-    "components": ["Sidebar", "Avatar"]
+    "width": 1000,
+    "height": 640,
+    "components": ["Sidebar", "UserMenu", "WorkspaceSwitcher", "Menu"]
+  },
+  {
+    "name": "UserMenu",
+    "group": "Navigation",
+    "width": 720,
+    "height": 360,
+    "components": ["UserMenu", "Card", "Menu", "Avatar"]
   },
   {
     "name": "FloatingLayout",
@@ -1220,5 +1227,60 @@
     "width": 960,
     "height": 420,
     "components": ["ResizablePanels"]
+  },
+  {
+    "name": "SidebarShellScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 820,
+    "components": [
+      "AppShell",
+      "Sidebar",
+      "WorkspaceSwitcher",
+      "UserMenu",
+      "Badge",
+      "Button",
+      "IconButton",
+      "KeyValue",
+      "PageHeader",
+      "Panel",
+      "Progress",
+      "SearchField",
+      "Stagger",
+      "StatTile"
+    ]
+  },
+  {
+    "name": "AttachedSidebarScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 720,
+    "components": [
+      "Sidebar",
+      "UserMenu",
+      "Badge",
+      "Button",
+      "Card",
+      "PageHeader",
+      "Stagger",
+      "Tabs"
+    ]
+  },
+  {
+    "name": "FilterSidebarScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 760,
+    "components": [
+      "Sidebar",
+      "RangeSlider",
+      "Badge",
+      "Button",
+      "Card",
+      "Chip",
+      "PageHeader",
+      "SearchField",
+      "Stagger"
+    ]
   }
 ]

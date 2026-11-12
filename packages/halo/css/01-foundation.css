@@ -965,6 +965,25 @@ select.tf-input {
 .tf-shell .tf-topbar {
   padding: 0 var(--space-6);
 }
+/* AppShell with navigation="sidebar": the labelled sidebar on the frame, the sheet beside it */
+.tf-shell.tf-shell-sidebar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: stretch;
+  padding: 8px;
+}
+.tf-shell-tools {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tf-sheet.tf-sheet-norail {
+  grid-template-columns: minmax(0, 1fr) 300px;
+}
+.tf-sheet.tf-sheet-norail.tf-sheet-2 {
+  grid-template-columns: minmax(0, 1fr);
+}
 .tf-sheet {
   display: grid;
   grid-template-columns: 44px 1fr 300px;
