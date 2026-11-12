@@ -509,7 +509,11 @@ export function PlanCard(p: PlanCardProps) {
       {p.featured && <span className="tf-plan-flag">{p.flag || t.mostPopular}</span>}
       <div className="tf-plan-head">
         <b>{p.name}</b>
-        {p.current && <span className="tf-plan-current">{t.currentPlan}</span>}
+        {p.current && (
+          <Badge tone="success" className="tf-plan-current">
+            {t.currentPlan}
+          </Badge>
+        )}
         {p.text && <span>{p.text}</span>}
       </div>
       <div className="tf-plan-price">

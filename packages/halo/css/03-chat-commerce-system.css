@@ -1627,7 +1627,7 @@
   color: var(--on-frame);
   box-shadow: var(--shadow-float);
 }
-.tf-plan.featured .tf-plan-head span,
+.tf-plan.featured .tf-plan-head span:not(.tf-badge),
 .tf-plan.featured .tf-plan-price span,
 .tf-plan.featured .tf-plan-price s,
 .tf-plan.featured .tf-plan-feats li.no {
@@ -1658,18 +1658,13 @@
 .tf-plan-head b {
   font: 700 20px/26px var(--font-sans);
 }
-.tf-plan-head span {
+.tf-plan-head span:not(.tf-badge) {
   font: 500 13px/18px var(--font-sans);
   color: var(--ink-muted);
 }
 /* "Current plan" next to the name, and the note under the price */
 .tf-plan-head .tf-plan-current {
   align-self: flex-start;
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-  background: var(--mint);
-  color: var(--mint-ink);
-  font: 600 11px/16px var(--font-sans);
 }
 .tf-plan-note {
   margin: -4px 0 0;
