@@ -325,3 +325,55 @@ describe("AppShell with a sidebar", () => {
     expect(screen.getByText("Page")).toBeTruthy();
   });
 });
+
+describe("Sidebar for filters", () => {
+  it("is an aside with checkbox and radio options, free content and no collapse", () => {
+    const pickType = vi.fn();
+    const pickRooms = vi.fn();
+    render(
+      <Sidebar
+        as="aside"
+        groups={[
+          {
+            label: "Type",
+            items: [
+              {
+                id: "flat",
+                label: "Apartment",
+                count: 12,
+                checked: true,
+                onCheckedChange: pickType,
+              },
+              { id: "house", label: "House", count: 3, checked: false, onCheckedChange: pickType },
+            ],
+          },
+          {
+            label: "Rooms",
+            select: "single",
+            items: [
+              { id: "r1", label: "1+", checked: true, onCheckedChange: pickRooms },
+              { id: "r2", label: "2+", checked: false, onCheckedChange: pickRooms },
+            ],
+          },
+          { label: "Price", content: <input aria-label="Max price" /> },
+        ]}
+      />,
+    );
+    const aside = screen.getByRole("complementary", { name: "Filters" });
+    expect(screen.queryByRole("navigation")).toBeNull();
+    const house = within(aside).getByRole("checkbox", { name: /House/ });
+    expect(within(aside).getByRole("checkbox", { name: /Apartment/ })).toHaveProperty(
+      "checked",
+      true,
+    );
+    fireEvent.click(house);
+    expect(pickType).toHaveBeenCalledWith(true);
+    const two = within(aside).getByRole("radio", { name: "2+" });
+    fireEvent.click(two);
+    expect(pickRooms).toHaveBeenCalledWith(true);
+    expect(within(aside).getByRole("group", { name: "Rooms" })).toBeTruthy();
+    expect(within(aside).getByRole("textbox", { name: "Max price" })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Collapse sidebar" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Filters" })).toBeTruthy();
+  });
+});

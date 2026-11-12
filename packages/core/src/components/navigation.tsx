@@ -463,7 +463,9 @@ export function Sidebar(p: SidebarProps) {
   const t = useStrings(NAVIGATION_STRINGS);
   const phone = usePhone();
   const collapsedState = useControlled(p.collapsed, !!p.defaultCollapsed, p.onCollapsedChange);
-  const collapsed = collapsedState[0] && !phone;
+  const aside = p.as === "aside";
+  const canCollapse = p.collapsible ?? !aside;
+  const collapsed = canCollapse && collapsedState[0] && !phone;
   const setCollapsed = collapsedState[1];
   const drawer = useControlled(p.mobileOpen, false, p.onMobileOpenChange);
   const open = phone && drawer[0];
@@ -471,7 +473,7 @@ export function Sidebar(p: SidebarProps) {
   const hasCurrent = (it: SidebarItem) =>
     idOf(it) === p.current || !!it.items?.some((c) => idOf(c) === p.current);
   const [expanded, setExpanded] = React.useState<string[]>(() =>
-    p.groups.flatMap((g) => g.items.filter((it) => it.items && hasCurrent(it)).map(idOf)),
+    p.groups.flatMap((g) => (g.items || []).filter((it) => it.items && hasCurrent(it)).map(idOf)),
   );
   const groupKey = (g: SidebarProps["groups"][number], i: number) => g.id || g.label || String(i);
   const [shut, setShut] = React.useState<string[]>(() =>
@@ -520,12 +522,12 @@ export function Sidebar(p: SidebarProps) {
       ) {
         e.preventDefault();
         if (phone) drawer[1](!drawer[0]);
-        else setCollapsed(!collapsedState[0]);
+        else if (canCollapse) setCollapsed(!collapsedState[0]);
       }
     };
     document.addEventListener("keydown", k);
     return () => document.removeEventListener("keydown", k);
-  }, [p.shortcut, phone, drawer[0], collapsedState[0]]);
+  }, [p.shortcut, phone, drawer[0], collapsedState[0], canCollapse]);
 
   // the drawer on phones: focus inside, Escape and Tab stay in it, focus returns to the button
   React.useEffect(() => {
@@ -583,7 +585,7 @@ export function Sidebar(p: SidebarProps) {
     nested: boolean,
   ) => (
     <>
-      {!nested && <Icon name={it.icon} />}
+      {!nested && it.icon && <Icon name={it.icon} />}
       <span className="tf-sidebar-label">{it.label}</span>
       {it.external && (
         <>
@@ -602,6 +604,44 @@ export function Sidebar(p: SidebarProps) {
       {it.items && <Icon name="chevronDown" size={14} className="tf-sidebar-chev" />}
     </>
   );
+
+  /** A filter option: a checkbox, or a radio when the group picks one */
+  const option = (it: SidebarItem, gi: number, single: boolean) => {
+    const id = idOf(it);
+    return (
+      <li key={id} className="tf-sidebar-li">
+        <label className={cx("tf-sidebar-item", "tf-sidebar-option", it.disabled && "disabled")}>
+          <input
+            type={single ? "radio" : "checkbox"}
+            name={single ? `${uid}-r${gi}` : undefined}
+            className="tf-sidebar-input"
+            checked={!!it.checked}
+            disabled={it.disabled}
+            onChange={(e) => it.onCheckedChange?.(e.currentTarget.checked)}
+          />
+          <span className={cx("tf-sidebar-mark", single && "round")} aria-hidden>
+            {!single && (
+              <svg
+                viewBox="0 0 24 24"
+                width={12}
+                height={12}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={3}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M5 12.5l4.5 4.5L19 7.5" />
+              </svg>
+            )}
+          </span>
+          {it.icon && <Icon name={it.icon} />}
+          <span className="tf-sidebar-label">{it.label}</span>
+          {it.count !== undefined && <span className="tf-sidebar-count">{it.count}</span>}
+        </label>
+      </li>
+    );
+  };
 
   const row = (
     it: Omit<SidebarItem, "items"> & { items?: SidebarItem["items"] },
@@ -726,19 +766,20 @@ export function Sidebar(p: SidebarProps) {
   };
 
   const flyItem = fly
-    ? p.groups.flatMap((g) => g.items).find((it) => idOf(it) === fly.id)
+    ? p.groups.flatMap((g) => g.items || []).find((it) => idOf(it) === fly.id)
     : undefined;
   const state = { collapsed };
   const header = typeof p.header === "function" ? p.header(state) : p.header;
   const footer = typeof p.footer === "function" ? p.footer(state) : p.footer;
   const variant = p.variant || "floating";
+  const Root = aside ? "aside" : "nav";
   return (
     <>
       <div className={cx("tf-sidebar-bar", variant)}>
         <IconButton
           ref={toggleRef}
-          icon="menu"
-          label={open ? t.closeNavigation : t.openNavigation}
+          icon={aside ? "filter" : "menu"}
+          label={aside ? p.label || t.filters : open ? t.closeNavigation : t.openNavigation}
           variant="ghost"
           aria-expanded={open}
           aria-controls={`${uid}-nav`}
@@ -747,7 +788,7 @@ export function Sidebar(p: SidebarProps) {
         {(typeof p.header === "function" ? p.header({ collapsed: false }) : p.header) || null}
       </div>
       {open && <div className="tf-sidebar-scrim" onClick={() => drawer[1](false)} />}
-      <nav
+      <Root
         ref={navRef}
         id={`${uid}-nav`}
         className={cx(
@@ -758,13 +799,17 @@ export function Sidebar(p: SidebarProps) {
           p.className,
         )}
         style={p.style}
-        aria-label={p.label || t.sidebar}
+        aria-label={p.label || (aside ? t.filters : t.sidebar)}
       >
         {header && <div className="tf-sidebar-head">{header}</div>}
         <div className="tf-sidebar-body">
           {p.groups.map((g, gi) => {
             const key = groupKey(g, gi);
             const isShut = !collapsed && shut.includes(key);
+            const items = g.items || [];
+            const options = items.some((it) => it.checked !== undefined);
+            // filters and free content have no icons-only form
+            if (collapsed && (options || (g.content && !items.length))) return null;
             return (
               <div key={key} className="tf-sidebar-group">
                 {(g.label || g.action) && (
@@ -800,10 +845,26 @@ export function Sidebar(p: SidebarProps) {
                     )}
                   </div>
                 )}
-                {!isShut && (
-                  <ul id={`${uid}-gl${gi}`} aria-labelledby={g.label ? `${uid}-g${gi}` : undefined}>
-                    {g.items.map((it) => row(it))}
-                  </ul>
+                {!isShut && (items.length > 0 || g.content) && (
+                  <div
+                    id={`${uid}-gl${gi}`}
+                    className="tf-sidebar-groupbody"
+                    role={options ? "group" : undefined}
+                    aria-labelledby={g.label ? `${uid}-g${gi}` : undefined}
+                  >
+                    {items.length > 0 && (
+                      <ul aria-labelledby={!options && g.label ? `${uid}-g${gi}` : undefined}>
+                        {items.map((it) =>
+                          it.checked !== undefined
+                            ? option(it, gi, g.select === "single")
+                            : row(it),
+                        )}
+                      </ul>
+                    )}
+                    {g.content && !collapsed && (
+                      <div className="tf-sidebar-content">{g.content}</div>
+                    )}
+                  </div>
                 )}
               </div>
             );
@@ -811,17 +872,19 @@ export function Sidebar(p: SidebarProps) {
         </div>
         <div className="tf-sidebar-foot">
           {footer}
-          <IconButton
-            icon={collapsed ? "chevronRight" : "chevronLeft"}
-            label={collapsed ? t.expandSidebar : t.collapseSidebar}
-            variant="ghost"
-            size="sm"
-            className="tf-sidebar-toggle"
-            aria-keyshortcuts={p.shortcut ? "Meta+B Control+B" : undefined}
-            onClick={() => setCollapsed(!collapsedState[0])}
-          />
+          {canCollapse && (
+            <IconButton
+              icon={collapsed ? "chevronRight" : "chevronLeft"}
+              label={collapsed ? t.expandSidebar : t.collapseSidebar}
+              variant="ghost"
+              size="sm"
+              className="tf-sidebar-toggle"
+              aria-keyshortcuts={p.shortcut ? "Meta+B Control+B" : undefined}
+              onClick={() => setCollapsed(!collapsedState[0])}
+            />
+          )}
         </div>
-      </nav>
+      </Root>
       {fly && flyItem && fly.kind === "tip" && (
         <SideLayer anchor={fly.el} place="right" center className="tf-sidebar-tip" hidden>
           {flyItem.label}

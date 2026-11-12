@@ -18,3 +18,6 @@ links, item menus and a collapsed mode with icons only.
 - On phones (≤ 760px) the sidebar becomes an off-canvas drawer behind a menu button: Escape and the
   scrim close it, focus stays inside and returns to the button. Control it with `mobileOpen` and
   `onMobileOpenChange`.
+- For filters, use `as="aside"`: items with `checked` become checkbox (or, with the group's
+  `select: "single"`, radio) options with counts, and a group's `content` holds sliders or date
+  fields. See the Filter Sidebar pattern.

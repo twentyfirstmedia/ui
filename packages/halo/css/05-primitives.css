@@ -802,6 +802,74 @@ button.tf-sidebar-grouplabel:focus-visible {
   text-decoration: none;
   cursor: pointer;
 }
+/* Filter options (Sidebar as="aside"): a checkbox or radio mark, the label and a count */
+.tf-sidebar-option {
+  position: relative;
+}
+.tf-sidebar-option.disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.tf-sidebar-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.tf-sidebar-mark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--primary-foreground);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.tf-sidebar-mark.round {
+  border-radius: 50%;
+}
+.tf-sidebar-mark svg {
+  opacity: 0;
+}
+.tf-sidebar-input:checked + .tf-sidebar-mark {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.tf-sidebar-input:checked + .tf-sidebar-mark.round {
+  box-shadow: inset 0 0 0 3px var(--surface);
+}
+.tf-sidebar-input:checked + .tf-sidebar-mark svg {
+  opacity: 1;
+}
+.tf-sidebar-input:focus-visible + .tf-sidebar-mark {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.tf-sidebar-option:has(.tf-sidebar-input:checked) {
+  color: var(--ink);
+}
+/* free content in a group (sliders, date fields, chips) */
+.tf-sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 12px 0;
+  min-width: 0;
+}
+.tf-sidebar-groupbody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
 .tf-sidebar-item:hover,
 .tf-sidebar-item.flying {
   background: var(--sidebar-accent);

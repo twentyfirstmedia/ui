@@ -102,6 +102,8 @@ export interface UIStrings {
   /** Accessible name of main navigation landmarks. */
   mainNavigation: string;
   sidebar: string;
+  /** Name of a `Sidebar as="aside"` and its button on phones, unless the app passes `label` */
+  filters: string;
   expandSidebar: string;
   collapseSidebar: string;
   /** The menu button that opens the sidebar on phones. */
@@ -1140,6 +1142,7 @@ export const NAVIGATION_STRINGS: Pick<
   | "previousPage"
   | "nextPage"
   | "sidebar"
+  | "filters"
   | "expandSidebar"
   | "collapseSidebar"
   | "openNavigation"
@@ -1154,6 +1157,7 @@ export const NAVIGATION_STRINGS: Pick<
   previousPage: "Previous page",
   nextPage: "Next page",
   sidebar: "Sidebar",
+  filters: "Filters",
   expandSidebar: "Expand sidebar",
   collapseSidebar: "Collapse sidebar",
   openNavigation: "Open navigation",

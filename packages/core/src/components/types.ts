@@ -2566,7 +2566,8 @@ export interface NavigationMenuProps extends BaseProps {
 export interface SidebarItem {
   id?: string;
   label: string;
-  icon: IconName;
+  /** Required for pages; options in a filter group usually go without. */
+  icon?: IconName;
   count?: number;
   /** A small marker instead of a number: `"dot"` for new activity, or a short word such as "New". */
   badge?: string;
@@ -2579,11 +2580,21 @@ export interface SidebarItem {
   actions?: (MenuItem | "-")[];
   /** One level of nested pages, shown when the item is open (as a flyout when the sidebar is collapsed). */
   items?: Omit<SidebarItem, "items">[];
+  /**
+   * Makes the item a filter option: a checkbox (or a radio in a group with `select: "single"`)
+   * with its label and `count`, instead of a page.
+   */
+  checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
 }
 export interface SidebarGroup {
   id?: string;
   label?: string;
-  items: SidebarItem[];
+  items?: SidebarItem[];
+  /** Any content instead of (or after) the items: a `RangeSlider`, `DateRangePicker`, chips … */
+  content?: ReactNode;
+  /** For filter options (items with `checked`): `single` makes them radios (one choice per group). */
+  select?: "multiple" | "single";
   /** The label folds the group open and shut. */
   collapsible?: boolean;
   /** For a collapsible group: starts open (default true). */
@@ -2618,7 +2629,14 @@ export interface SidebarProps extends BaseProps {
   header?: ReactNode | ((state: { collapsed: boolean }) => ReactNode);
   /** Bottom of the sidebar (`UserMenu`, settings); a function gets the collapsed state. */
   footer?: ReactNode | ((state: { collapsed: boolean }) => ReactNode);
-  /** Accessible name of the navigation. */
+  /**
+   * `nav` (default) for app navigation. `aside` for filters, settings or other tools beside the
+   * content: a complementary region instead of a navigation landmark.
+   */
+  as?: "nav" | "aside";
+  /** Offers the collapse button and the icons-only mode (default true; filters usually set false). */
+  collapsible?: boolean;
+  /** Accessible name of the navigation (or the aside). */
   label?: string;
 }
 export interface UserMenuProps extends BaseProps {

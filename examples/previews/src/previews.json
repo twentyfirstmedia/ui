@@ -1265,5 +1265,22 @@
       "Stagger",
       "Tabs"
     ]
+  },
+  {
+    "name": "FilterSidebarScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 760,
+    "components": [
+      "Sidebar",
+      "RangeSlider",
+      "Badge",
+      "Button",
+      "Card",
+      "Chip",
+      "PageHeader",
+      "SearchField",
+      "Stagger"
+    ]
   }
 ]
