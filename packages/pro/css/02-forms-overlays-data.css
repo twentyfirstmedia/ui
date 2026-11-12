@@ -46,6 +46,23 @@
   font: 500 13px/18px var(--font-sans);
   pointer-events: none;
 }
+/* an interactive control at the end (reveal password, clear, copy) */
+.tf-input-action {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+}
+.tf-inputwrap.has-action .tf-input {
+  padding-right: 44px;
+}
+.tf-inputwrap.has-action.has-suffix .tf-input {
+  padding-right: 72px;
+}
+.tf-inputwrap.has-action .tf-input-suffix {
+  right: 44px;
+}
 .tf-input-suffix.err {
   color: var(--blush-ink);
 }
@@ -816,6 +833,10 @@ label.tf-menu-item {
   transition:
     border-color var(--dur-fast) ease,
     background-color var(--dur-fast) ease;
+}
+.tf-drop.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 .tf-drop b {
   font: 500 14px/20px var(--font-sans);

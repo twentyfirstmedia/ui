@@ -574,3 +574,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* key hints mean nothing on touch screens */
+@media (pointer: coarse) {
+  .tf-search .tf-kbd {
+    display: none;
+  }
+}

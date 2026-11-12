@@ -34,18 +34,26 @@ import type {
  * in de-DE, "$1,305.50" in en-US): the number animates, the text around it stays, and decimals and
  * grouping are kept. The final text is always `value` itself.
  */
+const useIsoLayoutEffect = typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
+
 export function CountUp(p: CountUpProps) {
   const { locale } = useFormat();
   const o = parseFormatted(p.value, locale),
     fmt = (n: number, shape: FormattedNumber) => formatLike(n, shape, locale),
     // numbers are shown in the locale too; strings end exactly as given
     final = o && typeof p.value === "number" ? fmt(p.value, o) : String(p.value),
-    st = React.useState(o ? fmt(0, o) : final),
+    // the server (and readers without scripts, print, share images) get the final value; the
+    // client starts at zero before the first paint and counts up
+    st = React.useState(final),
     last = React.useRef(0),
     first = React.useRef(true),
     el = React.useRef<HTMLSpanElement>(null);
+  useIsoLayoutEffect(() => {
+    if (o && p.animate !== false && !reduced(el.current)) st[1](fmt(0, o));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only before the first count
+  }, []);
   React.useEffect(() => {
-    if (!o || reduced(el.current)) {
+    if (!o || p.animate === false || reduced(el.current)) {
       st[1](final);
       return;
     }

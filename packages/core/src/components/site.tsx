@@ -2,7 +2,7 @@
 import * as React from "react";
 import { useStrings } from "../context.js";
 import { SITE_STRINGS } from "../strings.js";
-import { useControlled } from "../hooks.js";
+import { useControlled, useId } from "../hooks.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { AgentMark } from "./chat.js";
@@ -64,6 +64,8 @@ export function ChatLauncher(p: ChatLauncherProps) {
 
 export function CookieConsent(p: CookieConsentProps) {
   const t = useStrings(SITE_STRINGS);
+  const auto = useId("cookie");
+  const id = p.id || auto;
   const more = React.useState(false),
     cats = React.useState(
       (p.categories || []).reduce<Record<string, boolean>>((a, c) => {
@@ -83,9 +85,11 @@ export function CookieConsent(p: CookieConsentProps) {
   return (
     <div
       style={p.style}
+      id={id}
       className={cx("tf-cookie", p.inline && "inline", p.className)}
       role="dialog"
       aria-label={p.title || t.privacySettings}
+      aria-describedby={`${id}-text`}
     >
       <div
         className="tf-row"
@@ -104,6 +108,7 @@ export function CookieConsent(p: CookieConsentProps) {
         >
           <b>{p.title || t.privacySettings}</b>
           <p
+            id={`${id}-text`}
             className="tf-card-desc"
             style={{
               margin: 0,
@@ -172,6 +177,7 @@ export function CookieConsent(p: CookieConsentProps) {
           {t.onlyNecessary}
         </Button>
         <Button
+          variant={p.equalChoice ? "secondary" : undefined}
           onClick={() => {
             done(true);
           }}

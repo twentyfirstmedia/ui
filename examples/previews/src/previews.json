@@ -1282,5 +1282,12 @@
       "SearchField",
       "Stagger"
     ]
+  },
+  {
+    "name": "QrCode",
+    "group": "Admin",
+    "width": 720,
+    "height": 320,
+    "components": ["QrCode", "Card"]
   }
 ]

@@ -500,6 +500,7 @@ export function OrderTimeline(p: OrderTimelineProps) {
 export function PlanCard(p: PlanCardProps) {
   const t = useStrings(COMMERCE_STRINGS);
   const money = useMoney();
+  const Link = (p.linkAs || "a") as React.ElementType;
   return (
     <div
       style={p.style}
@@ -508,29 +509,45 @@ export function PlanCard(p: PlanCardProps) {
       {p.featured && <span className="tf-plan-flag">{p.flag || t.mostPopular}</span>}
       <div className="tf-plan-head">
         <b>{p.name}</b>
+        {p.current && <span className="tf-plan-current">{t.currentPlan}</span>}
         {p.text && <span>{p.text}</span>}
       </div>
       <div className="tf-plan-price">
+        {p.pricePrefix && <span className="tf-plan-prefix">{p.pricePrefix}</span>}
         {p.price === 0 ? (
           <b>{t.free}</b>
-        ) : p.price == null ? (
+        ) : p.price === null || p.price === undefined ? (
           <b>{t.letsTalk}</b>
-        ) : (
+        ) : typeof p.price === "number" ? (
           <>
             <b>{money(p.price)}</b>
             <span>{p.per || t.perSeatMonth}</span>
           </>
+        ) : (
+          <>
+            <b>{p.price}</b>
+            {p.per && <span>{p.per}</span>}
+          </>
         )}
         {p.was && <s>{money(p.was)}</s>}
       </div>
-      <Button
-        variant={p.current ? "soft" : p.featured ? "primary" : "secondary"}
-        disabled={p.current || p.disabled}
-        onClick={p.onPick}
-        className="tf-plan-cta"
-      >
-        {p.current ? t.currentPlan : p.cta || t.choosePlan(p.name)}
-      </Button>
+      {p.priceNote && <p className="tf-plan-note">{p.priceNote}</p>}
+      {p.href && !p.current && !p.disabled ? (
+        <Button variant={p.featured ? "primary" : "secondary"} className="tf-plan-cta" asChild>
+          <Link href={p.href} onClick={p.onPick}>
+            {p.cta || t.choosePlan(p.name)}
+          </Link>
+        </Button>
+      ) : (
+        <Button
+          variant={p.current ? "soft" : p.featured ? "primary" : "secondary"}
+          disabled={p.current || p.disabled}
+          onClick={p.onPick}
+          className="tf-plan-cta"
+        >
+          {p.current ? t.currentPlan : p.cta || t.choosePlan(p.name)}
+        </Button>
+      )}
       <ul className="tf-plan-feats">
         {(p.features || []).map((f, i) => (
           <li key={i} className={f[0] === "-" ? "no" : undefined}>

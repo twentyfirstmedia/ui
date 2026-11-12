@@ -8,6 +8,7 @@ import { Icon } from "../Icon.js";
 import { toast } from "../toast-store.js";
 import { Portal } from "../portal.js";
 import { DatePicker, FormField, OtpInput, Segmented } from "./forms.js";
+import { QrCode } from "./qr-code.js";
 import { Popover } from "./overlays.js";
 import { StatusIndicator, StatusShape } from "./status.js";
 import { Avatar, Button, Chip, IconButton, TintIcon } from "./foundation.js";
@@ -271,11 +272,13 @@ export function TilePicker(p: TilePickerProps) {
   }
   return (
     <div
-      className={cx("tf-tiles", p.className)}
+      className={cx("tf-tiles", p.layout === "list" && "list", p.className)}
       role={multi ? "group" : "radiogroup"}
       aria-label={p.label}
       style={{
-        gridTemplateColumns: "repeat(auto-fill, minmax(" + (p.min || 120) + "px, 1fr))",
+        ...(p.layout === "list"
+          ? null
+          : { gridTemplateColumns: "repeat(auto-fill, minmax(" + (p.min || 120) + "px, 1fr))" }),
         ...p.style,
       }}
     >
@@ -1642,7 +1645,12 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
       {step[0] === 0 && (
         <div className="tf-2fa-scan">
           <div className="tf-2fa-qr" role="img" aria-label={t.qrCode}>
-            {p.qr || <Icon name="grid" size={48} />}
+            {p.qr ||
+              (p.qrValue ? (
+                <QrCode value={p.qrValue} quiet={2} label={t.qrCode} />
+              ) : (
+                <Icon name="grid" size={48} />
+              ))}
           </div>
           <div
             className="tf-col"
@@ -1704,6 +1712,8 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
           <OtpInput
             error={!!err[0]}
             onComplete={(c) => {
+              // a second wrong code turns the error on again, which empties the cells
+              err[1](null);
               Promise.resolve(p.onVerify ? p.onVerify(c) : true).then((ok) => {
                 if (ok) {
                   err[1](null);
@@ -1713,6 +1723,14 @@ export function TwoFactorSetup(p: TwoFactorSetupProps) {
             }}
           />
           {err[0] && <span className="tf-field-error">{err[0]}</span>}
+          {p.trustDevice && (
+            <Checkbox
+              defaultChecked={false}
+              onChange={(e) => p.onTrustChange?.(e.currentTarget.checked)}
+            >
+              {typeof p.trustDevice === "string" ? p.trustDevice : t.trustDevice}
+            </Checkbox>
+          )}
           <div>
             <Button
               variant="ghost"

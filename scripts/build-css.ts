@@ -55,6 +55,39 @@ export const FONTS: Record<Kit, FontSource[]> = {
 
 const SUBSETS = /-(latin|latin-ext)-/;
 
+/**
+ * Static WOFF files for tools that cannot read woff2 or variable fonts (share images with
+ * `next/og`/Satori, PDF generators): latin, upright, the weights the kit uses.
+ */
+export const OG_FONTS: Record<Kit, { pkg: string; prefix: string; weights: number[] }[]> = {
+  halo: [
+    {
+      pkg: "@fontsource/plus-jakarta-sans",
+      prefix: "plus-jakarta-sans",
+      weights: [400, 500, 600, 700, 800],
+    },
+    { pkg: "@fontsource/ibm-plex-mono", prefix: "ibm-plex-mono", weights: [500, 600] },
+  ],
+  pro: [
+    { pkg: "@fontsource/geist", prefix: "geist", weights: [400, 500, 600, 700] },
+    { pkg: "@fontsource/geist-mono", prefix: "geist-mono", weights: [500, 600] },
+  ],
+};
+
+/** Copies the static WOFF files into outDir/fonts/og. */
+function ogFonts(kit: Kit, outDir: string): void {
+  const req = createRequire(join(ROOT, "packages", kit, "package.json"));
+  const dir = join(outDir, "fonts", "og");
+  mkdirSync(dir, { recursive: true });
+  for (const src of OG_FONTS[kit]) {
+    const pkgDir = dirname(req.resolve(`${src.pkg}/package.json`));
+    for (const w of src.weights) {
+      const file = `${src.prefix}-latin-${w}-normal.woff`;
+      copyFileSync(join(pkgDir, "files", file), join(dir, file));
+    }
+  }
+}
+
 /** Reads the @font-face rules of a kit's fonts and copies the woff2 files into outDir/fonts. */
 function fonts(kit: Kit, outDir: string): string {
   const req = createRequire(join(ROOT, "packages", kit, "package.json"));
@@ -174,6 +207,7 @@ function buildKit(kit: Kit): void {
   mkdirSync(out, { recursive: true });
   buildPresets([kit], out, false);
   const fontCss = fonts(kit, out);
+  ogFonts(kit, out);
   const tokens = generated(kit, "tokens.css");
   writeFileSync(join(out, "fonts.css"), banner(`${kit} fonts (self-hosted)`) + fontCss);
   writeFileSync(join(out, "tokens.css"), tokens);

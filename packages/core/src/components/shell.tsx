@@ -214,12 +214,64 @@ export function Dock(p: DockProps) {
  * UI floating over a full-bleed background (a map, a 3D scene, a video): four slots along the
  * edges, glass by default. The background stays interactive wherever no slot sits on it.
  */
+/** Measures how far the slots reach into the layout and publishes it as CSS variables. */
+function useSafeArea(root: React.RefObject<HTMLDivElement | null>) {
+  React.useLayoutEffect(() => {
+    const el = root.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const slot = (c: string) => el.querySelector<HTMLElement>(`:scope > .tf-floating-ui > .${c}`);
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      const top = slot("tf-floating-top"),
+        start = slot("tf-floating-start"),
+        end = slot("tf-floating-end"),
+        bottom = slot("tf-floating-bottom");
+      const px = (n: number) => `${Math.max(0, Math.round(n))}px`;
+      el.style.setProperty(
+        "--floating-safe-top",
+        px(top ? top.getBoundingClientRect().bottom - r.top : 0),
+      );
+      el.style.setProperty(
+        "--floating-safe-start",
+        px(start ? start.getBoundingClientRect().right - r.left : 0),
+      );
+      el.style.setProperty(
+        "--floating-safe-end",
+        px(end ? r.right - end.getBoundingClientRect().left : 0),
+      );
+      el.style.setProperty(
+        "--floating-safe-bottom",
+        px(bottom ? r.bottom - bottom.getBoundingClientRect().top : 0),
+      );
+    };
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    el.querySelectorAll(":scope > .tf-floating-ui > *").forEach((c) => ro.observe(c));
+    measure();
+    return () => ro.disconnect();
+  });
+}
+
 export function FloatingLayout(p: FloatingLayoutProps) {
+  const t = useStrings(SHELL_STRINGS);
   const surface = p.surface ?? "glass";
+  const root = React.useRef<HTMLDivElement>(null);
+  const [sheetFull, setSheetFull] = React.useState(false);
+  const sheet = p.end != null && p.endSheet !== false;
+  useSafeArea(root);
+  const size = (v: number | string | undefined) => (typeof v === "number" ? `${v}px` : v);
   return (
     <div
-      className={cx("tf-floating", p.className)}
-      style={{ minHeight: p.height ?? 640, ...p.style }}
+      ref={root}
+      className={cx("tf-floating", sheet && "has-sheet", sheetFull && "sheet-full", p.className)}
+      style={
+        {
+          minHeight: p.height ?? 640,
+          ...(p.startWidth != null ? { "--floating-start": size(p.startWidth) } : null),
+          ...(p.endWidth != null ? { "--floating-end": size(p.endWidth) } : null),
+          ...p.style,
+        } as React.CSSProperties
+      }
       role="region"
       aria-label={p.label}
       data-surface={surface}
@@ -228,7 +280,28 @@ export function FloatingLayout(p: FloatingLayoutProps) {
       <div className="tf-floating-ui">
         {p.top != null && <div className="tf-floating-top">{p.top}</div>}
         {p.start != null && <div className="tf-floating-start">{p.start}</div>}
-        {p.end != null && <div className="tf-floating-end">{p.end}</div>}
+        {(p.controls != null || p.attribution != null) && (
+          <div className="tf-floating-controls">
+            {p.controls}
+            {p.attribution != null && (
+              <div className="tf-floating-attribution">{p.attribution}</div>
+            )}
+          </div>
+        )}
+        {p.end != null && (
+          <div className="tf-floating-end">
+            {sheet && (
+              <button
+                type="button"
+                className="tf-floating-handle"
+                aria-expanded={sheetFull}
+                aria-label={sheetFull ? t.collapsePanel : t.expandPanel}
+                onClick={() => setSheetFull(!sheetFull)}
+              />
+            )}
+            {p.end}
+          </div>
+        )}
         {p.bottom != null && <div className="tf-floating-bottom">{p.bottom}</div>}
       </div>
       {p.children}

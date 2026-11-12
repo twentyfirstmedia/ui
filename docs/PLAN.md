@@ -241,6 +241,17 @@ Notiz (Robin: „Das Spacing ist nicht optimal, wenn die Sidebar Kategorien hat 
 
 Notiz (Robin: „Sämtliche Elemente sollten by default fluid sein, z. B. Tabs“ und die Capitaso-Liste vom 12.11.): Umgesetzt als „nie überlaufen, immer schrumpfen“ für alle Bausteine. Volle Breite bleibt bei Tabs, Segmented und ToggleGroup Opt-in (`block`), weil gestreckte Tabs als Navigation auf breiten Seiten falsch aussehen und die Referenz sie inhaltsbreit zeigt; auf Telefonen scrollen nicht-`block`-Varianten weiter seitlich. Die Wurzel-Props wurden per Skript an der obersten JSX-Wurzel jeder Komponente ergänzt und dort, wo schon ein Inline-Style stand, zusammengeführt; `root-props.test.tsx` umhüllt jede Komponente der Referenz-Previews mit einer Prüfklasse und einer Prüfvariable und meldet, wo eine fehlt (ausgenommen Provider, Helfer ohne eigenes Element und geschlossene Overlays). Die TopBar misst per `ResizeObserver`, ob die Navigation mit Beschriftungen in den Platz passt, den Marke, Extras und Konto übrig lassen, und merkt sich die volle Breite, damit sie bei mehr Platz wieder aufklappt.
 
+### Phase 22: Formulare, Medien, Karte, Schriften (Capitaso-Liste)
+- [x] TextField: Passwort anzeigen/verbergen, `action`-Slot; Checkbox mit 24-px-Trefferfläche; SearchField reicht `id`/`name`/Events/ARIA durch, `bindShortcut`, Tastenhinweis auf Touch aus
+- [x] FileDrop `disabled`, `name`, abgelehnte Dateien nicht gelistet; OtpInput leert sich bei Fehler und per `reset()`
+- [x] `QrCode` (lokal kodiert) und TwoFactorSetup mit `qrValue` und „Diesem Gerät vertrauen“; TilePicker `layout="list"`
+- [x] CookieConsent `equalChoice`, `id`, `aria-describedby`, Links in Kategorien
+- [x] Gallery kontrolliert, `label`, Pfeiltasten, Fokus in und aus der Lightbox; BeforeAfter scrollt vertikal, `pointercancel`; CountUp mit Endwert auf dem Server; PlanCard mit Preis-Node, Präfix, Hinweis, Link-Aktion und „Aktueller Tarif“
+- [x] FloatingLayout: `controls`, `attribution`, Spaltenbreiten, `--floating-safe-*`, Bottom-Sheet unter 720 px
+- [x] Tokens `ramp-1…5` für Karten und Heatmaps in beiden Kits; statische WOFF-Schriften unter `fonts/og/`
+
+Notiz: Der QR-Encoder (`packages/core/src/qr.ts`, Byte-Modus, Versionen 1–40, Fehlerkorrektur L/M/Q/H, Maske mit der geringsten Strafpunktzahl) ist eigener Code ohne Laufzeit-Abhängigkeit, damit Geheimnisse wie der TOTP-Schlüssel das Gerät nicht verlassen; `qr.test.ts` dekodiert jede Stufe und Längen bis 800 Zeichen mit jsQR (nur devDependency). Das Passwort-Symbol `eyeOff` kommt aus der Icon-Bibliothek und wird von `forms.tsx` selbst registriert. Die Pro-Tints sind Statusflächen (info/ok/warn …) und für Kartenrampen zu laut; statt sie umzufärben gibt es in beiden Kits die neutralen Rampen `ramp-1…5`, gemischt aus `chart-1` und dem Hintergrund (in beiden Themes ruhig). Statische WOFF-Dateien kommen aus den nicht-variablen Fontsource-Paketen (devDependencies der Kits), weil Satori weder woff2 noch variable Schriften lesen kann.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`

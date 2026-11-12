@@ -10,6 +10,11 @@ import { Icon } from "../Icon.js";
 import { useControlled, useId, useOutside } from "../hooks.js";
 import { Avatar, IconButton, TintIcon } from "./foundation.js";
 import { Popover } from "./overlays.js";
+import { registerIcons } from "../icons.js";
+import { eyeOff } from "../icon-library.js";
+
+// the password field's "hide" state needs this one library icon
+registerIcons({ eyeOff });
 import type {
   CalendarProps,
   ComboboxProps,
@@ -69,6 +74,22 @@ export function FormField(p: FormFieldProps) {
 }
 
 export function TextField(p: TextFieldProps) {
+  const t = useStrings(FORMS_STRINGS);
+  const [shown, setShown] = React.useState(false);
+  const password = p.type === "password";
+  const action =
+    p.action ??
+    (password && p.reveal !== false ? (
+      <IconButton
+        icon={shown ? "eyeOff" : "eye"}
+        label={shown ? t.hidePassword : t.showPassword}
+        size="sm"
+        variant="ghost"
+        aria-pressed={shown}
+        disabled={p.disabled}
+        onClick={() => setShown(!shown)}
+      />
+    ) : null);
   const auto = useId("tf");
   const id = p.id || auto;
   const fromForm = useFieldError(p.name);
@@ -90,6 +111,7 @@ export function TextField(p: TextFieldProps) {
           "tf-inputwrap",
           p.icon && "has-icon",
           (error || p.success || p.suffix) && "has-suffix",
+          action && "has-action",
         )}
       >
         {p.icon && <Icon name={p.icon} size={15} className="tf-input-icon" />}
@@ -97,12 +119,13 @@ export function TextField(p: TextFieldProps) {
           id={id}
           name={p.name}
           className={cx("tf-input", p.success && "is-valid")}
-          type={p.type || "text"}
+          type={password && shown ? "text" : p.type || "text"}
           placeholder={p.placeholder}
           value={p.value}
           defaultValue={p.defaultValue}
           onChange={p.onChange}
           onBlur={p.onBlur}
+          onKeyDown={p.onKeyDown}
           required={p.required}
           disabled={p.disabled}
           readOnly={p.readOnly}
@@ -129,6 +152,7 @@ export function TextField(p: TextFieldProps) {
         ) : (
           p.suffix && <span className="tf-input-suffix">{p.suffix}</span>
         )}
+        {action && <span className="tf-input-action">{action}</span>}
       </span>
     </FormField>
   );
@@ -875,6 +899,16 @@ export function OtpInput(p: OtpInputProps) {
   const n = p.length || 6,
     st = React.useState(Array(n).fill("")),
     refs = React.useRef<(HTMLInputElement | null)[]>([]);
+  const reset = React.useCallback(() => {
+    st[1](Array(n).fill(""));
+    refs.current[0]?.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- st[1] is stable
+  }, [n]);
+  React.useImperativeHandle(p.ref, () => ({ reset }), [reset]);
+  // a wrong code: empty the cells for the next try
+  React.useEffect(() => {
+    if (p.error && p.clearOnError !== false) reset();
+  }, [p.error, p.clearOnError, reset]);
   function set(i: number, ch: string) {
     const nx = st[0].slice();
     nx[i] = ch;
@@ -952,6 +986,19 @@ function acceptsFile(file: { name: string; type: string }, accept?: string): boo
   );
 }
 
+/** A hidden file input that carries the listed files into a surrounding form. */
+function FormFiles(p: { name: string; files: UploadFile[] }) {
+  const ref = React.useRef<HTMLInputElement>(null);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof DataTransfer === "undefined") return;
+    const dt = new DataTransfer();
+    p.files.forEach((f) => f.file && dt.items.add(f.file));
+    el.files = dt.files;
+  }, [p.files]);
+  return <input ref={ref} type="file" name={p.name} multiple hidden tabIndex={-1} />;
+}
+
 export function FileDrop(p: FileDropProps) {
   const t = useStrings(FORMS_STRINGS);
   const fm = useFormat();
@@ -975,8 +1022,11 @@ export function FileDrop(p: FileDropProps) {
     picked = picked.filter((f) => acceptsFile(f, p.accept));
     if (p.multiple === false) picked = picked.slice(0, 1);
     if (rejected.length) p.onReject?.(rejected);
+    if (!picked.length || p.disabled) return;
+    const kept = p.onFiles?.(picked);
+    if (kept === false) return;
+    if (Array.isArray(kept)) picked = kept;
     if (!picked.length) return;
-    p.onFiles?.(picked);
     const add: UploadFile[] = picked.map((f) => ({
       name: f.name,
       size: f.size,
@@ -1010,21 +1060,22 @@ export function FileDrop(p: FileDropProps) {
       }}
     >
       <div
-        className={cx("tf-drop", over[0] && "over")}
+        className={cx("tf-drop", over[0] && "over", p.disabled && "disabled")}
         role="button"
-        tabIndex={0}
+        tabIndex={p.disabled ? -1 : 0}
+        aria-disabled={p.disabled || undefined}
         onClick={() => {
-          inp.current?.click();
+          if (!p.disabled) inp.current?.click();
         }}
         onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
+          if (!p.disabled && (e.key === "Enter" || e.key === " ")) {
             e.preventDefault();
             inp.current?.click();
           }
         }}
         onDragOver={(e) => {
           e.preventDefault();
-          over[1](true);
+          if (!p.disabled) over[1](true);
         }}
         onDragLeave={() => {
           over[1](false);
@@ -1044,11 +1095,13 @@ export function FileDrop(p: FileDropProps) {
           hidden
           multiple={p.multiple !== false}
           accept={p.accept}
+          disabled={p.disabled}
           onChange={(e) => {
             take(e.target.files);
             e.target.value = "";
           }}
         />
+        {p.name && <FormFiles name={p.name} files={files[0]} />}
       </div>
       {files[0].length > 0 && (
         <div

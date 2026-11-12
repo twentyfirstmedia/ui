@@ -136,6 +136,9 @@ export interface UIStrings {
   pickRange: string;
   decrease: string;
   increase: string;
+  /** TextField type="password": the reveal button */
+  showPassword: string;
+  hidePassword: string;
   verificationCode: string;
   digitN: (n: number) => string;
   dropFiles: string;
@@ -196,6 +199,9 @@ export interface UIStrings {
   expandRail: string;
   /** SideRail toggle: back to icons only */
   collapseRail: string;
+  /** FloatingLayout bottom sheet handle */
+  expandPanel: string;
+  collapsePanel: string;
   /* Site: ChatLauncher, CookieConsent */
   assistant: string;
   openAssistant: string;
@@ -471,6 +477,8 @@ export interface UIStrings {
   fileReady: string;
   newExport: string;
   twoFactorSteps: [string, string, string];
+  /** TwoFactorSetup: the checkbox under the code field */
+  trustDevice: string;
   qrCode: string;
   scanText: string;
   next: string;
@@ -628,6 +636,7 @@ export const ADMIN_STRINGS: Pick<
   | "newExport"
   | "twoFactorSteps"
   | "qrCode"
+  | "trustDevice"
   | "scanText"
   | "enterCode"
   | "codeFailed"
@@ -705,6 +714,7 @@ export const ADMIN_STRINGS: Pick<
   newExport: "New export",
   twoFactorSteps: ["Scan", "Confirm", "Save codes"],
   qrCode: "QR code",
+  trustDevice: "Trust this device",
   scanText:
     "Scan the code with your authenticator app. If you can't scan it, enter the key by hand.",
   enterCode: "Enter the 6-digit code from the app.",
@@ -1081,8 +1091,12 @@ export const FORMS_STRINGS: Pick<
   | "dropHint"
   | "uploaded"
   | "cancelUpload"
+  | "showPassword"
+  | "hidePassword"
 > = {
   noMatches: "No matches",
+  showPassword: "Show password",
+  hidePassword: "Hide password",
   createOption: (text) => `Create “${text}”`,
   tagPlaceholder: "Type and press Enter",
   previousMonth: "Previous month",
@@ -1361,12 +1375,14 @@ export const SELECT_MENU_STRINGS: Pick<UIStrings, "options"> = {
 /** Strings of the components in `shell.tsx`. */
 export const SHELL_STRINGS: Pick<
   UIStrings,
-  "tools" | "quickActions" | "expandRail" | "collapseRail"
+  "tools" | "quickActions" | "expandRail" | "collapseRail" | "expandPanel" | "collapsePanel"
 > = {
   tools: "Tools",
   quickActions: "Quick actions",
   expandRail: "Show names",
   collapseRail: "Icons only",
+  expandPanel: "Expand panel",
+  collapsePanel: "Collapse panel",
 };
 
 /** Strings of the components in `site.tsx`. */
