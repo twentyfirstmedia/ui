@@ -1843,7 +1843,8 @@ a.tf-page {
   min-height: 24px;
   max-width: 100%;
   padding: 0 4px;
-  margin: 0 -4px;
+  /* the target grows to 24px around the 18px line without moving the text */
+  margin: -3px -4px;
   border: 0;
   border-radius: var(--radius-sm);
   background: none;
