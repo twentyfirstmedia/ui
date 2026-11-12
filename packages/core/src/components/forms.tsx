@@ -231,16 +231,20 @@ export function Segmented(p: SegmentedProps) {
           on = v[0] === opt.value;
         return (
           <label key={opt.value} className={cx("tf-seg-item", on && "on")}>
-            <input
-              type="radio"
-              name={name}
-              checked={on}
-              onChange={() => {
-                v[1](opt.value);
-              }}
-            />
             {opt.icon && <Icon name={opt.icon} size={14} />}
-            <span className="tf-seg-label">{opt.label}</span>
+            {/* the radio covers the whole segment (positioned on the label); inside the text's
+                span, a click on the text and a click on the radio hit the same target */}
+            <span className="tf-seg-label">
+              <input
+                type="radio"
+                name={name}
+                checked={on}
+                onChange={() => {
+                  v[1](opt.value);
+                }}
+              />
+              {opt.label}
+            </span>
           </label>
         );
       })}
