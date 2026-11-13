@@ -94,11 +94,16 @@
   }
   .tf-habit-marks {
     grid-column: 1 / -1;
-    padding-left: 44px;
   }
   .tf-habit-days {
     justify-self: start;
-    padding: 0 0 0 56px;
+    padding: 0 0 0 12px;
+  }
+}
+@container tf-habits (max-width: 240px) {
+  .tf-habit-days,
+  .tf-habit-marks {
+    gap: 2px;
   }
 }
 button.tf-habit-mark {
@@ -122,6 +127,7 @@ button.tf-habit-mark:focus-visible {
   font: 500 14px/20px var(--font-sans);
 }
 .tf-mood-scale {
+  container: tf-mood / inline-size;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
@@ -154,6 +160,13 @@ button.tf-habit-mark:focus-visible {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+/* narrow: tighter cells so every word still fits */
+@container tf-mood (max-width: 300px) {
+  .tf-mood-opt {
+    padding: 8px 2px;
+    font-size: 11px;
+  }
 }
 .tf-mood-opt input {
   position: absolute;
@@ -495,7 +508,14 @@ button.tf-habit-mark:focus-visible {
   background: var(--surface);
   box-shadow: 0 0 0 var(--line-width) var(--line);
 }
+/* narrow: the icon steps aside so the title keeps whole words */
+@container tf-goal (max-width: 280px) {
+  .tf-goal-head > .tf-tinticon {
+    display: none;
+  }
+}
 .tf-goal-head {
+  container: tf-goal / inline-size;
   display: flex;
   align-items: center;
   gap: 12px;
