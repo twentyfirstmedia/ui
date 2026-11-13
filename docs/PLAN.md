@@ -252,6 +252,13 @@ Notiz (Robin: „Sämtliche Elemente sollten by default fluid sein, z. B. Tabs�
 
 Notiz: Der QR-Encoder (`packages/core/src/qr.ts`, Byte-Modus, Versionen 1–40, Fehlerkorrektur L/M/Q/H, Maske mit der geringsten Strafpunktzahl) ist eigener Code ohne Laufzeit-Abhängigkeit, damit Geheimnisse wie der TOTP-Schlüssel das Gerät nicht verlassen; `qr.test.ts` dekodiert jede Stufe und Längen bis 800 Zeichen mit jsQR (nur devDependency). Das Passwort-Symbol `eyeOff` kommt aus der Icon-Bibliothek und wird von `forms.tsx` selbst registriert. Die Pro-Tints sind Statusflächen (info/ok/warn …) und für Kartenrampen zu laut; statt sie umzufärben gibt es in beiden Kits die neutralen Rampen `ramp-1…5`, gemischt aus `chart-1` und dem Hintergrund (in beiden Themes ruhig). Statische WOFF-Dateien kommen aus den nicht-variablen Fontsource-Paketen (devDependencies der Kits), weil Satori weder woff2 noch variable Schriften lesen kann.
 
+### Phase 23: Life – Wellbeing, Gesundheit, KI-Hinweise, Einwilligungen
+- [x] `HabitTracker`, `MoodPicker`, `VitalTile`, `ActivityRings`, `SleepChart`, `MedicationList`, `JournalEntry`, `GoalCard`
+- [x] `InsightCard` (Quelle, „Warum sehe ich das?“, Annehmen/Später/Verwerfen) und `ConsentList` (Zugriffe je Quelle, abschaltbar, widerrufbar)
+- [x] Doku-Gruppe „Life“, Muster Health, Habits & journal, Data access; Tests
+
+Notiz (Robin: „AI-first Life-MCP-Dashboard mit Wellbeing, Organisation, Finanzen, Versicherungen“): Erster von zwei Teilen. Gesundheitswerte zeigen ihren Status immer in Worten (im/über/unter dem Normalbereich) und nie nur über Farbe; der Normalbereich ist ein Band mit Markierung. Statusangaben, die von der Uhrzeit abhängen (Medikation fällig/verpasst), setzt die App, damit Server und Client gleich rendern. Die Gesichter der Stimmungsskala, die Flamme der Serie und `heartPulse`, `pill`, `target` kommen aus der Icon-Bibliothek und werden von `life.tsx` selbst registriert. `InsightCard` nutzt die Quellen-Chips des Chats, damit jede KI-Aussage dieselbe Herkunftsangabe hat; `ConsentList` ist bewusst pro Scope schaltbar, weil Gesundheits- und Bankdaten nach DSGVO zweckgebunden freigegeben werden. Teil 2: Geld, Versicherung, Fristen, Dokumente und die Übersicht.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`

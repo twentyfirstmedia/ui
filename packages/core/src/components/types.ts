@@ -2833,3 +2833,171 @@ export interface QrCodeProps extends BaseProps {
   /** Accessible name (default "QR code"). */
   label?: string;
 }
+
+/* ── Life: wellbeing, health, goals, AI insights, consent ── */
+export interface Habit {
+  id: string;
+  label: string;
+  icon?: IconName;
+  tint?: Tint;
+  /** One entry per day, oldest first, today last: true done, false missed, null no data. */
+  days: (boolean | null)[];
+  /** Days in a row (shown as "12-day streak"). */
+  streak?: number;
+  /** A short target, e.g. "8 glasses" or "3× a week". */
+  goal?: string;
+}
+export interface HabitTrackerProps extends BaseProps {
+  habits: Habit[];
+  /** Labels of the day columns, oldest first (default: weekday initials ending today). */
+  dayLabels?: string[];
+  /** Today's box of a habit was toggled. */
+  onToggle?: (id: string, done: boolean) => void;
+  /** Accessible name of the list (default "Habits"). */
+  label?: string;
+}
+export type MoodLevel = 1 | 2 | 3 | 4 | 5;
+export interface MoodPickerProps extends BaseProps {
+  value?: MoodLevel | null;
+  defaultValue?: MoodLevel | null;
+  onChange?: (mood: MoodLevel) => void;
+  /** The question (default "How are you feeling?"). */
+  label?: ReactNode;
+  /** Words for the five levels, lowest first (default Awful, Low, Okay, Good, Great). */
+  levels?: [string, string, string, string, string];
+  /** Only the faces; the words stay as accessible names. */
+  compact?: boolean;
+}
+export interface VitalTileProps extends BaseProps {
+  label: string;
+  value: number;
+  unit?: string;
+  icon?: IconName;
+  /** The healthy range [low, high]; the tile says whether the value is below, in or above it. */
+  normal?: [number, number];
+  /** The whole scale of the band [min, max] (default: the normal range with room on both sides). */
+  scale?: [number, number];
+  /** Recent values, oldest first, drawn as a sparkline. */
+  trend?: number[];
+  /** Under the value: when it was measured, the source … */
+  caption?: ReactNode;
+  /** Digits after the decimal point (default 0). */
+  digits?: number;
+}
+export interface ActivityRing {
+  label: string;
+  value: number;
+  goal: number;
+  unit?: string;
+  tint?: Tint;
+}
+export interface ActivityRingsProps extends BaseProps {
+  /** Outer ring first. */
+  rings: ActivityRing[];
+  /** Diameter of the rings (default 132). */
+  size?: number;
+  /** Hide the legend beside the rings. */
+  legend?: boolean;
+  /** Accessible name (default "Activity"). */
+  label?: string;
+}
+export type SleepStage = "awake" | "rem" | "light" | "deep";
+export interface SleepSegment {
+  stage: SleepStage;
+  start: Date | string | number;
+  end: Date | string | number;
+}
+export interface SleepChartProps extends BaseProps {
+  /** The night in order, from falling asleep to getting up. */
+  segments: SleepSegment[];
+  /** Accessible name (default "Sleep stages"). */
+  label?: string;
+  /** Hide the totals per stage under the chart. */
+  summary?: boolean;
+}
+export interface MedicationItem {
+  id: string;
+  name: string;
+  dose?: string;
+  /** When, as shown ("08:00", "With breakfast"). */
+  time: string;
+  /** Set by the app, which knows the clock: default "taken" when `taken`, else "due". */
+  status?: "taken" | "due" | "missed" | "upcoming";
+  taken?: boolean;
+  note?: string;
+  icon?: IconName;
+}
+export interface MedicationListProps extends BaseProps {
+  items: MedicationItem[];
+  /** "Mark as taken" was pressed. */
+  onTake?: (id: string) => void;
+  /** Accessible name (default "Medication"). */
+  label?: string;
+}
+export interface JournalEntryProps extends BaseProps {
+  date: Date | string | number;
+  title?: string;
+  mood?: MoodLevel;
+  tags?: string[];
+  children?: ReactNode;
+  /** Buttons at the end (edit, share …). */
+  actions?: ReactNode;
+}
+export interface GoalCardProps extends BaseProps {
+  title: string;
+  value: number;
+  target: number;
+  /** How to show value and target (default number). */
+  format?: "number" | "money" | "percent";
+  /** Unit after numbers ("km", "books"). */
+  unit?: string;
+  currency?: string;
+  due?: Date | string | number;
+  icon?: IconName;
+  tint?: Tint;
+  milestones?: { label: string; done?: boolean }[];
+  /** A note under the progress ("€250 a month keeps you on track"). */
+  note?: ReactNode;
+}
+export interface InsightCardProps extends BaseProps {
+  title: string;
+  children?: ReactNode;
+  icon?: IconName;
+  tone?: "info" | "success" | "warning" | "highlight";
+  /** Above the title: area and time ("Money · 2 h ago"). */
+  meta?: ReactNode;
+  /** Where the insight comes from, as chips (like chat sources). */
+  sources?: Source[];
+  /** Why the assistant shows it; folded away behind "Why am I seeing this?". */
+  why?: ReactNode;
+  onAccept?: () => void;
+  acceptLabel?: string;
+  onSnooze?: () => void;
+  onDismiss?: () => void;
+}
+export interface ConsentScope {
+  id: string;
+  label: string;
+  description?: string;
+  granted: boolean;
+  /** Needed for the connection to work at all: shown, not switchable. */
+  required?: boolean;
+}
+export interface ConsentConnector {
+  id: string;
+  name: string;
+  icon?: IconName;
+  /** A logo instead of the icon. */
+  logo?: ReactNode;
+  /** What the assistant uses it for. */
+  purpose?: ReactNode;
+  scopes: ConsentScope[];
+  lastUsed?: Date | string | number;
+}
+export interface ConsentListProps extends BaseProps {
+  connectors: ConsentConnector[];
+  onScopeChange?: (connectorId: string, scopeId: string, granted: boolean) => void;
+  onRevoke?: (connectorId: string) => void;
+  /** Accessible name (default "Data access"). */
+  label?: string;
+}

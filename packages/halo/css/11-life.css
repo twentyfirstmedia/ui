@@ -1,0 +1,727 @@
+/* Life: habits, mood, vitals, activity rings, sleep, medication, journal, goals, insights, consent */
+
+/* HabitTracker */
+.tf-habits {
+  container: tf-habits / inline-size;
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.tf-habit-days,
+.tf-habit-marks {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 24px;
+  gap: 6px;
+}
+.tf-habit-days {
+  justify-self: end;
+  padding-right: 12px;
+  font: 600 11px/16px var(--font-sans);
+  color: var(--ink-muted);
+  text-align: center;
+}
+.tf-habit {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+}
+.tf-habit:hover {
+  background: var(--surface-sunken);
+}
+.tf-habit-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.tf-habit-text b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 600 14px/20px var(--font-sans);
+}
+.tf-habit-text small {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-habit-streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--butter-ink);
+}
+.tf-habit-mark {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  box-sizing: border-box;
+  padding: 0;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--primary-foreground);
+}
+.tf-habit-mark.done {
+  border-color: var(--mint-ink);
+  background: var(--mint-ink);
+}
+/* missed: an empty ring with a small cross; no entry: a faint dashed ring */
+.tf-habit-mark.missed {
+  color: var(--ink-subtle);
+}
+.tf-habit-mark:not(.done):not(.missed) {
+  border-style: dashed;
+  border-color: var(--line);
+}
+.tf-habit-mark.today {
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 4px var(--line-strong);
+}
+/* narrow: the marks go under the name, the day labels line up with them */
+@container tf-habits (max-width: 400px) {
+  .tf-habit {
+    grid-template-columns: auto minmax(0, 1fr);
+    row-gap: 8px;
+  }
+  .tf-habit-marks {
+    grid-column: 1 / -1;
+  }
+  .tf-habit-days {
+    justify-self: start;
+    padding: 0 0 0 12px;
+  }
+}
+@container tf-habits (max-width: 240px) {
+  .tf-habit-days,
+  .tf-habit-marks {
+    gap: 2px;
+  }
+}
+button.tf-habit-mark {
+  cursor: pointer;
+}
+button.tf-habit-mark:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+
+/* MoodPicker */
+.tf-mood {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.tf-mood-q {
+  padding: 0;
+  margin-bottom: 12px;
+  font: 600 14px/20px var(--font-sans);
+}
+.tf-mood-scale {
+  container: tf-mood / inline-size;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+.tf-mood-opt {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 72px;
+  padding: 8px 4px;
+  box-sizing: border-box;
+  border-radius: var(--radius-md);
+  color: var(--ink-muted);
+  font: 600 12px/16px var(--font-sans);
+  cursor: pointer;
+}
+/* the picked level keeps the tint its tf-t-* class gives it */
+.tf-mood-opt:not(.on) {
+  background: var(--surface-sunken);
+}
+.tf-mood.compact .tf-mood-opt {
+  min-height: 48px;
+}
+.tf-mood-opt span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* narrow: tighter cells so every word still fits */
+@container tf-mood (max-width: 300px) {
+  .tf-mood-opt {
+    padding: 8px 2px;
+    font-size: 11px;
+  }
+}
+.tf-mood-opt input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.tf-mood-opt:hover {
+  color: var(--ink);
+}
+.tf-mood-opt.on {
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+.tf-mood-opt:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* VitalTile */
+.tf-vital {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+.tf-vital-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.tf-vital-head .tf-badge {
+  flex: none;
+  white-space: nowrap;
+}
+.tf-vital-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font: 600 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-vital-main {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.tf-vital-value {
+  font: 700 28px/34px var(--font-sans);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.tf-vital-value small {
+  margin-left: 4px;
+  font: 600 13px/18px var(--font-sans);
+  letter-spacing: 0;
+  color: var(--ink-muted);
+}
+.tf-vital-band {
+  position: relative;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+}
+.tf-vital-normal {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: var(--radius-pill);
+  background: var(--mint);
+}
+.tf-vital-dot {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  box-sizing: border-box;
+  border: 3px solid var(--surface);
+  border-radius: 50%;
+  background: var(--mint-ink);
+  translate: -50% -50%;
+}
+.tf-vital.is-low .tf-vital-dot,
+.tf-vital.is-high .tf-vital-dot {
+  background: var(--butter-ink);
+}
+.tf-vital-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+
+/* ActivityRings */
+.tf-rings {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+}
+.tf-rings svg {
+  flex: none;
+}
+.tf-rings-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tf-rings-legend li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 8px;
+}
+.tf-rings-key {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.tf-rings-name {
+  font: 600 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-rings-legend b {
+  grid-column: 2;
+  font: 700 14px/20px var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+/* SleepChart */
+.tf-sleep {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.tf-sleep-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tf-sleep-lane {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+.tf-sleep-name {
+  font: 600 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-sleep-track {
+  position: relative;
+  height: 20px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+}
+.tf-sleep-seg {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  min-width: 2px;
+  border-radius: var(--radius-sm);
+}
+.tf-sleep-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 64px;
+  font: 500 11px/16px var(--font-sans);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.tf-sleep-sum {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.tf-sleep-sum b {
+  font: 700 14px/20px var(--font-sans);
+}
+.tf-sleep-sum ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tf-sleep-sum li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-sleep-sum li span:last-child {
+  color: var(--ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* MedicationList */
+.tf-meds {
+  container: tf-meds / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tf-med {
+  display: grid;
+  grid-template-columns: 48px auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+}
+.tf-med.is-due {
+  background: var(--surface-sunken);
+}
+.tf-med-time {
+  font: 600 13px/18px var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+.tf-med-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.tf-med-text b {
+  font: 600 14px/20px var(--font-sans);
+  overflow-wrap: break-word;
+}
+.tf-med-text small {
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-med.is-taken .tf-med-text b {
+  color: var(--ink-muted);
+}
+.tf-med-act {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+/* narrow: time, name and status; the icon gives way */
+@container tf-meds (max-width: 400px) {
+  .tf-med {
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 8px;
+  }
+  .tf-med > .tf-tinticon {
+    display: none;
+  }
+}
+
+/* JournalEntry */
+.tf-journal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+.tf-journal-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font: 600 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-journal-mood {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+.tf-journal-title {
+  margin: 0;
+  font: 700 16px/22px var(--font-sans);
+}
+.tf-journal-body {
+  font: 500 14px/22px var(--font-sans);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.tf-journal-body p {
+  margin: 0 0 8px;
+}
+.tf-journal-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 4px;
+}
+.tf-journal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* GoalCard */
+.tf-goal {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+/* narrow: the icon steps aside so the title keeps whole words */
+@container tf-goal (max-width: 280px) {
+  .tf-goal-head > .tf-tinticon {
+    display: none;
+  }
+}
+.tf-goal-head {
+  container: tf-goal / inline-size;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tf-goal-head .tf-option-text {
+  flex: 1;
+  padding: 0;
+}
+.tf-goal-head b {
+  font: 700 14px/20px var(--font-sans);
+}
+.tf-goal-pct {
+  font: 700 20px/26px var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+.tf-goal-bar {
+  height: 10px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+}
+.tf-goal-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+}
+.tf-goal-meta,
+.tf-goal-note {
+  margin: 0;
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-goal-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: 500 13px/18px var(--font-sans);
+}
+.tf-goal-steps li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tf-goal-steps li.done {
+  color: var(--ink-muted);
+}
+.tf-goal-step {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  color: var(--primary-foreground);
+}
+.tf-goal-steps li.done .tf-goal-step {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+/* InsightCard */
+.tf-insight {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px 16px 16px 20px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow:
+    var(--shadow-card),
+    inset 3px 0 0 var(--sky-ink);
+}
+.tf-insight.is-success {
+  box-shadow:
+    var(--shadow-card),
+    inset 3px 0 0 var(--mint-ink);
+}
+.tf-insight.is-warning {
+  box-shadow:
+    var(--shadow-card),
+    inset 3px 0 0 var(--butter-ink);
+}
+.tf-insight.is-highlight {
+  box-shadow:
+    var(--shadow-card),
+    inset 3px 0 0 var(--lilac-ink);
+}
+.tf-insight-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.tf-insight-titles {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.tf-insight-titles small {
+  font: 600 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-insight-titles b {
+  font: 700 15px/22px var(--font-sans);
+  overflow-wrap: anywhere;
+}
+.tf-insight-body {
+  font: 500 14px/20px var(--font-sans);
+  color: var(--ink);
+}
+.tf-insight-why button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-muted);
+  font: 600 12px/16px var(--font-sans);
+  cursor: pointer;
+}
+.tf-insight-why button:hover {
+  color: var(--ink);
+}
+.tf-insight-why button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+.tf-insight-why button[aria-expanded="true"] .tf-insight-chev {
+  rotate: 180deg;
+}
+.tf-insight-whytext {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  font: 500 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-insight-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* ConsentList */
+.tf-consent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.tf-consent-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+.tf-consent-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.tf-consent-head .tf-option-text {
+  flex: 1;
+  min-width: 140px;
+  padding: 0;
+}
+.tf-consent-purpose {
+  margin: 0;
+  font: 500 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-consent-scopes {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tf-consent-scopes li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+.tf-consent-scopes .tf-option-text {
+  min-width: 0;
+  padding: 0;
+}
+.tf-consent-req {
+  flex: none;
+  font: 600 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}

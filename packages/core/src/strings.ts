@@ -492,6 +492,51 @@ export interface UIStrings {
   contrastAA: string;
   contrastAALarge: string;
   contrastFails: string;
+  /* Life: HabitTracker, MoodPicker, VitalTile, ActivityRings, SleepChart, MedicationList, GoalCard, InsightCard, ConsentList */
+  habits: string;
+  /** "12-day streak" */
+  habitStreak: (days: number) => string;
+  /** "Mark {habit} done today" */
+  markHabitDone: (habit: string) => string;
+  habitDone: string;
+  habitMissed: string;
+  habitNoData: string;
+  howAreYou: string;
+  /** The five mood words, lowest first. */
+  moodLevels: [string, string, string, string, string];
+  inRange: string;
+  belowRange: string;
+  aboveRange: string;
+  /** "Normal 60–100" */
+  normalRange: (low: string, high: string) => string;
+  activity: string;
+  /** "6,240 of 8,000 steps" */
+  ofGoal: (value: string, goal: string) => string;
+  sleepStages: string;
+  /** Names of the sleep stages. */
+  sleepStageNames: Record<"awake" | "rem" | "light" | "deep", string>;
+  /** "7 h 32 min" */
+  durationHm: (hours: number, minutes: number) => string;
+  /** "Asleep 7 h 32 min" */
+  totalSleep: (duration: string) => string;
+  medication: string;
+  medTaken: string;
+  medDue: string;
+  medMissed: string;
+  medUpcoming: string;
+  /** "Mark {name} as taken" */
+  markTaken: (name: string) => string;
+  /** "By {date}" */
+  dueBy: (date: string) => string;
+  whyInsight: string;
+  insightAccept: string;
+  insightSnooze: string;
+  dataAccess: string;
+  revokeAccess: string;
+  /** "Last used {date}" */
+  lastUsed: (date: string) => string;
+  notUsedYet: string;
+  requiredScope: string;
   // @@KEYS
 }
 
@@ -1491,6 +1536,79 @@ export const WORKSPACE_STRINGS: Pick<
   accept: "Accept",
 };
 
+/** Strings of the components in `life.tsx`. */
+export const LIFE_STRINGS: Pick<
+  UIStrings,
+  | "habits"
+  | "habitStreak"
+  | "markHabitDone"
+  | "habitDone"
+  | "habitMissed"
+  | "habitNoData"
+  | "howAreYou"
+  | "moodLevels"
+  | "inRange"
+  | "belowRange"
+  | "aboveRange"
+  | "normalRange"
+  | "activity"
+  | "ofGoal"
+  | "sleepStages"
+  | "sleepStageNames"
+  | "durationHm"
+  | "totalSleep"
+  | "medication"
+  | "medTaken"
+  | "medDue"
+  | "medMissed"
+  | "medUpcoming"
+  | "markTaken"
+  | "dueBy"
+  | "whyInsight"
+  | "insightAccept"
+  | "insightSnooze"
+  | "dataAccess"
+  | "revokeAccess"
+  | "lastUsed"
+  | "notUsedYet"
+  | "requiredScope"
+> = {
+  habits: "Habits",
+  habitStreak: (days) => `${days}-day streak`,
+  markHabitDone: (habit) => `Mark ${habit} done today`,
+  habitDone: "Done",
+  habitMissed: "Missed",
+  habitNoData: "No entry",
+  howAreYou: "How are you feeling?",
+  moodLevels: ["Awful", "Low", "Okay", "Good", "Great"],
+  inRange: "In range",
+  belowRange: "Below range",
+  aboveRange: "Above range",
+  normalRange: (low, high) => `Normal ${low}–${high}`,
+  activity: "Activity",
+  ofGoal: (value, goal) => `${value} of ${goal}`,
+  sleepStages: "Sleep stages",
+  sleepStageNames: { awake: "Awake", rem: "REM", light: "Light", deep: "Deep" },
+  durationHm: (hours, minutes) =>
+    hours ? (minutes ? `${hours} h ${minutes} min` : `${hours} h`) : `${minutes} min`,
+  totalSleep: (duration) => `Asleep ${duration}`,
+  medication: "Medication",
+  medTaken: "Taken",
+  medDue: "Due",
+  medMissed: "Missed",
+  medUpcoming: "Later",
+  markTaken: (name) => `Mark ${name} as taken`,
+  dueBy: (date) => `By ${date}`,
+  whyInsight: "Why am I seeing this?",
+  insightAccept: "Do it",
+  insightSnooze: "Later",
+  dataAccess: "Data access",
+  revokeAccess: "Revoke access",
+  lastUsed: (date) => `Last used ${date}`,
+  notUsedYet: "Not used yet",
+  requiredScope: "Required",
+};
+
 /** The English defaults: every group together. */
 export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   {},
@@ -1509,6 +1627,7 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   FEEDBACK_STRINGS,
   FORM_STRINGS,
   FORMS_STRINGS,
+  LIFE_STRINGS,
   MAIL_STRINGS,
   MEDIA_STRINGS,
   NAVIGATION_STRINGS,
