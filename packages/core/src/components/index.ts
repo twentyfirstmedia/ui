@@ -23,6 +23,18 @@ export {
 } from "./admin.js";
 export { QrCode } from "./qr-code.js";
 export {
+  HabitTracker,
+  MoodPicker,
+  VitalTile,
+  ActivityRings,
+  SleepChart,
+  MedicationList,
+  JournalEntry,
+  GoalCard,
+  InsightCard,
+  ConsentList,
+} from "./life.js";
+export {
   AgentCard,
   AgentDetails,
   ChatList,

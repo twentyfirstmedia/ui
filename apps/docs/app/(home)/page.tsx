@@ -98,6 +98,7 @@ const GROUP_ICON: Record<string, IconName> = {
   Commerce: "cart",
   Admin: "settings",
   "Real estate": "home",
+  Life: "heart",
   Media: "image",
 };
 const TINTS: Tint[] = ["sky", "mint", "butter", "lilac", "blush"];

@@ -1289,5 +1289,128 @@
     "width": 720,
     "height": 320,
     "components": ["QrCode", "Card"]
+  },
+  {
+    "name": "HabitTracker",
+    "group": "Life",
+    "width": 960,
+    "height": 420,
+    "components": ["HabitTracker", "Panel"]
+  },
+  {
+    "name": "MoodPicker",
+    "group": "Life",
+    "width": 960,
+    "height": 300,
+    "components": ["MoodPicker", "Card"]
+  },
+  {
+    "name": "VitalTile",
+    "group": "Life",
+    "width": 1000,
+    "height": 300,
+    "components": ["VitalTile"]
+  },
+  {
+    "name": "ActivityRings",
+    "group": "Life",
+    "width": 960,
+    "height": 300,
+    "components": ["ActivityRings", "Card"]
+  },
+  {
+    "name": "SleepChart",
+    "group": "Life",
+    "width": 960,
+    "height": 360,
+    "components": ["SleepChart", "Panel"]
+  },
+  {
+    "name": "MedicationList",
+    "group": "Life",
+    "width": 960,
+    "height": 380,
+    "components": ["MedicationList", "Panel"]
+  },
+  {
+    "name": "JournalEntry",
+    "group": "Life",
+    "width": 960,
+    "height": 460,
+    "components": ["JournalEntry", "IconButton"]
+  },
+  {
+    "name": "GoalCard",
+    "group": "Life",
+    "width": 1000,
+    "height": 420,
+    "components": ["GoalCard"]
+  },
+  {
+    "name": "InsightCard",
+    "group": "Life",
+    "width": 960,
+    "height": 520,
+    "components": ["InsightCard"]
+  },
+  {
+    "name": "ConsentList",
+    "group": "Life",
+    "width": 960,
+    "height": 640,
+    "components": ["ConsentList"]
+  },
+  {
+    "name": "HealthScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1000,
+    "components": [
+      "AppShell",
+      "VitalTile",
+      "ActivityRings",
+      "SleepChart",
+      "MedicationList",
+      "InsightCard",
+      "PageHeader",
+      "Panel",
+      "Segmented",
+      "Stagger",
+      "Button"
+    ]
+  },
+  {
+    "name": "HabitsScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 980,
+    "components": [
+      "AppShell",
+      "MoodPicker",
+      "HabitTracker",
+      "JournalEntry",
+      "GoalCard",
+      "PageHeader",
+      "Panel",
+      "Stagger",
+      "Textarea",
+      "Button"
+    ]
+  },
+  {
+    "name": "DataAccessScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 980,
+    "components": [
+      "AppShell",
+      "ConsentList",
+      "InsightCard",
+      "KeyValue",
+      "PageHeader",
+      "Panel",
+      "Stagger",
+      "Switch"
+    ]
   }
 ]
