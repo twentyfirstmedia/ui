@@ -18,6 +18,7 @@
   min-width: 0;
 }
 .tf-budget {
+  container: tf-budget / inline-size;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -50,9 +51,16 @@ button.tf-budget:focus-visible {
 }
 .tf-budget-top {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
+  gap: 0 12px;
+}
+/* narrow: the icon steps aside so the category keeps its name */
+@container tf-budget (max-width: 300px) {
+  .tf-budget > .tf-tinticon {
+    display: none;
+  }
 }
 .tf-budget-top b {
   min-width: 0;
@@ -99,6 +107,7 @@ button.tf-budget:focus-visible {
   min-width: 0;
 }
 .tf-subs ul {
+  container: tf-subs / inline-size;
   display: flex;
   flex-direction: column;
 }
@@ -139,6 +148,30 @@ button.tf-budget:focus-visible {
   font-weight: 500;
   color: var(--ink-muted);
 }
+/* narrow: amount and trial badge go under the name, the menu stays at the end */
+@container tf-subs (max-width: 380px) {
+  .tf-sub {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 4px 12px;
+    align-items: center;
+  }
+  .tf-sub > :first-child {
+    grid-row: 1 / span 2;
+    align-self: start;
+  }
+  .tf-sub > .tf-sub-text,
+  .tf-sub > .tf-badge,
+  .tf-sub > .tf-sub-amount {
+    grid-column: 2;
+    justify-self: start;
+    text-align: left;
+  }
+  .tf-sub > :last-child:not(.tf-sub-amount) {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
 .tf-sub.is-cancelled .tf-sub-text b,
 .tf-sub.is-cancelled .tf-sub-amount {
   color: var(--ink-muted);
@@ -174,12 +207,13 @@ button.tf-budget:focus-visible {
 }
 .tf-nw-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
   gap: 12px;
 }
 .tf-nw-head > :first-child {
-  flex: 1;
+  flex: 1 1 200px;
 }
 .tf-nw-head > :last-child:not(:first-child) {
   flex: none;
@@ -395,6 +429,9 @@ button.tf-budget:focus-visible {
   flex-wrap: wrap;
   gap: 8px 16px;
 }
+.tf-coverage-box {
+  container: tf-coverage / inline-size;
+}
 .tf-coverage-table {
   width: 100%;
   border-collapse: collapse;
@@ -426,6 +463,28 @@ button.tf-budget:focus-visible {
 }
 .tf-coverage-table tr.is-none th b {
   color: var(--blush-ink);
+}
+/* narrow: each risk becomes a block, its status top right, the note underneath */
+@container tf-coverage (max-width: 440px) {
+  .tf-coverage-table,
+  .tf-coverage-table tbody {
+    display: block;
+  }
+  .tf-coverage-table tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 12px;
+    padding: 10px 4px;
+    border-top: 1px solid var(--line);
+  }
+  .tf-coverage-table th,
+  .tf-coverage-table td {
+    padding: 0;
+    border-top: 0;
+  }
+  .tf-coverage-table td.tf-coverage-note {
+    grid-column: 1 / -1;
+  }
 }
 
 /* ClaimTimeline */

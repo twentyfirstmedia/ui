@@ -357,27 +357,29 @@ export function CoverageMatrix(p: CoverageMatrixProps) {
           </span>
         ))}
       </div>
-      <table className="tf-coverage-table">
-        <caption className="tf-sidebar-sr">{p.label || t.coverageLabel}</caption>
-        <tbody>
-          {p.rows.map((r) => (
-            <tr key={r.id} className={"is-" + r.status}>
-              <th scope="row">
-                <b>{r.risk}</b>
-                {r.policy && <small>{r.policy}</small>}
-              </th>
-              <td>
-                <StatusIndicator
-                  status={COVER_STATUS[r.status]}
-                  label={words[r.status]}
-                  size="sm"
-                />
-              </td>
-              <td className="tf-coverage-note">{r.note}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="tf-coverage-box">
+        <table className="tf-coverage-table">
+          <caption className="tf-sidebar-sr">{p.label || t.coverageLabel}</caption>
+          <tbody>
+            {p.rows.map((r) => (
+              <tr key={r.id} className={"is-" + r.status}>
+                <th scope="row">
+                  <b>{r.risk}</b>
+                  {r.policy && <small>{r.policy}</small>}
+                </th>
+                <td>
+                  <StatusIndicator
+                    status={COVER_STATUS[r.status]}
+                    label={words[r.status]}
+                    size="sm"
+                  />
+                </td>
+                <td className="tf-coverage-note">{r.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
