@@ -20,6 +20,12 @@ const PAGES = [
     glass: ".docs-preview .tf-shell, .docs-preview .tf-shell :is(.tf-stat, .tf-panel, .tf-dock)",
     min: 9,
   },
+  ...["HealthScreen", "HabitsScreen", "LifeOverviewScreen"].map((name) => ({
+    path: "patterns/" + name,
+    glass:
+      ".docs-preview .tf-shell, .docs-preview .tf-shell :is(.tf-panel, .tf-vital, .tf-goal, .tf-insight, .tf-journal):not(:is(.tf-panel, .tf-card) *)",
+    min: 3,
+  })),
 ];
 
 async function open(page: Page, kit: string, theme: string, path = PAGES[0]!.path) {

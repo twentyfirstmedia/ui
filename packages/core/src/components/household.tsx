@@ -179,7 +179,7 @@ export function NetWorthCard(p: NetWorthCardProps) {
     </div>
   );
   return (
-    <div style={p.style} className={cx("tf-nw", p.className)}>
+    <div style={p.style} className={cx("tf-nw", p.surface && "tf-" + p.surface, p.className)}>
       <div className="tf-nw-head">
         <div className="tf-col" style={{ gap: 2, minWidth: 0 }}>
           <span className="tf-nw-title">{p.title || t.netWorth}</span>
@@ -283,7 +283,10 @@ export function PolicyCard(p: PolicyCardProps) {
   const st = p.status || "active";
   const no = p.policyNumber && p.maskNumber ? "•••• " + p.policyNumber.slice(-4) : p.policyNumber;
   return (
-    <div style={p.style} className={cx("tf-policy", "is-" + st, p.className)}>
+    <div
+      style={p.style}
+      className={cx("tf-policy", p.surface && "tf-" + p.surface, "is-" + st, p.className)}
+    >
       <div className="tf-policy-head">
         <TintIcon icon={p.icon || "umbrella"} tint={p.tint || "sky"} size={40} />
         <div className="tf-option-text">

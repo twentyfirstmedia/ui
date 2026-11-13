@@ -267,6 +267,13 @@ Notiz (Robin: „AI-first Life-MCP-Dashboard mit Wellbeing, Organisation, Finanz
 
 Notiz: Zweiter Teil. Fristen und Ablaufdaten zählen Kalendertage in UTC ab einem `today`, das die App übergibt, damit Server und Client gleich rendern und die Zeitzone keinen Tag verschiebt. Beträge laufen durch `useFormat()`, Summen von Abos rechnen alle Perioden auf Monat und Jahr um und lassen gekündigte weg. Policennummern lassen sich maskieren („•••• 1938“), weil die Übersicht oft geteilt oder vorgelesen wird. Die Deckungsmatrix ist eine echte Tabelle mit Beschriftung und nennt jeden Status in Worten.
 
+### Phase 25: Life in Glas, mitwachsende Aktionsleisten
+- [x] Life-Karten (`VitalTile`, `JournalEntry`, `GoalCard`, `InsightCard`, `ConsentList`, `NetWorthCard`, `PolicyCard`) mit `surface` und als Glasflächen im Glas-Provider
+- [x] Muster Health, Habits & journal und Life overview in Glas über `Ambient`
+- [x] Aktionsleisten werden in schmalen Boxen voll breit, in sehr schmalen untereinander
+
+Notiz (Robin: „mehr mit Glass machen, perfekt für diese“ und „Buttons sollten in dünneren Karten oder mobil fluider sein“): Die Life-Karten stehen jetzt in derselben Glasliste wie Panel und Card, verschachtelt bleiben sie klar. Eine `InsightCard` setzt `--tint` nach ihrem Ton, auf Glas bekommt sie dadurch einen zarten Farbschleier. Eine Sidebar auf dem Shell-Rahmen (`.shell`) war im Glas-Provider eine zweite Glasschicht auf der Glas-Shell und wirkte deckend weiß; sie bleibt jetzt klar wie Topbar und Rail. Aktionsleisten messen sich selbst (`container: tf-actions`), nicht die Karte: Ein Container auf `.tf-card`/`.tf-panel` ließ breitenlose Karten in Flex-Zeilen auf 0 px schrumpfen (im UserMenu-Beispiel gefunden). Deshalb zählen nur die eigenen Fußleisten der Komponenten und `.tf-row`s mit nur Buttons direkt in einer Spaltenbox (Panel, Card, Dialog, Popover, Form), die immer die volle Breite haben. Die Aktionen der `PolicyCard` stehen neben dem Verlängerungsdatum und sind deshalb ausgenommen. Ein Prüfskript hat auf allen Seiten bei 390 und 1440 px kontrolliert, dass keine Leiste schmaler als ihre Box wird. Der Glas-Test prüft die drei neuen Muster (durchscheinend, Kontrast über Schwarz, Weiß und Grau, Fallbacks) und schaut nur auf oberste Flächen.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`

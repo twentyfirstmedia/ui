@@ -185,7 +185,10 @@ export function VitalTile(p: VitalTileProps) {
   const pos = (x: number) => Math.max(0, Math.min(100, ((x - min) / (max - min || 1)) * 100));
   const st = !p.normal ? null : p.value < lo ? "low" : p.value > hi ? "high" : "ok";
   return (
-    <div style={p.style} className={cx("tf-vital", st && "is-" + st, p.className)}>
+    <div
+      style={p.style}
+      className={cx("tf-vital", p.surface && "tf-" + p.surface, st && "is-" + st, p.className)}
+    >
       <div className="tf-vital-head">
         <span className="tf-vital-label">
           <Icon name={p.icon || "heartPulse"} size={14} />
@@ -425,7 +428,10 @@ export function JournalEntry(p: JournalEntryProps) {
   const t = useStrings(LIFE_STRINGS);
   const { formatDate } = useFormat();
   return (
-    <article style={p.style} className={cx("tf-journal", p.className)}>
+    <article
+      style={p.style}
+      className={cx("tf-journal", p.surface && "tf-" + p.surface, p.className)}
+    >
       <header className="tf-journal-head">
         <time dateTime={new Date(p.date).toISOString()}>
           {formatDate(p.date, { weekday: "long", day: "numeric", month: "long" })}
@@ -467,7 +473,7 @@ export function GoalCard(p: GoalCardProps) {
         ? formatPercent(n)
         : formatNumber(n) + (p.unit ? " " + p.unit : "");
   return (
-    <div style={p.style} className={cx("tf-goal", p.className)}>
+    <div style={p.style} className={cx("tf-goal", p.surface && "tf-" + p.surface, p.className)}>
       <div className="tf-goal-head">
         <TintIcon icon={p.icon || "target"} tint={p.tint || "lilac"} size={36} />
         <div className="tf-option-text">
@@ -528,7 +534,7 @@ export function InsightCard(p: InsightCardProps) {
   return (
     <section
       style={p.style}
-      className={cx("tf-insight", "is-" + tone, p.className)}
+      className={cx("tf-insight", p.surface && "tf-" + p.surface, "is-" + tone, p.className)}
       aria-labelledby={`${id}-t`}
     >
       <div className="tf-insight-head">
@@ -617,7 +623,12 @@ export function ConsentList(p: ConsentListProps) {
       aria-label={p.label || t.dataAccess}
     >
       {p.connectors.map((c) => (
-        <section key={c.id} className="tf-consent-item" role="listitem" aria-label={c.name}>
+        <section
+          key={c.id}
+          className={cx("tf-consent-item", p.surface && "tf-" + p.surface)}
+          role="listitem"
+          aria-label={c.name}
+        >
           <div className="tf-consent-head">
             {c.logo || <TintIcon icon={c.icon || "plug"} tint="sky" size={36} />}
             <div className="tf-option-text">
