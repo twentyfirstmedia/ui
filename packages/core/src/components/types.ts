@@ -2869,6 +2869,8 @@ export interface MoodPickerProps extends BaseProps {
   compact?: boolean;
 }
 export interface VitalTileProps extends BaseProps {
+  /** `"glass"`: translucent glass over a backdrop (`Ambient`, a photo, a map); `"solid"` opts out inside a glass `UIProvider`. */
+  surface?: Surface;
   label: string;
   value: number;
   unit?: string;
@@ -2935,6 +2937,8 @@ export interface MedicationListProps extends BaseProps {
   label?: string;
 }
 export interface JournalEntryProps extends BaseProps {
+  /** `"glass"`: translucent glass over a backdrop (`Ambient`, a photo, a map); `"solid"` opts out inside a glass `UIProvider`. */
+  surface?: Surface;
   date: Date | string | number;
   title?: string;
   mood?: MoodLevel;
@@ -2944,6 +2948,8 @@ export interface JournalEntryProps extends BaseProps {
   actions?: ReactNode;
 }
 export interface GoalCardProps extends BaseProps {
+  /** `"glass"`: translucent glass over a backdrop (`Ambient`, a photo, a map); `"solid"` opts out inside a glass `UIProvider`. */
+  surface?: Surface;
   title: string;
   value: number;
   target: number;
@@ -2960,6 +2966,8 @@ export interface GoalCardProps extends BaseProps {
   note?: ReactNode;
 }
 export interface InsightCardProps extends BaseProps {
+  /** `"glass"`: translucent glass over a backdrop (`Ambient`, a photo, a map); `"solid"` opts out inside a glass `UIProvider`. */
+  surface?: Surface;
   title: string;
   children?: ReactNode;
   icon?: IconName;
@@ -2995,6 +3003,8 @@ export interface ConsentConnector {
   lastUsed?: Date | string | number;
 }
 export interface ConsentListProps extends BaseProps {
+  /** `"glass"`: translucent glass over a backdrop (`Ambient`, a photo, a map); `"solid"` opts out inside a glass `UIProvider`. */
+  surface?: Surface;
   connectors: ConsentConnector[];
   onScopeChange?: (connectorId: string, scopeId: string, granted: boolean) => void;
   onRevoke?: (connectorId: string) => void;
@@ -3043,6 +3053,8 @@ export interface SubscriptionListProps extends BaseProps {
   label?: string;
 }
 export interface NetWorthCardProps extends BaseProps {
+  /** `"glass"`: translucent glass over a backdrop (`Ambient`, a photo, a map); `"solid"` opts out inside a glass `UIProvider`. */
+  surface?: Surface;
   assets: { label: string; value: number; icon?: IconName }[];
   liabilities?: { label: string; value: number; icon?: IconName }[];
   /** Net worth over time, oldest first. */
@@ -3076,6 +3088,8 @@ export interface DeadlineListProps extends BaseProps {
   label?: string;
 }
 export interface PolicyCardProps extends BaseProps {
+  /** `"glass"`: translucent glass over a backdrop (`Ambient`, a photo, a map); `"solid"` opts out inside a glass `UIProvider`. */
+  surface?: Surface;
   /** The kind of insurance: "Household contents", "Liability" … */
   type: string;
   insurer: string;

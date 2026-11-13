@@ -592,18 +592,23 @@ button.tf-habit-mark:focus-visible {
   box-shadow:
     var(--shadow-card),
     inset 3px 0 0 var(--sky-ink);
+  /* on glass the card takes a faint wash of its tone */
+  --tint: var(--sky);
 }
 .tf-insight.is-success {
+  --tint: var(--mint);
   box-shadow:
     var(--shadow-card),
     inset 3px 0 0 var(--mint-ink);
 }
 .tf-insight.is-warning {
+  --tint: var(--butter);
   box-shadow:
     var(--shadow-card),
     inset 3px 0 0 var(--butter-ink);
 }
 .tf-insight.is-highlight {
+  --tint: var(--lilac);
   box-shadow:
     var(--shadow-card),
     inset 3px 0 0 var(--lilac-ink);

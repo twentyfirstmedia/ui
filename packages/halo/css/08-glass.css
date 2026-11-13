@@ -25,7 +25,14 @@
     .tf-sidebar,
     .tf-map-legend,
     .tf-map-ctl,
-    .tf-map-pop
+    .tf-map-pop,
+    .tf-vital,
+    .tf-journal,
+    .tf-goal,
+    .tf-insight,
+    .tf-consent-item,
+    .tf-nw,
+    .tf-policy
   ):not(
     :is(
         .tf-panel,
@@ -41,6 +48,13 @@
         .tf-palette,
         .tf-modal,
         .tf-drawer,
+        .tf-vital,
+        .tf-journal,
+        .tf-goal,
+        .tf-insight,
+        .tf-consent-item,
+        .tf-nw,
+        .tf-policy,
         .tf-glass
       )
       *
@@ -135,6 +149,10 @@
         .tf-modal,
         .tf-drawer,
         .tf-glass,
+        .tf-insight,
+        .tf-policy,
+        .tf-consent-item,
+        .tf-journal,
         .tf-btngroup,
         .tf-map-ctl,
         .tf-topbar
@@ -160,7 +178,21 @@
 }
 [data-surface="glass"]
   :is(.tf-iconbtn-soft, .tf-iconbtn-outline, .tf-btn-secondary, .tf-chip):not(
-    :is(.tf-panel, .tf-card, .tf-dock, .tf-popover, .tf-menu, .tf-modal, .tf-drawer, .tf-glass) *
+    :is(
+        .tf-panel,
+        .tf-card,
+        .tf-dock,
+        .tf-popover,
+        .tf-menu,
+        .tf-modal,
+        .tf-drawer,
+        .tf-insight,
+        .tf-policy,
+        .tf-consent-item,
+        .tf-journal,
+        .tf-glass
+      )
+      *
   ):not(.tf-solid):not([aria-pressed="true"]):hover {
   background:
     linear-gradient(var(--glass-hover), var(--glass-hover)) border-box,
@@ -214,7 +246,14 @@
       .tf-sidebar,
       .tf-map-legend,
       .tf-map-ctl,
-      .tf-map-pop
+      .tf-map-pop,
+      .tf-vital,
+      .tf-journal,
+      .tf-goal,
+      .tf-insight,
+      .tf-consent-item,
+      .tf-nw,
+      .tf-policy
     ) {
     outline: 1px solid CanvasText;
     outline-offset: -1px;
