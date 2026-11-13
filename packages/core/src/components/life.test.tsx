@@ -186,4 +186,24 @@ describe("life components", () => {
     fireEvent.click(screen.getByRole("button", { name: "Revoke access" }));
     expect(revoke).toHaveBeenCalledWith("bank");
   });
+
+  it("Life cards take the glass surface", () => {
+    const { container } = render(
+      <>
+        <VitalTile surface="glass" label="Pulse" value={58} />
+        <GoalCard surface="solid" title="Fund" value={1} target={2} />
+        <InsightCard surface="glass" title="Hint" />
+        <ConsentList
+          surface="glass"
+          connectors={[
+            { id: "bank", name: "Bank", scopes: [{ id: "b", label: "Balances", granted: true }] },
+          ]}
+        />
+      </>,
+    );
+    expect(container.querySelector(".tf-vital")?.classList.contains("tf-glass")).toBe(true);
+    expect(container.querySelector(".tf-goal")?.classList.contains("tf-solid")).toBe(true);
+    expect(container.querySelector(".tf-insight")?.classList.contains("tf-glass")).toBe(true);
+    expect(container.querySelector(".tf-consent-item")?.classList.contains("tf-glass")).toBe(true);
+  });
 });

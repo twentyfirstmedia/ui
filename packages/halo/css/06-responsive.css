@@ -581,72 +581,33 @@
   }
 }
 
-/* Fluid actions: boxes that hold actions measure themselves, so their buttons answer to the box
-   (a thin card, a side panel, a phone) instead of the window. In a narrow box an action row
-   wraps and its buttons share the full width; in a very narrow one each button takes a line.
-   A plain `.tf-row` counts as an action row when it holds nothing but buttons. */
-:where(
-  .tf-panel,
-  .tf-card,
-  .tf-modal,
-  .tf-drawer,
-  .tf-cookie,
-  .tf-push,
-  .tf-auth,
-  .tf-review,
-  .tf-approval,
-  .tf-insight,
-  .tf-policy,
-  .tf-journal,
-  .tf-consent-item
+/* Fluid actions: an action row measures itself, so its buttons answer to the box it sits in (a
+   thin card, a side panel, a phone) instead of the window. When the row is narrow it wraps and
+   its buttons share the full width; when it is very narrow each button takes a line. The rows are
+   the kit's own footers and action bars, and plain `.tf-row`s of buttons placed directly in a
+   column box (panel, card, dialog, form …), where they always span the box. */
+:is(
+  .tf-modal-foot,
+  .tf-card-foot,
+  .tf-approval-foot,
+  .tf-review-actions,
+  .tf-cookie-actions,
+  .tf-push-actions,
+  .tf-insight-actions,
+  .tf-journal-foot,
+  :is(.tf-panel, .tf-card, .tf-modal, .tf-drawer, .tf-popover, .tf-form, .tf-col)
+    > .tf-row:not(:has(> :not(.tf-btn, .tf-iconbtn)))
 ) {
-  container: tf-box / inline-size;
+  container: tf-actions / inline-size;
+  flex-wrap: wrap;
 }
-@container tf-box (max-width: 440px) {
-  :is(
-    .tf-modal-foot,
-    .tf-card-foot,
-    .tf-approval-foot,
-    .tf-review-actions,
-    .tf-cookie-actions,
-    .tf-push-actions,
-    .tf-insight-actions,
-    .tf-policy-actions,
-    .tf-journal-foot,
-    .tf-row:not(:has(> :not(.tf-btn, .tf-iconbtn)))
-  ) {
-    flex-wrap: wrap;
-  }
-  :is(
-      .tf-modal-foot,
-      .tf-card-foot,
-      .tf-approval-foot,
-      .tf-review-actions,
-      .tf-cookie-actions,
-      .tf-push-actions,
-      .tf-insight-actions,
-      .tf-policy-actions,
-      .tf-journal-foot,
-      .tf-row:not(:has(> :not(.tf-btn, .tf-iconbtn)))
-    )
-    > .tf-btn {
+@container tf-actions (max-width: 400px) {
+  .tf-btn {
     flex: 1 1 auto;
   }
 }
-@container tf-box (max-width: 280px) {
-  :is(
-      .tf-modal-foot,
-      .tf-card-foot,
-      .tf-approval-foot,
-      .tf-review-actions,
-      .tf-cookie-actions,
-      .tf-push-actions,
-      .tf-insight-actions,
-      .tf-policy-actions,
-      .tf-journal-foot,
-      .tf-row:not(:has(> :not(.tf-btn, .tf-iconbtn)))
-    )
-    > .tf-btn {
+@container tf-actions (max-width: 240px) {
+  .tf-btn {
     flex-basis: 100%;
   }
 }
