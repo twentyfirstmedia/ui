@@ -3001,3 +3001,143 @@ export interface ConsentListProps extends BaseProps {
   /** Accessible name (default "Data access"). */
   label?: string;
 }
+
+/* ── Life: money, insurance, deadlines, documents ── */
+export interface BudgetCategory {
+  id: string;
+  label: string;
+  icon?: IconName;
+  tint?: Tint;
+  spent: number;
+  limit: number;
+}
+export interface BudgetListProps extends BaseProps {
+  categories: BudgetCategory[];
+  currency?: string;
+  /** A category was picked (to show its transactions). */
+  onSelect?: (id: string) => void;
+  /** Accessible name (default "Budgets"). */
+  label?: string;
+}
+export interface Subscription {
+  id: string;
+  name: string;
+  icon?: IconName;
+  /** A logo instead of the icon. */
+  logo?: ReactNode;
+  amount: number;
+  period: "week" | "month" | "year";
+  /** Next charge. */
+  next?: Date | string | number;
+  status?: "active" | "trial" | "cancelled";
+  category?: string;
+}
+export interface SubscriptionListProps extends BaseProps {
+  items: Subscription[];
+  currency?: string;
+  /** "Manage" on a subscription (cancel, change plan …). */
+  onManage?: (id: string) => void;
+  /** Hide the monthly and yearly totals. */
+  totals?: boolean;
+  /** Accessible name (default "Subscriptions"). */
+  label?: string;
+}
+export interface NetWorthCardProps extends BaseProps {
+  assets: { label: string; value: number; icon?: IconName }[];
+  liabilities?: { label: string; value: number; icon?: IconName }[];
+  /** Net worth over time, oldest first. */
+  history?: number[];
+  /** Change over `changeLabel` (e.g. +1,240 "since October"). */
+  change?: number;
+  changeLabel?: string;
+  currency?: string;
+  title?: string;
+}
+export interface DeadlineItem {
+  id: string;
+  title: string;
+  /** What kind: "Contract", "ID card", "Tax" … */
+  kind?: string;
+  icon?: IconName;
+  date: Date | string | number;
+  amount?: number;
+  done?: boolean;
+  note?: string;
+}
+export interface DeadlineListProps extends BaseProps {
+  items: DeadlineItem[];
+  /** The day to count from (default: now). Set it for server rendering and stable output. */
+  today?: Date | string | number;
+  /** Days ahead that count as soon (default 14). */
+  soon?: number;
+  currency?: string;
+  onDone?: (id: string) => void;
+  /** Accessible name (default "Deadlines"). */
+  label?: string;
+}
+export interface PolicyCardProps extends BaseProps {
+  /** The kind of insurance: "Household contents", "Liability" … */
+  type: string;
+  insurer: string;
+  icon?: IconName;
+  tint?: Tint;
+  policyNumber?: string;
+  /** Show only the last four characters of the policy number. */
+  maskNumber?: boolean;
+  /** Sum insured: a number (money) or text ("unlimited"). */
+  coverage?: number | ReactNode;
+  premium?: { amount: number; period: "month" | "quarter" | "year" };
+  deductible?: number;
+  renews?: Date | string | number;
+  status?: "active" | "pending" | "expiring" | "lapsed";
+  currency?: string;
+  /** Buttons at the foot (documents, report a claim …). */
+  actions?: ReactNode;
+}
+export interface CoverageRow {
+  id: string;
+  risk: string;
+  status: "covered" | "partial" | "none";
+  note?: ReactNode;
+  /** Which policy covers it. */
+  policy?: string;
+}
+export interface CoverageMatrixProps extends BaseProps {
+  rows: CoverageRow[];
+  /** Accessible name and caption (default "Coverage"). */
+  label?: string;
+}
+export interface ClaimStep {
+  label: string;
+  date?: Date | string | number;
+  state: "done" | "current" | "todo" | "failed";
+  note?: ReactNode;
+}
+export interface ClaimTimelineProps extends BaseProps {
+  title: string;
+  /** Reference and insurer under the title. */
+  meta?: ReactNode;
+  amount?: number;
+  currency?: string;
+  steps: ClaimStep[];
+}
+export interface LifeDocument {
+  id: string;
+  title: string;
+  category?: string;
+  icon?: IconName;
+  holder?: string;
+  expires?: Date | string | number;
+  /** "PDF · 240 KB" */
+  meta?: string;
+}
+export interface DocumentListProps extends BaseProps {
+  documents: LifeDocument[];
+  /** The day to count expiry from (default: now). */
+  today?: Date | string | number;
+  /** Days ahead that count as expiring soon (default 60). */
+  soon?: number;
+  onOpen?: (id: string) => void;
+  /** Accessible name (default "Documents"). */
+  label?: string;
+}

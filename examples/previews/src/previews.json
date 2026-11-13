@@ -1412,5 +1412,114 @@
       "Stagger",
       "Switch"
     ]
+  },
+  {
+    "name": "BudgetList",
+    "group": "Life",
+    "width": 960,
+    "height": 440,
+    "components": ["BudgetList", "Panel"]
+  },
+  {
+    "name": "SubscriptionList",
+    "group": "Life",
+    "width": 960,
+    "height": 560,
+    "components": ["SubscriptionList", "Panel"]
+  },
+  {
+    "name": "NetWorthCard",
+    "group": "Life",
+    "width": 960,
+    "height": 420,
+    "components": ["NetWorthCard"]
+  },
+  {
+    "name": "DeadlineList",
+    "group": "Life",
+    "width": 960,
+    "height": 520,
+    "components": ["DeadlineList", "Panel"]
+  },
+  {
+    "name": "PolicyCard",
+    "group": "Life",
+    "width": 1000,
+    "height": 380,
+    "components": ["PolicyCard", "Button"]
+  },
+  {
+    "name": "CoverageMatrix",
+    "group": "Life",
+    "width": 960,
+    "height": 520,
+    "components": ["CoverageMatrix", "Panel"]
+  },
+  {
+    "name": "ClaimTimeline",
+    "group": "Life",
+    "width": 960,
+    "height": 400,
+    "components": ["ClaimTimeline", "Panel"]
+  },
+  {
+    "name": "DocumentList",
+    "group": "Life",
+    "width": 960,
+    "height": 480,
+    "components": ["DocumentList", "Panel"]
+  },
+  {
+    "name": "MoneyScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1080,
+    "components": [
+      "AppShell",
+      "NetWorthCard",
+      "InsightCard",
+      "BudgetList",
+      "SubscriptionList",
+      "PageHeader",
+      "Panel",
+      "Segmented",
+      "Stagger",
+      "Button"
+    ]
+  },
+  {
+    "name": "InsuranceScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1100,
+    "components": [
+      "AppShell",
+      "PolicyCard",
+      "CoverageMatrix",
+      "ClaimTimeline",
+      "DeadlineList",
+      "PageHeader",
+      "Panel",
+      "Stagger",
+      "Button"
+    ]
+  },
+  {
+    "name": "LifeOverviewScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1000,
+    "components": [
+      "AppShell",
+      "InsightCard",
+      "DeadlineList",
+      "BudgetList",
+      "MoodPicker",
+      "ActivityRings",
+      "PageHeader",
+      "Panel",
+      "SearchField",
+      "Stagger"
+    ]
   }
 ]

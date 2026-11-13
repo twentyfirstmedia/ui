@@ -537,6 +537,55 @@ export interface UIStrings {
   lastUsed: (date: string) => string;
   notUsedYet: string;
   requiredScope: string;
+  /* Life: BudgetList, SubscriptionList, NetWorthCard, DeadlineList, PolicyCard, CoverageMatrix, ClaimTimeline, DocumentList */
+  budgets: string;
+  /** "€120 left" */
+  budgetLeft: (amount: string) => string;
+  /** "€40 over" */
+  budgetOver: (amount: string) => string;
+  subscriptions: string;
+  /** "€86 a month" */
+  perMonthTotal: (amount: string) => string;
+  /** "€1,032 a year" */
+  perYearTotal: (amount: string) => string;
+  /** "Manage {name}" */
+  manageItem: (name: string) => string;
+  /** "Trial" */
+  trialEnds: string;
+  cancelledLabel: string;
+  /** "Next on {date}" */
+  nextCharge: (date: string) => string;
+  /** Words for billing periods. */
+  periodWord: Record<"week" | "month" | "quarter" | "year", string>;
+  netWorth: string;
+  assetsLabel: string;
+  liabilitiesLabel: string;
+  deadlines: string;
+  /** "Overdue by 3 days" */
+  overdueBy: (days: number) => string;
+  dueToday: string;
+  /** "In 12 days" */
+  dueIn: (days: number) => string;
+  /** "Mark {title} done" */
+  markDone: (title: string) => string;
+  coverageLabel: string;
+  covered: string;
+  partlyCovered: string;
+  notCovered: string;
+  sumInsured: string;
+  deductibleLabel: string;
+  /** "Renews {date}" */
+  renewsOn: (date: string) => string;
+  policyNo: string;
+  /** Words for a policy's status. */
+  policyStatus: Record<"active" | "pending" | "expiring" | "lapsed", string>;
+  claimAmount: string;
+  documents: string;
+  expired: string;
+  /** "Expires in 40 days" */
+  expiresIn: (days: number) => string;
+  /** "Valid until {date}" */
+  expiresOn: (date: string) => string;
   // @@KEYS
 }
 
@@ -1609,6 +1658,78 @@ export const LIFE_STRINGS: Pick<
   requiredScope: "Required",
 };
 
+/** Strings of the components in `household.tsx`. */
+export const HOUSEHOLD_STRINGS: Pick<
+  UIStrings,
+  | "budgets"
+  | "budgetLeft"
+  | "budgetOver"
+  | "subscriptions"
+  | "perMonthTotal"
+  | "perYearTotal"
+  | "manageItem"
+  | "trialEnds"
+  | "cancelledLabel"
+  | "nextCharge"
+  | "periodWord"
+  | "netWorth"
+  | "assetsLabel"
+  | "liabilitiesLabel"
+  | "deadlines"
+  | "overdueBy"
+  | "dueToday"
+  | "dueIn"
+  | "markDone"
+  | "coverageLabel"
+  | "covered"
+  | "partlyCovered"
+  | "notCovered"
+  | "sumInsured"
+  | "deductibleLabel"
+  | "renewsOn"
+  | "policyNo"
+  | "policyStatus"
+  | "claimAmount"
+  | "documents"
+  | "expired"
+  | "expiresIn"
+  | "expiresOn"
+> = {
+  budgets: "Budgets",
+  budgetLeft: (amount) => `${amount} left`,
+  budgetOver: (amount) => `${amount} over`,
+  subscriptions: "Subscriptions",
+  perMonthTotal: (amount) => `${amount} a month`,
+  perYearTotal: (amount) => `${amount} a year`,
+  manageItem: (name) => `Manage ${name}`,
+  trialEnds: "Trial",
+  cancelledLabel: "Cancelled",
+  nextCharge: (date) => `Next on ${date}`,
+  periodWord: { week: "week", month: "month", quarter: "quarter", year: "year" },
+  netWorth: "Net worth",
+  assetsLabel: "Assets",
+  liabilitiesLabel: "Liabilities",
+  deadlines: "Deadlines",
+  overdueBy: (days) => (days === 1 ? "Overdue by 1 day" : `Overdue by ${days} days`),
+  dueToday: "Today",
+  dueIn: (days) => (days === 1 ? "Tomorrow" : `In ${days} days`),
+  markDone: (title) => `Mark ${title} done`,
+  coverageLabel: "Coverage",
+  covered: "Covered",
+  partlyCovered: "Partly",
+  notCovered: "Not covered",
+  sumInsured: "Sum insured",
+  deductibleLabel: "Deductible",
+  renewsOn: (date) => `Renews ${date}`,
+  policyNo: "Policy no.",
+  policyStatus: { active: "Active", pending: "Pending", expiring: "Expiring", lapsed: "Lapsed" },
+  claimAmount: "Claimed",
+  documents: "Documents",
+  expired: "Expired",
+  expiresIn: (days) => (days === 1 ? "Expires tomorrow" : `Expires in ${days} days`),
+  expiresOn: (date) => `Valid until ${date}`,
+};
+
 /** The English defaults: every group together. */
 export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   {},
@@ -1627,6 +1748,7 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   FEEDBACK_STRINGS,
   FORM_STRINGS,
   FORMS_STRINGS,
+  HOUSEHOLD_STRINGS,
   LIFE_STRINGS,
   MAIL_STRINGS,
   MEDIA_STRINGS,

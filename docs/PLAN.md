@@ -259,6 +259,14 @@ Notiz: Der QR-Encoder (`packages/core/src/qr.ts`, Byte-Modus, Versionen 1–40, 
 
 Notiz (Robin: „AI-first Life-MCP-Dashboard mit Wellbeing, Organisation, Finanzen, Versicherungen“): Erster von zwei Teilen. Gesundheitswerte zeigen ihren Status immer in Worten (im/über/unter dem Normalbereich) und nie nur über Farbe; der Normalbereich ist ein Band mit Markierung. Statusangaben, die von der Uhrzeit abhängen (Medikation fällig/verpasst), setzt die App, damit Server und Client gleich rendern. Die Gesichter der Stimmungsskala, die Flamme der Serie und `heartPulse`, `pill`, `target` kommen aus der Icon-Bibliothek und werden von `life.tsx` selbst registriert. `InsightCard` nutzt die Quellen-Chips des Chats, damit jede KI-Aussage dieselbe Herkunftsangabe hat; `ConsentList` ist bewusst pro Scope schaltbar, weil Gesundheits- und Bankdaten nach DSGVO zweckgebunden freigegeben werden. Teil 2: Geld, Versicherung, Fristen, Dokumente und die Übersicht.
 
+### Phase 24: Life – Geld, Versicherung, Fristen, Dokumente
+- [x] `BudgetList`, `SubscriptionList`, `NetWorthCard`
+- [x] `DeadlineList` und `DocumentList` (Tage ab `today`, überfällig/bald/später)
+- [x] `PolicyCard`, `CoverageMatrix`, `ClaimTimeline`
+- [x] Muster Money, Insurance und Life overview; Tests
+
+Notiz: Zweiter Teil. Fristen und Ablaufdaten zählen Kalendertage in UTC ab einem `today`, das die App übergibt, damit Server und Client gleich rendern und die Zeitzone keinen Tag verschiebt. Beträge laufen durch `useFormat()`, Summen von Abos rechnen alle Perioden auf Monat und Jahr um und lassen gekündigte weg. Policennummern lassen sich maskieren („•••• 1938“), weil die Übersicht oft geteilt oder vorgelesen wird. Die Deckungsmatrix ist eine echte Tabelle mit Beschriftung und nennt jeden Status in Worten.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`
