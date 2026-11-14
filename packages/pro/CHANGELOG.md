@@ -1,5 +1,44 @@
 # @twentyfirstmedia/pro
 
+## 0.8.0
+
+### Minor Changes
+
+- [#50](https://github.com/twentyfirstmedia/ui/pull/50) [`9ef8510`](https://github.com/twentyfirstmedia/ui/commit/9ef8510af5849a9ecd4977797a67df379af916b1) Thanks [@robintrepte](https://github.com/robintrepte)! - Widgets for the data that connected services bring.
+  
+  - `DeviceTile`: a smart-home device (switch, light, thermostat, vacuum, purifier, camera, lock, sensor) with its reading, a switch, a thermostat stepper, battery, quick actions and an offline state.
+  - `VehicleCard`: an electric car with charge and limit, range, charging power and finish time, lock and climate as toggle buttons, inside temperature and location.
+  - `NowPlaying`: cover, title, device, progress and previous / play-pause / next.
+  - `WorkoutCard`: duration, distance, calories, heart rate and minutes per heart-rate zone.
+  - `CallLog`: calls by day with direction, length, an assistant's summary and call back.
+  - `ReservationCard`: stays, flights, trains, rides, deliveries and tickets with dates, place, booking number and status.
+  - `Scorecard`: a golf round with the usual score marks, putts, Out, In and total against par; every score in words for screen readers.
+  - `HoldingsList`: portfolio positions with value, change and share.
+  - All cards turn to glass inside `<UIProvider surface="glass">`. Patterns Home (in glass), Trips & orders, Golf and Investments.
+
+- [#49](https://github.com/twentyfirstmedia/ui/pull/49) [`d141a0c`](https://github.com/twentyfirstmedia/ui/commit/d141a0cf463439e074b77daa57463e61a3794cae) Thanks [@robintrepte](https://github.com/robintrepte)! - Connectors: UI for assistants that read from and act in your services.
+  
+  - `ServiceMark`: a service's brand logo, your own logo or a monogram (for brands without an open logo), with a state dot that screen readers hear in words.
+  - `ConnectorGallery`: every service by category with search and chips; Connect, Connected, Needs attention (Reconnect) and Coming soon.
+  - `ConnectionList`: connected services with account, state, how fresh the data is, Manage and Reconnect.
+  - `SyncStatus`: "Synced 6 minutes ago", the next sync, what it brought and why it failed, with "Sync now".
+  - `AgentActivity`: what agents read and changed, grouped by day, with waiting, declined, undone and failed states, "Review" and "Undo".
+  - `ConsentList` scopes take `level` (`read`, `act`, `money`) and `asksFirst`; the header uses `ServiceMark`.
+  - `formatRelative` and `useFormat().formatRelative`: "6 minutes ago", "in 1 hour", "yesterday" with `Intl.RelativeTimeFormat`.
+  - 72 more brand logos (Gmail, Google Calendar, Docs, Sheets, Photos, Maps, Home, Tesla, Commerzbank, N26, tado°, SmartThings, Booking.com, Netflix, Strava, Garmin, Philips Hue, Deutsche Bahn …) and 18 line icons for home, devices and travel.
+  - Patterns Connections, Connect a service and Agent activity in a new docs group "Connectors".
+
+- [#52](https://github.com/twentyfirstmedia/ui/pull/52) [`d93b13f`](https://github.com/twentyfirstmedia/ui/commit/d93b13f41cb047af965555ec8c86808149ac363b) Thanks [@robintrepte](https://github.com/robintrepte)! - Real provider logos for every connector.
+  
+  - 23 more brand logos: Apple Health, Apple Fitness, Apple Home, Google Fit, Microsoft Outlook, Microsoft Teams, Scalable Capital, Trade Republic, Getsafe, ottonova, HanseMerkur, Dyson, eufy, Dreame, Wolt, Careem, Oura, WHOOP, Withings, Doctolib, PCCADDIE, Hole19 and Trackman. Most are drawn from the companies' own artwork (sources in `scripts/brands/index.json`); Google Fit, Outlook and Teams come from Material Design Icons (Apache 2.0).
+  - Brand logos are trademarks and artwork of their owners and are not covered by the MIT License; `ICONS-LICENSE` says so and now also ships with `@twentyfirstmedia/elements`, which bundles the icons.
+  - Wordmark logos carry `wide: true`; `ServiceMark` draws them across most of its tile so the letters stay readable.
+
+### Patch Changes
+
+- Updated dependencies [[`9ef8510`](https://github.com/twentyfirstmedia/ui/commit/9ef8510af5849a9ecd4977797a67df379af916b1), [`d141a0c`](https://github.com/twentyfirstmedia/ui/commit/d141a0cf463439e074b77daa57463e61a3794cae), [`d93b13f`](https://github.com/twentyfirstmedia/ui/commit/d93b13f41cb047af965555ec8c86808149ac363b)]:
+  - @twentyfirstmedia/ui-core@0.8.0
+
 ## 0.7.0
 
 ### Minor Changes
