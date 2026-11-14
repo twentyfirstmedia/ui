@@ -1581,7 +1581,7 @@
     "components": ["ConsentList", "KeyValue", "Panel", "QrCode", "ServiceMark"]
   },
   {
-    "name": "AgentActivityScreen",
+    "name": "ActivityScreen",
     "group": "Pages",
     "width": 1280,
     "height": 960,
