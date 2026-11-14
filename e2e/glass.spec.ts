@@ -20,6 +20,12 @@ const PAGES = [
     glass: ".docs-preview .tf-shell, .docs-preview .tf-shell :is(.tf-stat, .tf-panel, .tf-dock)",
     min: 9,
   },
+  {
+    path: "patterns/HomeScreen",
+    glass:
+      ".docs-preview .tf-shell, .docs-preview .tf-shell :is(.tf-device, .tf-vehicle, .tf-nowplaying)",
+    min: 9,
+  },
   ...["HealthScreen", "HabitsScreen", "LifeOverviewScreen"].map((name) => ({
     path: "patterns/" + name,
     glass:
@@ -36,7 +42,7 @@ async function open(page: Page, kit: string, theme: string, path = PAGES[0]!.pat
   await page.goto(`/${kit}/${path}/`);
   // the docs apply the saved theme to the preview once hydrated; measure after that
   await page.locator(`.docs-preview-inner[data-theme="${theme}"]`).waitFor();
-  await page.locator(".docs-preview .tf-panel").first().waitFor();
+  await page.locator(".docs-preview :is(.tf-panel, .tf-shell)").first().waitFor();
   await page.evaluate(() => document.fonts.ready);
 }
 

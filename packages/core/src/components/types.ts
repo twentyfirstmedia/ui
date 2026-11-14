@@ -3275,3 +3275,163 @@ export interface ConnectionListProps extends BaseProps {
   /** Accessible name (default "Connections"). */
   label?: string;
 }
+
+/* ── Connected data: home, car, media, workouts, calls, bookings, golf, investments ── */
+/** The service a value comes from, shown as a small mark. */
+export interface ServiceRef {
+  name: string;
+  icon?: IconName;
+  logo?: ReactNode;
+}
+export interface DeviceTileProps extends BaseProps {
+  name: string;
+  room?: string;
+  icon?: IconName;
+  /** The kind sets the default icon and which controls appear. */
+  kind?: "switch" | "light" | "thermostat" | "vacuum" | "purifier" | "camera" | "lock" | "sensor";
+  /** On or off; with `onToggle` a switch. */
+  on?: boolean;
+  onToggle?: (on: boolean) => void;
+  /** The main reading: "21.5 °C", "Cleaning", "AQI 12". */
+  value?: ReactNode;
+  /** A line under the value: "Heating to 22 °C", "Kitchen · 18 m² left". */
+  status?: ReactNode;
+  /** Thermostat target in °C; with `onTarget` a − / + stepper (steps of `step`, default 0.5). */
+  target?: number;
+  onTarget?: (value: number) => void;
+  step?: number;
+  /** Battery in percent (vacuums, sensors, locks). */
+  battery?: number;
+  /** Quick actions: "Start", "Dock", "Boost". */
+  actions?: { label: string; icon?: IconName; onClick?: () => void }[];
+  /** The device does not answer. */
+  offline?: boolean;
+  service?: ServiceRef;
+}
+export interface VehicleCardProps extends BaseProps {
+  name: string;
+  model?: string;
+  /** Battery (or tank) in percent. */
+  battery: number;
+  /** Range in km. */
+  range?: number;
+  /** The charge limit in percent, marked on the bar. */
+  limit?: number;
+  charging?: "charging" | "complete" | "plugged" | "unplugged";
+  /** Charging power in kW while charging. */
+  power?: number;
+  /** When charging reaches the limit. */
+  until?: Date | string | number;
+  locked?: boolean;
+  /** Inside temperature in °C. */
+  inside?: number;
+  climateOn?: boolean;
+  location?: ReactNode;
+  onLock?: (locked: boolean) => void;
+  onClimate?: (on: boolean) => void;
+  service?: ServiceRef;
+}
+export interface NowPlayingProps extends BaseProps {
+  title: string;
+  artist?: string;
+  album?: string;
+  /** Cover art: an `<img>`. */
+  art?: ReactNode;
+  /** Position and length in seconds. */
+  position?: number;
+  duration?: number;
+  playing?: boolean;
+  /** Where it plays: "Living room speaker". */
+  device?: string;
+  onPlayPause?: () => void;
+  onNext?: () => void;
+  onPrevious?: () => void;
+  service?: ServiceRef;
+}
+export interface WorkoutCardProps extends BaseProps {
+  /** "Run", "Ride", "Strength", "Golf" … */
+  type: string;
+  icon?: IconName;
+  date: Date | string | number;
+  /** Minutes. */
+  duration: number;
+  /** Kilometres. */
+  distance?: number;
+  calories?: number;
+  /** Average heart rate in bpm. */
+  heartRate?: number;
+  /** Minutes in heart-rate zones 1–5. */
+  zones?: number[];
+  service?: ServiceRef;
+}
+export interface CallItem {
+  id: string;
+  name: string;
+  number?: string;
+  direction: "incoming" | "outgoing" | "missed";
+  at: Date | string | number;
+  /** Seconds. */
+  duration?: number;
+  /** What the call was about (an assistant's summary). */
+  summary?: ReactNode;
+}
+export interface CallLogProps extends BaseProps {
+  calls: CallItem[];
+  /** "Now" for the day headings. */
+  now?: Date | string | number;
+  onCall?: (id: string) => void;
+  onOpen?: (id: string) => void;
+  /** Accessible name (default "Calls"). */
+  label?: string;
+}
+export interface ReservationCardProps extends BaseProps {
+  kind: "stay" | "flight" | "train" | "ride" | "order" | "event";
+  title: string;
+  /** "Hotel Atlantic · 2 nights", "LH 2024 · Seat 14A". */
+  subtitle?: ReactNode;
+  start: Date | string | number;
+  end?: Date | string | number;
+  /** Where: an address, airport codes, a restaurant. */
+  place?: ReactNode;
+  /** Booking or order number. */
+  code?: string;
+  status?: "confirmed" | "pending" | "cancelled" | "delayed" | "onTheWay" | "delivered";
+  /** Extra words for the status: "+25 min", "Arrives 19:40". */
+  statusText?: string;
+  service?: ServiceRef;
+  actions?: ReactNode;
+}
+export interface GolfHole {
+  par: number;
+  strokes?: number;
+  putts?: number;
+}
+export interface ScorecardProps extends BaseProps {
+  course: string;
+  date?: Date | string | number;
+  /** 9 or 18 holes. */
+  holes: GolfHole[];
+  /** Tee and course rating: "Yellow · CR 71.2 / SR 128". */
+  tee?: string;
+  service?: ServiceRef;
+}
+export interface Holding {
+  id: string;
+  name: string;
+  /** Ticker or ISIN. */
+  symbol?: string;
+  value: number;
+  /** Change in percent over `period`. */
+  change?: number;
+  /** Share of the portfolio in percent. */
+  weight?: number;
+}
+export interface HoldingsListProps extends BaseProps {
+  holdings: Holding[];
+  currency?: string;
+  /** The period of `change` ("today", "1 year"). */
+  period?: string;
+  onSelect?: (id: string) => void;
+  /** Accessible name (default "Holdings"). */
+  label?: string;
+}
