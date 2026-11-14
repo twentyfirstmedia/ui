@@ -1,5 +1,47 @@
 # @twentyfirstmedia/halo
 
+## 0.7.0
+
+### Minor Changes
+
+- [#47](https://github.com/twentyfirstmedia/ui/pull/47) [`23598f6`](https://github.com/twentyfirstmedia/ui/commit/23598f6121300b627e1f5ee1509897fed4440bd9) Thanks [@robintrepte](https://github.com/robintrepte)! - Glass for the Life components, and fluid action rows.
+  
+  - `VitalTile`, `JournalEntry`, `GoalCard`, `InsightCard`, `ConsentList`, `NetWorthCard` and `PolicyCard` take `surface` and turn to glass inside `<UIProvider surface="glass">`, like panels and cards. Nested in a panel they stay clear (no glass on glass).
+  - On glass an `InsightCard` takes a faint wash of its tone (info, success, warning, highlight).
+  - A sidebar on the AppShell frame is no longer a second pane of glass on the glass shell.
+  - The Health, Habits & journal and Life overview patterns are glass over `Ambient`.
+  - Action rows (dialog, card and approval footers, review, cookie, push, insight and journal actions, and a `.tf-row` of buttons placed directly in a panel, card, dialog, popover or form) measure themselves: when narrow, their buttons wrap and share the full width; when very narrow, each button takes a line.
+
+- [#45](https://github.com/twentyfirstmedia/ui/pull/45) [`6afd7a8`](https://github.com/twentyfirstmedia/ui/commit/6afd7a81ebd4a235351bd348da4bb0ef3085f04c) Thanks [@robintrepte](https://github.com/robintrepte)! - Life components for money, insurance, deadlines and documents.
+  
+  - `BudgetList`: spending per category against its limit, what is left or over in words.
+  - `SubscriptionList`: recurring payments with the next charge, trials and cancelled ones, totals per month and year.
+  - `NetWorthCard`: assets minus liabilities with the change over a period.
+  - `DeadlineList`: dates sorted and counted from `today` (overdue, today, soon, later), "mark done".
+  - `PolicyCard`: an insurance policy with insurer, sum insured, premium, deductible, renewal, a maskable policy number and its status.
+  - `CoverageMatrix`: which risks are covered, partly or not, as a captioned table.
+  - `ClaimTimeline`: a claim's steps with the current one marked.
+  - `DocumentList`: documents with their expiry (expired, expiring, valid).
+  - Patterns Money, Insurance and Life overview in the docs group "Life".
+
+- [#44](https://github.com/twentyfirstmedia/ui/pull/44) [`2d58fd0`](https://github.com/twentyfirstmedia/ui/commit/2d58fd064f90321a43823885523e585aec80937a) Thanks [@robintrepte](https://github.com/robintrepte)! - Life components for wellbeing and health, and for AI-first apps.
+  
+  - `HabitTracker`: habits with their last days (done, missed, no entry), streaks, today as a toggle.
+  - `MoodPicker`: a five-step scale with faces and words (radio group), `compact`.
+  - `VitalTile`: a health value with its healthy range as a band, the status in words, a trend.
+  - `ActivityRings`: concentric goal rings with a legend.
+  - `SleepChart`: a night as stages over time with totals per stage.
+  - `MedicationList`: today's doses with status and "mark as taken".
+  - `JournalEntry` and `GoalCard` (number, money or percent; due date, milestones).
+  - `InsightCard`: what the assistant noticed, its sources, "Why am I seeing this?", accept/snooze/dismiss.
+  - `ConsentList`: per connected source what the assistant may read and do, switchable, revocable.
+  - New docs group "Life" with the patterns Health, Habits & journal and Data access.
+
+### Patch Changes
+
+- Updated dependencies [[`23598f6`](https://github.com/twentyfirstmedia/ui/commit/23598f6121300b627e1f5ee1509897fed4440bd9), [`6afd7a8`](https://github.com/twentyfirstmedia/ui/commit/6afd7a81ebd4a235351bd348da4bb0ef3085f04c), [`2d58fd0`](https://github.com/twentyfirstmedia/ui/commit/2d58fd064f90321a43823885523e585aec80937a)]:
+  - @twentyfirstmedia/ui-core@0.7.0
+
 ## 0.6.0
 
 ### Minor Changes
