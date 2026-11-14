@@ -1,6 +1,22 @@
 import { registerIcons } from "@twentyfirstmedia/ui-core";
 import type { Connector } from "@twentyfirstmedia/ui-core";
 import {
+  brandApplefitness,
+  brandApplehealth,
+  brandApplehome,
+  brandCareem,
+  brandDreame,
+  brandDyson,
+  brandEufy,
+  brandGetsafe,
+  brandGooglefit,
+  brandHansemerkur,
+  brandHole19,
+  brandOttonova,
+  brandPccaddie,
+  brandScalable,
+  brandTrackman,
+  brandWolt,
   brandAmazon,
   brandAudible,
   brandBooking,
@@ -36,6 +52,22 @@ import {
 } from "@twentyfirstmedia/ui-core/icons";
 
 registerIcons({
+  brandApplefitness,
+  brandApplehealth,
+  brandApplehome,
+  brandCareem,
+  brandDreame,
+  brandDyson,
+  brandEufy,
+  brandGetsafe,
+  brandGooglefit,
+  brandHansemerkur,
+  brandHole19,
+  brandOttonova,
+  brandPccaddie,
+  brandScalable,
+  brandTrackman,
+  brandWolt,
   brandAmazon,
   brandAudible,
   brandBooking,
@@ -84,8 +116,7 @@ export const CATEGORIES = [
 ];
 
 /**
- * Services a personal assistant connects to. Brands without an open logo show a monogram; pass
- * `logo` with the artwork you are allowed to use.
+ * Services a personal assistant connects to, each with its brand logo from the icon library.
  */
 export const CONNECTORS: Connector[] = [
   {
@@ -153,7 +184,7 @@ export const CONNECTORS: Connector[] = [
   {
     id: "health",
     name: "Apple Health",
-    tint: "blush",
+    icon: "brandApplehealth",
     category: "Health & fitness",
     description: "Steps, heart rate, sleep and workouts.",
     note: "Needs the iPhone app",
@@ -162,7 +193,7 @@ export const CONNECTORS: Connector[] = [
   {
     id: "fitness",
     name: "Apple Fitness",
-    tint: "mint",
+    icon: "brandApplefitness",
     category: "Health & fitness",
     description: "Rings, workouts and trends.",
     note: "Needs the iPhone app",
@@ -170,7 +201,7 @@ export const CONNECTORS: Connector[] = [
   {
     id: "gfit",
     name: "Google Fit",
-    tint: "sky",
+    icon: "brandGooglefit",
     category: "Health & fitness",
     description: "Activity and heart points from Android.",
     state: "soon",
@@ -192,23 +223,21 @@ export const CONNECTORS: Connector[] = [
   {
     id: "pccaddie",
     name: "PCCADDIE",
-    monogram: "PC",
-    tint: "mint",
+    icon: "brandPccaddie",
     category: "Health & fitness",
     description: "Handicap, tee times and club results.",
   },
   {
     id: "hole19",
     name: "Hole19",
-    monogram: "19",
-    tint: "mint",
+    icon: "brandHole19",
     category: "Health & fitness",
     description: "Golf rounds, scorecards and stats.",
   },
   {
     id: "trackman",
     name: "Trackman",
-    tint: "butter",
+    icon: "brandTrackman",
     category: "Health & fitness",
     description: "Range sessions: carry, speed and dispersion.",
     state: "soon",
@@ -232,7 +261,7 @@ export const CONNECTORS: Connector[] = [
   {
     id: "scalable",
     name: "Scalable Capital",
-    tint: "lilac",
+    icon: "brandScalable",
     category: "Money",
     description: "Portfolio, savings plans and orders.",
   },
@@ -246,21 +275,21 @@ export const CONNECTORS: Connector[] = [
   {
     id: "getsafe",
     name: "Getsafe",
-    tint: "sky",
+    icon: "brandGetsafe",
     category: "Insurance",
     description: "Policies, documents and claims.",
   },
   {
     id: "ottonova",
     name: "ottonova",
-    tint: "lilac",
+    icon: "brandOttonova",
     category: "Insurance",
     description: "Health insurance: invoices and refunds.",
   },
   {
     id: "hansemerkur",
     name: "HanseMerkur",
-    tint: "sky",
+    icon: "brandHansemerkur",
     category: "Insurance",
     description: "Travel and supplementary cover.",
   },
@@ -275,7 +304,7 @@ export const CONNECTORS: Connector[] = [
   {
     id: "ahome",
     name: "Apple Home",
-    tint: "butter",
+    icon: "brandApplehome",
     category: "Home",
     description: "HomeKit scenes and accessories.",
     note: "Needs the iPhone app",
@@ -305,21 +334,21 @@ export const CONNECTORS: Connector[] = [
   {
     id: "dyson",
     name: "MyDyson",
-    tint: "plain",
+    icon: "brandDyson",
     category: "Home",
     description: "Air quality and purifier modes.",
   },
   {
     id: "eufy",
     name: "Anker eufy",
-    tint: "plain",
+    icon: "brandEufy",
     category: "Home",
     description: "Cameras, doorbell and robot vacuum.",
   },
   {
     id: "dreame",
     name: "Dreamehome",
-    tint: "plain",
+    icon: "brandDreame",
     category: "Home",
     description: "Robot vacuum: clean, map and dock.",
   },
@@ -355,14 +384,14 @@ export const CONNECTORS: Connector[] = [
   {
     id: "careem",
     name: "Careem",
-    tint: "mint",
+    icon: "brandCareem",
     category: "Travel & mobility",
     description: "Rides and deliveries in the Middle East.",
   },
   {
     id: "wolt",
     name: "Wolt",
-    tint: "sky",
+    icon: "brandWolt",
     category: "Food & shopping",
     description: "Orders, delivery status and receipts.",
   },

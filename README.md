@@ -178,7 +178,7 @@ For any other LLM: [`/llms.txt`](https://ui.twentyfirst.media/llms.txt), [`/llms
 | **Charts** | LineChart, AreaChart, BarChart, StackedBarChart, Funnel, Gauge, Heatmap |
 | **Overlays** | Modal, Drawer (sheet on any side), Popover, HoverCard, Menu, Toaster, ConfirmDialog |
 | **AI** | ChatMessage, Composer, ToolCall, Reasoning, AgentCard, ApprovalCard, RunTrace, VoiceMode |
-| **Icons** | 93 built in, plus a library of 780 more: passkeys, AI, social and brand logos (mail, calendar, banks, smart home, cars, media), files, media, commerce, maps and 3D, games |
+| **Icons** | 93 built in, plus a library of 803 more: passkeys, AI, social and brand logos (mail, calendar, banks, insurers, smart home, cars, health, golf, media), files, media, commerce, maps and 3D, games |
 | **Commerce** | ProductCard, VariantPicker, OrderSummary, PlanCard, CouponCard |
 | **Admin** | SettingsLayout, TwoFactorSetup, WebhookEndpoint, ExportDialog, ServiceMonitor |
 | **Real estate and media** | ListingCard, MapView, ValuationCard, Gallery, Carousel |
@@ -217,6 +217,8 @@ Issues and pull requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING
 ## License
 
 [MIT](LICENSE) © Twentyfirst Media. The bundled fonts (Plus Jakarta Sans, IBM Plex Mono, Geist, Geist Mono) are licensed under the SIL Open Font License 1.1.
+
+The icon library carries its own notices in [`packages/core/ICONS-LICENSE`](packages/core/ICONS-LICENSE): line icons from Lucide (ISC), brand logos from Simple Icons (CC0), Font Awesome Free (CC BY 4.0) and Material Design Icons (Apache 2.0). Some brand logos (Apple Health, Scalable Capital, Getsafe, Wolt …) are drawn from the companies' own artwork, with their sources in [`scripts/brands/index.json`](scripts/brands/index.json). All brand logos are trademarks of their owners and are not covered by the MIT License: use them only to refer to the service, for example to show a connection to it.
 
 <p align="center">
   <br />

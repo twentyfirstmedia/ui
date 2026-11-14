@@ -51,7 +51,8 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "ICONS-LICENSE"
   ],
   "scripts": {
     "build": "node scripts/generate.ts && node scripts/build.ts",

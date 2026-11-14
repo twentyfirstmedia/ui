@@ -13,18 +13,19 @@ export default function Preview() {
         <ServiceMark name="Spotify" icon="brandSpotify" status="syncing" />
         <ServiceMark name="N26" icon="brandN26" status="error" />
         <ServiceMark name="tado°" icon="brandTado" status="paused" />
-        <ServiceMark name="Apple Health" tint="blush" />
-        <ServiceMark name="Scalable Capital" tint="lilac" />
-        <ServiceMark name="Hole19" monogram="19" tint="mint" />
+        <ServiceMark name="Apple Health" icon="brandApplehealth" />
+        <ServiceMark name="Scalable Capital" icon="brandScalable" />
+        <ServiceMark name="Hole19" icon="brandHole19" />
+        <ServiceMark name="Kita Sonnenschein" tint="mint" />
         <ServiceMark name="Phone calls" icon="phone" tint="sky" />
       </div>
       <div className="tf-row" style={{ gap: 12, alignItems: "center" }}>
         <ServiceMark name="Tesla" icon="brandTesla" size="sm" />
         <ServiceMark name="Tesla" icon="brandTesla" />
         <ServiceMark name="Tesla" icon="brandTesla" size="lg" status="connected" />
-        <ServiceMark name="Wolt" tint="sky" size="sm" />
-        <ServiceMark name="Wolt" tint="sky" />
-        <ServiceMark name="Wolt" tint="sky" size="lg" />
+        <ServiceMark name="Wolt" icon="brandWolt" size="sm" />
+        <ServiceMark name="Wolt" icon="brandWolt" />
+        <ServiceMark name="Wolt" icon="brandWolt" size="lg" />
       </div>
     </Panel>
   );

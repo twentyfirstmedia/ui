@@ -128,6 +128,8 @@ export type IconName = KitIconName | LibraryIconName | Extract<keyof CustomIcons
 export interface FilledIcon {
   d: string;
   filled: true;
+  /** A wordmark at least twice as wide as tall: marks such as `ServiceMark` draw it larger. */
+  wide?: true;
 }
 
 /** A drawing for `registerIcons`: a path on the 24px grid, stroked like the kit's icons, or filled. */

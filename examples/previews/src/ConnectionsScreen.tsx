@@ -52,7 +52,7 @@ const CONNECTED: ConnectionItem[] = [
   {
     id: "health",
     name: "Apple Health",
-    tint: "blush",
+    icon: "brandApplehealth",
     account: "Mara's iPhone",
     state: "connected",
     sync: { state: "synced", last: ago(18) },
@@ -131,7 +131,7 @@ export default function Preview() {
         <Panel title="Connected" subtitle="Freshest data first">
           <ConnectionList items={CONNECTED} now={now} onManage={() => {}} onReconnect={() => {}} />
         </Panel>
-        <Panel title="Add more" subtitle="Brands without an open logo show a monogram">
+        <Panel title="Add more" subtitle="49 services in 10 categories">
           <ConnectorGallery
             connectors={CONNECTORS.filter((c) => c.state !== "connected")}
             categories={CATEGORIES}

@@ -87,7 +87,7 @@ export default function Preview() {
         title="Connect Apple Health"
         subtitle="Health data stays on your iPhone until you share it"
       >
-        <ServiceMark name="Apple Health" tint="blush" size="lg" />
+        <ServiceMark name="Apple Health" icon="brandApplehealth" size="lg" />
         <p style={{ margin: 0 }}>
           Open the Life app on your iPhone and scan this code. It asks iOS for steps, sleep, heart
           rate and workouts; you pick each type there.

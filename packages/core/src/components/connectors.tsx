@@ -4,7 +4,7 @@ import { cx, initials } from "../cx.js";
 import { useFormat, useStrings } from "../context.js";
 import { CONNECTOR_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
-import { registerIcons } from "../icons.js";
+import { iconData, registerIcons } from "../icons.js";
 import { refreshCwOff } from "../icon-library.js";
 import { Badge, Button, Chip } from "./foundation.js";
 import { SearchField } from "./inputs.js";
@@ -23,6 +23,11 @@ import type {
 registerIcons({ refreshCwOff });
 
 const MARK_SIZE = { sm: 14, md: 20, lg: 26 } as const;
+
+function isWide(name: string): boolean {
+  const d = iconData(name);
+  return typeof d === "object" && d.wide === true;
+}
 
 /**
  * A service's mark: its brand logo, your own logo, or a monogram when neither exists, with an
@@ -48,7 +53,11 @@ export function ServiceMark(p: ServiceMarkProps) {
     >
       {p.logo ||
         (p.icon ? (
-          <Icon name={p.icon} size={MARK_SIZE[size]} />
+          isWide(p.icon) ? (
+            <Icon name={p.icon} style={{ width: "88%", height: "88%" }} />
+          ) : (
+            <Icon name={p.icon} size={MARK_SIZE[size]} />
+          )
         ) : (
           <span className="tf-svc-mono">{(p.monogram || initials(p.name)).slice(0, 2)}</span>
         ))}

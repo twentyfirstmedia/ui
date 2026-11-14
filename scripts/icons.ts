@@ -25,6 +25,7 @@ import { ROOT } from "./tokens.ts";
 
 const require = createRequire(import.meta.url);
 const OUT = join(ROOT, "packages", "core", "src", "icon-library.ts");
+const BRANDS_DIR = join(ROOT, "scripts", "brands");
 
 /**
  * Categories in gallery order. An entry is a kit icon name, a Lucide name (camelCased for the
@@ -1027,6 +1028,13 @@ function toPath(nodes: Node[]): string {
   return parts.join("");
 }
 
+/** A filled icon's source line, flagged `wide` when the drawing is a wordmark (≥ 2.2 : 1). */
+function filled(name: string, d: string): string {
+  const [x0, y0, x1, y1] = svgPathBbox(d);
+  const wide = x1 - x0 >= 2.2 * (y1 - y0) ? ", wide: true" : "";
+  return `export const ${name}: FilledIcon = { d: "${d}", filled: true${wide} };`;
+}
+
 /** Moves a drawing so its box is centred on the 24px grid (and optionally scales it). */
 function centre(d: string, scale = 1): string {
   let p = svgpath(d).abs();
@@ -1100,9 +1108,7 @@ export function build(): string {
       "social",
     ]);
     // logos fill their box; scaled to 20/24 they sit like the line icons (which reach 2–22)
-    lines.push(
-      `export const ${kitName}: FilledIcon = { d: "${centre(icon.path, 20 / 24)}", filled: true };`,
-    );
+    lines.push(filled(kitName, centre(icon.path, 20 / 24)));
   }
   const fa = require("@fortawesome/free-brands-svg-icons") as Record<
     string,
@@ -1123,7 +1129,31 @@ export function build(): string {
     const fitted = svgpath(d)
       .scale(20 / Math.max(w, h))
       .toString();
-    lines.push(`export const ${kitName}: FilledIcon = { d: "${centre(fitted)}", filled: true };`);
+    lines.push(filled(kitName, centre(fitted)));
+  }
+  // logos that no open set carries: taken from the companies' own websites (or Material Design
+  // Icons) and drawn as one path on the 24px grid; each source is listed in scripts/brands/index.json
+  const ownBrands = JSON.parse(readFileSync(join(BRANDS_DIR, "index.json"), "utf8")) as {
+    name: string;
+    title: string;
+    words: string;
+  }[];
+  for (const b of ownBrands) {
+    const svg = readFileSync(join(BRANDS_DIR, b.name + ".svg"), "utf8");
+    const d = /\sd="([^"]+)"/.exec(svg)?.[1];
+    if (!d) {
+      missing.push(`scripts/brands/${b.name}.svg`);
+      continue;
+    }
+    brands.push(b.name);
+    names.push(b.name);
+    addWords(b.name, [
+      ...b.words.split(/\s+/),
+      ...b.title.toLowerCase().split(/\s+/),
+      "brand",
+      "logo",
+    ]);
+    lines.push(filled(b.name, centre(d, 20 / 24)));
   }
   categories["Brands"] = brands;
   if (missing.length) throw new Error(`not found: ${missing.join(", ")}`);
@@ -1155,9 +1185,14 @@ export function build(): string {
  * \`<Icon name="fingerprint" />\`, \`<Button icon="brandGithub">\`.
  *
  * Line icons: Lucide, ISC License, Copyright (c) Lucide Icons and Contributors (see ICONS-LICENSE).
- * Brand logos: Simple Icons, CC0 1.0; LinkedIn, Microsoft, Windows, Slack, Skype, Amazon and OpenAI
- * from Font Awesome Free, CC BY 4.0 (https://fontawesome.com/license/free). Logos are trademarks of
- * their owners; follow each brand's guidelines (e.g. link to the brand's own page).
+ * Brand logos: Simple Icons, CC0 1.0; LinkedIn, Microsoft, Windows, Slack, Skype, Amazon, OpenAI,
+ * Xbox and Waze from Font Awesome Free, CC BY 4.0 (https://fontawesome.com/license/free); Google Fit,
+ * Outlook and Teams from Material Design Icons, Apache License 2.0; the others (Apple Health, Fitness
+ * and Home, Scalable Capital, Trade Republic, Getsafe, ottonova, HanseMerkur, Dyson, eufy, Dreame,
+ * Wolt, Careem, Oura, WHOOP, Withings, Doctolib, PCCADDIE, Hole19, Trackman) drawn from the companies'
+ * own artwork, sources in scripts/brands/index.json. Logos are trademarks and artwork of their owners
+ * and are not covered by the MIT License; use them only to refer to the service (e.g. to show a
+ * connection to it) and follow each brand's guidelines.
  */
 import type { FilledIcon } from "./icons.js";
 
