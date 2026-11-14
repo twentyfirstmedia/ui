@@ -54,8 +54,8 @@ owners; use them according to each brand's guidelines.
 
 ---
 
-The brand logos brandLinkedin, brandMicrosoft, brandWindows, brandSlack, brandSkype, brandAmazon and
-brandOpenai are from Font Awesome Free (https://fontawesome.com), whose icons are licensed under
+The brand logos brandLinkedin, brandMicrosoft, brandWindows, brandSlack, brandSkype, brandAmazon,
+brandOpenai, brandXbox and brandWaze are from Font Awesome Free (https://fontawesome.com), whose icons are licensed under
 CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); attribution: "Font Awesome Free by
 Fonticons, Inc.". They were rescaled to the kit's 24px grid. The logos are trademarks of their owners.
 
@@ -226,3 +226,25 @@ All brand icons are trademarks of their respective owners. The use of these
 trademarks does not indicate endorsement of the trademark holder by Font
 Awesome, nor vice versa. **Please do not use brand logos for any purpose except
 to represent the company, product, or service to which they refer.**
+
+================================================================================
+
+brandGooglefit, brandOutlook and brandTeams are from Material Design Icons
+(https://pictogrammers.com/library/mdi/), Copyright (c) Pictogrammers, licensed under the
+Apache License, Version 2.0 (https://www.apache.org/licenses/LICENSE-2.0). They are used as
+published. The logos are trademarks of their owners.
+
+================================================================================
+
+brandApplehealth, brandApplefitness, brandApplehome, brandCareem, brandDoctolib, brandDreame,
+brandDyson, brandEufy, brandGetsafe, brandHansemerkur, brandHole19, brandOttonova, brandOura,
+brandPccaddie, brandScalable, brandTrackman, brandTraderepublic, brandWhoop, brandWithings and
+brandWolt are drawn from the companies' own artwork (their websites and, for Apple, Apple's
+marketing pages; Doctolib and WHOOP via Wikimedia Commons), reduced to one colour on the kit's
+24px grid. Each source is listed in scripts/brands/index.json in the repository.
+
+These logos are trademarks and copyrighted artwork of their owners. They are NOT covered by the
+MIT License of this package. Use them only to refer to the company, product or service they
+represent (for example to show that an app connects to it), do not alter them to suggest
+endorsement, and follow each owner's brand guidelines. Owners who want a logo removed can open an
+issue at https://github.com/twentyfirstmedia/ui and it will be taken out.

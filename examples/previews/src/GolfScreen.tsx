@@ -9,6 +9,7 @@ import {
   StatTile,
   WorkoutCard,
 } from "@twentyfirstmedia/ui-core";
+import "./_connectors";
 import { LIFE_NAV } from "./_lifenav";
 
 const PAR = [4, 4, 3, 5, 4, 4, 3, 4, 5, 4, 3, 4, 5, 4, 4, 3, 4, 5];
@@ -48,6 +49,7 @@ export default function Preview() {
           course="GC Hamburg-Walddörfer"
           date={new Date(2026, 10, 13)}
           tee="Yellow · CR 71.2 / SR 128"
+          service={{ name: "Hole19", icon: "brandHole19" }}
           holes={PAR.map((par, i) => ({ par, strokes: STROKES[i], putts: PUTTS[i] }))}
         />
         <div

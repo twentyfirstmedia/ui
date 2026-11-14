@@ -287,6 +287,13 @@ Notiz (Robin: „Life-MCP, damit KI-Agenten beim Organisieren helfen“, mit ein
 
 Notiz: Zweiter Teil zum Life-MCP. Jede Karte kann über `service` zeigen, aus welchem Dienst die Daten stammen (kleines `ServiceMark`). Schalter, Schloss und Klima sind echte Umschalter (`role="switch"` bzw. `aria-pressed`) mit gleichbleibender Beschriftung; den Zustand nennt die Karte daneben in Worten. Die Golfkarte nutzt die üblichen Zeichen (Kreis für Birdie, Quadrat für Bogey) und sagt jeden Score für Screenreader in Worten. Einheiten, die `Intl` nicht kennt (kW, kcal, bpm), werden als Text an die formatierte Zahl gehängt. Alle Karten werden im Glas-Provider zu Glas; die Home-Seite ist im Glas-Test.
 
+### Phase 28: Echte Anbieter-Logos
+- [x] 23 Logos ohne offene Quelle aus der Originalgrafik der Anbieter (Websites, Apple-Marketingseiten, Wikimedia Commons), Google Fit, Outlook, Teams aus Material Design Icons
+- [x] Quellen in `scripts/brands/index.json`, Hinweis in `ICONS-LICENSE` (auch in `elements`), Test dafür
+- [x] Breite Wortmarken (`wide`) zeichnet `ServiceMark` größer
+
+Notiz (Robin: „wir wollen alle echten Anbieter-Icons“, Entscheidung: in der Icon-Bibliothek des Kits): Für die 20 Marken gab es in keinem offen lizenzierten Set ein Logo. Jedes Logo stammt aus der Originaldatei des Anbieters (SVG der Website, bei Apple die Marketing-Grafiken, bei Doctolib und WHOOP Wikimedia Commons), wurde in hoher Auflösung gerendert und als einfarbiger Pfad auf das 24-px-Raster gebracht, ohne es nachzuzeichnen oder zu verändern. Wo das Original ein farbiges Feld mit Zeichen ist (Careem, Scalable), ist das Zeichen das Icon. Die Logos sind Marken und Grafiken der Inhaber und nicht von der MIT-Lizenz gedeckt; das steht in `ICONS-LICENSE` und im README, mit dem Angebot, ein Logo auf Wunsch des Inhabers zu entfernen. `@twentyfirstmedia/elements` bündelt die Icons und liefert den Hinweis jetzt mit (vorher fehlte er dort auch für Simple Icons und Font Awesome). Getsafe ist das deutsche Versicherungs-Start-up (hellogetsafe.com), nicht die US-Firma unter getsafe.com.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`

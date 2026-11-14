@@ -1,0 +1,163 @@
+[
+  {
+    "name": "brandApplefitness",
+    "title": "Apple Fitness",
+    "words": "fitness apple rings activity",
+    "source": "Fitness icon on apple.com/health (www.apple.com/v/health/f/images/overview/hero/icon_hero_fitness_large.png), traced",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandApplehealth",
+    "title": "Apple Health",
+    "words": "health apple heart",
+    "source": "Health app icon on apple.com/health (www.apple.com/v/health/f/images/overview/health-app/icon_health_app_large_2x.jpg), heart traced",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandApplehome",
+    "title": "Apple Home",
+    "words": "home apple homekit smart home",
+    "source": "“Works with Apple Home” badge, developer.apple.com/apple-home/images/works-with-apple-home.svg (house)",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandCareem",
+    "title": "Careem",
+    "words": "careem ride delivery",
+    "source": "www.careem.com/favicon.svg (the mark)",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandDoctolib",
+    "title": "Doctolib",
+    "words": "doctolib doctor appointment",
+    "source": "commons.wikimedia.org/wiki/File:Doctolib_Logo.svg (public domain)",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandDreame",
+    "title": "Dreame",
+    "words": "dreame dreamehome vacuum",
+    "source": "cdn.shopify.com/s/files/1/0553/1320/3405/files/dreame-favicon_32x32.svg (dreametech.com)",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandDyson",
+    "title": "Dyson",
+    "words": "dyson mydyson purifier",
+    "source": "www.dyson.de/etc.clientlibs/dyson/…/images/dyson-logo.svg",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandEufy",
+    "title": "eufy",
+    "words": "eufy anker camera vacuum",
+    "source": "www.eufy.com (header logo, inline SVG)",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandGetsafe",
+    "title": "Getsafe",
+    "words": "getsafe insurance",
+    "source": "hellogetsafe.com/de-de (header logo, inline SVG)",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandGooglefit",
+    "title": "Google Fit",
+    "words": "google fit fitness activity",
+    "source": "Material Design Icons, mdi:google-fit (Apache License 2.0)",
+    "method": "path as published"
+  },
+  {
+    "name": "brandHansemerkur",
+    "title": "HanseMerkur",
+    "words": "hansemerkur insurance",
+    "source": "www.hansemerkur.de/resource/crblob/…/safari-pinned-tab-svg-data.svg",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandHole19",
+    "title": "Hole19",
+    "words": "hole19 golf gps",
+    "source": "www.hole19golf.com/packs/static/components/stories/assets/symbol.svg",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandOttonova",
+    "title": "ottonova",
+    "words": "ottonova health insurance",
+    "source": "www.ottonova.de/assets/dist/sprite.svg#btn-ottonova",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandOura",
+    "title": "Oura",
+    "words": "oura ring sleep",
+    "source": "ouraring.com (header logo, inline SVG)",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandOutlook",
+    "title": "Microsoft Outlook",
+    "words": "outlook microsoft mail",
+    "source": "Material Design Icons, mdi:microsoft-outlook (Apache License 2.0)",
+    "method": "path as published"
+  },
+  {
+    "name": "brandPccaddie",
+    "title": "PCCADDIE",
+    "words": "pccaddie golf club handicap",
+    "source": "www.pccaddie.de/_assets/…/Images/logo.svg",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandScalable",
+    "title": "Scalable Capital",
+    "words": "scalable capital broker invest",
+    "source": "de.scalable.capital/icon.svg (the S mark)",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandTeams",
+    "title": "Microsoft Teams",
+    "words": "teams microsoft chat meeting",
+    "source": "Material Design Icons, mdi:microsoft-teams (Apache License 2.0)",
+    "method": "path as published"
+  },
+  {
+    "name": "brandTrackman",
+    "title": "Trackman",
+    "words": "trackman golf launch monitor",
+    "source": "www.trackman.com/_next/static/immutable/media/Trackman_logo--light.svg",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandTraderepublic",
+    "title": "Trade Republic",
+    "words": "trade republic broker bank",
+    "source": "traderepublic.com/de-de (header logo, inline SVG)",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandWhoop",
+    "title": "WHOOP",
+    "words": "whoop strain recovery",
+    "source": "commons.wikimedia.org/wiki/File:WHOOP_Logo_Black.svg",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandWithings",
+    "title": "Withings",
+    "words": "withings scale health",
+    "source": "www.withings.com/cdn/shop/files/Logo-black.svg",
+    "method": "traced from the original artwork"
+  },
+  {
+    "name": "brandWolt",
+    "title": "Wolt",
+    "words": "wolt food delivery",
+    "source": "wolt.com (footer logo, inline SVG)",
+    "method": "traced from the original artwork"
+  }
+]

@@ -31,7 +31,7 @@ export default function Preview() {
           {
             id: "health",
             name: "Apple Health",
-            tint: "blush",
+            icon: "brandApplehealth",
             account: "Mara's iPhone",
             state: "connected",
             sync: { state: "synced", last: ago(18) },
@@ -47,8 +47,7 @@ export default function Preview() {
           {
             id: "pccaddie",
             name: "PCCADDIE",
-            monogram: "PC",
-            tint: "mint",
+            icon: "brandPccaddie",
             account: "GC Hamburg-Walddörfer",
             state: "paused",
             sync: { state: "paused", last: ago(9 * 24 * 60) },

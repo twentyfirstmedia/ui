@@ -73,6 +73,7 @@ export default function Preview() {
             start={new Date(2026, 10, 14, 19, 10)}
             status="onTheWay"
             statusText="Arrives 19:40"
+            service={{ name: "Wolt", icon: "brandWolt" }}
           />
           <ReservationCard
             kind="order"
@@ -115,6 +116,7 @@ export default function Preview() {
               start={new Date(2026, 10, 21, 0, 30)}
               status="pending"
               statusText="Booked by the assistant once you land"
+              service={{ name: "Careem", icon: "brandCareem" }}
             />
             <ReservationCard
               kind="event"
