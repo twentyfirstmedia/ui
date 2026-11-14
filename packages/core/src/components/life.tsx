@@ -20,6 +20,7 @@ import { useControlled, useId } from "../hooks.js";
 import { Badge, Button, IconButton, TintIcon } from "./foundation.js";
 import { Sparkline } from "./charts.js";
 import { Switch } from "./inputs.js";
+import { ServiceMark } from "./connectors.js";
 import type {
   ActivityRingsProps,
   ConsentListProps,
@@ -630,7 +631,7 @@ export function ConsentList(p: ConsentListProps) {
           aria-label={c.name}
         >
           <div className="tf-consent-head">
-            {c.logo || <TintIcon icon={c.icon || "plug"} tint="sky" size={36} />}
+            <ServiceMark name={c.name} icon={c.icon} logo={c.logo} tint="sky" decorative />
             <div className="tf-option-text">
               <b>{c.name}</b>
               <small>
@@ -652,6 +653,12 @@ export function ConsentList(p: ConsentListProps) {
                 <span className="tf-option-text">
                   <b>{s.label}</b>
                   {s.description && <small>{s.description}</small>}
+                  {s.level && (
+                    <span className={cx("tf-scope-level", "is-" + s.level)}>
+                      {t.scopeLevels[s.level]}
+                      {s.asksFirst && " · " + t.asksFirst}
+                    </span>
+                  )}
                 </span>
                 {s.required ? (
                   <span className="tf-consent-req">{t.requiredScope}</span>

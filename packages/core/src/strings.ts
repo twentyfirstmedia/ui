@@ -586,6 +586,43 @@ export interface UIStrings {
   expiresIn: (days: number) => string;
   /** "Valid until {date}" */
   expiresOn: (date: string) => string;
+  /* connectors */
+  /** A connected service's state in words. */
+  serviceStates: Record<"connected" | "syncing" | "error" | "paused" | "off", string>;
+  connectors: string;
+  connectionsLabel: string;
+  manageAction: string;
+  /** "Manage Gmail" */
+  manageService: (name: string) => string;
+  searchConnectors: string;
+  allCategories: string;
+  connect: string;
+  /** "Connect Gmail" */
+  connectService: (name: string) => string;
+  openAction: string;
+  /** "Open Gmail" */
+  openService: (name: string) => string;
+  reconnect: string;
+  /** "Reconnect Gmail" */
+  reconnectService: (name: string) => string;
+  comingSoon: string;
+  /** "No connector matches “tesla”" */
+  noConnectorMatch: (query: string) => string;
+  /** "Synced 5 minutes ago" */
+  syncedAgo: (when: string) => string;
+  syncingNow: string;
+  syncFailed: string;
+  syncPaused: string;
+  neverSynced: string;
+  /** "Next in 1 hour" */
+  nextSync: (when: string) => string;
+  syncNow: string;
+  agentActivity: string;
+  actionKinds: Record<"read" | "act" | "money", string>;
+  actionStates: Record<"waiting" | "declined" | "undone" | "failed", string>;
+  reviewAction: string;
+  scopeLevels: Record<"read" | "act" | "money", string>;
+  asksFirst: string;
   // @@KEYS
 }
 
@@ -1621,6 +1658,8 @@ export const LIFE_STRINGS: Pick<
   | "lastUsed"
   | "notUsedYet"
   | "requiredScope"
+  | "scopeLevels"
+  | "asksFirst"
 > = {
   habits: "Habits",
   habitStreak: (days) => `${days}-day streak`,
@@ -1656,6 +1695,8 @@ export const LIFE_STRINGS: Pick<
   lastUsed: (date) => `Last used ${date}`,
   notUsedYet: "Not used yet",
   requiredScope: "Required",
+  scopeLevels: { read: "Read only", act: "Can act", money: "Money" },
+  asksFirst: "asks first",
 };
 
 /** Strings of the components in `household.tsx`. */
@@ -1730,6 +1771,74 @@ export const HOUSEHOLD_STRINGS: Pick<
   expiresOn: (date) => `Valid until ${date}`,
 };
 
+export const CONNECTOR_STRINGS: Pick<
+  UIStrings,
+  | "serviceStates"
+  | "connectors"
+  | "connectionsLabel"
+  | "manageAction"
+  | "manageService"
+  | "searchConnectors"
+  | "allCategories"
+  | "connect"
+  | "connectService"
+  | "openAction"
+  | "openService"
+  | "reconnect"
+  | "reconnectService"
+  | "comingSoon"
+  | "noConnectorMatch"
+  | "syncedAgo"
+  | "syncingNow"
+  | "syncFailed"
+  | "syncPaused"
+  | "neverSynced"
+  | "nextSync"
+  | "syncNow"
+  | "agentActivity"
+  | "actionKinds"
+  | "actionStates"
+  | "reviewAction"
+> = {
+  serviceStates: {
+    connected: "Connected",
+    syncing: "Syncing",
+    error: "Needs attention",
+    paused: "Paused",
+    off: "Off",
+  },
+  connectors: "Connectors",
+  connectionsLabel: "Connections",
+  manageAction: "Manage",
+  manageService: (name) => `Manage ${name}`,
+  searchConnectors: "Search connectors",
+  allCategories: "All",
+  connect: "Connect",
+  connectService: (name) => `Connect ${name}`,
+  openAction: "Open",
+  openService: (name) => `Open ${name}`,
+  reconnect: "Reconnect",
+  reconnectService: (name) => `Reconnect ${name}`,
+  comingSoon: "Coming soon",
+  noConnectorMatch: (q) => `No connector matches “${q}”`,
+  syncedAgo: (when) => `Synced ${when}`,
+  syncingNow: "Syncing…",
+  syncFailed: "Sync failed",
+  syncPaused: "Sync paused",
+  neverSynced: "Not synced yet",
+  nextSync: (when) => `Next ${when}`,
+  syncNow: "Sync now",
+  agentActivity: "Agent activity",
+  actionKinds: { read: "Read", act: "Acted", money: "Money" },
+  actionStates: {
+    waiting: "Waiting for you",
+    declined: "Declined",
+    undone: "Undone",
+    failed: "Failed",
+  },
+  reviewAction: "Review",
+};
+
 /** The English defaults: every group together. */
 export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   {},
@@ -1742,6 +1851,7 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   CHARTS_STRINGS,
   CHAT_STRINGS,
   COMMERCE_STRINGS,
+  CONNECTOR_STRINGS,
   DATA_DISPLAY_STRINGS,
   DATA_TABLE_STRINGS,
   DEVELOPER_STRINGS,

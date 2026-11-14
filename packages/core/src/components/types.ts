@@ -2990,6 +2990,10 @@ export interface ConsentScope {
   granted: boolean;
   /** Needed for the connection to work at all: shown, not switchable. */
   required?: boolean;
+  /** What the permission allows: reading, acting (sending, booking, switching) or moving money. */
+  level?: "read" | "act" | "money";
+  /** The assistant asks you before it uses this permission. */
+  asksFirst?: boolean;
 }
 export interface ConsentConnector {
   id: string;
@@ -3153,5 +3157,121 @@ export interface DocumentListProps extends BaseProps {
   soon?: number;
   onOpen?: (id: string) => void;
   /** Accessible name (default "Documents"). */
+  label?: string;
+}
+
+/* ── Connectors: services an assistant reads from and acts in ── */
+/** The state of a connected service. */
+export type ServiceState = "connected" | "syncing" | "error" | "paused" | "off";
+export interface ServiceMarkProps extends BaseProps {
+  /** The service's name: the accessible name, and the monogram when there is no icon or logo. */
+  name: string;
+  /** A brand logo (`brandGmail` …) or a line icon. */
+  icon?: IconName;
+  /** Your own logo (an `<img>` or `<svg>`) instead of the icon. */
+  logo?: ReactNode;
+  /** Letters for the monogram (default: the initials of `name`). */
+  monogram?: string;
+  /** 24, 36 (default) or 48 px. */
+  size?: "sm" | "md" | "lg";
+  tint?: Tint | "plain";
+  /** A dot in the corner with the state in words for screen readers. */
+  status?: ServiceState;
+  /** Hidden from screen readers when the name is written next to it. */
+  decorative?: boolean;
+}
+export interface Connector {
+  id: string;
+  name: string;
+  icon?: IconName;
+  logo?: ReactNode;
+  /** Letters shown when there is neither icon nor logo (default: the initials of `name`). */
+  monogram?: string;
+  tint?: Tint | "plain";
+  /** The group it is listed under ("Health & fitness", "Money" …). */
+  category: string;
+  description?: ReactNode;
+  /** `available` (default), `connected`, `error` (needs a reconnect) or `soon`. */
+  state?: "available" | "connected" | "error" | "soon";
+  /** A hint under the description: "Needs the iPhone app", "Import an export file". */
+  note?: ReactNode;
+  /** The connected account ("mara@gmail.com"). */
+  account?: string;
+}
+export interface ConnectorGalleryProps extends BaseProps {
+  connectors: Connector[];
+  /** Order of the groups; categories not listed follow in the order they appear. */
+  categories?: string[];
+  onConnect?: (id: string) => void;
+  /** Opens a connected (or failing) connector. */
+  onOpen?: (id: string) => void;
+  /** A search field and category chips above the grid (default true). */
+  filters?: boolean;
+  /** Accessible name (default "Connectors"). */
+  label?: string;
+}
+export interface SyncStatusProps extends BaseProps {
+  state: "synced" | "syncing" | "error" | "paused" | "never";
+  /** The last successful sync. */
+  last?: Date | string | number;
+  /** The next planned sync. */
+  next?: Date | string | number;
+  /** "Now" for the relative times; pass it so server and client render the same. */
+  now?: Date | string | number;
+  /** What the last sync brought: `{ label: "emails", value: 1204 }`. */
+  counts?: { label: string; value: number }[];
+  /** Why the sync failed. */
+  error?: ReactNode;
+  onSync?: () => void;
+  /** One line: state and time only. */
+  compact?: boolean;
+}
+export interface AgentAction {
+  id: string;
+  /** The service the action used. */
+  service?: { name: string; icon?: IconName; logo?: ReactNode };
+  /** Which agent did it ("Assistant", "Money agent"). */
+  agent?: string;
+  /** What happened, in a sentence: "Moved the dentist to Friday, 10:00". */
+  text: ReactNode;
+  at: Date | string | number;
+  /** `read` (looked something up), `act` (changed something) or `money`. */
+  kind?: "read" | "act" | "money";
+  /** `done` (default), `waiting` for your approval, `declined`, `undone` or `failed`. */
+  state?: "done" | "waiting" | "declined" | "undone" | "failed";
+  detail?: ReactNode;
+}
+export interface AgentActivityProps extends BaseProps {
+  items: AgentAction[];
+  /** "Now" for the day headings; pass it so server and client render the same. */
+  now?: Date | string | number;
+  /** Offers "Undo" on finished actions that changed something. */
+  onUndo?: (id: string) => void;
+  /** Opens an action that waits for your approval. */
+  onReview?: (id: string) => void;
+  /** Accessible name (default "Agent activity"). */
+  label?: string;
+}
+export interface ConnectionItem {
+  id: string;
+  name: string;
+  icon?: IconName;
+  logo?: ReactNode;
+  monogram?: string;
+  tint?: Tint | "plain";
+  /** The connected account ("mara@gmail.com", "Giro ••• 4410"). */
+  account?: ReactNode;
+  state: ServiceState;
+  /** How fresh the data is, shown as a compact `SyncStatus`. */
+  sync?: { state: SyncStatusProps["state"]; last?: Date | string | number };
+}
+export interface ConnectionListProps extends BaseProps {
+  items: ConnectionItem[];
+  /** "Now" for the relative times; pass it so server and client render the same. */
+  now?: Date | string | number;
+  onManage?: (id: string) => void;
+  /** Shown instead of "Manage" on connections in the `error` state. */
+  onReconnect?: (id: string) => void;
+  /** Accessible name (default "Connections"). */
   label?: string;
 }

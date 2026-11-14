@@ -4,7 +4,14 @@
  * provider so a component that only needs its strings or formatters does not pull in theming.
  */
 import { createContext, useContext } from "react";
-import { LOCALE, formatDate, formatMoney, formatNumber, formatPercent } from "./format.js";
+import {
+  LOCALE,
+  formatDate,
+  formatMoney,
+  formatNumber,
+  formatPercent,
+  formatRelative,
+} from "./format.js";
 import {
   DEFAULT_STRINGS,
   SHARED_STRINGS,
@@ -87,6 +94,7 @@ export interface Formatters {
   formatMoney: (v: number, currency?: string | null, o?: Intl.NumberFormatOptions) => string;
   formatPercent: (v: number, o?: Intl.NumberFormatOptions) => string;
   formatDate: (input: Date | string | number, o?: Intl.DateTimeFormatOptions) => string;
+  formatRelative: (input: Date | string | number, now?: Date | string | number) => string;
 }
 
 const formatters = new Map<string, Formatters>();
@@ -100,6 +108,7 @@ export function formattersFor(locale: string): Formatters {
       formatMoney: (v, currency, o) => formatMoney(v, currency, o, locale),
       formatPercent: (v, o) => formatPercent(v, o, locale),
       formatDate: (input, o) => formatDate(input, o, locale),
+      formatRelative: (input, now) => formatRelative(input, now, locale),
     };
     formatters.set(locale, f);
   }
