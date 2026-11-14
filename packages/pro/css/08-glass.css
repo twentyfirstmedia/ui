@@ -34,7 +34,13 @@
     .tf-consent-item,
     .tf-nw,
     .tf-policy,
-    .tf-connector
+    .tf-connector,
+    .tf-device,
+    .tf-vehicle,
+    .tf-nowplaying,
+    .tf-workout,
+    .tf-booking,
+    .tf-scorecard
   ):not(
     :is(
         .tf-panel,
@@ -58,6 +64,12 @@
         .tf-nw,
         .tf-policy,
         .tf-connector,
+        .tf-device,
+        .tf-vehicle,
+        .tf-nowplaying,
+        .tf-workout,
+        .tf-booking,
+        .tf-scorecard,
         .tf-glass
       )
       *
@@ -157,6 +169,12 @@
         .tf-consent-item,
         .tf-journal,
         .tf-connector,
+        .tf-device,
+        .tf-vehicle,
+        .tf-nowplaying,
+        .tf-workout,
+        .tf-booking,
+        .tf-scorecard,
         .tf-btngroup,
         .tf-map-ctl,
         .tf-topbar
@@ -195,6 +213,12 @@
         .tf-consent-item,
         .tf-journal,
         .tf-connector,
+        .tf-device,
+        .tf-vehicle,
+        .tf-nowplaying,
+        .tf-workout,
+        .tf-booking,
+        .tf-scorecard,
         .tf-glass
       )
       *
@@ -259,7 +283,13 @@
       .tf-consent-item,
       .tf-nw,
       .tf-policy,
-      .tf-connector
+      .tf-connector,
+      .tf-device,
+      .tf-vehicle,
+      .tf-nowplaying,
+      .tf-workout,
+      .tf-booking,
+      .tf-scorecard
     ) {
     outline: 1px solid CanvasText;
     outline-offset: -1px;

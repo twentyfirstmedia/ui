@@ -52,6 +52,16 @@ export {
   AgentActivity,
 } from "./connectors.js";
 export {
+  DeviceTile,
+  VehicleCard,
+  NowPlaying,
+  WorkoutCard,
+  CallLog,
+  ReservationCard,
+  Scorecard,
+  HoldingsList,
+} from "./connected-data.js";
+export {
   AgentCard,
   AgentDetails,
   ChatList,

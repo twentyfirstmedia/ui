@@ -1586,5 +1586,114 @@
     "width": 1280,
     "height": 960,
     "components": ["AgentActivity", "AppShell", "ApprovalCard", "PageHeader", "Panel", "Segmented"]
+  },
+  {
+    "name": "DeviceTile",
+    "group": "Connectors",
+    "width": 1200,
+    "height": 620,
+    "components": ["DeviceTile"]
+  },
+  {
+    "name": "VehicleCard",
+    "group": "Connectors",
+    "width": 720,
+    "height": 420,
+    "components": ["VehicleCard"]
+  },
+  {
+    "name": "NowPlaying",
+    "group": "Connectors",
+    "width": 720,
+    "height": 240,
+    "components": ["NowPlaying"]
+  },
+  {
+    "name": "WorkoutCard",
+    "group": "Connectors",
+    "width": 1000,
+    "height": 360,
+    "components": ["WorkoutCard"]
+  },
+  {
+    "name": "CallLog",
+    "group": "Connectors",
+    "width": 900,
+    "height": 560,
+    "components": ["CallLog", "Panel"]
+  },
+  {
+    "name": "ReservationCard",
+    "group": "Connectors",
+    "width": 1000,
+    "height": 640,
+    "components": ["ReservationCard", "Button"]
+  },
+  {
+    "name": "Scorecard",
+    "group": "Connectors",
+    "width": 1000,
+    "height": 420,
+    "components": ["Scorecard"]
+  },
+  {
+    "name": "HoldingsList",
+    "group": "Connectors",
+    "width": 960,
+    "height": 480,
+    "components": ["HoldingsList", "Panel"]
+  },
+  {
+    "name": "HomeScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1100,
+    "components": [
+      "Ambient",
+      "AppShell",
+      "DeviceTile",
+      "NowPlaying",
+      "PageHeader",
+      "Segmented",
+      "UIProvider",
+      "VehicleCard"
+    ]
+  },
+  {
+    "name": "TripsScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1100,
+    "components": ["AppShell", "CallLog", "PageHeader", "Panel", "ReservationCard"]
+  },
+  {
+    "name": "GolfScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1100,
+    "components": [
+      "AppShell",
+      "BarList",
+      "PageHeader",
+      "Panel",
+      "Scorecard",
+      "StatTile",
+      "WorkoutCard"
+    ]
+  },
+  {
+    "name": "InvestmentsScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 900,
+    "components": [
+      "AppShell",
+      "Donut",
+      "HoldingsList",
+      "PageHeader",
+      "Panel",
+      "Segmented",
+      "StatTile"
+    ]
   }
 ]

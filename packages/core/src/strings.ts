@@ -623,6 +623,60 @@ export interface UIStrings {
   reviewAction: string;
   scopeLevels: Record<"read" | "act" | "money", string>;
   asksFirst: string;
+  /* connected data: home, car, media, workouts, calls, bookings, golf, investments */
+  deviceOn: string;
+  deviceOff: string;
+  deviceOffline: string;
+  /** "Target 21.5 °C" */
+  targetTemp: (value: string) => string;
+  lowerTarget: string;
+  raiseTarget: string;
+  /** "Battery 64%" */
+  batteryLevel: (percent: string) => string;
+  chargingStates: Record<"charging" | "complete" | "plugged" | "unplugged", string>;
+  /** "Limit 80%" */
+  chargeLimit: (percent: string) => string;
+  /** "Done by 06:30" */
+  chargedBy: (time: string) => string;
+  /** "412 km range" */
+  rangeLeft: (distance: string) => string;
+  lockedState: string;
+  unlockedState: string;
+  lockAction: string;
+  climateLabel: string;
+  climateOnLabel: string;
+  climateOffLabel: string;
+  /** "Inside 19 °C" */
+  insideTemp: (value: string) => string;
+  playAction: string;
+  pauseAction: string;
+  nextTrack: string;
+  previousTrack: string;
+  /** "Playing on Living room" */
+  playingOn: (device: string) => string;
+  heartRateZones: string;
+  /** "Zone 3: 18 min" */
+  zoneMinutes: (zone: number, minutes: number) => string;
+  avgHeartRate: string;
+  caloriesLabel: string;
+  distanceLabel: string;
+  durationLabel: string;
+  calls: string;
+  callDirections: Record<"incoming" | "outgoing" | "missed", string>;
+  /** "Call Lena" */
+  callPerson: (name: string) => string;
+  reservationStatus: Record<
+    "confirmed" | "pending" | "cancelled" | "delayed" | "onTheWay" | "delivered",
+    string
+  >;
+  bookingCode: string;
+  scoreLabels: Record<"hole" | "par" | "score" | "putts" | "out" | "in" | "total", string>;
+  scoreNames: Record<"eagle" | "birdie" | "par" | "bogey" | "double", string>;
+  /** "+7", "Even", "−2" */
+  toPar: (strokes: number) => string;
+  holdings: string;
+  /** "12% of portfolio" */
+  portfolioShare: (percent: string) => string;
   // @@KEYS
 }
 
@@ -1839,6 +1893,118 @@ export const CONNECTOR_STRINGS: Pick<
   reviewAction: "Review",
 };
 
+export const CONNECTED_DATA_STRINGS: Pick<
+  UIStrings,
+  | "deviceOn"
+  | "deviceOff"
+  | "deviceOffline"
+  | "targetTemp"
+  | "lowerTarget"
+  | "raiseTarget"
+  | "batteryLevel"
+  | "chargingStates"
+  | "chargeLimit"
+  | "chargedBy"
+  | "rangeLeft"
+  | "lockedState"
+  | "unlockedState"
+  | "lockAction"
+  | "climateLabel"
+  | "climateOnLabel"
+  | "climateOffLabel"
+  | "insideTemp"
+  | "playAction"
+  | "pauseAction"
+  | "nextTrack"
+  | "previousTrack"
+  | "playingOn"
+  | "heartRateZones"
+  | "zoneMinutes"
+  | "avgHeartRate"
+  | "caloriesLabel"
+  | "distanceLabel"
+  | "durationLabel"
+  | "durationHm"
+  | "calls"
+  | "callDirections"
+  | "callPerson"
+  | "reservationStatus"
+  | "bookingCode"
+  | "scoreLabels"
+  | "scoreNames"
+  | "toPar"
+  | "holdings"
+  | "portfolioShare"
+> = {
+  deviceOn: "On",
+  deviceOff: "Off",
+  deviceOffline: "Offline",
+  targetTemp: (v) => `Target ${v}`,
+  lowerTarget: "Lower target",
+  raiseTarget: "Raise target",
+  batteryLevel: (p) => `Battery ${p}`,
+  chargingStates: {
+    charging: "Charging",
+    complete: "Charged",
+    plugged: "Plugged in",
+    unplugged: "Not plugged in",
+  },
+  chargeLimit: (p) => `Limit ${p}`,
+  chargedBy: (time) => `Done by ${time}`,
+  rangeLeft: (d) => `${d} range`,
+  lockedState: "Locked",
+  unlockedState: "Unlocked",
+  lockAction: "Lock",
+  climateLabel: "Climate",
+  climateOnLabel: "Climate on",
+  climateOffLabel: "Climate off",
+  insideTemp: (v) => `Inside ${v}`,
+  playAction: "Play",
+  pauseAction: "Pause",
+  nextTrack: "Next",
+  previousTrack: "Previous",
+  playingOn: (d) => `Playing on ${d}`,
+  heartRateZones: "Heart-rate zones",
+  zoneMinutes: (zone, minutes) => `Zone ${zone}: ${minutes} min`,
+  avgHeartRate: "Avg heart rate",
+  caloriesLabel: "Calories",
+  distanceLabel: "Distance",
+  durationLabel: "Duration",
+  durationHm: (hours, minutes) =>
+    hours ? (minutes ? `${hours} h ${minutes} min` : `${hours} h`) : `${minutes} min`,
+  calls: "Calls",
+  callDirections: { incoming: "Incoming", outgoing: "Outgoing", missed: "Missed" },
+  callPerson: (name) => `Call ${name}`,
+  reservationStatus: {
+    confirmed: "Confirmed",
+    pending: "Pending",
+    cancelled: "Cancelled",
+    delayed: "Delayed",
+    onTheWay: "On the way",
+    delivered: "Delivered",
+  },
+  bookingCode: "Booking",
+  scoreLabels: {
+    hole: "Hole",
+    par: "Par",
+    score: "Score",
+    putts: "Putts",
+    out: "Out",
+    in: "In",
+    total: "Total",
+  },
+  scoreNames: {
+    eagle: "Eagle or better",
+    birdie: "Birdie",
+    par: "Par",
+    bogey: "Bogey",
+    double: "Double bogey or worse",
+  },
+  toPar: (n) => (n === 0 ? "Even" : n > 0 ? `+${n}` : `−${-n}`),
+  holdings: "Holdings",
+  portfolioShare: (p) => `${p} of portfolio`,
+};
+
 /** The English defaults: every group together. */
 export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   {},
@@ -1851,6 +2017,7 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   CHARTS_STRINGS,
   CHAT_STRINGS,
   COMMERCE_STRINGS,
+  CONNECTED_DATA_STRINGS,
   CONNECTOR_STRINGS,
   DATA_DISPLAY_STRINGS,
   DATA_TABLE_STRINGS,

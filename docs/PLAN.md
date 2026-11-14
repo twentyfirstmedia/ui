@@ -281,6 +281,12 @@ Notiz (Robin: „mehr mit Glass machen, perfekt für diese“ und „Buttons sol
 
 Notiz (Robin: „Life-MCP, damit KI-Agenten beim Organisieren helfen“, mit einer Liste von 42 Diensten): Noch keine App und kein MCP, nur die UI-Bausteine. Logos kommen nur aus offenen Sets (Simple Icons CC0, Font Awesome Free CC BY 4.0). Für Google Fit, Apple Health, Apple Fitness, Apple Home, Scalable Capital, PCCADDIE, Hole19, Trackman, Dyson, eufy, Dreame, Wolt, Careem, Getsafe, ottonova und HanseMerkur gibt es dort kein Logo. Wir zeichnen keine Marken nach; `ServiceMark` zeigt dann ein Monogramm, und die App kann über `logo` die lizenzierte Grafik einsetzen. Berechtigungen haben eine Stufe (lesen, handeln, Geld) und „fragt vorher“, damit sichtbar ist, was ein Agent ohne Rückfrage darf. Relative Zeiten laufen über `Intl.RelativeTimeFormat` mit einem `now`, das die App übergibt (gleiches Rendering auf Server und Client). Teil 2 folgt: Widgets für die Daten der Dienste (Smart Home, Auto, Medien, Training, Anrufe, Reisen und Bestellungen, Golf, Depot).
 
+### Phase 27: Daten der verbundenen Dienste
+- [x] `DeviceTile`, `VehicleCard`, `NowPlaying`, `WorkoutCard`, `CallLog`, `ReservationCard`, `Scorecard`, `HoldingsList`
+- [x] Muster Home (Glas), Trips & orders, Golf, Investments; Tests
+
+Notiz: Zweiter Teil zum Life-MCP. Jede Karte kann über `service` zeigen, aus welchem Dienst die Daten stammen (kleines `ServiceMark`). Schalter, Schloss und Klima sind echte Umschalter (`role="switch"` bzw. `aria-pressed`) mit gleichbleibender Beschriftung; den Zustand nennt die Karte daneben in Worten. Die Golfkarte nutzt die üblichen Zeichen (Kreis für Birdie, Quadrat für Bogey) und sagt jeden Score für Screenreader in Worten. Einheiten, die `Intl` nicht kennt (kW, kcal, bpm), werden als Text an die formatierte Zahl gehängt. Alle Karten werden im Glas-Provider zu Glas; die Home-Seite ist im Glas-Test.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`
