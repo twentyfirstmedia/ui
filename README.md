@@ -45,7 +45,7 @@
 ## Why Twentyfirst UI
 
 - **One API, two looks.** Every component, prop, class and token exists in both kits. Load both and switch with `data-kit`: markup and state stay, only the CSS changes. A parity test fails the build if the kits drift apart.
-- **236 components, 37 complete screens.** From buttons and data tables to chat, tool calls, agent status and human-in-the-loop approvals, plus commerce, admin, real-estate and life building blocks (health, habits, money, insurance, deadlines, documents).
+- **241 components, 40 complete screens.** From buttons and data tables to chat, tool calls, agent status and human-in-the-loop approvals, plus commerce, admin, real-estate and life building blocks (health, habits, money, insurance, deadlines, documents) and connectors for assistants that work across your services.
 - **Finished from the first render.** Empty, loading, error and approval states come with the components.
 - **Mobile first.** Works from 320px up: shells collapse, tables scroll, dialogs become sheets, inputs never zoom.
 - **Accessible.** Keyboard paths, focus rings and ARIA on every component; axe (WCAG 2.1 AA) runs on every example in both kits, light and dark.
@@ -178,7 +178,7 @@ For any other LLM: [`/llms.txt`](https://ui.twentyfirst.media/llms.txt), [`/llms
 | **Charts** | LineChart, AreaChart, BarChart, StackedBarChart, Funnel, Gauge, Heatmap |
 | **Overlays** | Modal, Drawer (sheet on any side), Popover, HoverCard, Menu, Toaster, ConfirmDialog |
 | **AI** | ChatMessage, Composer, ToolCall, Reasoning, AgentCard, ApprovalCard, RunTrace, VoiceMode |
-| **Icons** | 93 built in, plus a library of 690 more: passkeys, AI, social and brand logos, files, media, commerce, maps and 3D, games |
+| **Icons** | 93 built in, plus a library of 780 more: passkeys, AI, social and brand logos (mail, calendar, banks, smart home, cars, media), files, media, commerce, maps and 3D, games |
 | **Commerce** | ProductCard, VariantPicker, OrderSummary, PlanCard, CouponCard |
 | **Admin** | SettingsLayout, TwoFactorSetup, WebhookEndpoint, ExportDialog, ServiceMonitor |
 | **Real estate and media** | ListingCard, MapView, ValuationCard, Gallery, Carousel |

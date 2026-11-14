@@ -99,6 +99,7 @@ const GROUP_ICON: Record<string, IconName> = {
   Admin: "settings",
   "Real estate": "home",
   Life: "heart",
+  Connectors: "link",
   Media: "image",
 };
 const TINTS: Tint[] = ["sky", "mint", "butter", "lilac", "blush"];

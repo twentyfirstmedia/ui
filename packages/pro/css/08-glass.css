@@ -33,7 +33,8 @@
     .tf-insight,
     .tf-consent-item,
     .tf-nw,
-    .tf-policy
+    .tf-policy,
+    .tf-connector
   ):not(
     :is(
         .tf-panel,
@@ -56,6 +57,7 @@
         .tf-consent-item,
         .tf-nw,
         .tf-policy,
+        .tf-connector,
         .tf-glass
       )
       *
@@ -154,6 +156,7 @@
         .tf-policy,
         .tf-consent-item,
         .tf-journal,
+        .tf-connector,
         .tf-btngroup,
         .tf-map-ctl,
         .tf-topbar
@@ -191,6 +194,7 @@
         .tf-policy,
         .tf-consent-item,
         .tf-journal,
+        .tf-connector,
         .tf-glass
       )
       *
@@ -254,7 +258,8 @@
       .tf-insight,
       .tf-consent-item,
       .tf-nw,
-      .tf-policy
+      .tf-policy,
+      .tf-connector
     ) {
     outline: 1px solid CanvasText;
     outline-offset: -1px;

@@ -56,6 +56,39 @@ export function formatDate(
   }
 }
 
+/**
+ * A moment relative to now, in words: "5 minutes ago", "in 2 hours", "yesterday". Picks the
+ * largest unit that fits; pass `now` so server and client render the same text.
+ */
+export function formatRelative(
+  input: Date | string | number,
+  now: Date | string | number = Date.now(),
+  locale?: string,
+): string {
+  const t = (input instanceof Date ? input : new Date(input)).getTime();
+  const n = (now instanceof Date ? now : new Date(now)).getTime();
+  const sec = Math.round((t - n) / 1000);
+  const abs = Math.abs(sec);
+  const steps: [Intl.RelativeTimeFormatUnit, number][] = [
+    ["second", 1],
+    ["minute", 60],
+    ["hour", 3600],
+    ["day", 86400],
+    ["week", 604800],
+    ["month", 2629800],
+    ["year", 31557600],
+  ];
+  let unit: Intl.RelativeTimeFormatUnit = "second";
+  let size = 1;
+  for (const [u, s] of steps) if (abs >= s) [unit, size] = [u, s];
+  try {
+    const rtf = new Intl.RelativeTimeFormat(locale || LOCALE, { numeric: "auto" });
+    return abs < 45 ? rtf.format(0, "second") : rtf.format(Math.round(sec / size), unit);
+  } catch {
+    return new Date(t).toLocaleString();
+  }
+}
+
 /** The group and decimal separators of a locale: `en-US` → `{ group: ",", decimal: "." }`. */
 export function numberSeparators(locale?: string): { group: string; decimal: string } {
   let group = ",",

@@ -45,6 +45,13 @@ export {
   DocumentList,
 } from "./household.js";
 export {
+  ServiceMark,
+  ConnectorGallery,
+  ConnectionList,
+  SyncStatus,
+  AgentActivity,
+} from "./connectors.js";
+export {
   AgentCard,
   AgentDetails,
   ChatList,

@@ -1521,5 +1521,70 @@
       "SearchField",
       "Stagger"
     ]
+  },
+  {
+    "name": "ServiceMark",
+    "group": "Connectors",
+    "width": 960,
+    "height": 300,
+    "components": ["ServiceMark", "Panel"]
+  },
+  {
+    "name": "ConnectorGallery",
+    "group": "Connectors",
+    "width": 1200,
+    "height": 1400,
+    "components": ["ConnectorGallery"]
+  },
+  {
+    "name": "ConnectionList",
+    "group": "Connectors",
+    "width": 960,
+    "height": 520,
+    "components": ["ConnectionList", "Panel"]
+  },
+  {
+    "name": "SyncStatus",
+    "group": "Connectors",
+    "width": 960,
+    "height": 520,
+    "components": ["SyncStatus", "Panel"]
+  },
+  {
+    "name": "AgentActivity",
+    "group": "Connectors",
+    "width": 960,
+    "height": 720,
+    "components": ["AgentActivity", "Panel"]
+  },
+  {
+    "name": "ConnectionsScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1500,
+    "components": [
+      "AppShell",
+      "ConnectionList",
+      "ConnectorGallery",
+      "PageHeader",
+      "Panel",
+      "StatTile",
+      "SyncStatus",
+      "ServiceMark"
+    ]
+  },
+  {
+    "name": "ConnectScreen",
+    "group": "Pages",
+    "width": 1200,
+    "height": 900,
+    "components": ["ConsentList", "KeyValue", "Panel", "QrCode", "ServiceMark"]
+  },
+  {
+    "name": "ActivityScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 960,
+    "components": ["AgentActivity", "AppShell", "ApprovalCard", "PageHeader", "Panel", "Segmented"]
   }
 ]

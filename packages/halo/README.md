@@ -1,6 +1,6 @@
 # @twentyfirstmedia/halo
 
-**Halo**: soft, rounded and light-first: big white cards on a warm canvas, five pastel tints that carry meaning and ink as the only accent. One of the two [Twentyfirst UI](https://ui.twentyfirst.media) kits: 236 accessible React components and 37 complete screens with exactly the same API as [Pro](https://www.npmjs.com/package/@twentyfirstmedia/pro).
+**Halo**: soft, rounded and light-first: big white cards on a warm canvas, five pastel tints that carry meaning and ink as the only accent. One of the two [Twentyfirst UI](https://ui.twentyfirst.media) kits: 241 accessible React components and 40 complete screens with exactly the same API as [Pro](https://www.npmjs.com/package/@twentyfirstmedia/pro).
 
 [Website](https://ui.twentyfirst.media) · [Halo docs](https://ui.twentyfirst.media/halo/) · [Pro docs](https://ui.twentyfirst.media/pro/) · [GitHub](https://github.com/twentyfirstmedia/ui) · [llms.txt](https://ui.twentyfirst.media/llms.txt)
 
