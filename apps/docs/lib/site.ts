@@ -54,6 +54,7 @@ export const GROUP_ORDER = [
   "Real estate",
   "Life",
   "Connectors",
+  "CRM",
   "Media",
 ];
 

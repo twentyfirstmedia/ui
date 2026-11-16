@@ -612,3 +612,52 @@
     flex-basis: 100%;
   }
 }
+
+/* Fluid list rows: a ListRow in a panel or card measures itself. In a narrow column (a side
+   panel, a thin card) its meta and trailing badge move under the text instead of squeezing the
+   title to a letter per line. Only rows in panels and cards, which always span their box. */
+:is(.tf-panel, .tf-card) .tf-row-item {
+  container: tf-row / inline-size;
+}
+@container tf-row (max-width: 300px) {
+  .tf-row-item > :first-child {
+    grid-row: span 2;
+    align-self: start;
+  }
+  .tf-row-item > .tf-row-text,
+  .tf-row-item > .tf-row-meta {
+    grid-column: 2 / -1;
+  }
+  .tf-row-item.has-actions > .tf-row-text,
+  .tf-row-item.has-actions > .tf-row-meta {
+    grid-column: 2 / -2;
+  }
+  .tf-row-item > .tf-row-meta {
+    justify-self: start;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .tf-row-item > .tf-row-meta:empty {
+    display: none;
+  }
+}
+
+/* Fluid stat tiles: a StatTile in a grid measures itself, so a long value (€197,500) shrinks
+   in a narrow tile instead of running over its edges. Only tiles that are grid cells, which
+   always fill their track. */
+.tf-grid > .tf-stat {
+  container: tf-stat / inline-size;
+  min-width: 0;
+}
+@container tf-stat (max-width: 200px) {
+  .tf-stat-value {
+    font-size: 24px;
+    line-height: 30px;
+  }
+}
+@container tf-stat (max-width: 140px) {
+  .tf-stat-value {
+    font-size: 18px;
+    line-height: 26px;
+  }
+}

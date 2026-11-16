@@ -677,6 +677,67 @@ export interface UIStrings {
   holdings: string;
   /** "12% of portfolio" */
   portfolioShare: (percent: string) => string;
+  /* CRM: records, fields, timeline, pipeline, tasks, scoring, merging, import */
+  /** "Owner Mara Ellis" */
+  ownedBy: (name: string) => string;
+  detailsLabel: string;
+  emptyValue: string;
+  /** "Edit Phone" */
+  editField: (label: string) => string;
+  activityLabel: string;
+  entryTypes: Record<
+    "email" | "call" | "meeting" | "note" | "task" | "stage" | "document" | "system",
+    string
+  >;
+  allTypes: string;
+  pinnedLabel: string;
+  composerModes: Record<"note" | "call" | "task", string>;
+  composerPlaceholders: Record<"note" | "call" | "task", string>;
+  saveEntry: string;
+  pipelineLabel: string;
+  /** "4 deals" */
+  dealCount: (n: number) => string;
+  /** "€42,000 weighted" */
+  weightedValue: (amount: string) => string;
+  /** "Closes Nov 30" */
+  closesOn: (date: string) => string;
+  /** "12 days in stage" */
+  daysInStage: (n: number) => string;
+  staleLabel: string;
+  /** "Next: Send proposal" */
+  nextStep: (step: string) => string;
+  moveTo: string;
+  /** "Move Nordhafen renewal" */
+  moveDeal: (title: string) => string;
+  tasksLabel: string;
+  taskGroups: Record<"overdue" | "today" | "upcoming" | "nodate" | "done", string>;
+  /** "Complete Call Lena" */
+  completeTask: (title: string) => string;
+  priorityLabels: Record<"high" | "normal" | "low", string>;
+  /** "Due Nov 30" */
+  dueOn: (date: string) => string;
+  leadGrades: Record<"hot" | "warm" | "cold", string>;
+  /** "Lead score 82 Hot" (contains the visible "82 Hot") */
+  leadScoreLabel: (score: number, grade: string) => string;
+  scoreReasons: string;
+  fieldLabel: string;
+  mergeAction: string;
+  mergeDiffers: string;
+  /** "Keep Phone from Nordhafen GmbH" */
+  mergeChoice: (field: string, record: string) => string;
+  importColumn: string;
+  importSamples: string;
+  importField: string;
+  importSkip: string;
+  /** "1,204 rows" */
+  importRows: (n: string) => string;
+  /** "Still to map: Email, Name" */
+  importMissing: (fields: string) => string;
+  /** "3 rows with problems" */
+  importProblems: (n: number) => string;
+  /** "Row 12: invalid email" */
+  importRowProblem: (row: number, message: string) => string;
+  importReady: string;
   // @@KEYS
 }
 
@@ -2005,6 +2066,112 @@ export const CONNECTED_DATA_STRINGS: Pick<
   portfolioShare: (p) => `${p} of portfolio`,
 };
 
+export const CRM_STRINGS: Pick<
+  UIStrings,
+  | "ownedBy"
+  | "detailsLabel"
+  | "emptyValue"
+  | "editField"
+  | "activityLabel"
+  | "entryTypes"
+  | "allTypes"
+  | "pinnedLabel"
+  | "composerModes"
+  | "composerPlaceholders"
+  | "saveEntry"
+  | "pipelineLabel"
+  | "dealCount"
+  | "weightedValue"
+  | "closesOn"
+  | "daysInStage"
+  | "staleLabel"
+  | "nextStep"
+  | "moveTo"
+  | "moveDeal"
+  | "tasksLabel"
+  | "taskGroups"
+  | "completeTask"
+  | "priorityLabels"
+  | "dueOn"
+  | "leadGrades"
+  | "leadScoreLabel"
+  | "scoreReasons"
+  | "fieldLabel"
+  | "mergeAction"
+  | "mergeDiffers"
+  | "mergeChoice"
+  | "importColumn"
+  | "importSamples"
+  | "importField"
+  | "importSkip"
+  | "importRows"
+  | "importMissing"
+  | "importProblems"
+  | "importRowProblem"
+  | "importReady"
+> = {
+  ownedBy: (name) => `Owner ${name}`,
+  detailsLabel: "Details",
+  emptyValue: "—",
+  editField: (label) => `Edit ${label}`,
+  activityLabel: "Activity",
+  entryTypes: {
+    email: "Email",
+    call: "Call",
+    meeting: "Meeting",
+    note: "Note",
+    task: "Task",
+    stage: "Stage",
+    document: "Document",
+    system: "System",
+  },
+  allTypes: "All",
+  pinnedLabel: "Pinned",
+  composerModes: { note: "Note", call: "Log call", task: "Task" },
+  composerPlaceholders: {
+    note: "Write a note…",
+    call: "What did you talk about?",
+    task: "What needs to happen?",
+  },
+  saveEntry: "Save",
+  pipelineLabel: "Pipeline",
+  dealCount: (n) => (n === 1 ? "1 deal" : `${n} deals`),
+  weightedValue: (amount) => `${amount} weighted`,
+  closesOn: (date) => `Closes ${date}`,
+  daysInStage: (n) => (n === 1 ? "1 day in stage" : `${n} days in stage`),
+  staleLabel: "Stale",
+  nextStep: (step) => `Next: ${step}`,
+  moveTo: "Move to",
+  moveDeal: (title) => `Move ${title}`,
+  tasksLabel: "Tasks",
+  taskGroups: {
+    overdue: "Overdue",
+    today: "Today",
+    upcoming: "Upcoming",
+    nodate: "No date",
+    done: "Done",
+  },
+  completeTask: (title) => `Complete ${title}`,
+  priorityLabels: { high: "High", normal: "Normal", low: "Low" },
+  dueOn: (date) => `Due ${date}`,
+  leadGrades: { hot: "Hot", warm: "Warm", cold: "Cold" },
+  leadScoreLabel: (score, grade) => `Lead score ${score} ${grade}`,
+  scoreReasons: "Why this score",
+  fieldLabel: "Field",
+  mergeAction: "Merge records",
+  mergeDiffers: "Differs",
+  mergeChoice: (field, record) => `Keep ${field} from ${record}`,
+  importColumn: "Column",
+  importSamples: "Sample values",
+  importField: "Import as",
+  importSkip: "Don’t import",
+  importRows: (n) => `${n} rows`,
+  importMissing: (fields) => `Still to map: ${fields}`,
+  importProblems: (n) => (n === 1 ? "1 row with a problem" : `${n} rows with problems`),
+  importRowProblem: (row, message) => `Row ${row}: ${message}`,
+  importReady: "Ready to import",
+};
+
 /** The English defaults: every group together. */
 export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   {},
@@ -2019,6 +2186,7 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   COMMERCE_STRINGS,
   CONNECTED_DATA_STRINGS,
   CONNECTOR_STRINGS,
+  CRM_STRINGS,
   DATA_DISPLAY_STRINGS,
   DATA_TABLE_STRINGS,
   DEVELOPER_STRINGS,
