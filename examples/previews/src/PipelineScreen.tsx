@@ -50,7 +50,7 @@ export default function Preview() {
           className="tf-grid"
           style={
             {
-              "--cols": "repeat(4, minmax(0, 1fr))",
+              "--cols": "repeat(auto-fit, minmax(160px, 1fr))",
               "--cols-sm": "repeat(2, minmax(0, 1fr))",
               gap: 16,
             } as React.CSSProperties

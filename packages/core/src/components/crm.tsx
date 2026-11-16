@@ -526,7 +526,7 @@ export function Pipeline(p: PipelineProps) {
   return (
     <div
       style={p.style}
-      className={cx("tf-pipeline", p.className)}
+      className={cx("tf-dealboard", p.className)}
       role="list"
       aria-label={p.label || t.pipelineLabel}
     >
@@ -541,7 +541,7 @@ export function Pipeline(p: PipelineProps) {
             key={s.id}
             role="listitem"
             aria-label={s.label}
-            className={cx("tf-stage", over === s.id && "is-over")}
+            className={cx("tf-dealstage", over === s.id && "is-over")}
             onDragOver={(e) => {
               if (!p.onMove) return;
               e.preventDefault();
@@ -555,9 +555,9 @@ export function Pipeline(p: PipelineProps) {
               if (id) p.onMove?.(id, s.id);
             }}
           >
-            <header className="tf-stage-head">
+            <header className="tf-dealstage-head">
               <b>{s.label}</b>
-              <span className="tf-stage-count" aria-hidden>
+              <span className="tf-dealstage-count" aria-hidden>
                 {s.deals.length}
               </span>
               <span className="tf-sidebar-sr">{t.dealCount(s.deals.length)}</span>
@@ -565,7 +565,7 @@ export function Pipeline(p: PipelineProps) {
                 {money(total)} · {t.weightedValue(money(weighted))}
               </small>
             </header>
-            <div className="tf-stage-deals">
+            <div className="tf-dealstage-deals">
               {s.deals.map((d: Deal) => (
                 <div
                   key={d.id}
