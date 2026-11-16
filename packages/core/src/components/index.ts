@@ -250,6 +250,7 @@ export {
   ValuationCard,
   EnergyClass,
 } from "./real-estate.js";
+export { MatchList, ViewingList, ConflictCheck } from "./industry.js";
 export { RichTextEditor } from "./rich-text-editor.js";
 export {
   QuoteBuilder,

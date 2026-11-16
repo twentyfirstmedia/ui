@@ -1918,5 +1918,57 @@
       "TimeTracker",
       "Timesheet"
     ]
+  },
+  {
+    "name": "MatchList",
+    "group": "CRM",
+    "width": 900,
+    "height": 560,
+    "components": ["MatchList", "Panel"]
+  },
+  {
+    "name": "ViewingList",
+    "group": "CRM",
+    "width": 800,
+    "height": 560,
+    "components": ["ViewingList", "Panel"]
+  },
+  {
+    "name": "ConflictCheck",
+    "group": "CRM",
+    "width": 1100,
+    "height": 620,
+    "components": ["ConflictCheck", "Panel"]
+  },
+  {
+    "name": "BrokerListingScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1500,
+    "components": [
+      "AppShell",
+      "EnergyClass",
+      "MatchList",
+      "Panel",
+      "PropertyList",
+      "RecordHeader",
+      "RecordTimeline",
+      "ViewingList"
+    ]
+  },
+  {
+    "name": "LawMatterScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1300,
+    "components": [
+      "AppShell",
+      "ConflictCheck",
+      "DeadlineList",
+      "Panel",
+      "RecordHeader",
+      "RecordTimeline",
+      "TimeTracker"
+    ]
   }
 ]

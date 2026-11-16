@@ -307,6 +307,12 @@ Notiz (Robin: „vollständiges CRM für jede Art: Agentur, Real Estate, Kanzlei
 
 Notiz: Teil 2 von 3. Angebote rechnen beim Tippen (Rabatt je Zeile, optionale Posten zum Ankreuzen, Mehrwertsteuer); in schmalen Boxen wird jede Zeile zur Karte mit beschrifteten Feldern. Signaturen zeigen Stand und Reihenfolge, „Erinnern“ nur bei denen, die das Dokument schon haben. Sequenzen rechnen Öffnungs- und Antwortraten aus `sent` und sagen sie in Worten. Der Forecast stapelt Gewonnen (kräftig), Commit und Best Case gegen eine Quotenlinie und nennt Erreichung und Lücke. Anruf, Timer und Zeiterfassung ticken jede Sekunde, mit festem `now` für Server-Rendering und Screenshots. Stundenzettel markieren Tage unter dem Soll auch für Screenreader. Das Gantt-Diagramm liest jede Aufgabe mit Zeitraum und Fortschritt vor und scrollt auf kleinen Bildschirmen in seiner Box. Klassen wurden vorher auf Kollisionen geprüft: `.tf-call` gehört schon `CallLog`, darum heißt der Wählbereich `.tf-dialer`, die Terminwahl `.tf-slots` (neben `.tf-booking`). Die Kacheln auf Forecast und Deals stehen jetzt 2×2, damit lange Beträge passen.
 
+### Phase 31: CRM für Makler und Kanzleien
+- [x] `MatchList`, `ViewingList`, `ConflictCheck`
+- [x] Muster Broker listing und Law matter; Tests
+
+Notiz: Teil 3 von 3. Damit deckt das Kit ein CRM für Agenturen, Makler und Kanzleien ab. Makler: passende Käufer mit Trefferquote und erfüllten oder fehlenden Kriterien (fehlende werden als „not met“ vorgelesen), Besichtigungen mit Stand und Feedback als Sterne und Zitat; Exposé, Bewertung und Energieklasse kommen aus dem Bestand. Kanzleien: die Kollisionsprüfung vor Mandatsannahme (Beteiligte als Tags, Treffer aus früheren Mandaten mit Grund, Konflikte vor möglichen Treffern, Entscheidung „freigegeben“ oder „abgelehnt“), dazu Fristen (`DeadlineList`), Zeiterfassung und Akte aus Teil 1 und 2. Zeilen und Listen messen sich selbst und stapeln sich in schmalen Spalten. `PropertyList` rundete Prozentwerte auf ganze Zahlen (3,57 % Käuferprovision wurde zu 4 %) und zeigt jetzt bis zu zwei Nachkommastellen.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`

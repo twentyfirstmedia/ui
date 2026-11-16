@@ -3825,3 +3825,84 @@ export interface GanttProps extends BaseProps {
   /** Accessible name (default "Timeline"). */
   label?: string;
 }
+
+// ── Industry CRM: buyer matching and viewings (real estate), conflict checks (law firms) ──
+
+export interface MatchCriterion {
+  /** "3+ rooms", "Budget €650,000", "Balcony". */
+  label: string;
+  met: boolean;
+}
+export interface Match {
+  id: string;
+  /** A buyer, a tenant, or a property when matching the other way round. */
+  name: string;
+  subtitle?: ReactNode;
+  /** Show an avatar with the name's initials. */
+  avatar?: boolean;
+  /** 0–100. */
+  score: number;
+  criteria?: MatchCriterion[];
+}
+export interface MatchListProps extends BaseProps {
+  matches: Match[];
+  /** Makes the name a button. */
+  onOpen?: (id: string) => void;
+  /** Shows the contact action per match ("Send exposé"). */
+  onContact?: (id: string) => void;
+  /** Text of the contact action (default "Contact"). */
+  contactLabel?: string;
+  /** Accessible name (default "Matches"). */
+  label?: string;
+}
+
+export type ViewingState = "requested" | "confirmed" | "done" | "cancelled" | "noshow";
+export interface Viewing {
+  id: string;
+  at: Date | string | number;
+  /** Who views: "Familie Kaya", "Jonas and Pia Stein". */
+  name: string;
+  subtitle?: ReactNode;
+  state: ViewingState;
+  /** People coming. */
+  attendees?: number;
+  /** After the viewing: 1–5 and a note. */
+  feedback?: { rating: number; note?: string };
+}
+export interface ViewingListProps extends BaseProps {
+  viewings: Viewing[];
+  /** Shows "Confirm" on requested viewings. */
+  onConfirm?: (id: string) => void;
+  /** Shows "Add feedback" on done viewings without feedback. */
+  onFeedback?: (id: string) => void;
+  /** Accessible name (default "Viewings"). */
+  label?: string;
+}
+
+export type ConflictLevel = "possible" | "conflict";
+export interface ConflictHit {
+  id: string;
+  /** The name found in your records. */
+  party: string;
+  /** "Opposing party", "Former client", "Managing director of the client". */
+  role: string;
+  /** The matter it was found in, "2024/118 Elbe Logistik ./. Hartmann". */
+  matter?: string;
+  level: ConflictLevel;
+  /** Why it matched: "Same name", "Same company register number". */
+  reason?: string;
+}
+export interface ConflictCheckProps extends BaseProps {
+  /** The names to check: client, opposing party, related people and companies. */
+  parties: string[];
+  /** Makes the parties editable. */
+  onParties?: (parties: string[]) => void;
+  hits: ConflictHit[];
+  /** When the check last ran; no result is shown before. */
+  checkedAt?: Date | string | number;
+  /** Shows "Run check". */
+  onCheck?: () => void;
+  /** Shows "Clear to proceed" and "Decline matter". */
+  onDecide?: (decision: "cleared" | "declined") => void;
+  decision?: "cleared" | "declined";
+}
