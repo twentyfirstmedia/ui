@@ -1,5 +1,15 @@
 # @twentyfirstmedia/ui
 
+## 0.9.0
+
+### Minor Changes
+
+- [#53](https://github.com/twentyfirstmedia/ui/pull/53) [`627303e`](https://github.com/twentyfirstmedia/ui/commit/627303ee4ae8b95015e6d981d2560804c9811b59) Thanks [@robintrepte](https://github.com/robintrepte)! - CRM core: `RecordHeader`, `PropertyList` (fields edited in place), `RecordTimeline` (grouped by day, pinned, filters, composer), `DealCard` and `Pipeline` (weighted value, stale deals, drag and drop or menu), `TaskList`, `LeadScore`, `MergeRecords` and `ImportMapper`, with patterns for a contact, a company, deals (the pipeline page) and tasks. List rows and the org chart now adapt to narrow boxes.
+
+- [#56](https://github.com/twentyfirstmedia/ui/pull/56) [`6576dd2`](https://github.com/twentyfirstmedia/ui/commit/6576dd2e91064a85d8d7c0f2cb041697aa417b7d) Thanks [@robintrepte](https://github.com/robintrepte)! - Industry CRM: `MatchList` (buyers or tenants for a property with match score and criteria), `ViewingList` (viewings with state and feedback) and `ConflictCheck` (conflict-of-interest check for law firms), with patterns for a broker's listing and a law-firm matter. `PropertyList` now keeps up to two decimals in percentages.
+
+- [#55](https://github.com/twentyfirstmedia/ui/pull/55) [`5b05bdc`](https://github.com/twentyfirstmedia/ui/commit/5b05bdc8e1d470f9e9e888f33ba4012e81391d32) Thanks [@robintrepte](https://github.com/robintrepte)! - Sales and agency: `QuoteBuilder` (line items, optional extras, discounts, VAT), `SignatureStatus` (e-signature progress and reminders), `SequenceSteps` (outreach cadence with open and reply rates), `Forecast` (won, commit and best case against quota), `CallPanel` (dialer with timer, mute, hold, record, notes and outcome), `BookingSlots` (pick a day and time), `TimeTracker`, `Timesheet` and `Gantt`, with patterns for a quote, the sales forecast, outreach and an agency project.
+
 ## 0.8.0
 
 ### Minor Changes
