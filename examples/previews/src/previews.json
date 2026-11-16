@@ -1695,5 +1695,114 @@
       "Segmented",
       "StatTile"
     ]
+  },
+  {
+    "name": "RecordHeader",
+    "group": "CRM",
+    "width": 1000,
+    "height": 560,
+    "components": ["RecordHeader"]
+  },
+  {
+    "name": "PropertyList",
+    "group": "CRM",
+    "width": 720,
+    "height": 560,
+    "components": ["PropertyList", "Panel"]
+  },
+  {
+    "name": "RecordTimeline",
+    "group": "CRM",
+    "width": 900,
+    "height": 900,
+    "components": ["RecordTimeline", "Panel"]
+  },
+  {
+    "name": "DealCard",
+    "group": "CRM",
+    "width": 720,
+    "height": 320,
+    "components": ["DealCard"]
+  },
+  {
+    "name": "Pipeline",
+    "group": "CRM",
+    "width": 1280,
+    "height": 640,
+    "components": ["Pipeline"]
+  },
+  {
+    "name": "TaskList",
+    "group": "CRM",
+    "width": 860,
+    "height": 620,
+    "components": ["TaskList", "Panel"]
+  },
+  {
+    "name": "LeadScore",
+    "group": "CRM",
+    "width": 720,
+    "height": 240,
+    "components": ["LeadScore", "Panel"]
+  },
+  {
+    "name": "MergeRecords",
+    "group": "CRM",
+    "width": 960,
+    "height": 520,
+    "components": ["MergeRecords", "Panel"]
+  },
+  {
+    "name": "ImportMapper",
+    "group": "CRM",
+    "width": 1000,
+    "height": 640,
+    "components": ["ImportMapper", "Panel"]
+  },
+  {
+    "name": "ContactScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1300,
+    "components": [
+      "AppShell",
+      "DealCard",
+      "Panel",
+      "PropertyList",
+      "RecordHeader",
+      "RecordTimeline",
+      "TaskList"
+    ]
+  },
+  {
+    "name": "CompanyScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1300,
+    "components": [
+      "AppShell",
+      "Badge",
+      "DealCard",
+      "LeadScore",
+      "ListRow",
+      "OrgChart",
+      "Panel",
+      "RecordHeader",
+      "RecordTimeline"
+    ]
+  },
+  {
+    "name": "DealsScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 900,
+    "components": ["AppShell", "Button", "PageHeader", "Pipeline", "Segmented", "StatTile"]
+  },
+  {
+    "name": "TasksScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 900,
+    "components": ["AppShell", "Button", "PageHeader", "Panel", "Segmented", "StatTile", "TaskList"]
   }
 ]

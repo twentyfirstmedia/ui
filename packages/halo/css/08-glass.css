@@ -39,7 +39,9 @@
     .tf-nowplaying,
     .tf-workout,
     .tf-booking,
-    .tf-scorecard
+    .tf-scorecard,
+    .tf-record,
+    .tf-deal
   ):not(
     :is(
         .tf-panel,
@@ -69,6 +71,8 @@
         .tf-workout,
         .tf-booking,
         .tf-scorecard,
+        .tf-record,
+        .tf-deal,
         .tf-glass
       )
       *
@@ -174,6 +178,8 @@
         .tf-workout,
         .tf-booking,
         .tf-scorecard,
+        .tf-record,
+        .tf-deal,
         .tf-btngroup,
         .tf-map-ctl,
         .tf-topbar
@@ -218,6 +224,8 @@
         .tf-workout,
         .tf-booking,
         .tf-scorecard,
+        .tf-record,
+        .tf-deal,
         .tf-glass
       )
       *
@@ -288,7 +296,9 @@
       .tf-nowplaying,
       .tf-workout,
       .tf-booking,
-      .tf-scorecard
+      .tf-scorecard,
+      .tf-record,
+      .tf-deal
     ) {
     outline: 1px solid CanvasText;
     outline-offset: -1px;

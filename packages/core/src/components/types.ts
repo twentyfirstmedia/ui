@@ -3435,3 +3435,177 @@ export interface HoldingsListProps extends BaseProps {
   /** Accessible name (default "Holdings"). */
   label?: string;
 }
+
+/* ── CRM: records, fields, timeline, pipeline, tasks, scoring, merging, import ── */
+export interface RecordHeaderProps extends BaseProps {
+  /** Sets the default picture: a person's initials, a company's monogram, a deal or matter icon. */
+  kind?: "person" | "company" | "deal" | "matter";
+  title: string;
+  /** "Head of Operations at Nordhafen", "Matter 2026/0412". */
+  subtitle?: ReactNode;
+  /** Your own picture (a photo, a logo); default from `kind`. */
+  avatar?: ReactNode;
+  icon?: IconName;
+  /** The stage or status as a badge. */
+  status?: { label: string; tone?: Tone };
+  tags?: string[];
+  /** Who looks after the record. */
+  owner?: string;
+  /** Key facts in a row: value, phone, close date … */
+  facts?: { label: string; value: ReactNode }[];
+  /** Quick actions: Call, Email, Meeting, Note … The first `primary` one is the main button. */
+  actions?: { label: string; icon?: IconName; onClick?: () => void; primary?: boolean }[];
+  /** More actions on the right (a menu button). */
+  menu?: ReactNode;
+  surface?: Surface;
+}
+export interface PropertyField {
+  id: string;
+  label: string;
+  value: string | number | string[] | Date | null | undefined;
+  /** How the value is shown and edited (default `text`). */
+  type?:
+    | "text"
+    | "email"
+    | "phone"
+    | "url"
+    | "number"
+    | "money"
+    | "percent"
+    | "date"
+    | "select"
+    | "tags"
+    | "person";
+  /** Choices for `select`. */
+  options?: string[];
+  currency?: string;
+  readOnly?: boolean;
+  /** Shown under the label. */
+  hint?: string;
+}
+export interface PropertyListProps extends BaseProps {
+  fields: PropertyField[];
+  /** Makes every field that is not `readOnly` editable in place. Values arrive as strings (tags comma-separated). */
+  onChange?: (id: string, value: string) => void;
+  /** Accessible name (default "Details"). */
+  label?: string;
+}
+export type RecordEntryType =
+  "email" | "call" | "meeting" | "note" | "task" | "stage" | "document" | "system";
+export interface RecordEntry {
+  id: string;
+  type: RecordEntryType;
+  title: ReactNode;
+  body?: ReactNode;
+  at: Date | string | number;
+  /** Who did it. */
+  actor?: string;
+  /** Extra words for the meta line: "12 min", "Outbound", "Proposal.pdf". */
+  meta?: string;
+  pinned?: boolean;
+}
+export interface RecordTimelineProps extends BaseProps {
+  entries: RecordEntry[];
+  /** "Now" for the day headings; pass it so server and client render the same. */
+  now?: Date | string | number;
+  /** Chips that filter by type (default true). */
+  filters?: boolean;
+  /** Adds the composer for a note, a logged call or a task. */
+  onAdd?: (type: "note" | "call" | "task", text: string) => void;
+  /** Accessible name (default "Activity"). */
+  label?: string;
+}
+export interface Deal {
+  id: string;
+  title: string;
+  company?: string;
+  value: number;
+  currency?: string;
+  /** Win probability in percent. */
+  probability?: number;
+  closeDate?: Date | string | number;
+  owner?: string;
+  /** Days the deal has been in its current stage. */
+  daysInStage?: number;
+  /** The next step: "Send proposal". */
+  next?: string;
+}
+export interface DealCardProps extends BaseProps {
+  deal: Deal;
+  /** Days in stage after which the deal is marked as stale (default 14). */
+  staleAfter?: number;
+  onOpen?: (id: string) => void;
+  /** Stages offered in the card's "Move to" menu. */
+  stages?: { id: string; label: string }[];
+  onMove?: (id: string, stageId: string) => void;
+  surface?: Surface;
+}
+export interface PipelineStage {
+  id: string;
+  label: string;
+  /** Default probability of deals in this stage, for the weighted value. */
+  probability?: number;
+  deals: Deal[];
+}
+export interface PipelineProps extends BaseProps {
+  stages: PipelineStage[];
+  currency?: string;
+  staleAfter?: number;
+  onOpen?: (id: string) => void;
+  /** Moving a deal: by drag and drop, or from the card's "Move to" menu with the keyboard. */
+  onMove?: (dealId: string, stageId: string) => void;
+  /** Accessible name (default "Pipeline"). */
+  label?: string;
+}
+export interface CrmTask {
+  id: string;
+  title: string;
+  due?: Date | string | number;
+  done?: boolean;
+  assignee?: string;
+  priority?: "high" | "normal" | "low";
+  /** The record it belongs to: "Deal · Nordhafen renewal". */
+  related?: string;
+}
+export interface TaskListProps extends BaseProps {
+  tasks: CrmTask[];
+  /** The day that counts as today; pass it so server and client render the same. */
+  today?: Date | string | number;
+  onToggle?: (id: string, done: boolean) => void;
+  onOpen?: (id: string) => void;
+  /** Groups: overdue, today, upcoming, no date, done (default true). */
+  grouped?: boolean;
+  /** Accessible name (default "Tasks"). */
+  label?: string;
+}
+export interface LeadScoreProps extends BaseProps {
+  /** 0–100. */
+  score: number;
+  /** What raised or lowered the score: `{ text: "Opened 3 emails", points: 12 }`. */
+  reasons?: { text: string; points: number }[];
+  /** Score from which a lead counts as hot (default 70) and warm (default 40). */
+  hot?: number;
+  warm?: number;
+}
+export interface MergeRecordsProps extends BaseProps {
+  /** Two (or more) records that are the same thing. */
+  records: { id: string; title: string; subtitle?: string; values: Record<string, ReactNode> }[];
+  fields: { id: string; label: string }[];
+  /** Which record's value to keep per field (default: the first record's, or the first that has one). */
+  value?: Record<string, string>;
+  onChange?: (value: Record<string, string>) => void;
+  onMerge?: (value: Record<string, string>) => void;
+}
+export interface ImportMapperProps extends BaseProps {
+  /** The file's columns with a few sample values. */
+  columns: { name: string; samples: string[] }[];
+  /** The fields records can take. */
+  fields: { id: string; label: string; required?: boolean }[];
+  /** Column → field id ("" to skip). */
+  mapping: Record<string, string>;
+  onChange?: (mapping: Record<string, string>) => void;
+  /** Rows in the file. */
+  rows?: number;
+  /** Problems found in the rows. */
+  problems?: { row: number; message: string }[];
+}

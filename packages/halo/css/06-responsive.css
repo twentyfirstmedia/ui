@@ -611,3 +611,32 @@
     flex-basis: 100%;
   }
 }
+
+/* Fluid list rows: a ListRow in a panel or card measures itself. In a narrow column (a side
+   panel, a thin card) its meta and trailing badge move under the text instead of squeezing the
+   title to a letter per line. Only rows in panels and cards, which always span their box. */
+:is(.tf-panel, .tf-card) .tf-row-item {
+  container: tf-row / inline-size;
+}
+@container tf-row (max-width: 220px) {
+  .tf-row-item > :first-child {
+    grid-row: span 2;
+    align-self: start;
+  }
+  .tf-row-item > .tf-row-text,
+  .tf-row-item > .tf-row-meta {
+    grid-column: 2 / -1;
+  }
+  .tf-row-item.has-actions > .tf-row-text,
+  .tf-row-item.has-actions > .tf-row-meta {
+    grid-column: 2 / -2;
+  }
+  .tf-row-item > .tf-row-meta {
+    justify-self: start;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .tf-row-item > .tf-row-meta:empty {
+    display: none;
+  }
+}

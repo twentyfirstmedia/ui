@@ -1311,7 +1311,8 @@
 }
 .tf-org ul {
   display: flex;
-  justify-content: center;
+  /* safe: a chart wider than its box scrolls from its start instead of cutting off the left */
+  justify-content: safe center;
   gap: 16px;
   margin: 0;
   padding: 24px 0 0;

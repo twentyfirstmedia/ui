@@ -62,6 +62,17 @@ export {
   HoldingsList,
 } from "./connected-data.js";
 export {
+  RecordHeader,
+  PropertyList,
+  RecordTimeline,
+  DealCard,
+  Pipeline,
+  TaskList,
+  LeadScore,
+  MergeRecords,
+  ImportMapper,
+} from "./crm.js";
+export {
   AgentCard,
   AgentDetails,
   ChatList,
