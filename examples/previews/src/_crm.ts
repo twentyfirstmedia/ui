@@ -15,6 +15,14 @@ export const CRM_NAV: SidebarGroup[] = [
       { id: "people", label: "People", icon: "users" },
       { id: "companies", label: "Companies", icon: "building" },
       { id: "deals", label: "Deals", icon: "handshake" },
+      { id: "quotes", label: "Quotes", icon: "file" },
+    ],
+  },
+  {
+    label: "Engage",
+    items: [
+      { id: "sequences", label: "Sequences", icon: "send" },
+      { id: "calls", label: "Calls", icon: "phone" },
     ],
   },
   {
@@ -167,5 +175,24 @@ export const ENTRIES: RecordEntry[] = [
     at: at(-6, 14, 0),
     actor: "Mara Ellis, Jonas Pick",
     meta: "1 h 30 min",
+  },
+];
+
+/** The navigation of the agency examples. */
+export const AGENCY_NAV: SidebarGroup[] = [
+  {
+    items: [
+      { id: "home", label: "Home", icon: "home" },
+      { id: "projects", label: "Projects", icon: "folder" },
+      { id: "time", label: "Time", icon: "clock" },
+    ],
+  },
+  {
+    label: "Clients",
+    items: [
+      { id: "clients", label: "Clients", icon: "building" },
+      { id: "quotes", label: "Quotes", icon: "file" },
+      { id: "invoices", label: "Invoices", icon: "card" },
+    ],
   },
 ];

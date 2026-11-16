@@ -738,6 +738,97 @@ export interface UIStrings {
   /** "Row 12: invalid email" */
   importRowProblem: (row: number, message: string) => string;
   importReady: string;
+  quoteLabel: string;
+  quoteItem: string;
+  quoteQuantity: string;
+  quotePrice: string;
+  quoteDiscount: string;
+  quoteLineTotal: string;
+  quoteSubtotal: string;
+  quoteDiscounts: string;
+  /** "VAT 19%" */
+  quoteTax: (rate: string) => string;
+  quoteTotal: string;
+  quoteOptional: string;
+  /** "Include Workshop day" */
+  quoteInclude: (name: string) => string;
+  /** "Remove Workshop day" */
+  quoteRemove: (name: string) => string;
+  /** "Quantity of Workshop day" */
+  quoteEditField: (field: string, name: string) => string;
+  quoteAdd: string;
+  /** "2 of 3 signed" */
+  signedCount: (signed: number, total: number) => string;
+  signerStates: Record<"waiting" | "sent" | "viewed" | "signed" | "declined", string>;
+  /** "Remind Lena Hartmann" */
+  remindSigner: (name: string) => string;
+  remindAction: string;
+  voidDocument: string;
+  /** "Expires Dec 1" */
+  signatureExpires: (date: string) => string;
+  sequenceLabel: string;
+  /** "Day 3" */
+  stepDay: (day: number) => string;
+  stepTypes: Record<"email" | "call" | "linkedin" | "task" | "wait", string>;
+  /** "120 sent" */
+  stepSent: (n: string) => string;
+  /** "48% opened" */
+  stepOpened: (p: string) => string;
+  /** "12% replied" */
+  stepReplied: (p: string) => string;
+  forecastLabel: string;
+  forecastParts: Record<"won" | "commit" | "bestCase", string>;
+  /** "Quota €120,000" */
+  quotaOf: (amount: string) => string;
+  /** "84% of quota" */
+  attainment: (p: string) => string;
+  forecastTotal: string;
+  /** "€18,000 to go" */
+  gapToQuota: (amount: string) => string;
+  /** "€6,000 over quota" */
+  overQuota: (amount: string) => string;
+  callStates: Record<"ringing" | "active" | "hold" | "ended", string>;
+  answerCall: string;
+  muteCall: string;
+  holdCall: string;
+  recordCall: string;
+  endCall: string;
+  callNotes: string;
+  callNotesPlaceholder: string;
+  callOutcome: string;
+  bookingLabel: string;
+  /** "30 min" */
+  bookingMinutes: (n: number) => string;
+  /** "Times in Europe/Berlin" */
+  bookingTimeZone: (tz: string) => string;
+  bookingNoSlots: string;
+  bookingDayLabel: string;
+  bookingTimeLabel: string;
+  /** "Thursday, Nov 19 at 10:30" */
+  bookingPicked: (date: string, time: string) => string;
+  bookingConfirm: string;
+  trackerTask: string;
+  trackerTaskPlaceholder: string;
+  trackerProject: string;
+  billable: string;
+  startTimer: string;
+  stopTimer: string;
+  /** "Today 5:45" */
+  trackerToday: (duration: string) => string;
+  timesheetLabel: string;
+  timesheetProject: string;
+  timesheetTotal: string;
+  /** "Hours for Website relaunch on Tuesday" */
+  timesheetCell: (project: string, day: string) => string;
+  /** "Below 8 h" */
+  belowTarget: (target: string) => string;
+  ganttLabel: string;
+  ganttTask: string;
+  /** "Design, Nov 2 to Nov 13, 60% done" */
+  ganttRange: (name: string, from: string, to: string, progress: string) => string;
+  /** "Launch, milestone on Dec 4" */
+  ganttMilestone: (name: string, date: string) => string;
+  todayLabel: string;
   // @@KEYS
 }
 
@@ -2172,6 +2263,154 @@ export const CRM_STRINGS: Pick<
   importReady: "Ready to import",
 };
 
+export const SALES_STRINGS: Pick<
+  UIStrings,
+  | "quoteLabel"
+  | "quoteItem"
+  | "quoteQuantity"
+  | "quotePrice"
+  | "quoteDiscount"
+  | "quoteLineTotal"
+  | "quoteSubtotal"
+  | "quoteDiscounts"
+  | "quoteTax"
+  | "quoteTotal"
+  | "quoteOptional"
+  | "quoteInclude"
+  | "quoteRemove"
+  | "quoteEditField"
+  | "quoteAdd"
+  | "signedCount"
+  | "signerStates"
+  | "remindSigner"
+  | "remindAction"
+  | "voidDocument"
+  | "signatureExpires"
+  | "sequenceLabel"
+  | "stepDay"
+  | "stepTypes"
+  | "stepSent"
+  | "stepOpened"
+  | "stepReplied"
+  | "forecastLabel"
+  | "forecastParts"
+  | "quotaOf"
+  | "attainment"
+  | "forecastTotal"
+  | "gapToQuota"
+  | "overQuota"
+  | "callStates"
+  | "answerCall"
+  | "muteCall"
+  | "holdCall"
+  | "recordCall"
+  | "endCall"
+  | "callNotes"
+  | "callNotesPlaceholder"
+  | "callOutcome"
+  | "bookingLabel"
+  | "bookingMinutes"
+  | "bookingTimeZone"
+  | "bookingNoSlots"
+  | "bookingDayLabel"
+  | "bookingTimeLabel"
+  | "bookingPicked"
+  | "bookingConfirm"
+  | "trackerTask"
+  | "trackerTaskPlaceholder"
+  | "trackerProject"
+  | "billable"
+  | "startTimer"
+  | "stopTimer"
+  | "trackerToday"
+  | "timesheetLabel"
+  | "timesheetProject"
+  | "timesheetTotal"
+  | "timesheetCell"
+  | "belowTarget"
+  | "ganttLabel"
+  | "ganttTask"
+  | "ganttRange"
+  | "ganttMilestone"
+  | "todayLabel"
+> = {
+  quoteLabel: "Quote",
+  quoteItem: "Item",
+  quoteQuantity: "Qty",
+  quotePrice: "Price",
+  quoteDiscount: "Discount",
+  quoteLineTotal: "Total",
+  quoteSubtotal: "Subtotal",
+  quoteDiscounts: "Discounts",
+  quoteTax: (rate) => `VAT ${rate}`,
+  quoteTotal: "Total",
+  quoteOptional: "Optional",
+  quoteInclude: (name) => `Include ${name}`,
+  quoteRemove: (name) => `Remove ${name}`,
+  quoteEditField: (field, name) => `${field} of ${name}`,
+  quoteAdd: "Add line",
+  signedCount: (signed, total) => `${signed} of ${total} signed`,
+  signerStates: {
+    waiting: "Waiting",
+    sent: "Sent",
+    viewed: "Viewed",
+    signed: "Signed",
+    declined: "Declined",
+  },
+  remindSigner: (name) => `Remind ${name}`,
+  remindAction: "Remind",
+  voidDocument: "Void",
+  signatureExpires: (date) => `Expires ${date}`,
+  sequenceLabel: "Sequence",
+  stepDay: (day) => `Day ${day}`,
+  stepTypes: { email: "Email", call: "Call", linkedin: "LinkedIn", task: "Task", wait: "Wait" },
+  stepSent: (n) => `${n} sent`,
+  stepOpened: (p) => `${p} opened`,
+  stepReplied: (p) => `${p} replied`,
+  forecastLabel: "Forecast",
+  forecastParts: { won: "Won", commit: "Commit", bestCase: "Best case" },
+  quotaOf: (amount) => `Quota ${amount}`,
+  attainment: (p) => `${p} of quota`,
+  forecastTotal: "Total",
+  gapToQuota: (amount) => `${amount} to go`,
+  overQuota: (amount) => `${amount} over quota`,
+  callStates: { ringing: "Ringing", active: "On call", hold: "On hold", ended: "Call ended" },
+  answerCall: "Answer",
+  muteCall: "Mute",
+  holdCall: "Hold",
+  recordCall: "Record",
+  endCall: "End call",
+  callNotes: "Notes",
+  callNotesPlaceholder: "What was said, what happens next…",
+  callOutcome: "Outcome",
+  bookingLabel: "Pick a time",
+  bookingMinutes: (n) => `${n} min`,
+  bookingTimeZone: (tz) => `Times in ${tz}`,
+  bookingNoSlots: "No free times on this day",
+  bookingDayLabel: "Day",
+  bookingTimeLabel: "Time",
+  bookingPicked: (date, time) => `${date} at ${time}`,
+  bookingConfirm: "Confirm",
+  trackerTask: "Task",
+  trackerTaskPlaceholder: "What are you working on?",
+  trackerProject: "Project",
+  billable: "Billable",
+  startTimer: "Start",
+  stopTimer: "Stop",
+  trackerToday: (duration) => `Today ${duration}`,
+  timesheetLabel: "Timesheet",
+  timesheetProject: "Project",
+  timesheetTotal: "Total",
+  timesheetCell: (project, day) => `Hours for ${project} on ${day}`,
+  belowTarget: (target) => `Below ${target}`,
+  ganttLabel: "Timeline",
+  ganttTask: "Task",
+  ganttRange: (name, from, to, progress) =>
+    `${name}, ${from} to ${to}${progress ? `, ${progress} done` : ""}`,
+  ganttMilestone: (name, date) => `${name}, milestone on ${date}`,
+  todayLabel: "Today",
+};
+
 /** The English defaults: every group together. */
 export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   {},
@@ -2187,6 +2426,7 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   CONNECTED_DATA_STRINGS,
   CONNECTOR_STRINGS,
   CRM_STRINGS,
+  SALES_STRINGS,
   DATA_DISPLAY_STRINGS,
   DATA_TABLE_STRINGS,
   DEVELOPER_STRINGS,

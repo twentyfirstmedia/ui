@@ -45,7 +45,7 @@
 ## Why Twentyfirst UI
 
 - **One API, two looks.** Every component, prop, class and token exists in both kits. Load both and switch with `data-kit`: markup and state stay, only the CSS changes. A parity test fails the build if the kits drift apart.
-- **258 components, 48 complete screens.** From buttons and data tables to chat, tool calls, agent status and human-in-the-loop approvals, plus commerce, admin, real-estate and life building blocks (health, habits, money, insurance, deadlines, documents) and connectors for assistants that work across your services (smart home, car, media, workouts, calls, trips, golf, investments) and a CRM core (records, timelines, pipelines, tasks, lead scores, merging and imports).
+- **267 components, 52 complete screens.** From buttons and data tables to chat, tool calls, agent status and human-in-the-loop approvals, plus commerce, admin, real-estate and life building blocks (health, habits, money, insurance, deadlines, documents) and connectors for assistants that work across your services (smart home, car, media, workouts, calls, trips, golf, investments) and a CRM (records, timelines, pipelines, tasks, lead scores, merging, imports, quotes, e-signatures, sequences, forecasts, calls, booking, time tracking and Gantt charts).
 - **Finished from the first render.** Empty, loading, error and approval states come with the components.
 - **Mobile first.** Works from 320px up: shells collapse, tables scroll, dialogs become sheets, inputs never zoom.
 - **Accessible.** Keyboard paths, focus rings and ARIA on every component; axe (WCAG 2.1 AA) runs on every example in both kits, light and dark.

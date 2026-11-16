@@ -3609,3 +3609,219 @@ export interface ImportMapperProps extends BaseProps {
   /** Problems found in the rows. */
   problems?: { row: number; message: string }[];
 }
+
+// ── Sales and agency: quotes, signatures, sequences, forecast, calls, booking, time, Gantt ──
+
+/** One line of a quote. Money is per unit; `discount` is in percent. */
+export interface QuoteLine {
+  id: string;
+  name: string;
+  description?: string;
+  quantity: number;
+  /** "h", "month", "seat" … shown after the quantity. */
+  unit?: string;
+  unitPrice: number;
+  /** Line discount in percent. */
+  discount?: number;
+  /** An optional extra the customer can tick on or off. */
+  optional?: boolean;
+  /** For optional lines: ticked on (counts towards the total). */
+  selected?: boolean;
+}
+export interface QuoteBuilderProps extends BaseProps {
+  lines: QuoteLine[];
+  /** Makes quantity, price and discount editable and optional lines tickable. */
+  onChange?: (lines: QuoteLine[]) => void;
+  /** Shows "Add line". */
+  onAdd?: () => void;
+  /** Shows a remove button per line. */
+  onRemove?: (id: string) => void;
+  currency?: string;
+  /** VAT or sales tax in percent (e.g. 19); no tax row when unset. */
+  taxRate?: number;
+  /** Accessible name (default "Quote"). */
+  label?: string;
+}
+
+export type SignerState = "waiting" | "sent" | "viewed" | "signed" | "declined";
+export interface Signer {
+  id: string;
+  name: string;
+  email?: string;
+  /** "Client", "Agency", "Witness". */
+  role?: string;
+  state: SignerState;
+  /** When the state was reached. */
+  at?: Date | string | number;
+}
+export interface SignatureStatusProps extends BaseProps {
+  /** The document out for signature. */
+  document: string;
+  signers: Signer[];
+  /** Signers sign one after the other (numbers them). */
+  ordered?: boolean;
+  expiresAt?: Date | string | number;
+  /** Shows "Remind" for signers who have it but have not signed. */
+  onRemind?: (id: string) => void;
+  /** Shows "Void" to withdraw the document. */
+  onVoid?: () => void;
+}
+
+export type SequenceStepType = "email" | "call" | "linkedin" | "task" | "wait";
+export interface SequenceStep {
+  id: string;
+  type: SequenceStepType;
+  /** Day of the sequence the step runs on (1 = the day someone is enrolled). */
+  day: number;
+  title: string;
+  detail?: string;
+  /** Counts so far; open and reply rates are worked out from `sent`. */
+  stats?: { sent?: number; opened?: number; replied?: number };
+}
+export interface SequenceStepsProps extends BaseProps {
+  steps: SequenceStep[];
+  /** Makes each step a button. */
+  onSelect?: (id: string) => void;
+  selected?: string;
+  /** Accessible name (default "Sequence"). */
+  label?: string;
+}
+
+export interface ForecastRow {
+  id: string;
+  /** A rep, a team or a month. */
+  name: string;
+  /** Show an avatar with the name's initials. */
+  avatar?: boolean;
+  quota: number;
+  /** Closed won. */
+  won: number;
+  /** Expected to close, on top of won. */
+  commit: number;
+  /** Could close, on top of commit. */
+  bestCase: number;
+}
+export interface ForecastProps extends BaseProps {
+  rows: ForecastRow[];
+  currency?: string;
+  /** Adds a total row (default when there is more than one row). */
+  total?: boolean;
+  /** Accessible name (default "Forecast"). */
+  label?: string;
+}
+
+export interface CallPanelProps extends BaseProps {
+  name: string;
+  /** "Head of Operations · Nordhafen". */
+  subtitle?: ReactNode;
+  number?: string;
+  state: "ringing" | "active" | "hold" | "ended";
+  /** When the call was answered; the timer counts from here. */
+  startedAt?: Date | string | number;
+  /** Fixed "now" for the timer (server rendering, screenshots); ticks every second when unset. */
+  now?: Date | string | number;
+  muted?: boolean;
+  recording?: boolean;
+  onAnswer?: () => void;
+  onMute?: (muted: boolean) => void;
+  onHold?: (hold: boolean) => void;
+  onRecord?: (recording: boolean) => void;
+  onEnd?: () => void;
+  /** Shows a notes field. */
+  notes?: string;
+  onNotes?: (text: string) => void;
+  /** Shows an outcome picker ("Connected", "Voicemail" …). */
+  outcomes?: string[];
+  outcome?: string;
+  onOutcome?: (outcome: string) => void;
+}
+
+export interface BookingDay {
+  date: Date | string | number;
+  /** Free start times, "09:30". */
+  slots: string[];
+}
+export interface BookingSlotsProps extends BaseProps {
+  days: BookingDay[];
+  value?: { date: Date | string | number; time: string } | null;
+  onChange?: (value: { date: Date | string | number; time: string }) => void;
+  /** Shows "Confirm" once a time is picked. */
+  onConfirm?: (value: { date: Date | string | number; time: string }) => void;
+  /** Minutes. */
+  duration?: number;
+  /** Shown under the times, "Europe/Berlin". */
+  timeZone?: string;
+  title?: string;
+  host?: string;
+}
+
+export interface TimeEntry {
+  id: string;
+  project: string;
+  task?: string;
+  minutes: number;
+  billable?: boolean;
+}
+export interface TimeTrackerProps extends BaseProps {
+  running?: boolean;
+  startedAt?: Date | string | number;
+  /** Fixed "now" for the timer; ticks every second when unset. */
+  now?: Date | string | number;
+  task?: string;
+  onTask?: (task: string) => void;
+  project?: string;
+  projects?: string[];
+  onProject?: (project: string) => void;
+  billable?: boolean;
+  onBillable?: (billable: boolean) => void;
+  onStart?: () => void;
+  onStop?: () => void;
+  /** Today's entries under the timer, with their total. */
+  entries?: TimeEntry[];
+}
+
+export interface TimesheetRow {
+  id: string;
+  project: string;
+  task?: string;
+  tint?: Tint;
+  /** Hours per day, Monday first (7 values). */
+  hours: number[];
+  billable?: boolean;
+}
+export interface TimesheetProps extends BaseProps {
+  rows: TimesheetRow[];
+  /** The Monday of the week. */
+  weekStart: Date | string | number;
+  /** Makes each cell an input. */
+  onChange?: (rowId: string, day: number, hours: number) => void;
+  /** Hours a day should reach; day totals below it are marked. */
+  target?: number;
+  /** Accessible name (default "Timesheet"). */
+  label?: string;
+}
+
+export interface GanttTask {
+  id: string;
+  name: string;
+  start: Date | string | number;
+  /** Last day (inclusive); a milestone uses `start` only. */
+  end?: Date | string | number;
+  /** 0–100. */
+  progress?: number;
+  tint?: Tint;
+  milestone?: boolean;
+  owner?: string;
+}
+export interface GanttProps extends BaseProps {
+  tasks: GanttTask[];
+  /** First and last day shown (default: the tasks' range). */
+  from?: Date | string | number;
+  to?: Date | string | number;
+  /** Draws the today line. */
+  today?: Date | string | number;
+  /** Makes each task a button. */
+  onOpen?: (id: string) => void;
+  /** Accessible name (default "Timeline"). */
+  label?: string;
+}

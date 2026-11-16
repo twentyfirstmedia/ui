@@ -1804,5 +1804,119 @@
     "width": 1280,
     "height": 900,
     "components": ["AppShell", "Button", "PageHeader", "Panel", "Segmented", "StatTile", "TaskList"]
+  },
+  {
+    "name": "QuoteBuilder",
+    "group": "CRM",
+    "width": 1000,
+    "height": 640,
+    "components": ["QuoteBuilder", "Panel"]
+  },
+  {
+    "name": "SignatureStatus",
+    "group": "CRM",
+    "width": 1000,
+    "height": 480,
+    "components": ["SignatureStatus", "Panel"]
+  },
+  {
+    "name": "SequenceSteps",
+    "group": "CRM",
+    "width": 800,
+    "height": 760,
+    "components": ["SequenceSteps", "Panel"]
+  },
+  {
+    "name": "Forecast",
+    "group": "CRM",
+    "width": 900,
+    "height": 420,
+    "components": ["Forecast", "Panel"]
+  },
+  {
+    "name": "CallPanel",
+    "group": "CRM",
+    "width": 1000,
+    "height": 560,
+    "components": ["CallPanel", "Panel"]
+  },
+  {
+    "name": "BookingSlots",
+    "group": "CRM",
+    "width": 720,
+    "height": 520,
+    "components": ["BookingSlots", "Panel"]
+  },
+  {
+    "name": "TimeTracker",
+    "group": "CRM",
+    "width": 900,
+    "height": 440,
+    "components": ["TimeTracker", "Panel"]
+  },
+  {
+    "name": "Timesheet",
+    "group": "CRM",
+    "width": 1000,
+    "height": 480,
+    "components": ["Timesheet", "Panel"]
+  },
+  {
+    "name": "Gantt",
+    "group": "CRM",
+    "width": 1100,
+    "height": 560,
+    "components": ["Gantt", "Panel"]
+  },
+  {
+    "name": "QuoteScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1100,
+    "components": [
+      "AppShell",
+      "Panel",
+      "PropertyList",
+      "QuoteBuilder",
+      "RecordHeader",
+      "SignatureStatus"
+    ]
+  },
+  {
+    "name": "SalesForecastScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 900,
+    "components": ["AppShell", "Forecast", "PageHeader", "Panel", "Segmented", "StatTile"]
+  },
+  {
+    "name": "OutreachScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1300,
+    "components": [
+      "AppShell",
+      "BookingSlots",
+      "Button",
+      "CallPanel",
+      "PageHeader",
+      "Panel",
+      "SequenceSteps"
+    ]
+  },
+  {
+    "name": "AgencyProjectScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 1600,
+    "components": [
+      "AppShell",
+      "BudgetList",
+      "Gantt",
+      "Panel",
+      "RecordHeader",
+      "TimeTracker",
+      "Timesheet"
+    ]
   }
 ]
