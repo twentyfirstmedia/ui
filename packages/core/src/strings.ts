@@ -829,6 +829,34 @@ export interface UIStrings {
   /** "Launch, milestone on Dec 4" */
   ganttMilestone: (name: string, date: string) => string;
   todayLabel: string;
+  matchesLabel: string;
+  /** "92% match" */
+  matchScore: (p: string) => string;
+  /** "4 of 5 criteria" */
+  criteriaMet: (met: number, total: number) => string;
+  criterionMissed: string;
+  contactMatch: string;
+  viewingsLabel: string;
+  viewingStates: Record<"requested" | "confirmed" | "done" | "cancelled" | "noshow", string>;
+  /** "3 people" */
+  viewingAttendees: (n: number) => string;
+  confirmViewing: string;
+  addFeedback: string;
+  /** "Rated 4 of 5" */
+  viewingRating: (n: number) => string;
+  conflictLabel: string;
+  conflictParties: string;
+  conflictPartiesPlaceholder: string;
+  runConflictCheck: string;
+  /** "Checked Nov 16, 9:30 AM" */
+  conflictCheckedAt: (date: string) => string;
+  conflictNone: string;
+  /** "1 conflict, 2 possible" */
+  conflictSummary: (conflicts: number, possible: number) => string;
+  conflictLevels: Record<"possible" | "conflict", string>;
+  conflictClear: string;
+  conflictDecline: string;
+  conflictDecisions: Record<"cleared" | "declined", string>;
   // @@KEYS
 }
 
@@ -2411,6 +2439,67 @@ export const SALES_STRINGS: Pick<
   todayLabel: "Today",
 };
 
+export const INDUSTRY_STRINGS: Pick<
+  UIStrings,
+  | "matchesLabel"
+  | "matchScore"
+  | "criteriaMet"
+  | "criterionMissed"
+  | "contactMatch"
+  | "viewingsLabel"
+  | "viewingStates"
+  | "viewingAttendees"
+  | "confirmViewing"
+  | "addFeedback"
+  | "viewingRating"
+  | "conflictLabel"
+  | "conflictParties"
+  | "conflictPartiesPlaceholder"
+  | "runConflictCheck"
+  | "conflictCheckedAt"
+  | "conflictNone"
+  | "conflictSummary"
+  | "conflictLevels"
+  | "conflictClear"
+  | "conflictDecline"
+  | "conflictDecisions"
+> = {
+  matchesLabel: "Matches",
+  matchScore: (p) => `${p} match`,
+  criteriaMet: (met, total) => `${met} of ${total} criteria`,
+  criterionMissed: "not met",
+  contactMatch: "Contact",
+  viewingsLabel: "Viewings",
+  viewingStates: {
+    requested: "Requested",
+    confirmed: "Confirmed",
+    done: "Done",
+    cancelled: "Cancelled",
+    noshow: "No-show",
+  },
+  viewingAttendees: (n) => (n === 1 ? "1 person" : `${n} people`),
+  confirmViewing: "Confirm",
+  addFeedback: "Add feedback",
+  viewingRating: (n) => `Rated ${n} of 5`,
+  conflictLabel: "Conflict check",
+  conflictParties: "Parties",
+  conflictPartiesPlaceholder: "Add a person or company…",
+  runConflictCheck: "Run check",
+  conflictCheckedAt: (date) => `Checked ${date}`,
+  conflictNone: "No conflicts found",
+  conflictSummary: (conflicts, possible) =>
+    [
+      conflicts ? `${conflicts} conflict${conflicts === 1 ? "" : "s"}` : "",
+      possible ? `${possible} possible` : "",
+    ]
+      .filter(Boolean)
+      .join(", "),
+  conflictLevels: { possible: "Possible", conflict: "Conflict" },
+  conflictClear: "Clear to proceed",
+  conflictDecline: "Decline matter",
+  conflictDecisions: { cleared: "Cleared to proceed", declined: "Matter declined" },
+};
+
 /** The English defaults: every group together. */
 export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   {},
@@ -2427,6 +2516,7 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   CONNECTOR_STRINGS,
   CRM_STRINGS,
   SALES_STRINGS,
+  INDUSTRY_STRINGS,
   DATA_DISPLAY_STRINGS,
   DATA_TABLE_STRINGS,
   DEVELOPER_STRINGS,

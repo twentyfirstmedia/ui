@@ -176,7 +176,7 @@ export function PropertyList(p: PropertyListProps) {
       case "money":
         return formatMoney(Number(v), f.currency);
       case "percent":
-        return formatPercent(Number(v));
+        return formatPercent(Number(v), { maximumFractionDigits: 2 });
       case "number":
         return formatNumber(Number(v));
       case "date":
