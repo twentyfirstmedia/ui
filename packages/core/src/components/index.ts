@@ -251,6 +251,17 @@ export {
   EnergyClass,
 } from "./real-estate.js";
 export { RichTextEditor } from "./rich-text-editor.js";
+export {
+  QuoteBuilder,
+  SignatureStatus,
+  SequenceSteps,
+  Forecast,
+  CallPanel,
+  BookingSlots,
+  TimeTracker,
+  Timesheet,
+  Gantt,
+} from "./sales.js";
 export { TopBar, SideRail, Dock, FloatingLayout, Ambient, NAV, AppShell } from "./shell.js";
 export { ChatLauncher, CookieConsent, AnnouncementBar } from "./site.js";
 export { StatusShape, StatusIndicator } from "./status.js";
