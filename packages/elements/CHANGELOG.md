@@ -1,5 +1,26 @@
 # @twentyfirstmedia/elements
 
+## 0.10.0
+
+### Minor Changes
+
+- [#57](https://github.com/twentyfirstmedia/ui/pull/57) [`855cb94`](https://github.com/twentyfirstmedia/ui/commit/855cb94018015de0921416ca59c4f22de2b29cde) Thanks [@robintrepte](https://github.com/robintrepte)! - DataTable for admin lists, and a bridge for apps moving from shadcn/ui:
+  
+  - **Rows as links**: `rowHref(row)` and `linkAs` make the first cell the row's link and the whole row clickable (except checkboxes, links, buttons and inputs inside); ⌘/Ctrl-click and middle-click open a new tab, Tab and Enter work. `onRowClick(row, event)` for rows that open something else; without `rowHref` the row is focusable and opens with Enter. Hover and focus styles in both kits.
+  - **Controlled sort**: `sort` and `onSortChange`; when controlled the table draws the sort but leaves the order to the caller (all pages, server). `defaultSort` keeps working.
+  - **Controlled selection**: `selected` (row keys, also of rows on other pages) and `onSelectedChange`; `bulkActions` still receive the rows.
+  - **`stack`**: up to 600px of its own width every row becomes a card with its column labels; checkbox and row link keep working. Cells without a label (checkbox, expand, actions) no longer get an empty label in `Table`'s and `DataTable`'s stacked cards.
+  - **Paging**: `pageSize` with `Pagination` and the row range under the table, `pageSizes` for a page-size menu, `page`/`defaultPage`/`onPageChange`, and `rowCount` for server-side paging.
+  - **`@twentyfirstmedia/ui-core/shadcn.css`**: dresses shadcn/ui primitives in the active kit by their `data-slot` attributes (buttons with `data-variant`/`data-size`, inputs, textareas, selects, cards, badges, tables, tabs, dialogs, alert dialogs, sheets, dropdown menus, popovers, tooltips, checkboxes, switches, labels, separators, progress, alerts, skeletons), only inside `[data-kit]`, unlayered so it wins over Tailwind's utilities, glass included. `data-kit-colors="status"` maps Tailwind's colour scale to the kit's status colours. New guide "Moving from shadcn/ui".
+
+- [#57](https://github.com/twentyfirstmedia/ui/pull/57) [`855cb94`](https://github.com/twentyfirstmedia/ui/commit/855cb94018015de0921416ca59c4f22de2b29cde) Thanks [@robintrepte](https://github.com/robintrepte)! - Fixes and additions from moving an admin app onto the kits:
+  
+  - **Focus trap of overlays opened through `open`**: `CommandPalette`, `Drawer`, `Modal`, `ConfirmDialog` and `ExportDialog` mounted closed and opened later now move focus inside on open (an element with `data-autofocus` first, then the first text field), keep Tab inside, close on Escape and return focus to the trigger on close. `useTrap(ref, onClose, active)` takes the new `active` flag. `Modal` traps focus while open (it did not before) and gets `inline` for in-page demos.
+  - **`hideLabel`** on every field control (`Input`, `Select`, `Textarea`, `TextField`, `SelectMenu`, `NumberInput`, `Combobox`, `DatePicker`, `TagInput`, `MoneyInput`, `ColorField`, `LocaleField`, `Slider`, `RangeSlider`, `RadioGroup`, `VariantPicker`, `FormField`; accepted by `SearchField` and `StatusSelect`): the label stays the accessible name but is visually hidden, so filter bars stay one row. New utility class `tf-sr-only`.
+  - **`IconButton` as a link**: `href` and `linkAs` (for router links); `label` stays the accessible name and tooltip. `asChild` is now documented.
+  - **`AppShell fill`**: the shell is the whole page (at least `100dvh`, no outer radius); the sidebar stays in view on desktop, and on phones the sheet starts right under the sidebar bar.
+  - **Icons**: `volume`, `volumeOff`, `trophy` and `receipt` are in the kit's own set (97 icons). The library still exports `volume`, `trophy` and `receipt` (deprecated aliases), so existing imports keep working.
+
 ## 0.9.0
 
 ### Minor Changes
