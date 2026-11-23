@@ -22,6 +22,8 @@ async function open(page: Page, kit: string, theme: string, density: string) {
   );
   await page.goto(`/${kit}/components/AppShell/`);
   await page.waitForSelector(".docs-preview .tf-shell-bar");
+  // the static page paints the kit's default theme until the docs apply the stored one
+  await page.waitForSelector(`.docs-preview [data-theme="${theme}"] .tf-shell-bar`);
   await page.evaluate((d) => {
     const shell = document.querySelector(".docs-preview .tf-shell")!;
     for (let a: Element | null = shell; a; a = a.parentElement)
@@ -80,6 +82,13 @@ for (const kit of KITS)
         test("desktop: brand column, one L, sheet under the bar", async ({ page }) => {
           await page.setViewportSize({ width: 1440, height: 900 });
           await open(page, kit, theme, density);
+          // bar, brand and sidebar show the same frame colour (once the theme has settled)
+          await expect
+            .poll(async () => {
+              const c = await measure(page);
+              return c.barFill === c.sideFill && c.brandFill === c.sideFill;
+            })
+            .toBe(true);
           const m = await measure(page);
           // the brand is the sidebar's column
           expect(Math.abs(m.brand.left - m.side.left)).toBeLessThanOrEqual(0.5);
