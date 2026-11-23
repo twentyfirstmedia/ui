@@ -27,6 +27,8 @@ export function App({ pro }: { pro: boolean }) {
 
 Markup, props and state stay the same; only the CSS that applies changes.
 
+**Moving from shadcn/ui:** `@twentyfirstmedia/ui-core/shadcn.css` dresses shadcn/ui's primitives (buttons, inputs, cards, dialogs, menus, tables, tabs …) in the active kit by their `data-slot` attributes, inside `[data-kit]` only, so an app can move page by page. Guide: [Moving from shadcn/ui](https://ui.twentyfirst.media/halo/shadcn/).
+
 ## License
 
 [MIT](https://github.com/twentyfirstmedia/ui/blob/main/LICENSE) © Twentyfirst Media. Fonts under the SIL Open Font License 1.1.

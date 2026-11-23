@@ -1,0 +1,722 @@
+/*
+ * @twentyfirstmedia/ui-core/shadcn.css: the shadcn/ui bridge.
+ *
+ * Dresses shadcn/ui primitives in the kit by their `data-slot` attributes, so an app built with
+ * shadcn/ui can move to Halo or Pro page by page: load the kit (`themes.css` or a kit's
+ * `styles.css`), then this file, and set `data-kit` on the part of the app that should look like
+ * the kit. Outside `[data-kit]` nothing changes.
+ *
+ * - Colours already match: both kits define shadcn's variables (`--background`, `--primary`,
+ *   `--border` …), so the utilities shadcn components use pick up the kit's colours. This file
+ *   adds what the variables do not carry: control heights from the density, the kit's radii,
+ *   panel surfaces and shadows, type, focus rings and glass.
+ * - Only kit tokens, no colour literals; both kits, light and dark, comfortable and compact, glass
+ *   and solid follow from the tokens.
+ * - Unlayered on purpose: it wins over Tailwind's layered utilities (`@layer utilities`), so the
+ *   kit's look holds even where a component's classes say otherwise. Layout utilities that set
+ *   other properties (width, margin, grid, flex) keep working.
+ * - The second block (Tailwind's colour scale) is opt-in through `data-kit-colors="status"`.
+ */
+
+/* ── Controls ─────────────────────────────────────────────────────────── */
+
+[data-kit] [data-slot="button"] {
+  height: var(--density-control);
+  padding-inline: calc(var(--density-control) * 0.4);
+  gap: 8px;
+  border-radius: var(--button-radius);
+  font-family: var(--font-sans);
+  font-size: var(--density-font-size);
+  line-height: var(--density-line-height);
+  font-weight: 600;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+[data-kit] [data-slot="button"][data-size="sm"] {
+  height: var(--control-sm);
+  padding-inline: calc(var(--control-sm) * 0.375);
+}
+[data-kit] [data-slot="button"][data-size="lg"] {
+  height: var(--control-lg);
+  padding-inline: calc(var(--control-lg) * 0.42);
+}
+[data-kit]
+  [data-slot="button"]:is([data-size="icon"], [data-size="icon-sm"], [data-size="icon-lg"]) {
+  width: var(--density-control);
+  padding: 0;
+}
+[data-kit] [data-slot="button"][data-size="icon-sm"] {
+  width: var(--control-sm);
+  height: var(--control-sm);
+}
+[data-kit] [data-slot="button"][data-size="icon-lg"] {
+  width: var(--control-lg);
+  height: var(--control-lg);
+}
+[data-kit] [data-slot="button"][data-variant="default"] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: none;
+}
+[data-kit] [data-slot="button"][data-variant="default"]:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+[data-kit] [data-slot="button"][data-variant="secondary"] {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  box-shadow: none;
+}
+[data-kit] [data-slot="button"][data-variant="outline"] {
+  background: transparent;
+  color: var(--foreground);
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+[data-kit] [data-slot="button"][data-variant="ghost"] {
+  background: transparent;
+  color: var(--foreground);
+  box-shadow: none;
+}
+[data-kit]
+  [data-slot="button"]:is(
+    [data-variant="secondary"],
+    [data-variant="outline"],
+    [data-variant="ghost"]
+  ):hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+[data-kit] [data-slot="button"][data-variant="destructive"] {
+  background: var(--destructive);
+  color: var(--destructive-foreground);
+  box-shadow: none;
+}
+[data-kit] [data-slot="button"][data-variant="link"] {
+  height: auto;
+  padding: 0;
+  background: transparent;
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+[data-kit] [data-slot="button"]:disabled {
+  opacity: 0.5;
+}
+
+[data-kit] :is([data-slot="input"], [data-slot="select-trigger"]) {
+  height: var(--density-control);
+  padding-inline: var(--density-pad-x);
+  border: 0;
+  border-radius: var(--field-radius);
+  background: var(--surface);
+  color: var(--foreground);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  font-family: var(--font-sans);
+  font-size: var(--density-font-size);
+  line-height: var(--density-line-height);
+  font-weight: 500;
+}
+[data-kit] [data-slot="select-trigger"][data-size="sm"] {
+  height: var(--control-sm);
+}
+[data-kit] [data-slot="textarea"] {
+  padding: 10px var(--density-pad-x);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--foreground);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  font-family: var(--font-sans);
+  font-size: var(--density-font-size);
+  line-height: var(--density-line-height);
+  font-weight: 500;
+}
+[data-kit] :is([data-slot="input"], [data-slot="textarea"])::placeholder {
+  color: var(--muted-foreground);
+}
+[data-kit]
+  :is([data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"]):focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--focus);
+}
+[data-kit]
+  :is(
+    [data-slot="input"],
+    [data-slot="textarea"],
+    [data-slot="select-trigger"]
+  )[aria-invalid="true"] {
+  box-shadow: inset 0 0 0 2px var(--danger);
+}
+
+[data-kit] [data-slot="label"] {
+  font-family: var(--font-sans);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-line);
+  color: var(--foreground);
+}
+
+[data-kit] [data-slot="checkbox"] {
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1.5px var(--line-strong);
+}
+[data-kit] [data-slot="checkbox"][data-state="checked"] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: none;
+}
+[data-kit] [data-slot="switch"] {
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--line-strong);
+}
+[data-kit] [data-slot="switch"][data-state="checked"] {
+  background: var(--primary);
+}
+[data-kit] [data-slot="switch-thumb"] {
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+/* every focus ring is the kit's */
+[data-kit]
+  [data-slot]:is(
+    button,
+    a,
+    [role="tab"],
+    [role="checkbox"],
+    [role="switch"],
+    [role="menuitem"],
+    [role="option"]
+  ):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  --tw-ring-shadow: 0 0 transparent;
+}
+
+/* ── Surfaces ─────────────────────────────────────────────────────────── */
+
+[data-kit] [data-slot="card"] {
+  gap: var(--panel-gap);
+  padding-block: var(--panel-pad);
+  border: 0;
+  border-radius: var(--panel-radius);
+  background: var(--panel-bg);
+  color: var(--card-foreground);
+  box-shadow:
+    inset 0 0 0 var(--line-width) var(--panel-border),
+    var(--panel-shadow);
+}
+[data-kit] :is([data-slot="card-header"], [data-slot="card-content"], [data-slot="card-footer"]) {
+  padding-inline: var(--panel-pad);
+}
+[data-kit] [data-slot="card-title"] {
+  font-family: var(--type-h3-family);
+  font-size: var(--type-h3-size);
+  font-weight: var(--type-h3-weight);
+  line-height: var(--type-h3-line);
+  letter-spacing: var(--type-h3-tracking);
+}
+[data-kit]
+  :is(
+    [data-slot="card-description"],
+    [data-slot="dialog-description"],
+    [data-slot="alert-dialog-description"],
+    [data-slot="sheet-description"]
+  ) {
+  font-family: var(--font-sans);
+  font-size: var(--type-small-size);
+  font-weight: var(--type-small-weight);
+  line-height: var(--type-small-line);
+  color: var(--muted-foreground);
+}
+
+[data-kit] :is([data-slot="dialog-content"], [data-slot="alert-dialog-content"]) {
+  gap: var(--panel-gap);
+  padding: var(--panel-pad);
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow: var(--shadow-overlay);
+}
+[data-kit] [data-slot="sheet-content"] {
+  gap: var(--panel-gap);
+  border: 0;
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow: var(--shadow-overlay);
+}
+[data-kit]
+  :is(
+    [data-slot="dialog-overlay"],
+    [data-slot="alert-dialog-overlay"],
+    [data-slot="sheet-overlay"]
+  ) {
+  background: var(--scrim);
+}
+[data-kit]
+  :is([data-slot="dialog-title"], [data-slot="alert-dialog-title"], [data-slot="sheet-title"]) {
+  font-family: var(--type-h2-family);
+  font-size: var(--type-h2-size);
+  font-weight: var(--type-h2-weight);
+  line-height: var(--type-h2-line);
+  letter-spacing: var(--type-h2-tracking);
+  color: var(--foreground);
+}
+
+[data-kit]
+  :is(
+    [data-slot="dropdown-menu-content"],
+    [data-slot="select-content"],
+    [data-slot="popover-content"]
+  ) {
+  border: 0;
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow:
+    var(--shadow-float),
+    0 0 0 var(--line-width) var(--line);
+}
+[data-kit] :is([data-slot="dropdown-menu-content"], [data-slot="select-content"]) {
+  padding: 6px;
+  border-radius: var(--radius-md);
+}
+[data-kit] [data-slot="popover-content"] {
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+}
+[data-kit] :is([data-slot="dropdown-menu-item"], [data-slot="select-item"]) {
+  min-height: calc(var(--density-control) - 4px);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: var(--density-font-size);
+  font-weight: 600;
+}
+[data-kit]
+  :is([data-slot="dropdown-menu-item"], [data-slot="select-item"]):is([data-highlighted], :focus) {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+[data-kit] [data-slot="dropdown-menu-item"][data-variant="destructive"] {
+  color: var(--danger);
+}
+[data-kit] [data-slot="tooltip-content"] {
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--frame);
+  color: var(--on-frame);
+  font-family: var(--font-sans);
+  font-size: var(--type-caption-size);
+  font-weight: 600;
+  box-shadow: var(--shadow-float);
+}
+
+/* ── Content ──────────────────────────────────────────────────────────── */
+
+[data-kit] [data-slot="badge"] {
+  height: 24px;
+  padding-inline: 8px;
+  border: 0;
+  border-radius: var(--badge-radius);
+  font-family: var(--font-sans);
+  font-size: var(--type-caption-size);
+  font-weight: 600;
+}
+[data-kit] [data-slot="badge"][data-variant="default"] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+[data-kit] [data-slot="badge"][data-variant="secondary"] {
+  background: var(--surface-sunken);
+  color: var(--foreground);
+}
+[data-kit] [data-slot="badge"][data-variant="destructive"] {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+[data-kit] [data-slot="badge"][data-variant="outline"] {
+  background: transparent;
+  color: var(--foreground);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+
+[data-kit] [data-slot="table"] {
+  font-family: var(--font-sans);
+  font-size: var(--density-font-size);
+}
+[data-kit] [data-slot="table-head"] {
+  height: var(--density-control);
+  padding-inline: var(--density-pad-x);
+  font-size: var(--type-caption-size);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+[data-kit] [data-slot="table-cell"] {
+  height: var(--density-row);
+  padding-inline: var(--density-pad-x);
+}
+[data-kit] [data-slot="table-row"] {
+  border-color: var(--line);
+}
+[data-kit] [data-slot="table-body"] [data-slot="table-row"]:hover {
+  background: var(--accent);
+}
+[data-kit] [data-slot="table-row"][data-state="selected"] {
+  background: var(--accent);
+}
+
+[data-kit] [data-slot="tabs-list"] {
+  height: auto;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+}
+[data-kit] [data-slot="tabs-trigger"] {
+  height: calc(var(--density-control) - 8px);
+  padding-inline: var(--density-pad-x);
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+  font-size: var(--density-font-size);
+  font-weight: 600;
+}
+[data-kit] [data-slot="tabs-trigger"][data-state="active"] {
+  background: var(--surface);
+  color: var(--foreground);
+  box-shadow: var(--shadow-card);
+}
+
+[data-kit] [data-slot="separator"] {
+  background: var(--line);
+}
+[data-kit] [data-slot="progress"] {
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+}
+[data-kit] [data-slot="progress-indicator"] {
+  border-radius: var(--radius-pill);
+  background: var(--primary);
+}
+[data-kit] [data-slot="skeleton"] {
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+}
+[data-kit] [data-slot="alert"] {
+  padding: 12px var(--density-pad-x);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--info-bg);
+  color: var(--info);
+  box-shadow: none;
+}
+[data-kit] [data-slot="alert"][data-variant="destructive"] {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+[data-kit] [data-slot="alert-title"] {
+  font-weight: 700;
+}
+[data-kit] [data-slot="alert-description"] {
+  color: inherit;
+}
+
+/* ── Glass: inside <UIProvider surface="glass"> cards and floating layers are glass too ── */
+
+[data-kit]
+  [data-surface="glass"]
+  :is(
+    [data-slot="card"],
+    [data-slot="dialog-content"],
+    [data-slot="alert-dialog-content"],
+    [data-slot="sheet-content"],
+    [data-slot="dropdown-menu-content"],
+    [data-slot="select-content"],
+    [data-slot="popover-content"]
+  ),
+[data-kit][data-surface="glass"]
+  :is(
+    [data-slot="card"],
+    [data-slot="dialog-content"],
+    [data-slot="alert-dialog-content"],
+    [data-slot="sheet-content"],
+    [data-slot="dropdown-menu-content"],
+    [data-slot="select-content"],
+    [data-slot="popover-content"]
+  ) {
+  background:
+    linear-gradient(to bottom, var(--glass-sheen), transparent 56px) border-box,
+    var(--glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  box-shadow:
+    inset 0 1px 0 0 var(--glass-highlight),
+    inset 0 0 0 1px var(--glass-border),
+    var(--shadow-glass);
+  --surface: var(--glass-control);
+  --secondary: var(--glass-control);
+  --surface-sunken: var(--glass-well);
+  --muted: var(--glass-well);
+  --accent: var(--glass-hover);
+}
+[data-kit]
+  [data-surface="glass"]
+  :is(
+    [data-slot="dialog-content"],
+    [data-slot="alert-dialog-content"],
+    [data-slot="sheet-content"],
+    [data-slot="dropdown-menu-content"],
+    [data-slot="select-content"],
+    [data-slot="popover-content"]
+  ),
+[data-kit][data-surface="glass"]
+  :is(
+    [data-slot="dialog-content"],
+    [data-slot="alert-dialog-content"],
+    [data-slot="sheet-content"],
+    [data-slot="dropdown-menu-content"],
+    [data-slot="select-content"],
+    [data-slot="popover-content"]
+  ) {
+  background:
+    linear-gradient(to bottom, var(--glass-sheen), transparent 56px) border-box,
+    var(--glass-strong);
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  [data-kit]
+    [data-surface="glass"]
+    :is(
+      [data-slot="card"],
+      [data-slot="dialog-content"],
+      [data-slot="alert-dialog-content"],
+      [data-slot="sheet-content"],
+      [data-slot="dropdown-menu-content"],
+      [data-slot="select-content"],
+      [data-slot="popover-content"]
+    ),
+  [data-kit][data-surface="glass"]
+    :is(
+      [data-slot="card"],
+      [data-slot="dialog-content"],
+      [data-slot="alert-dialog-content"],
+      [data-slot="sheet-content"],
+      [data-slot="dropdown-menu-content"],
+      [data-slot="select-content"],
+      [data-slot="popover-content"]
+    ) {
+    background: var(--popover);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* ── Tailwind's colour scale → the kit's status colours (opt-in) ──────────────
+ * Pages ported from shadcn often colour states with Tailwind's palette (`bg-green-100
+ * text-green-800`, `text-red-600` …). With `data-kit-colors="status"` next to `data-kit`, those
+ * utilities draw the kit's status colours instead: green/emerald/lime/teal → ok,
+ * red/rose → danger, amber/yellow/orange → warn, blue/sky/cyan/indigo → info,
+ * purple/violet/fuchsia/pink → signal. Shades 50–200 and 950 become the soft background
+ * (`--*-bg`), 300–900 the colour itself, so light text on dark shades and the other way round
+ * keep their contrast in both themes. Tailwind v4 reads these variables at use time, so setting
+ * them on the subtree is enough.
+ */
+[data-kit][data-kit-colors="status"],
+[data-kit] [data-kit-colors="status"] {
+  --color-green-50: var(--ok-bg);
+  --color-green-100: var(--ok-bg);
+  --color-green-200: var(--ok-bg);
+  --color-green-300: var(--ok);
+  --color-green-400: var(--ok);
+  --color-green-500: var(--ok);
+  --color-green-600: var(--ok);
+  --color-green-700: var(--ok);
+  --color-green-800: var(--ok);
+  --color-green-900: var(--ok);
+  --color-green-950: var(--ok-bg);
+  --color-emerald-50: var(--ok-bg);
+  --color-emerald-100: var(--ok-bg);
+  --color-emerald-200: var(--ok-bg);
+  --color-emerald-300: var(--ok);
+  --color-emerald-400: var(--ok);
+  --color-emerald-500: var(--ok);
+  --color-emerald-600: var(--ok);
+  --color-emerald-700: var(--ok);
+  --color-emerald-800: var(--ok);
+  --color-emerald-900: var(--ok);
+  --color-emerald-950: var(--ok-bg);
+  --color-lime-50: var(--ok-bg);
+  --color-lime-100: var(--ok-bg);
+  --color-lime-200: var(--ok-bg);
+  --color-lime-300: var(--ok);
+  --color-lime-400: var(--ok);
+  --color-lime-500: var(--ok);
+  --color-lime-600: var(--ok);
+  --color-lime-700: var(--ok);
+  --color-lime-800: var(--ok);
+  --color-lime-900: var(--ok);
+  --color-lime-950: var(--ok-bg);
+  --color-teal-50: var(--ok-bg);
+  --color-teal-100: var(--ok-bg);
+  --color-teal-200: var(--ok-bg);
+  --color-teal-300: var(--ok);
+  --color-teal-400: var(--ok);
+  --color-teal-500: var(--ok);
+  --color-teal-600: var(--ok);
+  --color-teal-700: var(--ok);
+  --color-teal-800: var(--ok);
+  --color-teal-900: var(--ok);
+  --color-teal-950: var(--ok-bg);
+  --color-red-50: var(--danger-bg);
+  --color-red-100: var(--danger-bg);
+  --color-red-200: var(--danger-bg);
+  --color-red-300: var(--danger);
+  --color-red-400: var(--danger);
+  --color-red-500: var(--danger);
+  --color-red-600: var(--danger);
+  --color-red-700: var(--danger);
+  --color-red-800: var(--danger);
+  --color-red-900: var(--danger);
+  --color-red-950: var(--danger-bg);
+  --color-rose-50: var(--danger-bg);
+  --color-rose-100: var(--danger-bg);
+  --color-rose-200: var(--danger-bg);
+  --color-rose-300: var(--danger);
+  --color-rose-400: var(--danger);
+  --color-rose-500: var(--danger);
+  --color-rose-600: var(--danger);
+  --color-rose-700: var(--danger);
+  --color-rose-800: var(--danger);
+  --color-rose-900: var(--danger);
+  --color-rose-950: var(--danger-bg);
+  --color-amber-50: var(--warn-bg);
+  --color-amber-100: var(--warn-bg);
+  --color-amber-200: var(--warn-bg);
+  --color-amber-300: var(--warn);
+  --color-amber-400: var(--warn);
+  --color-amber-500: var(--warn);
+  --color-amber-600: var(--warn);
+  --color-amber-700: var(--warn);
+  --color-amber-800: var(--warn);
+  --color-amber-900: var(--warn);
+  --color-amber-950: var(--warn-bg);
+  --color-yellow-50: var(--warn-bg);
+  --color-yellow-100: var(--warn-bg);
+  --color-yellow-200: var(--warn-bg);
+  --color-yellow-300: var(--warn);
+  --color-yellow-400: var(--warn);
+  --color-yellow-500: var(--warn);
+  --color-yellow-600: var(--warn);
+  --color-yellow-700: var(--warn);
+  --color-yellow-800: var(--warn);
+  --color-yellow-900: var(--warn);
+  --color-yellow-950: var(--warn-bg);
+  --color-orange-50: var(--warn-bg);
+  --color-orange-100: var(--warn-bg);
+  --color-orange-200: var(--warn-bg);
+  --color-orange-300: var(--warn);
+  --color-orange-400: var(--warn);
+  --color-orange-500: var(--warn);
+  --color-orange-600: var(--warn);
+  --color-orange-700: var(--warn);
+  --color-orange-800: var(--warn);
+  --color-orange-900: var(--warn);
+  --color-orange-950: var(--warn-bg);
+  --color-blue-50: var(--info-bg);
+  --color-blue-100: var(--info-bg);
+  --color-blue-200: var(--info-bg);
+  --color-blue-300: var(--info);
+  --color-blue-400: var(--info);
+  --color-blue-500: var(--info);
+  --color-blue-600: var(--info);
+  --color-blue-700: var(--info);
+  --color-blue-800: var(--info);
+  --color-blue-900: var(--info);
+  --color-blue-950: var(--info-bg);
+  --color-sky-50: var(--info-bg);
+  --color-sky-100: var(--info-bg);
+  --color-sky-200: var(--info-bg);
+  --color-sky-300: var(--info);
+  --color-sky-400: var(--info);
+  --color-sky-500: var(--info);
+  --color-sky-600: var(--info);
+  --color-sky-700: var(--info);
+  --color-sky-800: var(--info);
+  --color-sky-900: var(--info);
+  --color-sky-950: var(--info-bg);
+  --color-cyan-50: var(--info-bg);
+  --color-cyan-100: var(--info-bg);
+  --color-cyan-200: var(--info-bg);
+  --color-cyan-300: var(--info);
+  --color-cyan-400: var(--info);
+  --color-cyan-500: var(--info);
+  --color-cyan-600: var(--info);
+  --color-cyan-700: var(--info);
+  --color-cyan-800: var(--info);
+  --color-cyan-900: var(--info);
+  --color-cyan-950: var(--info-bg);
+  --color-indigo-50: var(--info-bg);
+  --color-indigo-100: var(--info-bg);
+  --color-indigo-200: var(--info-bg);
+  --color-indigo-300: var(--info);
+  --color-indigo-400: var(--info);
+  --color-indigo-500: var(--info);
+  --color-indigo-600: var(--info);
+  --color-indigo-700: var(--info);
+  --color-indigo-800: var(--info);
+  --color-indigo-900: var(--info);
+  --color-indigo-950: var(--info-bg);
+  --color-purple-50: var(--signal-bg);
+  --color-purple-100: var(--signal-bg);
+  --color-purple-200: var(--signal-bg);
+  --color-purple-300: var(--signal);
+  --color-purple-400: var(--signal);
+  --color-purple-500: var(--signal);
+  --color-purple-600: var(--signal);
+  --color-purple-700: var(--signal);
+  --color-purple-800: var(--signal);
+  --color-purple-900: var(--signal);
+  --color-purple-950: var(--signal-bg);
+  --color-violet-50: var(--signal-bg);
+  --color-violet-100: var(--signal-bg);
+  --color-violet-200: var(--signal-bg);
+  --color-violet-300: var(--signal);
+  --color-violet-400: var(--signal);
+  --color-violet-500: var(--signal);
+  --color-violet-600: var(--signal);
+  --color-violet-700: var(--signal);
+  --color-violet-800: var(--signal);
+  --color-violet-900: var(--signal);
+  --color-violet-950: var(--signal-bg);
+  --color-fuchsia-50: var(--signal-bg);
+  --color-fuchsia-100: var(--signal-bg);
+  --color-fuchsia-200: var(--signal-bg);
+  --color-fuchsia-300: var(--signal);
+  --color-fuchsia-400: var(--signal);
+  --color-fuchsia-500: var(--signal);
+  --color-fuchsia-600: var(--signal);
+  --color-fuchsia-700: var(--signal);
+  --color-fuchsia-800: var(--signal);
+  --color-fuchsia-900: var(--signal);
+  --color-fuchsia-950: var(--signal-bg);
+  --color-pink-50: var(--signal-bg);
+  --color-pink-100: var(--signal-bg);
+  --color-pink-200: var(--signal-bg);
+  --color-pink-300: var(--signal);
+  --color-pink-400: var(--signal);
+  --color-pink-500: var(--signal);
+  --color-pink-600: var(--signal);
+  --color-pink-700: var(--signal);
+  --color-pink-800: var(--signal);
+  --color-pink-900: var(--signal);
+  --color-pink-950: var(--signal-bg);
+}

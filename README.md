@@ -107,6 +107,8 @@ export function App() {
 
 **Both kits in one app:** import `@twentyfirstmedia/ui-core/themes.css` instead and switch with `<UIProvider kit="pro">` or `data-kit="pro"` on `<html>`.
 
+**Moving from shadcn/ui:** add `@import "@twentyfirstmedia/ui-core/shadcn.css";` and shadcn's buttons, inputs, cards, dialogs, menus, tables and tabs inside `data-kit` take on the kit's look, so you can move page by page ([guide](https://ui.twentyfirst.media/halo/shadcn/)).
+
 **Tailwind v4:** `@import "@twentyfirstmedia/halo/tailwind.css";` after `@import "tailwindcss";` maps every token to utilities (`bg-surface`, `text-ink`, `rounded-lg`, `shadow-card`).
 
 ## Theming

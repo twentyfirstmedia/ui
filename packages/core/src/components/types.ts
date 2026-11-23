@@ -1049,6 +1049,10 @@ export interface DataTableProps<R = any> extends BaseProps {
   rows: R[];
   rowKey?: string;
   selectable?: boolean;
+  /**
+   * Actions for the selected rows. `onClick` receives the selected rows the table knows (from
+   * `rows`); with server-side paging use the keys from `onSelectedChange` for the others.
+   */
   bulkActions?: {
     label: string;
     icon?: IconName;
@@ -1058,7 +1062,55 @@ export interface DataTableProps<R = any> extends BaseProps {
   renderExpanded?: (row: R) => ReactNode;
   stickyHeader?: boolean;
   maxHeight?: number | string;
+  /** The sort to start with when the table sorts itself (uncontrolled). */
   defaultSort?: { key: string; dir: "asc" | "desc" };
+  /**
+   * Controlled sort: the table draws this state and the sortable headers but does not sort the
+   * rows itself (sort them yourself, e.g. across all pages or on the server). `null` is unsorted.
+   */
+  sort?: { key: string; dir: "asc" | "desc" } | null;
+  /** A sortable header was clicked: ascending, then descending, then `null`. */
+  onSortChange?: (sort: { key: string; dir: "asc" | "desc" } | null) => void;
+  /**
+   * Controlled selection: the keys (`rowKey`) of the selected rows, also of rows on other pages,
+   * so a selection survives paging and can be set or cleared from outside.
+   */
+  selected?: (string | number)[];
+  /** The selection changed (a checkbox, select all, Clear, or a bulk action's `clear`). */
+  onSelectedChange?: (keys: (string | number)[]) => void;
+  /**
+   * Rows open as links: the address of a row. A click anywhere on the row opens it (except on
+   * checkboxes, links, buttons and inputs inside); ⌘/Ctrl-click and middle-click open it in a new
+   * tab. The first column's content becomes the row's link, so Tab reaches it and Enter opens it.
+   */
+  rowHref?: (row: R) => string;
+  /** The link component for `rowHref` (default `a`), e.g. Next.js `Link`. */
+  linkAs?: ElementType;
+  /**
+   * A row was clicked (anywhere except on its own controls) or, without `rowHref`, opened with
+   * Enter (the row is then focusable). With `rowHref` it runs before the link opens;
+   * `event.preventDefault()` stops the navigation.
+   */
+  onRowClick?: (row: R, event: MouseEvent | KeyboardEvent) => void;
+  /** Up to 600px of its own width, every row becomes a card with its column labels (like `Table`). */
+  stack?: boolean;
+  /** Rows per page: the table pages itself and shows `Pagination` under it. */
+  pageSize?: number;
+  /** Offer these page sizes in a menu next to the pages (e.g. `[20, 50, 100]`). */
+  pageSizes?: number[];
+  /** A page size was picked from `pageSizes`. */
+  onPageSizeChange?: (size: number) => void;
+  /** The current page (1-based), controlled with `onPageChange`. */
+  page?: number;
+  /** Start page when uncontrolled (default 1). */
+  defaultPage?: number;
+  /** A page was picked. */
+  onPageChange?: (page: number) => void;
+  /**
+   * Server-side paging: the number of rows across all pages. `rows` is then the current page and
+   * is shown as it is; the pages are counted from `rowCount` and `pageSize`.
+   */
+  rowCount?: number;
   toolbar?: ReactNode;
   columnToggle?: boolean;
   empty?: ReactNode;

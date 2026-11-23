@@ -29,6 +29,7 @@ export const guidePages = [
   "icons",
   "ai",
   "html",
+  "shadcn",
   "status-and-approvals",
   "changelog",
   "components",

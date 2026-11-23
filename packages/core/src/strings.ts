@@ -857,6 +857,9 @@ export interface UIStrings {
   conflictClear: string;
   conflictDecline: string;
   conflictDecisions: Record<"cleared" | "declined", string>;
+  rowsPerPage: string;
+  /** "21–40 of 134" */
+  rowRange: (from: string, to: string, total: string) => string;
   // @@KEYS
 }
 
@@ -1382,6 +1385,8 @@ export const DATA_TABLE_STRINGS: Pick<
   | "expandRow"
   | "bulkActions"
   | "clear"
+  | "rowsPerPage"
+  | "rowRange"
 > = {
   removeFilter: (filter) => `Remove filter ${filter}`,
   addFilter: "Filter",
@@ -1395,6 +1400,8 @@ export const DATA_TABLE_STRINGS: Pick<
   expandRow: "Expand row",
   bulkActions: "Bulk actions",
   clear: "Clear",
+  rowsPerPage: "Rows per page",
+  rowRange: (from, to, total) => `${from}–${to} of ${total}`,
 };
 
 /** Strings of the components in `developer.tsx`. */
