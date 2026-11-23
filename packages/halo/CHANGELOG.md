@@ -1,5 +1,16 @@
 # @twentyfirstmedia/halo
 
+## 0.11.0
+
+### Minor Changes
+
+- [#61](https://github.com/twentyfirstmedia/ui/pull/61) [`36ad547`](https://github.com/twentyfirstmedia/ui/commit/36ad547acb12e4f8af96232f165805f21464ee5c) Thanks [@robintrepte](https://github.com/robintrepte)! - AppShell: a top bar on the frame in sidebar mode. `topbar` adds a bar across the top; the brand (or `workspaces`) moves into its start and is exactly as wide as the sidebar below it, expanded or collapsed, `topStart` follows it (a search field or palette trigger), `topEnd` sits at the end and `topExtra` joins it. Frame, bar and sidebar form one L around the sheet (Halo: the dark frame, the sheet rounded where it meets them; Pro: bg-100 with a hairline to the sheet). With `fill` bar and sidebar stay in view while the sheet scrolls. On phones the bar is the sidebar's bar with `topEnd` on the right and `topStart` behind an icon button that opens it over the bar (`topStartIcon`, `topStartLabel`, or your own `topStartCompact`). On glass the bar sits on the glass frame. Without `topbar` nothing changes.
+
+### Patch Changes
+
+- Updated dependencies [[`36ad547`](https://github.com/twentyfirstmedia/ui/commit/36ad547acb12e4f8af96232f165805f21464ee5c)]:
+  - @twentyfirstmedia/ui-core@0.11.0
+
 ## 0.10.1
 
 ### Patch Changes
