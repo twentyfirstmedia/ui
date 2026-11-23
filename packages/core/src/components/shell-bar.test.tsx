@@ -99,4 +99,20 @@ describe("AppShell topbar", () => {
       screen.getByRole("button", { name: "Command palette" }).closest(".tf-shell-bar-find"),
     ).toBeTruthy();
   });
+
+  it("draws the brand dot unless brandDot is false", () => {
+    const { container, rerender } = render(shell({ topbar: true }));
+    expect(container.querySelectorAll(".tf-brand-dot").length).toBeGreaterThan(0);
+    rerender(shell({ topbar: true, brandDot: false }));
+    expect(container.querySelector(".tf-brand-dot")).toBeNull();
+    rerender(shell({ brandDot: false }));
+    expect(container.querySelector(".tf-brand-dot")).toBeNull();
+    rerender(
+      <AppShell brand="Admin" brandDot={false} dock={false}>
+        page
+      </AppShell>,
+    );
+    expect(container.querySelector(".tf-topbar .tf-brand")).toBeTruthy();
+    expect(container.querySelector(".tf-brand-dot")).toBeNull();
+  });
 });

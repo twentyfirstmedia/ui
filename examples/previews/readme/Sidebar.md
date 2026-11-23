@@ -12,7 +12,8 @@ links, item menus and a collapsed mode with icons only.
   `disabled`, `actions` (a "…" menu on hover and focus) and `items` for nested pages. Groups take
   `collapsible`, `defaultOpen` and an `action` such as "New project".
 - Collapsed, every label is a tooltip; a parent opens a flyout with its pages on hover, click or
-  →. Pass `storageKey` to remember the state and `shortcut` for ⌘B / Ctrl+B.
+  →. Pass `storageKey` to remember the state (also with a controlled `collapsed`: the stored value
+  reaches `onCollapsedChange` on mount) and `shortcut` for ⌘B / Ctrl+B.
 - `header` and `footer` take nodes or a function of `{ collapsed }`, e.g. a `WorkspaceSwitcher`
   and a `UserMenu` that turn compact.
 - On phones (≤ 760px) the sidebar becomes an off-canvas drawer behind a menu button: Escape and the

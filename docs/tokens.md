@@ -165,6 +165,7 @@ Both kits define the same token names. Pro maps its own scale (bg/fg/line ladder
 | `--panel-pad` | `{space-6}` | `{space-4}` | Inner padding of a panel. |
 | `--panel-gap` | `{space-4}` | `1px` | Gap between panels in a grid: the hairline in Pro, air between cards in Halo. |
 | `--glass-filter` | `blur(24px) saturate(180%) brightness(1.05)` / `blur(24px) saturate(160%) brightness(0.85)` | `blur(16px) saturate(130%) brightness(1.04)` / `blur(16px) saturate(120%) brightness(0.8)` | backdrop-filter of glass surfaces: blur, colour lift and a nudge towards the theme's side. |
+| `--glass-blur` | `blur(24px)` | `blur(16px)` | The blur of glass alone, for a layer on a glass pane that must keep the pane's tint (the AppShell top bar over scrolling content). |
 | `--glass-tint` | `62%` | `40%` | How strongly a tint (StatTile, tinted Card) colours the glass it sits on. |
 
 ## font

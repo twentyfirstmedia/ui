@@ -9,6 +9,11 @@ and the page on a sheet beside it, with an optional side panel and dock.
 - `fill` makes the shell the whole page: at least the viewport's height (`100dvh`), no outer radius,
   the sheet takes the rest of the height. On desktop the sidebar stays in view while the page
   scrolls; on phones the sheet starts right under the sidebar's bar.
+- `brandDot={false}` drops the status dot after the brand, e.g. next to a logo of your own.
+- With `fill` the page itself scrolls and the sidebar (and the top bar) stick to it. Do not put
+  `overflow-x: hidden` on `html` or `body`: it turns `body` into a scroll container that never
+  scrolls, and the sticky parts scroll away with the page. Use `overflow-x: clip` to cut off
+  sideways overflow instead.
 
 ```tsx
 // app/admin/layout.tsx: the shell is the page
@@ -33,7 +38,11 @@ starts under the bar, rounded where it meets them.
   that opens your command palette.
 - Content given to `topbar` itself goes between `topStart` and `topEnd`. `topExtra` goes to the
   bar's end; without the bar it stays at the top of the sheet as before.
-- On glass the bar sits on the glass frame like the sidebar.
+- On glass the bar sits on the glass frame like the sidebar: frame, bar and sidebar are one pane.
+  With `fill` the sheet scrolls under the bar, so the bar blurs what passes under it
+  (`--glass-blur`) without adding a tint of its own. For that the pane is drawn on a layer behind
+  the shell's content rather than on the shell itself (a backdrop-filter on the shell would make
+  every filter inside it see only the shell).
 
 ```tsx
 <AppShell fill navigation="sidebar" topbar brand="Admin" sidebarGroups={groups} active={section}
