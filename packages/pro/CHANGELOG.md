@@ -1,5 +1,13 @@
 # @twentyfirstmedia/pro
 
+## 0.10.1
+
+### Patch Changes
+
+- [#59](https://github.com/twentyfirstmedia/ui/pull/59) [`89da74a`](https://github.com/twentyfirstmedia/ui/commit/89da74abaa37848802e47852c854c353ec54ce81) Thanks [@robintrepte](https://github.com/robintrepte)! - shadcn bridge: fields keep their own horizontal padding. A search field with `pl-9` (or `ps-*`, `p-*`, `pr-*`, `pe-*`, also with variants) keeps it, so a leading icon no longer sits on the placeholder; the other side still gets the kit's padding. Fields without Tailwind classes can ask for icon room with `data-icon="leading"` or `"trailing"`.
+- Updated dependencies [[`89da74a`](https://github.com/twentyfirstmedia/ui/commit/89da74abaa37848802e47852c854c353ec54ce81)]:
+  - @twentyfirstmedia/ui-core@0.10.1
+
 ## 0.10.0
 
 ### Minor Changes
