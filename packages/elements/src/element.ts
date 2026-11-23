@@ -638,7 +638,8 @@ export class TfElement extends HTMLElement {
     if (this.hidden) return null;
     const C = (this.constructor as typeof TfElement).component;
     const props = this._props();
-    const node = createElement(C, props);
+    // a dialog element traps focus in its frame; the component inside renders in place
+    const node = createElement(C, this._def.dialog ? { ...props, inline: true } : props);
     return this._def.dialog
       ? createElement(DialogFrame, { onClose: props.onClose as (() => void) | undefined }, node)
       : node;

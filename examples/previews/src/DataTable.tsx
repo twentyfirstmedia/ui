@@ -55,9 +55,7 @@ const TONE: Record<string, Tone> = {
   Away: "warning",
 };
 function App() {
-  const f = React.useState<Record<string, string>>({
-      Team: "Engineering",
-    }),
+  const f = React.useState<Record<string, string>>({}),
     q = React.useState("");
   const rows = ROWS.filter(
     (r) =>
@@ -96,6 +94,10 @@ function App() {
           rows={rows}
           selectable
           stickyHeader
+          stack
+          rowHref={(r) => `#people/${r.id}`}
+          pageSize={4}
+          pageSizes={[4, 10, 25]}
           defaultSort={{
             key: "name",
             dir: "asc",

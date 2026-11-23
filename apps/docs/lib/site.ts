@@ -81,6 +81,7 @@ export const GUIDES: NavLink[] = [
   { href: "text", label: "Text and locale" },
   { href: "ai", label: "AI agents and MCP" },
   { href: "html", label: "Plain HTML and frameworks" },
+  { href: "shadcn", label: "Moving from shadcn/ui" },
   { href: "status-and-approvals", label: "Status and approvals" },
   { href: "changelog", label: "Changelog" },
 ];

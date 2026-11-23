@@ -241,6 +241,8 @@ function buildThemes(): void {
   for (const kit of KITS) css += "\n" + generated(kit, "tokens.scoped.css");
   for (const kit of KITS) css += "\n" + componentCss(kit, true);
   writeFileSync(join(out, "themes.css"), css);
+  // the shadcn/ui bridge: dresses shadcn primitives (by data-slot) in whichever kit is active
+  copyFileSync(join(ROOT, "packages", "core", "src", "shadcn.css"), join(out, "shadcn.css"));
   buildPresets(KITS, out, true);
 }
 

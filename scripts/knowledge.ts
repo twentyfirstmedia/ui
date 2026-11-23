@@ -41,6 +41,7 @@ export const GUIDE_ORDER = [
   "text",
   "ai",
   "html",
+  "shadcn",
   "status-and-approvals",
 ];
 

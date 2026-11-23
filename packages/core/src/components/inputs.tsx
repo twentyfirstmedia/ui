@@ -32,7 +32,7 @@ function Field(p: FieldProps, w: Wired, control: React.ReactNode) {
   return (
     <div className={cx("tf-field", p.className)} style={p.style}>
       {p.label && (
-        <label className="tf-field-label" htmlFor={w.id}>
+        <label className={cx("tf-field-label", p.hideLabel && "tf-sr-only")} htmlFor={w.id}>
           {p.label}
           {p.required && (
             <span className="tf-req" aria-hidden>

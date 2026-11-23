@@ -62,51 +62,82 @@ export const FOCUSABLE =
   'button:not([disabled]), [href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /**
- * Traps keyboard focus inside `ref` while mounted, closes on Escape and returns focus to the
- * element that had it before. Used by Modal, Drawer, CommandPalette and Wizard.
+ * Traps keyboard focus inside `ref` while `active` (default: while mounted): moves focus into it
+ * (an element marked `data-autofocus` or `autofocus` first, then the first text field, then the
+ * first focusable element), keeps Tab and Shift+Tab inside, closes on Escape and returns focus to
+ * the element that had it before. Pass `active` for overlays that stay mounted while closed or
+ * animate out: the trap starts each time it turns true (and the element is rendered) and releases,
+ * returning focus, when it turns false. Used by Modal, Drawer, ConfirmDialog, ExportDialog and
+ * CommandPalette.
  */
 export function useTrap<T extends HTMLElement>(
   ref: RefObject<T | null>,
   onClose?: () => void,
+  active = true,
 ): void {
   const cb = useRef(onClose);
   cb.current = onClose;
   useEffect(() => {
-    const root = ref.current;
+    if (!active) return;
+    // the element that had focus when the overlay opened gets it back when it closes
     const before = document.activeElement as HTMLElement | null;
-    if (!root) return;
-    if (!root.contains(document.activeElement)) {
-      const auto =
-        root.querySelector<HTMLElement>('[autofocus], input:not([type="checkbox"]), textarea') ||
-        root.querySelector<HTMLElement>(FOCUSABLE);
-      auto?.focus();
-    }
-    const k = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && cb.current) {
-        cb.current();
+    let release: (() => void) | undefined;
+    let frame = 0;
+    let tries = 0;
+    const start = () => {
+      const root = ref.current;
+      if (!root) {
+        // the overlay renders a frame later (a portal, an enter animation): wait for it briefly
+        if (tries++ < 10 && typeof requestAnimationFrame === "function")
+          frame = requestAnimationFrame(start);
         return;
       }
-      if (e.key !== "Tab") return;
-      const els = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
-        (x) => x.offsetParent !== null || x === document.activeElement,
-      );
-      if (!els.length) return;
-      const a = els[0] as HTMLElement;
-      const z = els[els.length - 1] as HTMLElement;
-      if (e.shiftKey && document.activeElement === a) {
-        e.preventDefault();
-        z.focus();
-      } else if (!e.shiftKey && document.activeElement === z) {
-        e.preventDefault();
-        a.focus();
+      if (!root.contains(document.activeElement)) {
+        const auto =
+          root.querySelector<HTMLElement>("[data-autofocus], [autofocus]") ||
+          root.querySelector<HTMLElement>(
+            'input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), textarea',
+          ) ||
+          root.querySelector<HTMLElement>(FOCUSABLE);
+        // no scrolling: the overlay is already in view (or fixed); a page under it must not jump
+        auto?.focus({ preventScroll: true });
       }
+      const k = (e: KeyboardEvent) => {
+        if (e.key === "Escape" && cb.current) {
+          cb.current();
+          return;
+        }
+        if (e.key !== "Tab") return;
+        const els = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+          (x) => x.offsetParent !== null || x === document.activeElement,
+        );
+        if (!els.length) return;
+        const a = els[0] as HTMLElement;
+        const z = els[els.length - 1] as HTMLElement;
+        if (e.shiftKey && document.activeElement === a) {
+          e.preventDefault();
+          z.focus();
+        } else if (!e.shiftKey && document.activeElement === z) {
+          e.preventDefault();
+          a.focus();
+        }
+      };
+      root.addEventListener("keydown", k);
+      release = () => root.removeEventListener("keydown", k);
     };
-    root.addEventListener("keydown", k);
+    start();
     return () => {
-      root.removeEventListener("keydown", k);
-      if (before && typeof before.focus === "function" && document.contains(before)) before.focus();
+      if (frame && typeof cancelAnimationFrame === "function") cancelAnimationFrame(frame);
+      release?.();
+      if (
+        before &&
+        before !== document.body &&
+        typeof before.focus === "function" &&
+        document.contains(before)
+      )
+        before.focus({ preventScroll: true });
     };
-  }, [ref]);
+  }, [ref, active]);
 }
 
 /** Measures the width of an element (for charts), or returns `fixed` when given. */

@@ -506,7 +506,10 @@ export function AppShell(p: AppShellProps) {
         </span>
       ) : null;
     return (
-      <div className={cx("tf-shell", "tf-shell-sidebar", p.className)} style={p.style}>
+      <div
+        className={cx("tf-shell", "tf-shell-sidebar", p.fill && "tf-shell-fill", p.className)}
+        style={p.style}
+      >
         <Sidebar
           variant="shell"
           groups={groups}
@@ -545,7 +548,7 @@ export function AppShell(p: AppShellProps) {
     );
   }
   return (
-    <div className={cx("tf-shell", p.className)} style={p.style}>
+    <div className={cx("tf-shell", p.fill && "tf-shell-fill", p.className)} style={p.style}>
       <TopBar
         brand={p.brand}
         tag={p.tag}

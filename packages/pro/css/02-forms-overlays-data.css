@@ -1189,6 +1189,52 @@ label.tf-menu-item {
   padding-left: 4px !important;
   padding-right: 0 !important;
 }
+/* Clickable rows (rowHref, onRowClick): the whole row opens it, hover and focus show it */
+.tf-dt-table tbody tr.is-clickable {
+  cursor: pointer;
+}
+.tf-dt-table tbody tr.is-clickable:hover td,
+.tf-dt-table tbody tr.is-clickable:focus-visible td,
+.tf-dt-table tbody tr.is-clickable:has(.tf-dt-rowlink:focus-visible) td {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.tf-dt-table tbody tr.is-clickable:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+.tf-dt-rowlink {
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+}
+.tf-dt-table tbody tr.is-clickable:hover .tf-dt-rowlink {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.tf-dt-rowlink:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+/* Built-in paging under the table: the range on the left, page size and pages on the right */
+.tf-dt-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px 16px;
+  padding: 0 8px 4px 16px;
+}
+.tf-dt-range {
+  margin-right: auto;
+  font: 500 13px/18px var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+.tf-dt-size {
+  width: auto;
+}
 .tf-dt-sort {
   display: inline-flex;
   align-items: center;

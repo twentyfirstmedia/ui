@@ -356,6 +356,25 @@
   .tf-table.stack tbody tr:hover td {
     background: transparent;
   }
+  /* cells without a label (checkbox, expand button, actions) get no empty label before them */
+  .tf-table.stack td:not([data-label])::before {
+    content: none;
+  }
+  /* DataTable cards: the checkbox and the expand button sit at the start of the card */
+  .tf-table.stack td.tf-dt-sel,
+  .tf-table.stack td.tf-dt-exp {
+    display: inline-flex;
+    justify-content: flex-start;
+    width: auto;
+    padding: 4px 12px 4px 0 !important;
+  }
+  .tf-table.stack tbody tr.is-clickable:hover td {
+    background: var(--accent);
+  }
+  .tf-table.stack tbody tr.is-clickable {
+    padding-inline: 8px;
+    border-radius: var(--radius-sm);
+  }
 }
 
 /* ── Phone: components ── */
@@ -553,6 +572,26 @@
   .tf-shell.tf-shell-sidebar {
     grid-template-columns: minmax(0, 1fr);
     padding: 0 8px 8px;
+  }
+}
+/* AppShell fill on phones: the bar keeps its height and the sheet takes the rest (no stretched
+   rows); on desktop the sidebar stays in view while the page scrolls */
+@media (max-width: 760px) {
+  .tf-shell.tf-shell-sidebar.tf-shell-fill {
+    display: flex;
+    flex-direction: column;
+  }
+  .tf-shell.tf-shell-sidebar.tf-shell-fill > .tf-sheet {
+    flex: 1 1 auto;
+  }
+}
+@media (min-width: 761px) {
+  .tf-shell.tf-shell-fill > .tf-sidebar.shell {
+    position: sticky;
+    top: 8px;
+    align-self: start;
+    height: calc(100dvh - 16px);
+    box-sizing: border-box;
   }
 }
 

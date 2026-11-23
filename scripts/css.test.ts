@@ -25,6 +25,27 @@ describe("component css", () => {
     }
   });
 
+  it("keeps the shadcn bridge on kit tokens and inside [data-kit]", () => {
+    const css = readFileSync(join(ROOT, "packages/core/src/shadcn.css"), "utf8").replace(
+      /\/\*[\s\S]*?\*\//g,
+      "",
+    );
+    css.split("\n").forEach((line, i) => {
+      expect(COLOUR.test(line), `shadcn.css:${i + 1}: ${line.trim()}`).toBe(false);
+    });
+    // every selector of every rule starts at [data-kit], so a host app outside the kit is untouched
+    for (const m of css.matchAll(/(^|[}\n])\s*([^@{}][^{}]*)\{/g)) {
+      const sel = (m[2] as string).trim();
+      if (!sel || sel.startsWith("@") || /^(from|to|\d)/.test(sel)) continue;
+      for (const part of sel.split(/,(?![^(]*\))/))
+        expect(part.trim().startsWith("[data-kit]"), `shadcn.css selector: ${part.trim()}`).toBe(
+          true,
+        );
+    }
+    // no @layer: unlayered rules win over Tailwind's layered utilities
+    expect(css).not.toContain("@layer");
+  });
+
   it("scopes rules to the kit and prefixes keyframes", () => {
     const out = scope(
       "halo",

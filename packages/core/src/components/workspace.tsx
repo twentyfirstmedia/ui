@@ -74,7 +74,7 @@ export function Drawer(p: DrawerProps) {
   const t = useStrings(WORKSPACE_STRINGS);
   const ref = React.useRef<HTMLElement>(null);
   const pr = usePresence(p.open ?? true);
-  useTrap(ref, p.onClose);
+  useTrap(ref, p.onClose, (p.open ?? true) && pr.mounted);
   if (!pr.mounted) return null;
   return (
     <div
@@ -135,7 +135,7 @@ export function CommandPalette(p: CommandPaletteProps) {
     idx = React.useState(0),
     ref = React.useRef<HTMLDivElement>(null),
     pr = usePresence(p.open ?? true);
-  useTrap(ref, p.onClose);
+  useTrap(ref, p.onClose, (p.open ?? true) && pr.mounted);
   const ql = q[0].toLowerCase().trim(),
     all = p.items || [];
   const res = (
