@@ -421,6 +421,41 @@ select.tf-input {
 .tf-shell-sidebar > .tf-sidebar.shell {
   border-radius: 0;
 }
+/* with the topbar: bar and sidebar are one L on the frame, a hairline between it and the sheet */
+.tf-shell.tf-shell-sidebar.tf-shell-has-bar {
+  padding: 0;
+  row-gap: 0;
+}
+.tf-shell-bar,
+.tf-shell-has-bar > .tf-sidebar.shell {
+  background: var(--frame);
+}
+@media (min-width: 761px) {
+  .tf-shell-bar-main {
+    margin-left: calc(-1 * var(--line-width));
+    padding: 0 var(--space-4) 0 calc(var(--space-4) + var(--line-width));
+    box-shadow: inset 0 calc(-1 * var(--line-width)) 0 var(--line);
+  }
+}
+/* phones: the sidebar's bar and the topbar are one row on the frame, a hairline above the sheet */
+@media (max-width: 760px) {
+  .tf-shell.tf-shell-sidebar.tf-shell-has-bar,
+  .tf-shell.tf-shell-sidebar.tf-shell-has-bar.tf-shell-fill {
+    padding: 0;
+    column-gap: 0;
+    row-gap: var(--line-width);
+  }
+  .tf-shell-has-bar > .tf-sidebar-bar {
+    background: var(--frame);
+  }
+  .tf-shell-has-bar > .tf-shell-bar {
+    padding-right: var(--space-2);
+  }
+}
+.tf-shell-has-bar > .tf-sheet,
+.tf-shell-has-bar.tf-shell-fill > .tf-sheet {
+  border-radius: 0;
+}
 .tf-topbar,
 .tf-shell .tf-topbar {
   border-radius: 0;

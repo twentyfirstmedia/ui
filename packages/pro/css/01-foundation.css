@@ -1036,6 +1036,102 @@ select.tf-input {
   display: grid;
   grid-template-rows: minmax(0, 1fr);
 }
+/* AppShell topbar in sidebar mode: a bar across the frame, the brand above the sidebar and as
+   wide as it, the sheet under the bar and beside the sidebar. Frame, bar and sidebar are one L. */
+.tf-shell.tf-shell-sidebar.tf-shell-has-bar {
+  grid-template-rows: auto minmax(0, 1fr);
+  padding: 0 8px 8px 0;
+}
+/* a shell that is the page: the sheet runs to the edges, rounded only where it meets the L */
+.tf-shell.tf-shell-sidebar.tf-shell-has-bar.tf-shell-fill {
+  padding: 0;
+}
+.tf-shell-bar {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: center;
+  height: var(--topbar-h);
+  color: var(--on-frame);
+}
+/* the brand takes the sidebar's width (it adds none of its own) */
+.tf-shell-bar-brand {
+  contain: inline-size;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  min-width: 0;
+  padding: 0 12px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.tf-shell-has-bar:has(> .tf-sidebar.collapsed) .tf-shell-bar-brand {
+  justify-content: center;
+  padding: 0 8px;
+}
+.tf-shell-bar-brand > .tf-brand,
+.tf-shell-bar-brand > .tf-pop-anchor,
+.tf-shell-bar-brand > .tf-wssw {
+  min-width: 0;
+}
+.tf-shell-bar-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  min-width: 0;
+  padding: 0 var(--space-6);
+  box-sizing: border-box;
+}
+.tf-shell-bar-start {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 1 420px;
+  min-width: 0;
+}
+.tf-shell-bar-start > * {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.tf-shell-bar-mid {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.tf-shell-bar-end {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  margin-left: auto;
+}
+.tf-shell-bar-find {
+  display: none;
+}
+.tf-shell-has-bar > .tf-sidebar.shell {
+  grid-column: 1;
+  grid-row: 2;
+  padding-top: 4px;
+}
+.tf-shell-has-bar > .tf-sheet {
+  grid-column: 2;
+  grid-row: 2;
+}
+.tf-shell-has-bar.tf-shell-fill > .tf-sheet {
+  border-radius: 0 0 0 0;
+}
+/* things on the bar read the frame's colours */
+.tf-shell-bar .tf-iconbtn-ghost {
+  color: var(--on-frame-muted);
+}
+.tf-shell-bar .tf-iconbtn-ghost:hover {
+  background: var(--frame-hover);
+  color: var(--on-frame);
+}
 .tf-shell-tools {
   display: flex;
   justify-content: flex-end;

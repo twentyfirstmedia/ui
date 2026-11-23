@@ -202,6 +202,8 @@ export interface UIStrings {
   /** FloatingLayout bottom sheet handle */
   expandPanel: string;
   collapsePanel: string;
+  /** AppShell top bar on phones: closes the search that opened over the bar */
+  closeSearch: string;
   /* Site: ChatLauncher, CookieConsent */
   assistant: string;
   openAssistant: string;
@@ -1747,7 +1749,13 @@ export const SELECT_MENU_STRINGS: Pick<UIStrings, "options"> = {
 /** Strings of the components in `shell.tsx`. */
 export const SHELL_STRINGS: Pick<
   UIStrings,
-  "tools" | "quickActions" | "expandRail" | "collapseRail" | "expandPanel" | "collapsePanel"
+  | "tools"
+  | "quickActions"
+  | "expandRail"
+  | "collapseRail"
+  | "expandPanel"
+  | "collapsePanel"
+  | "closeSearch"
 > = {
   tools: "Tools",
   quickActions: "Quick actions",
@@ -1755,6 +1763,7 @@ export const SHELL_STRINGS: Pick<
   collapseRail: "Icons only",
   expandPanel: "Expand panel",
   collapsePanel: "Collapse panel",
+  closeSearch: "Close search",
 };
 
 /** Strings of the components in `site.tsx`. */

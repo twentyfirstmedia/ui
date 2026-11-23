@@ -4,9 +4,9 @@ import { useStrings } from "../context.js";
 import { SHELL_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { cx, reduced } from "../cx.js";
-import { Avatar } from "./foundation.js";
+import { Avatar, IconButton } from "./foundation.js";
 import { Tooltip } from "./overlays.js";
-import { useControlled } from "../hooks.js";
+import { useControlled, useId } from "../hooks.js";
 import { Sidebar, UserMenu } from "./navigation.js";
 import { WorkspaceSwitcher } from "./admin.js";
 import type {
@@ -483,7 +483,86 @@ const DOCK = (): DockItem[] => [
   },
 ];
 
+/** The AppShell's bar across the frame in sidebar mode (see `AppShellProps.topbar`). */
+function ShellBar(p: {
+  brand: React.ReactNode;
+  shell: AppShellProps;
+  find: boolean;
+  setFind: (open: boolean) => void;
+}) {
+  const t = useStrings(SHELL_STRINGS);
+  const s = p.shell;
+  const startRef = React.useRef<HTMLDivElement>(null);
+  const findRef = React.useRef<HTMLButtonElement>(null);
+  const id = useId("shellbar");
+  // the search opened over the bar on phones: focus goes into it, Escape closes it again
+  React.useEffect(() => {
+    if (!p.find) return;
+    startRef.current
+      ?.querySelector<HTMLElement>(
+        "input, textarea, button, [href], [tabindex]:not([tabindex='-1'])",
+      )
+      ?.focus();
+  }, [p.find]);
+  const end = s.topExtra != null || s.topEnd != null;
+  return (
+    <header className={cx("tf-shell-bar", p.find && "find-open")}>
+      <div className="tf-shell-bar-brand">{p.brand}</div>
+      <div className="tf-shell-bar-main">
+        {s.topStart != null && (
+          <div
+            ref={startRef}
+            id={`${id}-start`}
+            className="tf-shell-bar-start"
+            onKeyDown={(e) => {
+              if (e.key === "Escape" && p.find) {
+                e.stopPropagation();
+                p.setFind(false);
+                findRef.current?.focus();
+              }
+            }}
+          >
+            {s.topStart}
+          </div>
+        )}
+        {s.topStart != null &&
+          (s.topStartCompact != null && !p.find ? (
+            <div className="tf-shell-bar-find">{s.topStartCompact}</div>
+          ) : (
+            <IconButton
+              ref={findRef}
+              className="tf-shell-bar-find"
+              icon={p.find ? "x" : s.topStartIcon || "search"}
+              label={p.find ? t.closeSearch : s.topStartLabel || t.search}
+              variant="ghost"
+              aria-expanded={p.find}
+              aria-controls={`${id}-start`}
+              onClick={() => p.setFind(!p.find)}
+            />
+          ))}
+        {typeof s.topbar !== "boolean" && s.topbar != null && (
+          <div className="tf-shell-bar-mid">{s.topbar}</div>
+        )}
+        {end && (
+          <div className="tf-shell-bar-end">
+            {s.topExtra}
+            {s.topEnd}
+          </div>
+        )}
+      </div>
+    </header>
+  );
+}
+
 export function AppShell(p: AppShellProps) {
+  const bar = p.navigation === "sidebar" && p.topbar != null && p.topbar !== false;
+  // with the bar the brand sits above the sidebar, so the shell follows the collapsed state
+  const [collapsed, setCollapsed] = useControlled(
+    p.sidebar?.collapsed,
+    !!p.sidebar?.defaultCollapsed,
+    p.sidebar?.onCollapsedChange,
+  );
+  const [find, setFind] = React.useState(false);
   if (p.navigation === "sidebar") {
     const groups = p.sidebarGroups || [
       {
@@ -507,9 +586,17 @@ export function AppShell(p: AppShellProps) {
       ) : null;
     return (
       <div
-        className={cx("tf-shell", "tf-shell-sidebar", p.fill && "tf-shell-fill", p.className)}
+        className={cx(
+          "tf-shell",
+          "tf-shell-sidebar",
+          bar && "tf-shell-has-bar",
+          bar && find && "tf-shell-find",
+          p.fill && "tf-shell-fill",
+          p.className,
+        )}
         style={p.style}
       >
+        {bar && <ShellBar brand={brand(collapsed)} shell={p} find={find} setFind={setFind} />}
         <Sidebar
           variant="shell"
           groups={groups}
@@ -527,6 +614,7 @@ export function AppShell(p: AppShellProps) {
             ) : null
           }
           {...p.sidebar}
+          {...(bar ? { collapsed, onCollapsedChange: setCollapsed } : null)}
         />
         <div
           className={cx("tf-sheet", !p.railTop && "tf-sheet-norail", !p.side && "tf-sheet-2")}
@@ -534,7 +622,7 @@ export function AppShell(p: AppShellProps) {
         >
           {p.railTop && <SideRail top={p.railTop} bottom={p.railBottom} />}
           <main key={p.contentKey} className={cx("tf-main", p.dock !== false && "tf-main-dock")}>
-            {p.topExtra && <div className="tf-shell-tools">{p.topExtra}</div>}
+            {p.topExtra && !bar && <div className="tf-shell-tools">{p.topExtra}</div>}
             {p.children}
           </main>
           {p.side || null}

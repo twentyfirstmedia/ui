@@ -261,6 +261,11 @@
 [data-surface="glass"] .tf-shell .tf-topbar {
   background: transparent;
 }
+/* the topbar of a filling shell stays on top while the sheet scrolls under it: glass of its own */
+[data-surface="glass"] .tf-shell.tf-shell-has-bar.tf-shell-fill > .tf-shell-bar {
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+}
 
 /* switch knobs stay solid on glass */
 .tf-glass .tf-switch::after,

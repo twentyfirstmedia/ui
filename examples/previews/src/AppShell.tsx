@@ -1,4 +1,11 @@
-import { AppShell, PageHeader, Panel } from "@twentyfirstmedia/ui-core";
+import {
+  AppShell,
+  Button,
+  IconButton,
+  PageHeader,
+  Panel,
+  SearchField,
+} from "@twentyfirstmedia/ui-core";
 import type { SidebarGroup } from "@twentyfirstmedia/ui-core";
 
 const GROUPS: SidebarGroup[] = [
@@ -22,7 +29,17 @@ export default function Preview() {
   return (
     <AppShell
       navigation="sidebar"
+      topbar
       brand="Admin"
+      topStart={<SearchField placeholder="Search orders" shortcut="⌘K" />}
+      topEnd={
+        <>
+          <IconButton icon="bell" label="Notifications" variant="ghost" />
+          <Button size="sm" variant="secondary">
+            New order
+          </Button>
+        </>
+      }
       sidebarGroups={GROUPS}
       active="orders"
       user={{ name: "Mara Ellis", email: "mara@example.com" }}

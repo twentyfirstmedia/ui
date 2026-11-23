@@ -17,3 +17,29 @@ and the page on a sheet beside it, with an optional side panel and dock.
   {children}
 </AppShell>
 ```
+
+## Top bar
+
+`topbar` adds a bar across the top of the frame in sidebar mode. The brand (or `workspaces`) moves
+into its start and is exactly as wide as the sidebar below it, expanded or collapsed, so both read
+as one column. `topStart` follows the brand (a `SearchField` or a command palette trigger), `topEnd`
+sits at the end (buttons, menus). Frame, bar and sidebar form one L around the sheet; the sheet
+starts under the bar, rounded where it meets them.
+
+- With `fill` the bar and the sidebar stay in view while the sheet scrolls under the bar.
+- On phones the bar is the sidebar's bar (menu button and brand) with `topEnd` on the right.
+  `topStart` sits behind an icon button (`topStartIcon`, `topStartLabel`) and opens over the bar;
+  Escape closes it. Pass `topStartCompact` to show something else there, e.g. an `IconButton`
+  that opens your command palette.
+- Content given to `topbar` itself goes between `topStart` and `topEnd`. `topExtra` goes to the
+  bar's end; without the bar it stays at the top of the sheet as before.
+- On glass the bar sits on the glass frame like the sidebar.
+
+```tsx
+<AppShell fill navigation="sidebar" topbar brand="Admin" sidebarGroups={groups} active={section}
+  topStart={<SearchField placeholder="Search orders" shortcut="⌘K" bindShortcut />}
+  topEnd={<><IconButton icon="bell" label="Notifications" variant="ghost" /><Button size="sm" variant="secondary">New order</Button></>}
+  user={{ name, email }} dock={false}>
+  {children}
+</AppShell>
+```

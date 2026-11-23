@@ -460,6 +460,27 @@ export interface AppShellProps extends BaseProps {
   workspaces?: WorkspaceSwitcherProps;
   /** The account menu's entries (with `navigation="sidebar"` at the foot of the sidebar). */
   userMenu?: (MenuItem | "-")[];
+  /**
+   * With `navigation="sidebar"`: a bar across the top of the frame. The brand (or `workspaces`)
+   * moves into its start, as wide as the sidebar below it (expanded or collapsed); `topStart`
+   * follows it, `topEnd` sits at the end. Frame, bar and sidebar read as one L around the sheet.
+   * Content given here goes between `topStart` and `topEnd`. On phones the bar is the sidebar's
+   * bar (menu button and brand) with `topEnd` on the right and `topStart` behind an icon button.
+   */
+  topbar?: boolean | ReactNode;
+  /** With `topbar`: right after the brand, e.g. a search field or a command palette trigger. */
+  topStart?: ReactNode;
+  /** With `topbar`: at the end of the bar (buttons, menus); `topExtra` goes there too. */
+  topEnd?: ReactNode;
+  /**
+   * With `topbar` on phones: what stands in for `topStart` (default: an icon button that opens
+   * `topStart` over the bar).
+   */
+  topStartCompact?: ReactNode;
+  /** The icon of that button (default `search`). */
+  topStartIcon?: IconName;
+  /** The accessible name of that button (default "Search"). */
+  topStartLabel?: string;
   children?: ReactNode;
 }
 export interface StaggerProps extends BaseProps {
