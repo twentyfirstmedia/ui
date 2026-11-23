@@ -327,6 +327,12 @@ Notiz (Robin: FollowerPilot hat den Admin auf 0.9.0 umgestellt und listet, was f
 
 Notiz: Die erste Zelle wird zum echten Link der Zeile (Tab, Enter, Mittelklick, Prefetch). Ein Klick auf eine andere Stelle der Zeile löst diesen Link aus, damit ein Router-Link clientseitig navigiert; ⌘/Strg-Klick und Mittelklick öffnen einen neuen Tab, eigene Bedienelemente der Zeile bleiben unberührt. Gesteuerte Sortierung sortiert nicht selbst; die Auswahl hält Schlüssel auch von Zeilen anderer Seiten. Für Serverseiten gibt es `rowCount`. Die gestapelten Karten bekamen für Zellen ohne Spaltennamen ein leeres Label mit Abstand; das fällt jetzt weg. Die shadcn-Brücke nutzt nur Kit-Tokens, steht ohne `@layer` (gewinnt gegen Tailwinds Utilities) und wirkt nur unter `[data-kit]`. Farben brauchen nichts, weil beide Kits shadcns Variablennamen schon definieren. Die Zuordnung von Tailwinds Farbpalette zu den Statusfarben ist mit `data-kit-colors="status"` zuschaltbar, weil Diagramme die Palette auch absichtlich nutzen. Die Vorlage `admin-compat.css` aus FollowerPilot lag nicht im Repo; die Brücke ist nach der Liste aus dem Auftrag gebaut.
 
+### Phase 34: shadcn-Brücke, Felder mit Icon (0.10.1)
+- [x] Felder behalten ihr eigenes Innenpolster links und rechts (`pl-*`, `ps-*`, `p-*`, `pr-*`, `pe-*`, auch mit Varianten), Haken `data-icon="leading"`/`"trailing"`
+- [x] Test in beiden Kits und beiden Dichten (`e2e/shadcn.spec.ts`), Anleitung ergänzt
+
+Notiz (Meldung aus FollowerPilot): `padding-inline` der Brücke überschrieb das `pl-9` der shadcn-Suchfelder, das Icon lag auf dem Platzhalter. Die Brücke setzt das Polster jetzt je Seite und nur, wenn das Feld diese Seite nicht selbst setzt; die Erkennung läuft über die Klassennamen in `:where()`, damit die Spezifität gleich bleibt.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`

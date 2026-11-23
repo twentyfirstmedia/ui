@@ -107,7 +107,6 @@
 
 [data-kit] :is([data-slot="input"], [data-slot="select-trigger"]) {
   height: var(--density-control);
-  padding-inline: var(--density-pad-x);
   border: 0;
   border-radius: var(--field-radius);
   background: var(--surface);
@@ -122,7 +121,7 @@
   height: var(--control-sm);
 }
 [data-kit] [data-slot="textarea"] {
-  padding: 10px var(--density-pad-x);
+  padding-block: 10px;
   border: 0;
   border-radius: var(--radius-md);
   background: var(--surface);
@@ -132,6 +131,61 @@
   font-size: var(--density-font-size);
   line-height: var(--density-line-height);
   font-weight: 500;
+}
+/* Horizontal padding of fields, one side at a time: a field that sets a side itself keeps it.
+   shadcn search fields put an icon in front with `pl-8`/`pl-9`/`pl-10` (or `ps-*`), and an
+   action at the end with `pr-*`/`pe-*`; `p-*` sets both. Variants (`md:pl-9`) count too. Fields
+   without Tailwind can ask for room with `data-icon="leading"` or `data-icon="trailing"`. */
+[data-kit]
+  :is([data-slot="input"], [data-slot="select-trigger"], [data-slot="textarea"]):not(
+    :where(
+      [class^="pl-"],
+      [class*=" pl-"],
+      [class*=":pl-"],
+      [class^="ps-"],
+      [class*=" ps-"],
+      [class*=":ps-"],
+      [class^="p-"],
+      [class*=" p-"],
+      [class*=":p-"],
+      [data-icon="leading"]
+    )
+  ) {
+  padding-inline-start: var(--density-pad-x);
+}
+[data-kit]
+  :is([data-slot="input"], [data-slot="select-trigger"], [data-slot="textarea"]):not(
+    :where(
+      [class^="pr-"],
+      [class*=" pr-"],
+      [class*=":pr-"],
+      [class^="pe-"],
+      [class*=" pe-"],
+      [class*=":pe-"],
+      [class^="p-"],
+      [class*=" p-"],
+      [class*=":p-"],
+      [data-icon="trailing"]
+    )
+  ) {
+  padding-inline-end: var(--density-pad-x);
+}
+/* room for an icon (about 16px) at the start or the end, measured from the control's height */
+[data-kit]
+  :is(
+    [data-slot="input"],
+    [data-slot="select-trigger"],
+    [data-slot="textarea"]
+  )[data-icon="leading"] {
+  padding-inline-start: calc(var(--density-control) * 0.5 + 16px);
+}
+[data-kit]
+  :is(
+    [data-slot="input"],
+    [data-slot="select-trigger"],
+    [data-slot="textarea"]
+  )[data-icon="trailing"] {
+  padding-inline-end: calc(var(--density-control) * 0.5 + 16px);
 }
 [data-kit] :is([data-slot="input"], [data-slot="textarea"])::placeholder {
   color: var(--muted-foreground);
