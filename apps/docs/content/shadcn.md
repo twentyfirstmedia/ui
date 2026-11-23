@@ -50,6 +50,19 @@ It follows the kit's settings: compact and comfortable density, light and dark, 
 
 The file is not in a CSS layer on purpose: it wins over Tailwind's utilities, which live in `@layer utilities`, so a button keeps the kit's height even when its classes say `h-9`. Utilities for other properties (width, margins, grid and flex) keep working.
 
+## Fields with an icon
+
+Fields get the kit's horizontal padding one side at a time, and a side the field sets itself wins. A shadcn search field keeps its `pl-9` (also `ps-*`, `p-*` and variants like `md:pl-9`), so the icon in front does not sit on the placeholder; the other side still gets the kit's padding. A field without Tailwind classes asks for room with `data-icon`:
+
+```tsx
+<div className="relative">
+  <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2" />
+  <Input className="pl-9" placeholder="Search customers" />
+</div>
+
+<input data-slot="input" data-icon="leading" />  {/* or "trailing" */}
+```
+
 ## Tailwind colours in ported pages
 
 Pages written for shadcn often colour states with Tailwind's palette: `bg-green-100 text-green-800` for paid, `text-red-600` for failed. Add `data-kit-colors="status"` next to `data-kit` and those utilities draw the kit's status colours:
