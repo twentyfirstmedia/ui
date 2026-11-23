@@ -9,7 +9,7 @@
  *   Free (CC BY 4.0), fitted the same way.
  *
  * Every drawing is centred on the 24px grid (as the kit's own icons are). Names are camelCase;
- * brands start with `brand`. The kit's own 93 icons (packages/core/src/icons.ts) stay as they are
+ * brands start with `brand`. The kit's own 97 icons (packages/core/src/icons.ts) stay as they are
  * and are only listed here for the categories.
  *
  *   node scripts/icons.ts          write
@@ -395,6 +395,7 @@ const CATEGORIES: Record<string, string[]> = {
     "volume-1",
     "volume-2",
     "volume-x",
+    "volume-off=volume-x",
     "circle-play",
     "circle-pause",
     "circle-stop",
@@ -1045,6 +1046,9 @@ function centre(d: string, scale = 1): string {
   return svgpath(p.toString()).translate(dx, dy).rel().round(2).toString();
 }
 
+/** Library icons that moved into the kit's own set; kept as exports for existing imports. */
+const FORMER_LIBRARY = ["volume", "trophy", "receipt"];
+
 export function build(): string {
   const lucide = JSON.parse(
     readFileSync(require.resolve("lucide-static/icon-nodes.json"), "utf8"),
@@ -1156,6 +1160,15 @@ export function build(): string {
     lines.push(filled(b.name, centre(d, 20 / 24)));
   }
   categories["Brands"] = brands;
+  // names that were library icons until the kit's own set took them over (0.10): still exported so
+  // existing imports keep working; they draw the kit's own icon and need no registration
+  for (const n of FORMER_LIBRARY) {
+    const kit = (ICON_PATHS as Record<string, string>)[n];
+    if (!kit) throw new Error(`former library icon ${n} is not in the kit's own set`);
+    lines.push(
+      `/** @deprecated Part of the kit's own set since 0.10: use the name directly, no \`registerIcons\` needed. */\nexport const ${n}: string = "${kit}";`,
+    );
+  }
   if (missing.length) throw new Error(`not found: ${missing.join(", ")}`);
   for (const c of core) if (!seen.has(c)) throw new Error(`kit icon ${c} has no category`);
 

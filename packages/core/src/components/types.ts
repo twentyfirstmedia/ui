@@ -80,6 +80,13 @@ export interface IconButtonProps extends BaseProps, NativeButtonProps {
   disabled?: boolean;
   /** Render the single child element (a link) with the button's look; the icon is placed inside it. */
   asChild?: boolean;
+  /**
+   * Render a link instead of a button (middle-click, ⌘-click, prefetch): `label` stays its
+   * accessible name and tooltip. Use `linkAs` for a router link (e.g. Next.js `Link`).
+   */
+  href?: string;
+  /** The link component for `href` (default `a`), e.g. Next.js `Link`. */
+  linkAs?: ElementType;
   children?: ReactNode;
 }
 export interface ChipProps extends BaseProps {
@@ -114,6 +121,8 @@ export interface AvatarStackProps extends BaseProps {
 }
 export interface FieldProps extends BaseProps {
   label?: string;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   hint?: string;
   error?: string;
   /** Form field name: the value's key in `Form`, and where its validation message shows. */
@@ -147,6 +156,8 @@ export interface SearchFieldProps extends BaseProps {
   placeholder?: string;
   /** Accessible name (default: the placeholder, or "Search"). */
   label?: string;
+  /** Accepted for uniform filter bars; this control never shows its label (it is always the accessible name only). */
+  hideLabel?: boolean;
   /** The key hint, e.g. "⌘K" (hidden on touch screens). */
   shortcut?: string;
   /** ⌘/Ctrl + the hint's last key (K for "⌘K") focuses the field, except while typing elsewhere. */
@@ -434,6 +445,12 @@ export interface AppShellProps extends BaseProps {
    * `top` (default): navigation in the top bar, tools in the side rail. `sidebar`: a labelled
    * sidebar on the frame, with groups, nesting and a drawer on phones.
    */
+  /**
+   * The shell is the whole page: at least the viewport's height (100dvh), no outer radius, the
+   * sheet fills the rest; on desktop the sidebar stays in view while the page scrolls, on phones
+   * the sheet starts right under the sidebar's bar.
+   */
+  fill?: boolean;
   navigation?: "top" | "sidebar";
   /** With `navigation="sidebar"`: groups instead of the flat `nav` list. */
   sidebarGroups?: SidebarGroup[];
@@ -590,6 +607,11 @@ export interface ModalProps extends BaseProps {
   children?: ReactNode;
   /** Optional: with `open` the component stays mounted while it animates out; without it, render it only while open. */
   open?: boolean;
+  /**
+   * Shown in place, as part of a page or a demo: no focus trap (focus stays where it is, Tab and
+   * Escape behave as on the page). Without it the dialog traps focus while open.
+   */
+  inline?: boolean;
 }
 /** Mounts a demo page with a "Replay motion" button that re-runs every entrance. */
 export interface SubNavItem {
@@ -740,6 +762,8 @@ export interface FormFieldProps extends BaseProps {
   /** Field name inside a `Form`: the field shows that name's validation message. */
   name?: string;
   label?: ReactNode;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   required?: boolean;
   optional?: boolean;
   hint?: ReactNode;
@@ -786,6 +810,8 @@ export interface TextFieldProps extends Omit<FormFieldProps, "children"> {
 }
 export interface RadioGroupProps extends BaseProps {
   label?: string;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   options: (string | Option)[];
   value?: string;
   defaultValue?: string;
@@ -804,6 +830,8 @@ export interface SegmentedProps extends BaseProps {
 }
 export interface ComboboxProps extends BaseProps {
   label?: string;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   options: (string | Option)[];
   value?: string | string[] | null;
   defaultValue?: string | string[];
@@ -817,6 +845,8 @@ export interface ComboboxProps extends BaseProps {
 }
 export interface TagInputProps extends BaseProps {
   label?: string;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   value?: string[];
   defaultValue?: string[];
   onChange?: (v: string[]) => void;
@@ -830,6 +860,8 @@ export interface DateRange {
 }
 export interface DatePickerProps extends BaseProps {
   label?: string;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   range?: boolean;
   value?: Date | DateRange | null;
   defaultValue?: Date | DateRange;
@@ -854,6 +886,8 @@ export interface CalendarProps extends BaseProps {
 }
 export interface NumberInputProps extends BaseProps {
   label?: string;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   value?: number;
   defaultValue?: number;
   onChange?: (n: number) => void;
@@ -866,6 +900,8 @@ export interface NumberInputProps extends BaseProps {
 }
 export interface SliderProps extends BaseProps {
   label?: string;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   min?: number;
   max?: number;
   step?: number;
@@ -1255,6 +1291,8 @@ export interface ProductCardProps extends BaseProps {
 }
 export interface VariantPickerProps extends BaseProps {
   label: string;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   type?: "color";
   options: (string | { value: string; label?: string; color?: string; disabled?: boolean })[];
   value?: string;
@@ -1516,6 +1554,8 @@ export interface SecretFieldProps extends BaseProps {
 }
 export interface MoneyInputProps extends BaseProps {
   label?: string;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   value?: number | null;
   onChange?: (v: number | null) => void;
   currency?: string;
@@ -1974,6 +2014,8 @@ export interface ModuleRegistryProps extends BaseProps {
 /* ── Kit 5: shared form and data pieces ── */
 export interface RangeSliderProps extends BaseProps {
   label?: ReactNode;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   min?: number;
   max?: number;
   step?: number;
@@ -2006,6 +2048,8 @@ export interface StatusSelectProps extends BaseProps {
   onChange?: (v: string) => void;
   size?: "sm";
   label?: string;
+  /** Accepted for uniform filter bars; this control never shows its label (it is always the accessible name only). */
+  hideLabel?: boolean;
   width?: number;
 }
 export interface TilePickerProps extends BaseProps {
@@ -2031,6 +2075,8 @@ export interface TilePickerProps extends BaseProps {
 }
 export interface ColorFieldProps extends BaseProps {
   label?: ReactNode;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   value?: string;
   defaultValue?: string;
   onChange?: (v: string) => void;
@@ -2247,6 +2293,8 @@ export interface CouponCardProps extends BaseProps {
 }
 export interface LocaleFieldProps extends BaseProps {
   label?: ReactNode;
+  /** Hide the label visually; it stays the accessible name (screen readers, `htmlFor`), e.g. in a one-row filter bar. */
+  hideLabel?: boolean;
   locales: { code: string; label?: string; flag?: string }[];
   value?: Record<string, string>;
   defaultValue?: Record<string, string>;

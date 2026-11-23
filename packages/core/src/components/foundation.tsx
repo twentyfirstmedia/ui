@@ -54,7 +54,19 @@ export function Button(props: NativeRest<ButtonProps>) {
 }
 
 export function IconButton(props: NativeRest<IconButtonProps>) {
-  const { icon, label, variant, size, asChild, className, children, type, ...native } = props;
+  const {
+    icon,
+    label,
+    variant,
+    size,
+    asChild,
+    href,
+    linkAs,
+    className,
+    children,
+    type,
+    ...native
+  } = props;
   const cls = cx(
     "tf-iconbtn",
     "tf-iconbtn-" + (variant || "soft"),
@@ -65,6 +77,14 @@ export function IconButton(props: NativeRest<IconButtonProps>) {
   if (asChild && children) {
     const el = slot(React.Children.only(children), cls, named, () => <Icon name={icon} />);
     if (el) return el;
+  }
+  if (href != null) {
+    const Link = (linkAs || "a") as React.ElementType;
+    return (
+      <Link {...named} href={href} className={cls}>
+        <Icon name={icon} />
+      </Link>
+    );
   }
   return (
     <button {...named} type={type || "button"} className={cls}>

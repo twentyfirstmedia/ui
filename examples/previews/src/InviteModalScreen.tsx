@@ -81,6 +81,7 @@ function App() {
         }}
       >
         <Modal
+          inline
           style={{
             position: "absolute",
             inset: 0,

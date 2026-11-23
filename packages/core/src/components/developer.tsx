@@ -179,6 +179,7 @@ export function MoneyInput(p: MoneyInputProps) {
       className={p.className}
       id={id}
       label={p.label}
+      hideLabel={p.hideLabel}
       hint={p.hint}
       error={p.error}
       required={p.required}

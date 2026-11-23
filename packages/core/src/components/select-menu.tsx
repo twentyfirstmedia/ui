@@ -83,7 +83,11 @@ export function SelectMenu(p: SelectMenuProps) {
   return (
     <div className={cx("tf-field", p.className)} style={p.style}>
       {p.label && (
-        <label className="tf-field-label" htmlFor={id} id={`${id}-label`}>
+        <label
+          className={cx("tf-field-label", p.hideLabel && "tf-sr-only")}
+          htmlFor={id}
+          id={`${id}-label`}
+        >
           {p.label}
           {p.required && (
             <span className="tf-req" aria-hidden>

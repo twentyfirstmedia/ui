@@ -12,6 +12,7 @@ export default function Preview() {
       }}
     >
       <Modal
+        inline
         style={{
           position: "absolute",
           inset: 0,

@@ -313,6 +313,13 @@ Notiz: Teil 2 von 3. Angebote rechnen beim Tippen (Rabatt je Zeile, optionale Po
 
 Notiz: Teil 3 von 3. Damit deckt das Kit ein CRM für Agenturen, Makler und Kanzleien ab. Makler: passende Käufer mit Trefferquote und erfüllten oder fehlenden Kriterien (fehlende werden als „not met“ vorgelesen), Besichtigungen mit Stand und Feedback als Sterne und Zitat; Exposé, Bewertung und Energieklasse kommen aus dem Bestand. Kanzleien: die Kollisionsprüfung vor Mandatsannahme (Beteiligte als Tags, Treffer aus früheren Mandaten mit Grund, Konflikte vor möglichen Treffern, Entscheidung „freigegeben“ oder „abgelehnt“), dazu Fristen (`DeadlineList`), Zeiterfassung und Akte aus Teil 1 und 2. Zeilen und Listen messen sich selbst und stapeln sich in schmalen Spalten. `PropertyList` rundete Prozentwerte auf ganze Zahlen (3,57 % Käuferprovision wurde zu 4 %) und zeigt jetzt bis zu zwei Nachkommastellen.
 
+### Phase 32: Lücken aus der FollowerPilot-Migration (Teil 1)
+- [x] Fokusfalle für Overlays, die mit `open` geöffnet werden (CommandPalette, Drawer, Modal, ConfirmDialog, ExportDialog)
+- [x] `hideLabel` an allen Feldern, `IconButton` als Link (`href`, `linkAs`), `AppShell fill`
+- [x] Icons `volume`, `volumeOff`, `trophy`, `receipt` im eigenen Satz; Doku-Seiten IconButton und AppShell; Tests
+
+Notiz (Robin: FollowerPilot hat den Admin auf 0.9.0 umgestellt und listet, was fehlte): `useTrap` lief nur beim Mounten, als die Ref noch leer war. Jetzt läuft die Falle, sobald `active` wahr wird, und gibt den Fokus beim Schließen zurück. Weil `Portal` seine Kinder einen Render später zeigt (und nur sich selbst neu rendert), wartet die Falle bis zu zehn Frames auf das Element; den Fokus zum Zurückgeben merkt sie sich schon beim Öffnen. `Modal` hatte gar keine Falle; damit die Demos auf der Doku-Seite nicht den Fokus beim Laden schnappen, gibt es `inline` (auch `<tf-modal>` nutzt es, weil sein Rahmen selbst fängt). `IconButton` konnte schon `asChild`, das war nur nicht dokumentiert; dazu kommen `href` und `linkAs`. Drei der vier Icons gab es in der Bibliothek; der Generator lässt Namen des eigenen Satzes dort weg, darum exportiert die Bibliothek `volume`, `trophy` und `receipt` weiter als veraltete Aliase, damit bestehende Imports nicht brechen.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`

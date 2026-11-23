@@ -1,6 +1,6 @@
 ---
 title: Icons
-description: "93 icons built into every component, plus a library of about 700 in the same style: passkeys and security, AI, social and brand logos, files, media, commerce, maps and 3D, games and more. Search them below and click one to copy its name."
+description: "97 icons built into every component, plus a library of about 700 in the same style: passkeys and security, AI, social and brand logos, files, media, commerce, maps and 3D, games and more. Search them below and click one to copy its name."
 ---
 
 Every icon is a line drawing on a 24px grid with 2px round-capped strokes in `currentColor`, so it takes the colour and size of the text around it, in both kits. Brand logos (`brand…`) are filled.
@@ -15,7 +15,7 @@ import { Button, Icon, IconButton } from "@twentyfirstmedia/{{kit}}";
 
 ## Built in and library
 
-- **Built in** (93): the icons the components use themselves. They work by name everywhere, with nothing to set up.
+- **Built in** (97): the icons the components use themselves. They work by name everywhere, with nothing to set up.
 - **Library** (about 700): everything else, from `@twentyfirstmedia/{{kit}}/icons`. Register what you use once, before rendering, and the names work like the built-in ones in `Icon` and every `icon` prop. Only the icons you register end up in your bundle.
 
 ```tsx

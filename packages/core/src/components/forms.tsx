@@ -41,7 +41,7 @@ export function FormField(p: FormFieldProps) {
   return (
     <div className={cx("tf-field", p.className)} style={p.style}>
       {p.label && (
-        <label className="tf-field-label" htmlFor={id}>
+        <label className={cx("tf-field-label", p.hideLabel && "tf-sr-only")} htmlFor={id}>
           {p.label}
           {p.required && (
             <span className="tf-req" aria-hidden>
@@ -100,6 +100,7 @@ export function TextField(p: TextFieldProps) {
       className={p.className}
       id={id}
       label={p.label}
+      hideLabel={p.hideLabel}
       required={p.required}
       optional={p.optional}
       hint={p.hint}
@@ -166,7 +167,9 @@ export function RadioGroup(p: RadioGroupProps) {
     v = useControlled(p.value, p.defaultValue, p.onChange);
   return (
     <fieldset style={p.style} className={cx("tf-radiogroup", p.cards && "cards", p.className)}>
-      {p.label && <legend className="tf-field-label">{p.label}</legend>}
+      {p.label && (
+        <legend className={cx("tf-field-label", p.hideLabel && "tf-sr-only")}>{p.label}</legend>
+      )}
       <div className="tf-radiogroup-items">
         {(p.options || []).map((o) => {
           const opt =
@@ -335,6 +338,7 @@ export function Combobox(p: ComboboxProps) {
       style={p.style}
       id={id}
       label={p.label}
+      hideLabel={p.hideLabel}
       required={p.required}
       hint={p.hint}
       error={p.error}
@@ -479,6 +483,7 @@ export function TagInput(p: TagInputProps) {
       className={p.className}
       id={id}
       label={p.label}
+      hideLabel={p.hideLabel}
       hint={p.hint}
       error={p.error}
     >
@@ -713,6 +718,7 @@ export function DatePicker(p: DatePickerProps) {
       style={p.style}
       id={id}
       label={p.label}
+      hideLabel={p.hideLabel}
       required={p.required}
       hint={p.hint}
       error={p.error}
@@ -801,6 +807,7 @@ export function NumberInput(p: NumberInputProps) {
       className={p.className}
       id={id}
       label={p.label}
+      hideLabel={p.hideLabel}
       hint={p.hint}
       error={p.error}
     >
@@ -858,7 +865,14 @@ export function Slider(p: SliderProps) {
   const pct = ((v[0] - min) / (max - min)) * 100,
     f = p.format || String;
   return (
-    <FormField style={p.style} className={p.className} id={id} label={p.label} hint={p.hint}>
+    <FormField
+      style={p.style}
+      className={p.className}
+      id={id}
+      label={p.label}
+      hideLabel={p.hideLabel}
+      hint={p.hint}
+    >
       <div className="tf-slider">
         <div className="tf-slider-track">
           <input

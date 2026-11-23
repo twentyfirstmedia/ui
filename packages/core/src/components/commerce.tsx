@@ -209,7 +209,7 @@ export function VariantPicker(p: VariantPickerProps) {
   const cur = opts.find((o) => o.value === v[0]);
   return (
     <fieldset style={p.style} className={cx("tf-variants", p.className)}>
-      <legend className="tf-field-label">
+      <legend className={cx("tf-field-label", p.hideLabel && "tf-sr-only")}>
         {p.label}
         {cur && <span className="tf-variants-cur">{cur.label || cur.value}</span>}
       </legend>

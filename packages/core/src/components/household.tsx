@@ -5,7 +5,7 @@ import { useFormat, useStrings } from "../context.js";
 import { HOUSEHOLD_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { registerIcons } from "../icons.js";
-import { landmark, receipt, repeat, umbrella } from "../icon-library.js";
+import { landmark, repeat, umbrella } from "../icon-library.js";
 import { Badge, IconButton, TintIcon } from "./foundation.js";
 import { Sparkline } from "./charts.js";
 import { StatusIndicator } from "./status.js";
@@ -21,7 +21,7 @@ import type {
 } from "./types.js";
 
 // default icons of these components come from the icon library
-registerIcons({ landmark, receipt, repeat, umbrella });
+registerIcons({ landmark, repeat, umbrella });
 
 const DAY = 86400000;
 /** Whole days from `from` to `to`, counted on the calendar (negative when `to` is earlier). */

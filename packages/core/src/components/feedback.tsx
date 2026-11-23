@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { leaving, usePresence } from "../presence.js";
-import { moveFocus, useId } from "../hooks.js";
+import { moveFocus, useId, useTrap } from "../hooks.js";
 import { cx } from "../cx.js";
 import { useStrings } from "../context.js";
 import { FEEDBACK_STRINGS } from "../strings.js";
@@ -184,11 +184,13 @@ export function Menu(p: MenuProps) {
 export function Modal(p: ModalProps) {
   const t = useStrings(FEEDBACK_STRINGS);
   const pr = usePresence(p.open ?? true);
+  const ref = React.useRef<HTMLDivElement>(null);
+  useTrap(ref, p.onClose, !p.inline && (p.open ?? true) && pr.mounted);
   if (!pr.mounted) return null;
   return (
     <div {...leaving(pr.closing)} className={cx("tf-modal-wrap", p.className)} style={p.style}>
       <div className="tf-backdrop" aria-hidden />
-      <div className="tf-modal" role="dialog" aria-modal="true" aria-label={p.title}>
+      <div ref={ref} className="tf-modal" role="dialog" aria-modal="true" aria-label={p.title}>
         <span className="tf-modal-close">
           <IconButton icon="x" label={t.close} size="sm" onClick={p.onClose} />
         </span>
@@ -293,28 +295,21 @@ export function ConfirmDialog(p: ConfirmDialogProps) {
   const titleId = useId("confirm");
   const typed = React.useState(""),
     ok = !p.confirmText || typed[0] === p.confirmText,
-    cancel = React.useRef<HTMLButtonElement>(null),
+    dialog = React.useRef<HTMLDivElement>(null),
     pr = usePresence(!!p.open);
   React.useEffect(() => {
-    if (!p.open) return;
-    typed[1]("");
-    setTimeout(() => {
-      cancel.current && cancel.current.focus();
-    }, 30);
-    function k(e: KeyboardEvent) {
-      if (e.key === "Escape") p.onCancel && p.onCancel();
-    }
-    document.addEventListener("keydown", k);
-    return () => {
-      document.removeEventListener("keydown", k);
-    };
+    if (p.open) typed[1]("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- reset the typed text on each open
   }, [p.open]);
+  // focus starts on Cancel (the safe choice), Tab stays inside, Escape cancels, focus returns
+  useTrap(dialog, p.onCancel, !!p.open && pr.mounted);
   if (!pr.mounted) return null;
   return (
     <Portal>
       <div {...leaving(pr.closing)} className="tf-overlay">
         <div className="tf-backdrop" onClick={p.onCancel} />
         <div
+          ref={dialog}
           className="tf-modal tf-confirm"
           role="alertdialog"
           aria-modal="true"
@@ -352,7 +347,12 @@ export function ConfirmDialog(p: ConfirmDialogProps) {
             </label>
           )}
           <div className="tf-modal-foot">
-            <button ref={cancel} type="button" className="tf-btn tf-btn-ghost" onClick={p.onCancel}>
+            <button
+              type="button"
+              className="tf-btn tf-btn-ghost"
+              data-autofocus
+              onClick={p.onCancel}
+            >
               {p.cancelLabel || t.cancel}
             </button>
             <Button

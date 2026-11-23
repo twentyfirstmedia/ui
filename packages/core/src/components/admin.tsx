@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useControlled, useId } from "../hooks.js";
+import { useControlled, useId, useTrap } from "../hooks.js";
 import { useFormat, useStrings } from "../context.js";
 import { ADMIN_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
@@ -69,7 +69,14 @@ export function RangeSlider(p: RangeSliderProps) {
     v[1](n);
   }
   return (
-    <FormField style={p.style} className={p.className} id={id} label={p.label} hint={p.hint}>
+    <FormField
+      style={p.style}
+      className={p.className}
+      id={id}
+      label={p.label}
+      hideLabel={p.hideLabel}
+      hint={p.hint}
+    >
       <div className="tf-range">
         <div className="tf-range-track">
           <span
@@ -1171,6 +1178,7 @@ export function LocaleField(p: LocaleFieldProps) {
       className={p.className}
       id={id}
       label={p.label}
+      hideLabel={p.hideLabel}
       hint={p.hint}
       error={p.error}
     >
@@ -1472,7 +1480,9 @@ export function ExportDialog(p: ExportDialogProps) {
     cols = React.useState((p.columns || []).filter((c) => c.default !== false).map((c) => c.key)),
     range = React.useState<DateRange | null>(p.range || null),
     st = React.useState("form"),
-    prog = React.useState(0);
+    prog = React.useState(0),
+    dialog = React.useRef<HTMLDivElement>(null);
+  useTrap(dialog, p.onClose, !!p.open && !p.inline);
   if (!p.open && !p.inline) return null;
   function start() {
     st[1]("running");
@@ -1494,6 +1504,7 @@ export function ExportDialog(p: ExportDialogProps) {
   }
   const body = (
     <div
+      ref={dialog}
       className="tf-modal tf-export"
       role="dialog"
       aria-modal={p.inline ? undefined : "true"}
@@ -1824,7 +1835,14 @@ export function ColorField(p: ColorFieldProps) {
     b = lum(p.against || "#ffffff"),
     ratio = a != null && b != null ? (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) : null;
   return (
-    <FormField style={p.style} className={p.className} id={id} label={p.label} hint={p.hint}>
+    <FormField
+      style={p.style}
+      className={p.className}
+      id={id}
+      label={p.label}
+      hideLabel={p.hideLabel}
+      hint={p.hint}
+    >
       <div className="tf-colorf">
         <label
           className="tf-colorf-sw"

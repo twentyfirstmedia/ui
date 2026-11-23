@@ -555,6 +555,26 @@
     padding: 0 8px 8px;
   }
 }
+/* AppShell fill on phones: the bar keeps its height and the sheet takes the rest (no stretched
+   rows); on desktop the sidebar stays in view while the page scrolls */
+@media (max-width: 760px) {
+  .tf-shell.tf-shell-sidebar.tf-shell-fill {
+    display: flex;
+    flex-direction: column;
+  }
+  .tf-shell.tf-shell-sidebar.tf-shell-fill > .tf-sheet {
+    flex: 1 1 auto;
+  }
+}
+@media (min-width: 761px) {
+  .tf-shell.tf-shell-fill > .tf-sidebar.shell {
+    position: sticky;
+    top: 8px;
+    align-self: start;
+    height: calc(100dvh - 16px);
+    box-sizing: border-box;
+  }
+}
 
 /* Fluid at every width: segmented controls, tabs and toggle groups never push past their
    container. When space runs short the items shrink and their labels end in an ellipsis. */

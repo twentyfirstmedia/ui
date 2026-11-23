@@ -1970,5 +1970,19 @@
       "RecordTimeline",
       "TimeTracker"
     ]
+  },
+  {
+    "name": "IconButton",
+    "group": "Foundations",
+    "width": 720,
+    "height": 240,
+    "components": ["IconButton"]
+  },
+  {
+    "name": "AppShell",
+    "group": "Navigation",
+    "width": 1100,
+    "height": 520,
+    "components": ["AppShell", "PageHeader", "Panel"]
   }
 ]

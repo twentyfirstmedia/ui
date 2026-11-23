@@ -16,3 +16,15 @@ Native constraints go straight to the input, so the browser checks them and `For
 - Use `success` sparingly, for checks that took effort (a free username, a verified domain).
 - Mark the minority: if most fields are required, mark the optional ones instead.
 - `FormField` is the same shell without an input, for wrapping custom controls.
+
+`hideLabel` keeps the label for screen readers (and `htmlFor`) but hides it visually, so a filter row
+stays one line. Every field control takes it: `Input`, `Select`, `Textarea`, `TextField`,
+`SelectMenu`, `NumberInput`, `Combobox`, `DatePicker`, `TagInput` and the others.
+
+```tsx
+<div className="tf-row">
+  <TextField label="Search customers" hideLabel placeholder="Search customers" icon="search" />
+  <SelectMenu label="Status" hideLabel options={["All", "Active", "Banned"]} defaultValue="All" />
+</div>
+```
+
