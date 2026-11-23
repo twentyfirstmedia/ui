@@ -192,6 +192,7 @@ function glassFallbacks(k: string, self: (attr: string) => string): string {
     "--glass-strong: var(--popover);",
     "--glass-sheen: transparent;",
     "--glass-filter: none;",
+    "--glass-blur: none;",
   ];
   const strong = ["--glass: var(--glass-strong);"];
   let css = "";

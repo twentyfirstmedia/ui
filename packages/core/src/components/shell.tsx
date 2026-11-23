@@ -61,7 +61,7 @@ export function TopBar(p: TopBarProps) {
       {p.brand && (
         <span className="tf-brand">
           {p.brand}
-          <span className="tf-brand-dot" aria-hidden />
+          {p.brandDot !== false && <span className="tf-brand-dot" aria-hidden />}
           {p.tag && <span className="tf-brand-tag">{p.tag}</span>}
         </span>
       )}
@@ -580,7 +580,7 @@ export function AppShell(p: AppShellProps) {
       ) : p.brand ? (
         <span className={cx("tf-brand", collapsed && "tf-brand-mini")}>
           {collapsed && typeof p.brand === "string" ? p.brand.slice(0, 1) : p.brand}
-          <span className="tf-brand-dot" aria-hidden />
+          {p.brandDot !== false && <span className="tf-brand-dot" aria-hidden />}
           {p.tag && !collapsed && <span className="tf-brand-tag">{p.tag}</span>}
         </span>
       ) : null;
@@ -639,6 +639,7 @@ export function AppShell(p: AppShellProps) {
     <div className={cx("tf-shell", p.fill && "tf-shell-fill", p.className)} style={p.style}>
       <TopBar
         brand={p.brand}
+        brandDot={p.brandDot}
         tag={p.tag}
         active={p.active}
         items={p.nav || NAV()}

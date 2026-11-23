@@ -324,6 +324,7 @@
   --panel-pad: var(--space-4);
   --panel-gap: 1px;
   --glass-filter: blur(16px) saturate(120%) brightness(0.8);
+  --glass-blur: blur(16px);
   --glass-tint: 40%;
   color-scheme: dark;
 }
@@ -477,6 +478,7 @@
     --panel-pad: var(--space-4);
     --panel-gap: 1px;
     --glass-filter: blur(16px) saturate(120%) brightness(0.8);
+    --glass-blur: blur(16px);
     --glass-tint: 40%;
     color-scheme: dark;
   }
@@ -631,6 +633,7 @@
     --panel-pad: var(--space-4);
     --panel-gap: 1px;
     --glass-filter: blur(16px) saturate(130%) brightness(1.04);
+    --glass-blur: blur(16px);
     --glass-tint: 40%;
     color-scheme: light;
   }
@@ -784,6 +787,7 @@
   --panel-pad: var(--space-4);
   --panel-gap: 1px;
   --glass-filter: blur(16px) saturate(120%) brightness(0.8);
+  --glass-blur: blur(16px);
   --glass-tint: 40%;
   color-scheme: dark;
 }
@@ -936,6 +940,7 @@
   --panel-pad: var(--space-4);
   --panel-gap: 1px;
   --glass-filter: blur(16px) saturate(130%) brightness(1.04);
+  --glass-blur: blur(16px);
   --glass-tint: 40%;
   color-scheme: light;
 }
@@ -1016,6 +1021,7 @@
     --glass-strong: var(--popover);
     --glass-sheen: transparent;
     --glass-filter: none;
+    --glass-blur: none;
   }
 }
 @media (forced-colors: active) {
@@ -1024,5 +1030,6 @@
     --glass-strong: var(--popover);
     --glass-sheen: transparent;
     --glass-filter: none;
+    --glass-blur: none;
   }
 }

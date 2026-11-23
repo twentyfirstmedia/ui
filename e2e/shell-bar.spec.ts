@@ -158,6 +158,56 @@ for (const kit of KITS)
           expect(r.sheet).toBeLessThan(0);
         });
 
+        test("glass fill: the bar shows the same pane as the sidebar", async ({ page }) => {
+          test.skip(density === "compact", "one density is enough for colours");
+          await page.setViewportSize({ width: 1440, height: 800 });
+          await open(page, kit, theme, density);
+          const html = await page.evaluate(
+            () => document.querySelector(".docs-preview .tf-shell")!.outerHTML,
+          );
+          const css = readFileSync(join(ROOT, "packages", kit, "dist", "styles.css"), "utf8");
+          // a flat backdrop: any difference between bar and sidebar comes from the shell itself
+          await page.setContent(
+            `<!doctype html><html data-kit="${kit}" data-theme="${theme}" data-density="${density}" data-surface="glass"><head><style>${css}</style><style>body{margin:0;background:#5b7fb0}</style></head><body>${html}</body></html>`,
+          );
+          await page.evaluate(() => {
+            const shell = document.querySelector(".tf-shell")!;
+            shell.classList.add("tf-shell-fill");
+            const tall = document.createElement("div");
+            tall.style.height = "2400px";
+            shell.querySelector(".tf-main")!.appendChild(tall);
+          });
+          /** The colour on screen at a point. */
+          const pixel = async (x: number, y: number) => {
+            const png = await page.screenshot({ clip: { x, y, width: 1, height: 1 } });
+            return page.evaluate(async (b64) => {
+              const img = new Image();
+              img.src = `data:image/png;base64,${b64}`;
+              await img.decode();
+              const c = document.createElement("canvas");
+              c.width = c.height = 1;
+              const ctx = c.getContext("2d")!;
+              ctx.drawImage(img, 0, 0);
+              return Array.from(ctx.getImageData(0, 0, 1, 1).data.slice(0, 3));
+            }, png.toString("base64"));
+          };
+          const compare = async () => {
+            const r = await page.evaluate(() => {
+              const b = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+              return { brand: b(".tf-shell-bar-brand"), side: b(".tf-sidebar") };
+            });
+            // the empty right edge of the brand cell and of the sidebar, in the same column
+            const x = Math.round(r.side.right - 4);
+            const bar = await pixel(x, Math.round(r.brand.top + r.brand.height / 2));
+            const side = await pixel(x, Math.round(r.side.top + 40));
+            return Math.max(...bar.map((v, i) => Math.abs(v - side[i]!)));
+          };
+          expect(await compare(), "at the top of the page").toBeLessThanOrEqual(8);
+          await page.evaluate(() => window.scrollTo(0, 900));
+          await page.waitForTimeout(100);
+          expect(await compare(), "with content scrolled under the bar").toBeLessThanOrEqual(8);
+        });
+
         test("phone: the sidebar's bar with the end actions, search over the bar", async ({
           page,
         }) => {

@@ -521,13 +521,19 @@ export function Sidebar(p: SidebarProps) {
   const uid = useId("side");
   const Link = (p.linkAs || "a") as React.ElementType;
 
-  // remember the collapsed state
+  // remember the collapsed state. The stored value is applied first; nothing is written until the
+  // state shows it (a controlled parent applies it a render later, and StrictMode runs the effects
+  // twice), so the value from before the reload is never overwritten with the initial one.
   const stored = React.useRef(false);
+  const pending = React.useRef<"0" | "1" | null>(null);
   React.useEffect(() => {
     if (!p.storageKey) return;
     try {
       const v = localStorage.getItem(p.storageKey);
-      if (v === "1" || v === "0") setCollapsed(v === "1");
+      if (v === "1" || v === "0") {
+        pending.current = v;
+        setCollapsed(v === "1");
+      }
     } catch {
       /* storage may be off */
     }
@@ -535,8 +541,14 @@ export function Sidebar(p: SidebarProps) {
   }, [p.storageKey]);
   React.useEffect(() => {
     if (!p.storageKey || !stored.current) return;
+    const now = collapsedState[0] ? "1" : "0";
+    if (pending.current !== null) {
+      // still waiting for the stored value to arrive in the state
+      if (now === pending.current) pending.current = null;
+      return;
+    }
     try {
-      localStorage.setItem(p.storageKey, collapsedState[0] ? "1" : "0");
+      localStorage.setItem(p.storageKey, now);
     } catch {
       /* storage may be off */
     }

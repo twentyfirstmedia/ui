@@ -263,6 +263,8 @@ export interface NavItem {
 export interface TopBarProps extends BaseProps {
   /** The product name, or a node (a logo mark with the name). */
   brand?: ReactNode;
+  /** The status dot after the brand (default `true`). */
+  brandDot?: boolean;
   tag?: string;
   items: NavItem[];
   active?: string;
@@ -429,6 +431,8 @@ export interface AppShellProps extends BaseProps {
   active?: string;
   /** The product name, or a node (a logo mark with the name; collapsed sidebars show it whole). */
   brand?: ReactNode;
+  /** The status dot after the brand (default `true`); turn it off next to a logo of your own. */
+  brandDot?: boolean;
   tag?: string;
   nav?: NavItem[];
   user?: { name: string; email?: string };
