@@ -99,7 +99,8 @@ export function useTrap<T extends HTMLElement>(
             'input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), textarea',
           ) ||
           root.querySelector<HTMLElement>(FOCUSABLE);
-        auto?.focus();
+        // no scrolling: the overlay is already in view (or fixed); a page under it must not jump
+        auto?.focus({ preventScroll: true });
       }
       const k = (e: KeyboardEvent) => {
         if (e.key === "Escape" && cb.current) {
@@ -134,7 +135,7 @@ export function useTrap<T extends HTMLElement>(
         typeof before.focus === "function" &&
         document.contains(before)
       )
-        before.focus();
+        before.focus({ preventScroll: true });
     };
   }, [ref, active]);
 }
