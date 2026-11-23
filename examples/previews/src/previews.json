@@ -1982,7 +1982,7 @@
     "name": "AppShell",
     "group": "Navigation",
     "width": 1100,
-    "height": 520,
+    "height": 580,
     "components": ["AppShell", "PageHeader", "Panel"]
   }
 ]

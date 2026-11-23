@@ -594,6 +594,82 @@
   }
 }
 
+/* AppShell topbar on phones: the sidebar's bar (menu button and brand) with the bar's end on the
+   right; topStart sits behind an icon button and opens over the whole bar */
+@media (max-width: 760px) {
+  .tf-shell.tf-shell-sidebar.tf-shell-has-bar,
+  .tf-shell.tf-shell-sidebar.tf-shell-has-bar.tf-shell-fill {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: 0 8px 8px;
+  }
+  .tf-shell-has-bar > .tf-sidebar-bar {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .tf-shell-has-bar > .tf-shell-bar {
+    grid-column: 2;
+    display: flex;
+    gap: 4px;
+    height: auto;
+    min-height: 56px;
+  }
+  .tf-shell-has-bar.tf-shell-find > .tf-shell-bar {
+    grid-column: 1 / -1;
+  }
+  .tf-shell-has-bar.tf-shell-find > .tf-sidebar-bar {
+    visibility: hidden;
+  }
+  .tf-shell-bar-brand,
+  .tf-shell-bar-start {
+    display: none;
+  }
+  .tf-shell-bar-main {
+    flex: 1 1 auto;
+    gap: 4px;
+    padding: 0;
+  }
+  .tf-shell-bar-find {
+    display: inline-flex;
+    flex: none;
+  }
+  .tf-shell-bar-mid {
+    display: none;
+  }
+  .tf-shell-bar.find-open .tf-shell-bar-start {
+    display: flex;
+    flex: 1 1 auto;
+  }
+  .tf-shell-bar.find-open .tf-shell-bar-end {
+    display: none;
+  }
+  .tf-shell-has-bar > .tf-sheet {
+    grid-column: 1 / -1;
+    border-radius: calc(var(--radius-xl) - 8px);
+  }
+  .tf-shell-has-bar.tf-shell-fill > .tf-sheet {
+    border-radius: calc(var(--radius-xl) - 8px);
+  }
+}
+/* AppShell fill with the topbar: bar and sidebar stay in view, the sheet scrolls under the bar */
+@media (min-width: 761px) {
+  /* the brand is in the bar; the drawer on phones still shows it at its top */
+  .tf-shell-has-bar > .tf-sidebar.shell > .tf-sidebar-head {
+    display: none;
+  }
+  .tf-shell.tf-shell-has-bar.tf-shell-fill > .tf-shell-bar {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    background: var(--frame);
+  }
+  .tf-shell.tf-shell-has-bar.tf-shell-fill > .tf-sidebar.shell {
+    top: var(--topbar-h);
+    height: calc(100dvh - var(--topbar-h));
+  }
+}
+
 /* Fluid at every width: segmented controls, tabs and toggle groups never push past their
    container. When space runs short the items shrink and their labels end in an ellipsis. */
 .tf-tabs {

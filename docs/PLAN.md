@@ -333,6 +333,13 @@ Notiz: Die erste Zelle wird zum echten Link der Zeile (Tab, Enter, Mittelklick, 
 
 Notiz (Meldung aus FollowerPilot): `padding-inline` der Brücke überschrieb das `pl-9` der shadcn-Suchfelder, das Icon lag auf dem Platzhalter. Die Brücke setzt das Polster jetzt je Seite und nur, wenn das Feld diese Seite nicht selbst setzt; die Erkennung läuft über die Klassennamen in `:where()`, damit die Spezifität gleich bleibt.
 
+### Phase 35: AppShell mit Leiste oben im Sidebar-Modus (0.11.0)
+- [x] `topbar` mit `topStart`, `topEnd` (und `topExtra`), Marke oben links genau so breit wie die Sidebar (aus- und eingeklappt)
+- [x] Rahmen, Leiste und Sidebar als ein L um die Fläche; mit `fill` bleiben Leiste und Sidebar stehen; Handy: Leiste der Sidebar mit Aktionen rechts und Suche hinter einem Icon-Button; Glas
+- [x] Beide Kits, hell/dunkel, beide Dichten; Unit-Tests und `e2e/shell-bar.spec.ts`; Doku-Beispiel auf der AppShell-Seite
+
+Notiz (Wunsch aus FollowerPilot): Die Leiste ist ein Subgrid über beide Spalten der Shell. Die Marke steckt in der ersten Spalte mit `contain: inline-size`, trägt also nichts zur Breite bei und ist damit immer genau so breit wie die Sidebar, auch während sie ein- und ausklappt. Den eingeklappten Zustand hält jetzt die Shell (gesteuert, `sidebar.collapsed`/`onCollapsedChange` gehen weiter durch), damit die Marke oben zur Kurzform wechselt. Auf dem Handy bleibt die Leiste der Sidebar (Menü und Marke, Drawer wie bisher); daneben stehen die Aktionen, die Suche öffnet sich über der ganzen Zeile, Escape schließt sie. Halo: Ist die Shell nicht die ganze Seite, behält sie rechts und unten den schmalen Rahmen, sonst zeigt die gerundete Ecke der Fläche eine Kante vom Rahmen. Pro: Leiste und Sidebar auf `--frame` (bg-100), eine Haarlinie unter der Leiste und neben der Sidebar.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`
