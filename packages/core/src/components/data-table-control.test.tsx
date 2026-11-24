@@ -197,3 +197,78 @@ describe("DataTable stack and paging", () => {
     expect(screen.getByText("3–4 of 5")).toBeTruthy();
   });
 });
+
+describe("DataTable range selection", () => {
+  const boxes = () => screen.getAllByRole("checkbox", { name: "Select row" }) as HTMLInputElement[];
+  const ticked = () => boxes().map((b) => b.checked);
+
+  it("selects the rows between the anchor and a Shift+click, in the order shown", () => {
+    render(
+      <DataTable
+        columns={COLS}
+        rows={ROWS}
+        selectable
+        columnToggle={false}
+        defaultSort={{ key: "total", dir: "asc" }}
+      />,
+    );
+    // shown: Ben, Dev, Ada, Eli, Cleo
+    fireEvent.click(boxes()[0]!);
+    fireEvent.click(boxes()[3]!, { shiftKey: true });
+    expect(ticked()).toEqual([true, true, true, true, false]);
+    // the clicked row is the new anchor: Shift+click below it extends from there
+    fireEvent.click(boxes()[4]!, { shiftKey: true });
+    expect(ticked()).toEqual([true, true, true, true, true]);
+  });
+
+  it("clears the rows in between when the anchor was cleared", () => {
+    render(<DataTable columns={COLS} rows={ROWS} selectable columnToggle={false} />);
+    fireEvent.click(boxes()[0]!);
+    fireEvent.click(boxes()[4]!, { shiftKey: true });
+    expect(ticked()).toEqual([true, true, true, true, true]);
+    fireEvent.click(boxes()[1]!); // clears Ben, the new anchor
+    fireEvent.click(boxes()[3]!, { shiftKey: true });
+    expect(ticked()).toEqual([true, false, false, false, true]);
+  });
+
+  it("works from the keyboard with Shift+Space", () => {
+    render(<DataTable columns={COLS} rows={ROWS} selectable columnToggle={false} />);
+    fireEvent.click(boxes()[1]!);
+    const last = boxes()[3]!;
+    // Space activates the checkbox with a click that carries no modifier
+    fireEvent.keyDown(last, { key: " ", shiftKey: true });
+    fireEvent.click(last);
+    fireEvent.keyUp(last, { key: " ", shiftKey: true });
+    expect(ticked()).toEqual([false, true, true, true, false]);
+    // without Shift it is a single toggle again
+    fireEvent.keyDown(boxes()[0]!, { key: " " });
+    fireEvent.click(boxes()[0]!);
+    expect(ticked()).toEqual([true, true, true, true, false]);
+  });
+
+  it("reports the range to a controlled table, also in stacked cards", () => {
+    const change = vi.fn();
+    function Controlled() {
+      const [sel, setSel] = React.useState<(string | number)[]>([]);
+      return (
+        <DataTable
+          columns={COLS}
+          rows={ROWS}
+          selectable
+          stack
+          columnToggle={false}
+          selected={sel}
+          onSelectedChange={(next) => {
+            change(next);
+            setSel(next);
+          }}
+        />
+      );
+    }
+    render(<Controlled />);
+    fireEvent.click(boxes()[1]!);
+    fireEvent.click(boxes()[3]!, { shiftKey: true });
+    expect(change).toHaveBeenLastCalledWith([2, 3, 4]);
+    expect(ticked()).toEqual([false, true, true, true, false]);
+  });
+});

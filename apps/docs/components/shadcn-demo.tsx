@@ -1,6 +1,6 @@
 "use client";
 import "@twentyfirstmedia/ui-core/shadcn.css";
-import { Switch, UIProvider, useUI } from "@twentyfirstmedia/ui-core";
+import { Icon, Switch, UIProvider, useUI } from "@twentyfirstmedia/ui-core";
 import { useState } from "react";
 
 /**
@@ -51,6 +51,47 @@ export function ShadcnSwitchDemo() {
             <Switch defaultChecked>Email notifications</Switch>
             <Switch>Weekly digest</Switch>
           </div>
+        </div>
+      </UIProvider>
+    </div>
+  );
+}
+
+/** shadcn's Alert (v4 markup, no data-variant) in the four tones the bridge reads. */
+export function ShadcnAlertDemo() {
+  const { kit, theme } = useUI();
+  const alerts = [
+    { attrs: {}, icon: "bell", title: "Sync finished", text: "1,240 orders imported." },
+    {
+      attrs: { "data-tone": "success" },
+      icon: "check",
+      title: "Payout sent",
+      text: "€3,180 to your account.",
+    },
+    {
+      attrs: { "data-tone": "warning" },
+      icon: "clock",
+      title: "Payout delayed",
+      text: "The bank needs one more day.",
+    },
+    {
+      attrs: { className: "text-destructive" },
+      icon: "ban",
+      title: "Card declined",
+      text: "Ask the customer for another card.",
+    },
+  ] as const;
+  return (
+    <div className="docs-preview">
+      <UIProvider scope="subtree" kit={kit} theme={theme} className="docs-preview-inner">
+        <div className="docs-demo-alerts">
+          {alerts.map((a) => (
+            <div key={a.title} role="alert" data-slot="alert" {...a.attrs}>
+              <Icon name={a.icon} />
+              <div data-slot="alert-title">{a.title}</div>
+              <div data-slot="alert-description">{a.text}</div>
+            </div>
+          ))}
         </div>
       </UIProvider>
     </div>

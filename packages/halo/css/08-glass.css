@@ -142,6 +142,39 @@
   --glass-fill: var(--glass-strong);
 }
 
+/* `<UIProvider floating="solid">`: menus, popovers and select lists stay solid on glass. Over busy
+   content (tables, text) what shows through competes with their text; dialogs and the command
+   palette keep their glass. The layer takes the popover colour and gives what sits on it the
+   values from outside the glass back. */
+:is(
+    .tf-popover,
+    .tf-menu:not(.tf-menu-static),
+    .tf-hovercard,
+    .tf-selectmenu-list,
+    .tf-navmenu-panel
+  ):is([data-floating="solid"] *):not(.tf-glass),
+.tf-bulkbar:is([data-surface="glass"] .tf-shell *):is([data-floating="solid"] *) {
+  background: var(--popover);
+  color: var(--popover-foreground);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-color: var(--line);
+  box-shadow:
+    var(--shadow-float),
+    0 0 0 var(--line-width) var(--line);
+  --surface: inherit;
+  --secondary: inherit;
+  --bg-100: inherit;
+  --surface-sunken: inherit;
+  --muted: inherit;
+  --canvas: inherit;
+  --bg-200: inherit;
+  --accent: inherit;
+  --bg-300: inherit;
+  --ink-subtle: inherit;
+  --fg-300: inherit;
+}
+
 /* Controls floating on their own (not on a surface) become small glass pills: a search field or
    zoom buttons over a map */
 [data-surface="glass"]
