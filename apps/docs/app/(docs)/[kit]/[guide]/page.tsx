@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { Markdown, PageHead } from "@/components/docs";
-import { ShadcnSwitchDemo } from "@/components/shadcn-demo";
+import { ShadcnAlertDemo, ShadcnSwitchDemo } from "@/components/shadcn-demo";
 import { forKit, knowledge, type KitName } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
 
@@ -10,6 +10,7 @@ import { pageMeta } from "@/lib/seo";
 /** Live demos a guide places with a marker such as `<!-- demo: shadcn-switch -->`. */
 const DEMOS: Record<string, () => ReactNode> = {
   "shadcn-switch": () => <ShadcnSwitchDemo />,
+  "shadcn-alerts": () => <ShadcnAlertDemo />,
 };
 const SLUGS = ["installation", "cli", "text", "ai", "html", "shadcn", "changelog"];
 

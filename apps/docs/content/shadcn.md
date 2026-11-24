@@ -37,18 +37,31 @@ Colours need nothing extra: both kits define shadcn's variables (`--background`,
 | --- | --- | --- |
 | Button | `button` with `data-variant`, `data-size` | control height of the density, button radius, type, hover, focus ring |
 | Input, Textarea, Select | `input`, `textarea`, `select-trigger`, `select-content`, `select-item` | field height and radius, inset border, focus and error ring |
-| Card | `card`, `card-header`, `card-title`, `card-description`, `card-content`, `card-footer` | panel surface, radius, shadow and padding, title type |
+| Card | `card`, `card-header`, `card-title`, `card-description`, `card-content`, `card-footer` | panel surface, radius, shadow, padding and gap (v3's padded parts and v4's gap look the same), title type |
 | Dialog, Alert dialog, Sheet | `…-content`, `…-overlay`, `…-title`, `…-description` | overlay surface and shadow, scrim, title type |
 | Dropdown menu, Popover, Tooltip | `dropdown-menu-content`, `dropdown-menu-item`, `popover-content`, `tooltip-content` | menu surface, item height and highlight, tooltip on the frame colour |
 | Badge | `badge` with `data-variant` | badge height and radius, status colours |
 | Table | `table`, `table-head`, `table-row`, `table-cell` | row height of the density, header type, hover and selected rows |
 | Tabs | `tabs-list`, `tabs-trigger` | the kit's segmented track |
 | Checkbox, Switch, Label | `checkbox`, `switch`, `switch-thumb`, `label` | shapes, checked state, label type |
-| Separator, Progress, Alert, Skeleton | `separator`, `progress`, `progress-indicator`, `alert`, `skeleton` | lines, bars, info and danger alerts |
+| Separator, Progress, Alert, Skeleton | `separator`, `progress`, `progress-indicator`, `alert`, `skeleton` | lines, bars, alerts in the status colours by tone |
 
 Switches take the kit's geometry, not only its colours: the track, the inset and the knob that moves inside it are the same as the kit's own `Switch` (Halo's round 40×24 switch, Pro's 28×16 hairline switch), for shadcn's sizes in both v3 and v4. On glass the knob stays solid.
 
 <!-- demo: shadcn-switch -->
+
+Alerts take the kit's status colours. shadcn's Alert sets no `data-variant`, so its `destructive` variant is found by its `text-destructive` class; for the other tones set `data-tone`: `danger`, `warning` or `success` (without one an alert is info). The icon takes the alert's colour, and on glass the alert is a translucent tint of its tone with a thin edge.
+
+<!-- demo: shadcn-alerts -->
+
+```tsx
+<Alert data-tone="warning">
+  <TriangleAlert />
+  <AlertTitle>Payout delayed</AlertTitle>
+</Alert>
+```
+
+On glass, dropdowns, selects, popovers and context menus are glass like the kit's own menus; with `<UIProvider surface="glass" floating="solid">` (or `data-floating="solid"`) they stay solid.
 
 It follows the kit's settings: compact and comfortable density, light and dark, and glass. Inside `<UIProvider surface="glass">` cards, dialogs, sheets, menus and popovers turn to glass like the kit's own surfaces, and back to solid for people who ask for less transparency.
 

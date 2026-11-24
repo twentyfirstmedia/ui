@@ -368,6 +368,14 @@ Notiz (Meldung aus FollowerPilot): Die Brücke hat den Switch nur umgefärbt. sh
 
 Notiz (Meldungen aus FollowerPilot): Lightning CSS, der CSS-Optimierer von Next.js, fasst `transform: none` und `translate` einer Regel zu `transform: translate(3px)` zusammen. Das `translate` der Regel für „an“ kam dann obendrauf, der Knopf saß rechts am Rand. Die Schublade hatte auf Glas nur die halbtransparente Füllung des Rahmens ohne Weichzeichnung, der Seiteninhalt schien scharf durch das Menü.
 
+### Phase 40: Vier Verbesserungen aus dem FollowerPilot-Admin (0.13.0)
+- [x] DataTable: Bereichsauswahl mit Umschalt-Klick und Umschalt+Leertaste, gesteuert und in `stack`
+- [x] shadcn-Brücke: v3- und v4-Karten mit gleichen Abständen; Alerts in den Statusfarben nach Ton, auf Glas als durchscheinende Tönung
+- [x] `UIProvider floating="solid"`: Menüs, Popover, Auswahllisten, Hovercards, Navigationsmenü, BulkBar und die Inhalte der Brücke bleiben auf Glas fest
+- [x] Tests (Unit, e2e für Brücke und Kits), Demo der Alert-Töne im shadcn-Leitfaden, Doku
+
+Notiz: Die Umschalttaste kommt beim Klick aus dem Mausereignis. Bei Leertaste meldet der Browser einen Klick ohne Umschalttaste, darum merkt sich die Tabelle sie beim Tastendruck. Die Auswahl ändert weiter das native `change`, ohne `preventDefault`, sonst springt das Häkchen einer gesteuerten Checkbox zurück. shadcns Alert setzt kein `data-variant`; „destructive“ wird zusätzlich an der Klasse `text-destructive` erkannt. Die BulkBar nutzt die Rahmenfarbe; durchsichtig wird sie nur in einer Glas-Shell, also wird sie auch nur dort fest gemacht. Inhalte der festen Ebenen bekommen ihre Tokens (`--surface` …) per `inherit` zurück; liegt eine solche Ebene im DOM innerhalb einer Glasfläche statt in einem Portal, erbt sie deren Werte.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`

@@ -21,6 +21,10 @@ Since 0.10 it can also do what admin lists need on top of that:
   to you, e.g. across all pages or on the server. `defaultSort` keeps sorting it in the table.
 - **Controlled selection**: `selected` (row keys) and `onSelectedChange`, so a selection survives
   paging and can be cleared from outside. `bulkActions` still receive the selected rows.
+- **Range selection**: a row checkbox toggles its row and becomes the anchor; Shift+click (or
+  Shift+Space on a focused checkbox) selects every row between the anchor and the clicked one in
+  the order shown on the page, or clears them when the anchor is cleared. Works controlled and in
+  `stack`.
 - **`stack`**: up to 600px of its own width every row becomes a card with its column labels.
 - **Paging**: `pageSize` pages the rows and shows `Pagination` under the table with the range;
   `pageSizes` adds a page-size menu; `page`/`onPageChange` control the page. For server-side

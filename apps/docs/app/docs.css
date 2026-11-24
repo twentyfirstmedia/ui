@@ -827,3 +827,16 @@ html.docs-locked {
   text-transform: uppercase;
   color: var(--ink-muted);
 }
+.docs-demo-alerts {
+  display: grid;
+  gap: 12px;
+}
+.docs-demo-alerts [data-slot="alert"] {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: start;
+}
+.docs-demo-alerts [data-slot="alert"] > :not(svg) {
+  grid-column: 2;
+}

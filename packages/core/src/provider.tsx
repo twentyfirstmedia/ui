@@ -18,6 +18,8 @@ export type Theme = "light" | "dark" | "system";
 export type Density = "compact" | "comfortable";
 /** How surfaces paint: solid (the default) or glass, translucent over what is behind them. */
 export type Surface = "solid" | "glass";
+/** How floating layers (menus, popovers, select lists) paint on glass: as glass or solid. */
+export type Floating = "glass" | "solid";
 /**
  * How much things move: "standard" (the kit's own motion), "expressive" (longer, staggered page
  * entrances, more travel; Pro stays crisp) or "off". A reduced-motion setting always means "off".
@@ -50,6 +52,13 @@ export interface UIProviderProps {
    * `surface="glass"` themselves; `surface="solid"` on one opts it out.
    */
   surface?: Surface;
+  /**
+   * With `surface="glass"`: `"solid"` keeps menus, popovers, select lists, hover cards, the
+   * navigation menu and the bulk action bar solid (the popover colour, no blur), so busy content
+   * behind them does not compete with their text. Dialogs, drawers and the command palette keep
+   * their glass. Default `"glass"` (sets `data-floating`).
+   */
+  floating?: Floating;
   /**
    * Motion level for everything inside (sets `data-motion`): `"standard"` (default), `"expressive"`
    * for orchestrated page entrances, or `"off"`, e.g. for a setting in your app. The reader's
@@ -146,8 +155,9 @@ export function UIProvider(p: UIProviderProps) {
     set("data-theme", p.theme);
     set("data-density", p.density);
     set("data-surface", p.surface);
+    set("data-floating", p.floating);
     set("data-motion", p.motion);
-  }, [scope, p.kit, p.theme, p.density, p.surface, p.motion]);
+  }, [scope, p.kit, p.theme, p.density, p.surface, p.floating, p.motion]);
 
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
   const ctx = useMemo<UIContextValue>(
@@ -169,6 +179,7 @@ export function UIProvider(p: UIProviderProps) {
           data-theme={subtreeTheme}
           data-density={p.density}
           data-surface={p.surface}
+          data-floating={p.floating}
           data-motion={p.motion}
         >
           {content}

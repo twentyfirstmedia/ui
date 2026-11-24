@@ -68,6 +68,7 @@ export {
   type Theme,
   type Density,
   type Motion,
+  type Floating,
 } from "./provider.js";
 export { Portal } from "./portal.js";
 export { startViewTransition, useMotion } from "./motion.js";

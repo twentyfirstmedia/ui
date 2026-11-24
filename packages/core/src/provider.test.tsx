@@ -17,7 +17,7 @@ import {
 
 afterEach(() => {
   cleanup();
-  for (const a of ["data-kit", "data-theme", "data-density", "data-surface"])
+  for (const a of ["data-kit", "data-theme", "data-density", "data-surface", "data-floating"])
     document.documentElement.removeAttribute(a);
 });
 
@@ -47,6 +47,23 @@ describe("UIProvider", () => {
       "dark",
       "compact",
     ]);
+  });
+
+  it("sets data-floating for solid floating layers, on <html> or the subtree", () => {
+    const { unmount } = render(
+      <UIProvider surface="glass" floating="solid">
+        <Text />
+      </UIProvider>,
+    );
+    expect(document.documentElement.dataset.floating).toBe("solid");
+    unmount();
+    const { container } = render(
+      <UIProvider scope="subtree" surface="glass" floating="solid">
+        <Text />
+      </UIProvider>,
+    );
+    const root = container.firstElementChild as HTMLElement;
+    expect([root.dataset.surface, root.dataset.floating]).toEqual(["glass", "solid"]);
   });
 
   it("keeps state when the theme or kit changes", () => {

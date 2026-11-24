@@ -206,3 +206,131 @@ for (const kit of KITS)
       // on glass the knob stays solid
       expect(m.glass).toBe(m.card);
     });
+
+/** shadcn's Card parts: v3 pads every part (p-6, pt-0), v4 spaces them with gap on the card. */
+const CARD_UTILITIES = `@layer utilities {
+  .v3-card { border-radius: 8px; border: 1px solid; }
+  .v3-header { display: flex; flex-direction: column; padding: 24px; }
+  .v3-content { padding: 24px; padding-top: 0; }
+  .v3-footer { display: flex; padding: 24px; padding-top: 0; }
+  .v4-card { display: flex; flex-direction: column; gap: 24px; padding-block: 24px; }
+  .v4-part { padding-inline: 24px; }
+  .text-destructive { color: red; }
+}`;
+const card = (v: 3 | 4) =>
+  `<div id="card${v}" data-slot="card" class="v${v}-card">
+    <div data-slot="card-header" class="${v === 3 ? "v3-header" : "v4-part"}"><div data-slot="card-title">Orders</div></div>
+    <div data-slot="card-content" class="${v === 3 ? "v3-content" : "v4-part"}">Body</div>
+    <div data-slot="card-footer" class="${v === 3 ? "v3-footer" : "v4-part"}">Footer</div>
+  </div>`;
+
+for (const kit of KITS)
+  test(`v3 and v4 cards get the same padding in ${kit}`, async ({ page }) => {
+    await page.setContent(
+      `<!doctype html><html><head>
+        <style>${CARD_UTILITIES}</style><style>${css("themes.css")}</style><style>${css("shadcn.css")}</style>
+      </head><body><div data-kit="${kit}" data-theme="light" style="width:360px">${card(3)}${card(4)}</div></body></html>`,
+    );
+    const layout = (id: string) =>
+      page.evaluate((id) => {
+        const c = document.getElementById(id)!;
+        const r = c.getBoundingClientRect();
+        return Array.from(c.children).map((el) => {
+          const b = el.getBoundingClientRect();
+          const s = getComputedStyle(el);
+          return [b.top - r.top, r.bottom - b.bottom, s.paddingTop, s.paddingBottom, s.paddingLeft];
+        });
+      }, id);
+    const v3 = await layout("card3"),
+      v4 = await layout("card4");
+    for (const part of v3) expect([part[2], part[3]]).toEqual(["0px", "0px"]);
+    // the parts sit at the same places in both versions
+    expect(v3.map((p) => [Math.round(+p[0]!), Math.round(+p[1]!), p[4]])).toEqual(
+      v4.map((p) => [Math.round(+p[0]!), Math.round(+p[1]!), p[4]]),
+    );
+  });
+
+for (const kit of KITS)
+  test(`alerts take the kit's status colours by tone in ${kit}`, async ({ page }) => {
+    const alert = (id: string, attrs: string) =>
+      `<div id="${id}" role="alert" data-slot="alert" ${attrs}><svg id="${id}-svg" viewBox="0 0 24 24"></svg><div data-slot="alert-title">Title</div></div>`;
+    await page.setContent(
+      `<!doctype html><html><head>
+        <style>${CARD_UTILITIES}</style><style>${css("themes.css")}</style><style>${css("shadcn.css")}</style>
+      </head><body><div data-kit="${kit}" data-theme="light">
+        ${alert("info", "")}
+        ${alert("variant", 'data-variant="destructive"')}
+        ${alert("cls", 'class="relative text-destructive"')}
+        ${alert("danger", 'data-tone="danger"')}
+        ${alert("warn", 'data-tone="warning"')}
+        ${alert("ok", 'data-tone="success"')}
+        <div data-surface="glass">${alert("glass", 'data-tone="warning"')}</div>
+        ${["info", "danger", "warn", "ok"].map((t) => `<i id="p-${t}" style="color: var(--${t}); background: var(--${t}-bg)"></i>`).join("")}
+      </div></body></html>`,
+    );
+    const m = await page.evaluate(() => {
+      const st = (id: string) => getComputedStyle(document.getElementById(id)!);
+      const read = (id: string) => [st(id).color, st(id).backgroundColor];
+      return {
+        info: read("info"),
+        variant: read("variant"),
+        cls: read("cls"),
+        danger: read("danger"),
+        warn: read("warn"),
+        ok: read("ok"),
+        svg: st("cls-svg").color,
+        glass: [st("glass").backgroundColor, st("glass").boxShadow],
+        p: Object.fromEntries(["info", "danger", "warn", "ok"].map((t) => [t, read(`p-${t}`)])),
+      };
+    });
+    expect(m.info).toEqual(m.p.info);
+    for (const k of ["variant", "cls", "danger"] as const) expect(m[k], k).toEqual(m.p.danger);
+    expect(m.warn).toEqual(m.p.warn);
+    expect(m.ok).toEqual(m.p.ok);
+    expect(m.svg, "the icon takes the alert's colour").toBe(m.p.danger![0]);
+    // on glass: a translucent tint of the tone with an edge
+    expect(m.glass[0]).not.toBe(m.p.warn![1]);
+    expect(m.glass[0]).toMatch(/\/ 0\.\d+\)|rgba\(.*, 0\.\d+\)/);
+    expect(m.glass[1]).toContain("inset");
+  });
+
+for (const kit of KITS)
+  test(`floating="solid" keeps shadcn's menus solid on glass in ${kit}`, async ({ page }) => {
+    const slots = [
+      "dropdown-menu-content",
+      "dropdown-menu-sub-content",
+      "select-content",
+      "popover-content",
+      "context-menu-content",
+    ];
+    const layer = (pre: string) =>
+      slots.map((s) => `<div id="${pre}-${s}" data-slot="${s}">Item</div>`).join("");
+    await page.setContent(
+      `<!doctype html><html><head><style>${css("themes.css")}</style><style>${css("shadcn.css")}</style></head>
+      <body><div data-kit="${kit}" data-theme="light" data-surface="glass">
+        <div>${layer("glass")}<div id="glass-dialog" data-slot="dialog-content">Dialog</div></div>
+        <div data-floating="solid">${layer("solid")}<div id="solid-dialog" data-slot="dialog-content">Dialog</div>
+          <i id="popover" style="background: var(--popover)"></i></div>
+      </div></body></html>`,
+    );
+    const m = await page.evaluate((slots) => {
+      const st = (id: string) => getComputedStyle(document.getElementById(id)!);
+      return {
+        popover: st("popover").backgroundColor,
+        glass: st("glass-dropdown-menu-content").backdropFilter,
+        solid: slots.map((s) => [
+          s,
+          st(`solid-${s}`).backgroundColor,
+          st(`solid-${s}`).backdropFilter,
+        ]),
+        dialog: st("solid-dialog").backdropFilter,
+      };
+    }, slots);
+    expect(m.glass).toContain("blur(");
+    for (const [s, bg, filter] of m.solid) {
+      expect(bg, s).toBe(m.popover);
+      expect(filter, s).toBe("none");
+    }
+    // dialogs keep their glass
+    expect(m.dialog).toContain("blur(");
+  });

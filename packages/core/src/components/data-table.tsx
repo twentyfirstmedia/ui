@@ -232,11 +232,48 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
   const onPage = ids.filter((id) => selected.indexOf(id) >= 0);
   const allOn = ids.length > 0 && onPage.length === ids.length,
     some = onPage.length > 0 && !allOn;
+  // range selection: a click sets the anchor, Shift+click (or Shift+Space) selects every row
+  // between the anchor and the clicked row as shown on this page, or clears them when the anchor
+  // is cleared; the clicked row becomes the new anchor
+  const anchor = React.useRef<Key | null>(null);
+  const shift = React.useRef(false);
+  const shiftKey = React.useRef(false);
   function toggle(id: Key) {
+    const range = shift.current || shiftKey.current;
+    shift.current = false;
+    const a = anchor.current;
+    const from = a === null ? -1 : ids.indexOf(a),
+      to = ids.indexOf(id);
+    anchor.current = id;
+    if (range && from >= 0 && to >= 0 && a !== id) {
+      const span = ids.slice(Math.min(from, to), Math.max(from, to) + 1);
+      setSelected(
+        selected.indexOf(a as Key) >= 0
+          ? selected.concat(span.filter((x) => selected.indexOf(x) < 0))
+          : selected.filter((x) => span.indexOf(x) < 0),
+      );
+      return;
+    }
     setSelected(
       selected.indexOf(id) >= 0 ? selected.filter((x) => x !== id) : selected.concat([id]),
     );
   }
+  // where the Shift key is: a click carries it, a key press on the checkbox (Space) is followed
+  // by a click without it
+  const rangeKeys = {
+    onClick: (e: React.MouseEvent) => {
+      shift.current = e.shiftKey;
+    },
+    onKeyDown: (e: React.KeyboardEvent) => {
+      shiftKey.current = e.shiftKey;
+    },
+    onKeyUp: (e: React.KeyboardEvent) => {
+      shiftKey.current = e.shiftKey;
+    },
+    onBlur: () => {
+      shiftKey.current = false;
+    },
+  };
   function toggleAll() {
     setSelected(
       allOn
@@ -244,13 +281,20 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
         : selected.concat(ids.filter((id) => selected.indexOf(id) < 0)),
     );
   }
-  function cb(checked: boolean, onChange: () => void, label: string, ind?: boolean) {
+  function cb(
+    checked: boolean,
+    onChange: () => void,
+    label: string,
+    ind?: boolean,
+    extra?: typeof rangeKeys,
+  ) {
     return (
       <span className="tf-checkbox">
         <input
           type="checkbox"
           checked={checked}
           onChange={onChange}
+          {...extra}
           aria-label={label}
           ref={(el) => {
             if (el) el.indeterminate = !!ind;
@@ -455,6 +499,8 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
                               toggle(id);
                             },
                             t.selectRow,
+                            false,
+                            rangeKeys,
                           )}
                         </td>
                       )}
