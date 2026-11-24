@@ -1,5 +1,12 @@
 # @twentyfirstmedia/ui-core
 
+## 0.12.1
+
+### Patch Changes
+
+- [#67](https://github.com/twentyfirstmedia/ui/pull/67) [`c6afed8`](https://github.com/twentyfirstmedia/ui/commit/c6afed8e490806450df676f59991f4c0335e8f94) Thanks [@robintrepte](https://github.com/robintrepte)! - - shadcn bridge: the switch knob's resting place is set in a rule of its own. Lightning CSS (Next.js) folded `transform: none` and `translate` of one rule into `transform: translate(3px)`, which then added to the checked `translate`, so the knob ended flush right (and 3px too far in on Pro). The bridge is now tested as Lightning CSS minifies it.
+  - Glass AppShell on phones: the shell's sidebar drawer blurs the page under it (`--glass-filter`), in both kits, so content no longer shows sharply through the menu.
+
 ## 0.12.0
 
 ### Minor Changes
