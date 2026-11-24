@@ -278,6 +278,14 @@
     background: transparent;
   }
 }
+/* the shell's sidebar as a drawer on phones floats over the page like any other layer: its glass
+   blurs what lies under it, so the page does not show sharply through the menu */
+@media (max-width: 760px) {
+  [data-surface="glass"] .tf-sidebar.shell {
+    -webkit-backdrop-filter: var(--glass-filter);
+    backdrop-filter: var(--glass-filter);
+  }
+}
 /* With fill the sheet scrolls under the sticky bar, so the bar has to blur what passes under it.
    A backdrop-filter on the shell would make the shell the backdrop root of everything inside: the
    bar's filter would only see the shell's own translucent tint and paint it a second time (an

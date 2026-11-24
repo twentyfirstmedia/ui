@@ -244,3 +244,20 @@ for (const kit of KITS)
           await expect(menu).toBeVisible();
         });
       });
+
+for (const kit of KITS)
+  test(`${kit}: on glass phones the sidebar drawer blurs the page under it`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await open(page, kit, "light", "comfortable");
+    await page.evaluate(() =>
+      document
+        .querySelector(".docs-preview .tf-shell")!
+        .closest("[data-kit]")!
+        .setAttribute("data-surface", "glass"),
+    );
+    await page.locator(".docs-preview").getByRole("button", { name: "Open navigation" }).click();
+    const drawer = page.locator(".docs-preview .tf-sidebar.shell");
+    await expect(drawer).toHaveClass(/open/);
+    const filter = await drawer.evaluate((el) => getComputedStyle(el).backdropFilter);
+    expect(filter).toContain("blur(");
+  });

@@ -253,10 +253,15 @@
   background: var(--surface);
   box-shadow: none;
   transform: none;
-  translate: 3px 0;
   transition:
     translate var(--dur-base) var(--ease-in-out),
     background-color var(--dur-base) var(--ease-in-out);
+}
+/* the resting place sits in a rule of its own: CSS optimisers (Lightning CSS in Next.js) fold
+   `transform: none` and `translate` of one rule into `transform: translate(…)`, which would then
+   add to the checked rule's `translate` */
+[data-kit] [data-slot="switch-thumb"]:not([data-state="checked"]) {
+  translate: 3px 0;
 }
 [data-kit] [data-slot="switch-thumb"][data-state="checked"] {
   translate: 19px 0;
@@ -280,6 +285,8 @@
   height: 10px;
   border-radius: 1px;
   background: var(--fg-300);
+}
+[data-kit="pro"] [data-slot="switch-thumb"]:not([data-state="checked"]) {
   translate: 2px 0;
 }
 [data-kit="pro"] [data-slot="switch-thumb"][data-state="checked"] {

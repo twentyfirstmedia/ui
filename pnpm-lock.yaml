@@ -199,6 +199,9 @@ importers:
       globals:
         specifier: 17.14.0
         version: 17.14.0
+      lightningcss:
+        specifier: 1.33.0
+        version: 1.33.0
       lucide-static:
         specifier: 1.70.0
         version: 1.70.0
