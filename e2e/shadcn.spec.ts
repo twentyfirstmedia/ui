@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
+import { transform } from "lightningcss";
 import { KITS } from "./pages";
 
 /**
@@ -99,14 +100,30 @@ const SWITCH_UTILITIES = `@layer utilities {
 const shadcnSwitch = (id: string, v: 3 | 4, on: boolean) =>
   `<button id="${id}" role="switch" data-slot="switch" data-state="${on ? "checked" : "unchecked"}" class="sw${v}"><span data-slot="switch-thumb" data-state="${on ? "checked" : "unchecked"}" class="sw${v}t"></span></button>`;
 
+/**
+ * The bridge as an app's build ships it: Next.js minifies CSS with Lightning CSS, which folds
+ * declarations of one rule (e.g. `transform` and `translate` into one `transform`).
+ */
+const BUILDS = {
+  source: () => css("shadcn.css"),
+  "lightning css": () =>
+    transform({
+      filename: "shadcn.css",
+      code: Buffer.from(css("shadcn.css")),
+      minify: true,
+      targets: { chrome: 111 << 16, safari: (16 << 16) | (4 << 8), firefox: 128 << 16 },
+    }).code.toString(),
+};
+
 for (const kit of KITS)
-  test(`the bridged switch has the kit's geometry in ${kit}`, async ({ page }) => {
-    const kitCss = readFileSync(join(DIST, "..", "..", kit, "dist", "styles.css"), "utf8");
-    await page.setContent(
-      `<!doctype html><html><head>
+  for (const [build, bridge] of Object.entries(BUILDS))
+    test(`the bridged switch has the kit's geometry in ${kit} (${build})`, async ({ page }) => {
+      const kitCss = readFileSync(join(DIST, "..", "..", kit, "dist", "styles.css"), "utf8");
+      await page.setContent(
+        `<!doctype html><html><head>
         <style>${SWITCH_UTILITIES}</style>
         <style>${kitCss}</style>
-        <style>${css("shadcn.css")}</style>
+        <style>${bridge()}</style>
         <style>*{transition:none!important}</style>
       </head><body>
         <div data-kit="${kit}" data-theme="light">
@@ -117,75 +134,75 @@ for (const kit of KITS)
           <div data-surface="glass">${shadcnSwitch("glass", 4, true)}<span id="card" style="color: var(--card)"></span></div>
         </div>
       </body></html>`,
-    );
-    const m = await page.evaluate(() => {
-      const box = (el: Element) => el.getBoundingClientRect();
-      // the radius as drawn: a percentage of the size, never more than half of it
-      const drawn = (r: string, size: number) =>
-        Math.min(r.endsWith("%") ? (parseFloat(r) / 100) * size : parseFloat(r), size / 2);
-      const bridged = (id: string) => {
-        const t = document.getElementById(id)!;
-        const k = t.firstElementChild!;
-        const a = box(t),
-          b = box(k);
-        return {
-          w: a.width,
-          h: a.height,
-          thumb: [b.width, b.height],
-          x: b.left - a.left,
-          y: b.top - a.top,
-          bg: getComputedStyle(k).backgroundColor,
-          shadow: getComputedStyle(k).boxShadow,
-          radius: drawn(getComputedStyle(k).borderTopLeftRadius, b.width),
-          trackRadius: drawn(getComputedStyle(t).borderTopLeftRadius, a.height),
+      );
+      const m = await page.evaluate(() => {
+        const box = (el: Element) => el.getBoundingClientRect();
+        // the radius as drawn: a percentage of the size, never more than half of it
+        const drawn = (r: string, size: number) =>
+          Math.min(r.endsWith("%") ? (parseFloat(r) / 100) * size : parseFloat(r), size / 2);
+        const bridged = (id: string) => {
+          const t = document.getElementById(id)!;
+          const k = t.firstElementChild!;
+          const a = box(t),
+            b = box(k);
+          return {
+            w: a.width,
+            h: a.height,
+            thumb: [b.width, b.height],
+            x: b.left - a.left,
+            y: b.top - a.top,
+            bg: getComputedStyle(k).backgroundColor,
+            shadow: getComputedStyle(k).boxShadow,
+            radius: drawn(getComputedStyle(k).borderTopLeftRadius, b.width),
+            trackRadius: drawn(getComputedStyle(t).borderTopLeftRadius, a.height),
+          };
         };
-      };
-      // the kit's own switch: the knob is ::after, placed by left/top and transform
-      const kitSwitch = (id: string) => {
-        const t = document.getElementById(id)!;
-        const c = getComputedStyle(t),
-          k = getComputedStyle(t, "::after");
-        const shift = k.transform === "none" ? 0 : new DOMMatrix(k.transform).m41;
-        const border = parseFloat(c.borderLeftWidth);
-        return {
-          w: box(t).width,
-          h: box(t).height,
-          thumb: [parseFloat(k.width), parseFloat(k.height)],
-          x: border + parseFloat(k.left) + shift,
-          y: parseFloat(c.borderTopWidth) + parseFloat(k.top),
-          bg: k.backgroundColor,
-          radius: drawn(k.borderTopLeftRadius, parseFloat(k.width)),
-          trackRadius: drawn(c.borderTopLeftRadius, box(t).height),
+        // the kit's own switch: the knob is ::after, placed by left/top and transform
+        const kitSwitch = (id: string) => {
+          const t = document.getElementById(id)!;
+          const c = getComputedStyle(t),
+            k = getComputedStyle(t, "::after");
+          const shift = k.transform === "none" ? 0 : new DOMMatrix(k.transform).m41;
+          const border = parseFloat(c.borderLeftWidth);
+          return {
+            w: box(t).width,
+            h: box(t).height,
+            thumb: [parseFloat(k.width), parseFloat(k.height)],
+            x: border + parseFloat(k.left) + shift,
+            y: parseFloat(c.borderTopWidth) + parseFloat(k.top),
+            bg: k.backgroundColor,
+            radius: drawn(k.borderTopLeftRadius, parseFloat(k.width)),
+            trackRadius: drawn(c.borderTopLeftRadius, box(t).height),
+          };
         };
-      };
-      return {
-        v3off: bridged("v3off"),
-        v3on: bridged("v3on"),
-        v4off: bridged("v4off"),
-        v4on: bridged("v4on"),
-        kitoff: kitSwitch("kitoff"),
-        kiton: kitSwitch("kiton"),
-        glass: bridged("glass").bg,
-        card: getComputedStyle(document.getElementById("card")!).color,
-      };
-    });
-    for (const v of ["v3", "v4"] as const) {
-      for (const [state, ref] of [
-        ["off", m.kitoff],
-        ["on", m.kiton],
-      ] as const) {
-        const b = m[`${v}${state}`];
-        const what = `${kit} shadcn ${v} ${state}`;
-        expect([b.w, b.h], `${what}: track`).toEqual([ref.w, ref.h]);
-        expect(b.thumb, `${what}: thumb`).toEqual(ref.thumb);
-        expect(b.x, `${what}: thumb x`).toBeCloseTo(ref.x, 1);
-        expect(b.y, `${what}: thumb y`).toBeCloseTo(ref.y, 1);
-        expect(b.bg, `${what}: thumb colour`).toBe(ref.bg);
-        expect(b.radius, `${what}: thumb radius`).toBe(ref.radius);
-        expect(b.trackRadius, `${what}: track radius`).toBe(ref.trackRadius);
-        expect(b.shadow, `${what}: no shadow`).toBe("none");
+        return {
+          v3off: bridged("v3off"),
+          v3on: bridged("v3on"),
+          v4off: bridged("v4off"),
+          v4on: bridged("v4on"),
+          kitoff: kitSwitch("kitoff"),
+          kiton: kitSwitch("kiton"),
+          glass: bridged("glass").bg,
+          card: getComputedStyle(document.getElementById("card")!).color,
+        };
+      });
+      for (const v of ["v3", "v4"] as const) {
+        for (const [state, ref] of [
+          ["off", m.kitoff],
+          ["on", m.kiton],
+        ] as const) {
+          const b = m[`${v}${state}`];
+          const what = `${kit} shadcn ${v} ${state}`;
+          expect([b.w, b.h], `${what}: track`).toEqual([ref.w, ref.h]);
+          expect(b.thumb, `${what}: thumb`).toEqual(ref.thumb);
+          expect(b.x, `${what}: thumb x`).toBeCloseTo(ref.x, 1);
+          expect(b.y, `${what}: thumb y`).toBeCloseTo(ref.y, 1);
+          expect(b.bg, `${what}: thumb colour`).toBe(ref.bg);
+          expect(b.radius, `${what}: thumb radius`).toBe(ref.radius);
+          expect(b.trackRadius, `${what}: track radius`).toBe(ref.trackRadius);
+          expect(b.shadow, `${what}: no shadow`).toBe("none");
+        }
       }
-    }
-    // on glass the knob stays solid
-    expect(m.glass).toBe(m.card);
-  });
+      // on glass the knob stays solid
+      expect(m.glass).toBe(m.card);
+    });

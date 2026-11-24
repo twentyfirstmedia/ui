@@ -361,6 +361,13 @@ Notiz (Wunsch aus FollowerPilot): Bisher war ein Eintrag mit `items` immer ein e
 
 Notiz (Meldung aus FollowerPilot): Die Brücke hat den Switch nur umgefärbt. shadcns Maße blieben, der Knopf saß schief und gequetscht. Gewünscht war 40×24 in beiden Kits. Pro hat aber laut `reference/pro` einen eigenen Switch (28×16, Haarlinie, 10px-Knopf mit 1px Radius); die Brücke folgt in Pro also diesem, sonst sähe ein shadcn-Switch anders aus als der des Kits. Leitfäden können jetzt Live-Demos per Marker `<!-- demo: name -->` einbetten.
 
+### Phase 39: Nacharbeiten zu 0.12.0 (0.12.1)
+- [x] shadcn-Brücke: `transform: none` und der Ruheplatz per `translate` stehen in getrennten Regeln; der Test prüft die Brücke auch so, wie Lightning CSS sie verkleinert
+- [x] Glas-AppShell auf dem Handy: Die Sidebar-Schublade zeichnet die Seite darunter weich (`--glass-filter`), in beiden Kits
+- [x] CI: Die Browser-Tests laufen auf sechs parallelen Runnern statt auf einem (etwa 10 statt 40 Minuten); der Check `e2e` fasst sie zusammen
+
+Notiz (Meldungen aus FollowerPilot): Lightning CSS, der CSS-Optimierer von Next.js, fasst `transform: none` und `translate` einer Regel zu `transform: translate(3px)` zusammen. Das `translate` der Regel für „an“ kam dann obendrauf, der Knopf saß rechts am Rand. Die Schublade hatte auf Glas nur die halbtransparente Füllung des Rahmens ohne Weichzeichnung, der Seiteninhalt schien scharf durch das Menü.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`

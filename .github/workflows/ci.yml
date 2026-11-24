@@ -27,11 +27,17 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
 
-  e2e:
-    name: e2e
+  # The browser suite (about 5,300 tests) is split over parallel runners; each builds the docs and
+  # runs its share. The job named "e2e" below sums the shards up, so the check keeps its name.
+  e2e-shard:
+    name: e2e ${{ matrix.shard }}/${{ strategy.job-total }}
     # Screenshot baselines are recorded on this image (font rasterising differs between systems);
     # bump it together with new baselines from the "Update screenshots" workflow.
     runs-on: ubuntu-26.04
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -41,12 +47,22 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm test:e2e
+      - run: pnpm build
+      - run: pnpm exec playwright test --shard=${{ matrix.shard }}/${{ strategy.job-total }}
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.shard }}
           path: |
             playwright-report/
             test-results/
           retention-days: 7
+
+  e2e:
+    name: e2e
+    needs: e2e-shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: All shards passed
+        run: test "${{ needs.e2e-shard.result }}" = "success"
