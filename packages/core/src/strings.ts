@@ -111,6 +111,9 @@ export interface UIStrings {
   closeNavigation: string;
   /** The "…" button of a sidebar item. */
   moreActionsFor: (label: string) => string;
+  /** Sidebar: the chevron of a parent that is a page itself, e.g. "Show Orders pages" */
+  showPages: (label: string) => string;
+  hidePages: (label: string) => string;
   /** Said after a link that opens in a new tab. */
   opensInNewTab: string;
   /** Said for the dot marker on a sidebar item. */
@@ -1540,6 +1543,8 @@ export const NAVIGATION_STRINGS: Pick<
   | "openNavigation"
   | "closeNavigation"
   | "moreActionsFor"
+  | "showPages"
+  | "hidePages"
   | "opensInNewTab"
   | "newActivity"
   | "account"
@@ -1555,6 +1560,8 @@ export const NAVIGATION_STRINGS: Pick<
   openNavigation: "Open navigation",
   closeNavigation: "Close navigation",
   moreActionsFor: (label) => `More actions for ${label}`,
+  showPages: (label) => `Show ${label} pages`,
+  hidePages: (label) => `Hide ${label} pages`,
   opensInNewTab: "(opens in a new tab)",
   newActivity: "New activity",
   account: "Account",

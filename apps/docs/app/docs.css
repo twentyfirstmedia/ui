@@ -808,3 +808,22 @@ html.docs-locked {
   color: var(--ink-muted);
   font-size: var(--type-caption-size);
 }
+
+/* the shadcn guide's side-by-side demo */
+.docs-demo-compare {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+.docs-demo-compare > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.docs-demo-caption {
+  font: 600 11px/14px var(--font-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}

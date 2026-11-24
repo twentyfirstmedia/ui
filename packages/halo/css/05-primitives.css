@@ -988,6 +988,49 @@ button.tf-sidebar-grouplabel:focus-visible {
 .tf-sidebar-more[aria-expanded="true"] {
   opacity: 1;
 }
+/* a parent that is a page itself: the label is a link, the chevron its own button */
+.tf-sidebar-li.with-sub > .tf-sidebar-item {
+  padding-right: 40px;
+}
+.tf-sidebar-li.with-sub.with-actions > .tf-sidebar-item {
+  padding-right: 72px;
+}
+.tf-sidebar-li.with-sub > .tf-sidebar-more {
+  right: 36px;
+}
+.tf-sidebar-subtoggle {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.tf-sidebar-subtoggle:hover {
+  background: var(--sidebar-accent);
+  color: var(--ink);
+}
+.tf-sidebar-subtoggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+.tf-sidebar-item[aria-current="page"] ~ .tf-sidebar-subtoggle {
+  color: var(--sidebar-primary-foreground);
+}
+.tf-sidebar-subtoggle[aria-expanded="true"] .tf-sidebar-chev {
+  transform: rotate(180deg);
+}
+.tf-sidebar-sub[hidden] {
+  display: none;
+}
 .tf-sidebar-foot {
   display: flex;
   align-items: center;
@@ -1153,6 +1196,9 @@ button.tf-sidebar-grouplabel:focus-visible {
   background: var(--frame-active);
   color: var(--on-frame);
 }
+.tf-sidebar.shell .tf-sidebar-item[aria-current="page"] ~ .tf-sidebar-subtoggle {
+  color: var(--on-frame);
+}
 .tf-sidebar.shell .tf-sidebar-item:disabled:hover {
   background: transparent;
   color: var(--on-frame-muted);
@@ -1161,10 +1207,12 @@ button.tf-sidebar-grouplabel:focus-visible {
 .tf-sidebar.shell.collapsed .tf-sidebar-group + .tf-sidebar-group {
   border-color: var(--frame-hover);
 }
-.tf-sidebar.shell .tf-iconbtn-ghost {
+.tf-sidebar.shell .tf-iconbtn-ghost,
+.tf-sidebar.shell .tf-sidebar-subtoggle {
   color: var(--on-frame-muted);
 }
-.tf-sidebar.shell .tf-iconbtn-ghost:hover {
+.tf-sidebar.shell .tf-iconbtn-ghost:hover,
+.tf-sidebar.shell .tf-sidebar-subtoggle:hover {
   background: var(--frame-hover);
   color: var(--on-frame);
 }

@@ -33,14 +33,16 @@ describe("component css", () => {
     css.split("\n").forEach((line, i) => {
       expect(COLOUR.test(line), `shadcn.css:${i + 1}: ${line.trim()}`).toBe(false);
     });
-    // every selector of every rule starts at [data-kit], so a host app outside the kit is untouched
+    // every selector of every rule starts at [data-kit] (or one kit, [data-kit="pro"]), so a host
+    // app outside the kit is untouched
     for (const m of css.matchAll(/(^|[}\n])\s*([^@{}][^{}]*)\{/g)) {
       const sel = (m[2] as string).trim();
       if (!sel || sel.startsWith("@") || /^(from|to|\d)/.test(sel)) continue;
       for (const part of sel.split(/,(?![^(]*\))/))
-        expect(part.trim().startsWith("[data-kit]"), `shadcn.css selector: ${part.trim()}`).toBe(
-          true,
-        );
+        expect(
+          /^\[data-kit(="(halo|pro)")?\]/.test(part.trim()),
+          `shadcn.css selector: ${part.trim()}`,
+        ).toBe(true);
     }
     // no @layer: unlayered rules win over Tailwind's layered utilities
     expect(css).not.toContain("@layer");

@@ -1,6 +1,8 @@
 import { registerIcons } from "@twentyfirstmedia/ui-core";
 import type { Connector } from "@twentyfirstmedia/ui-core";
 import {
+  brandGoogle,
+  footprints,
   brandApplefitness,
   brandApplehealth,
   brandApplehome,
@@ -52,6 +54,8 @@ import {
 } from "@twentyfirstmedia/ui-core/icons";
 
 registerIcons({
+  brandGoogle,
+  footprints,
   brandApplefitness,
   brandApplehealth,
   brandApplehome,

@@ -507,6 +507,15 @@ export function Sidebar(p: SidebarProps) {
   const [expanded, setExpanded] = React.useState<string[]>(() =>
     p.groups.flatMap((g) => (g.items || []).filter((it) => it.items && hasCurrent(it)).map(idOf)),
   );
+  // opening a parent page or one of its children opens the parent, also on later navigation;
+  // parents the user opened stay open
+  React.useEffect(() => {
+    const open = p.groups.flatMap((g) =>
+      (g.items || []).filter((it) => it.items && hasCurrent(it)).map(idOf),
+    );
+    if (open.length)
+      setExpanded((e) => (open.every((id) => e.includes(id)) ? e : [...new Set([...e, ...open])]));
+  }, [p.current]);
   const groupKey = (g: SidebarProps["groups"][number], i: number) => g.id || g.label || String(i);
   const [shut, setShut] = React.useState<string[]>(() =>
     p.groups.flatMap((g, i) => (g.collapsible && g.defaultOpen === false ? [groupKey(g, i)] : [])),
@@ -627,6 +636,7 @@ export function Sidebar(p: SidebarProps) {
   const inner = (
     it: Omit<SidebarItem, "items"> & { items?: SidebarItem["items"] },
     nested: boolean,
+    chevron = true,
   ) => (
     <>
       {!nested && it.icon && <Icon name={it.icon} />}
@@ -645,7 +655,7 @@ export function Sidebar(p: SidebarProps) {
         <span className="tf-sidebar-badge">{it.badge}</span>
       ) : null}
       {it.count ? <span className="tf-sidebar-count">{it.count}</span> : null}
-      {it.items && <Icon name="chevronDown" size={14} className="tf-sidebar-chev" />}
+      {it.items && chevron && <Icon name="chevronDown" size={14} className="tf-sidebar-chev" />}
     </>
   );
 
@@ -694,7 +704,10 @@ export function Sidebar(p: SidebarProps) {
     const id = idOf(it);
     const isOpen = expanded.includes(id);
     const current = id === p.current;
-    const parentCurrent = !!it.items && hasCurrent(it as SidebarItem);
+    // a child is the current page (the parent itself being current shows as aria-current)
+    const parentCurrent = !!it.items?.some((c) => idOf(c) === p.current);
+    // a parent that is a page itself: its label is a link, the chevron its own button
+    const split = !!it.items && !!it.href && !it.disabled && !nested;
     const cls = cx(
       "tf-sidebar-item",
       nested && "nested",
@@ -714,8 +727,43 @@ export function Sidebar(p: SidebarProps) {
         : undefined,
       onBlur: hover && !it.items ? () => setFly(null) : undefined,
     };
+    const toggleSub = () =>
+      setExpanded(isOpen ? expanded.filter((x) => x !== id) : expanded.concat(id));
     let control: React.ReactNode;
-    if (it.items)
+    if (split)
+      control = (
+        <>
+          <Link
+            href={it.href}
+            {...itemProps}
+            {...(it.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            onClick={() => pick(id)}
+            onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
+              // collapsed: → opens the flyout with the parent page and its children
+              if (collapsed && e.key === "ArrowRight") {
+                e.preventDefault();
+                showFly(e.currentTarget, true);
+              }
+            }}
+          >
+            {inner(it, nested, false)}
+          </Link>
+          {!collapsed && (
+            <button
+              type="button"
+              className="tf-sidebar-subtoggle"
+              aria-label={isOpen ? t.hidePages(it.label) : t.showPages(it.label)}
+              title={isOpen ? t.hidePages(it.label) : t.showPages(it.label)}
+              aria-expanded={isOpen}
+              aria-controls={`${uid}-${id}`}
+              onClick={toggleSub}
+            >
+              <Icon name="chevronDown" size={14} className="tf-sidebar-chev" />
+            </button>
+          )}
+        </>
+      );
+    else if (it.items)
       control = (
         <button
           type="button"
@@ -728,7 +776,7 @@ export function Sidebar(p: SidebarProps) {
             if (collapsed) {
               if (fly?.id === id && fly.kind === "menu") setFly(null);
               else showFly(e.currentTarget, e.detail === 0);
-            } else setExpanded(isOpen ? expanded.filter((x) => x !== id) : expanded.concat(id));
+            } else toggleSub();
           }}
           onKeyDown={(e) => {
             if (collapsed && e.key === "ArrowRight") {
@@ -760,7 +808,11 @@ export function Sidebar(p: SidebarProps) {
     return (
       <li
         key={id}
-        className={cx("tf-sidebar-li", it.actions && !collapsed && "with-actions")}
+        className={cx(
+          "tf-sidebar-li",
+          it.actions && !collapsed && "with-actions",
+          split && !collapsed && "with-sub",
+        )}
         onPointerEnter={
           hover
             ? (e) => {
@@ -786,9 +838,9 @@ export function Sidebar(p: SidebarProps) {
             }
           />
         )}
-        {it.items && isOpen && !collapsed && (
-          <ul id={`${uid}-${id}`} className="tf-sidebar-sub">
-            {it.items.map((c) => row(c, true))}
+        {it.items && !collapsed && (isOpen || split) && (
+          <ul id={`${uid}-${id}`} className="tf-sidebar-sub" hidden={!isOpen}>
+            {isOpen && it.items.map((c) => row(c, true))}
           </ul>
         )}
         {menuFor?.id === id && it.actions && (
@@ -955,8 +1007,23 @@ export function Sidebar(p: SidebarProps) {
             } else moveFocus(e, flyRef.current, "a, button");
           }}
         >
-          <div className="tf-sidebar-flytitle">{flyItem.label}</div>
+          {!(flyItem.href && !flyItem.disabled) && (
+            <div className="tf-sidebar-flytitle">{flyItem.label}</div>
+          )}
           <ul>
+            {flyItem.href && !flyItem.disabled && (
+              <li>
+                <Link
+                  href={flyItem.href}
+                  className="tf-sidebar-item nested tf-sidebar-flyparent"
+                  aria-current={idOf(flyItem) === p.current ? "page" : undefined}
+                  {...(flyItem.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  onClick={() => pick(idOf(flyItem))}
+                >
+                  {inner({ ...flyItem, items: undefined }, true)}
+                </Link>
+              </li>
+            )}
             {flyItem.items.map((c) => {
               const cid = idOf(c);
               const cls = cx("tf-sidebar-item", "nested");
