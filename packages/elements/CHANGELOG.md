@@ -1,5 +1,15 @@
 # @twentyfirstmedia/elements
 
+## 0.12.0
+
+### Minor Changes
+
+- [#65](https://github.com/twentyfirstmedia/ui/pull/65) [`d822653`](https://github.com/twentyfirstmedia/ui/commit/d82265377e0a2b0b74158a952bdf3a6ff4f888bb) Thanks [@robintrepte](https://github.com/robintrepte)! - Sidebar: parents that are pages themselves. A `SidebarItem` with `items` and an `href` now splits: its label (icon, label, count, badge) is a link to `href` (with `linkAs`, calling `onPick`), and the chevron is its own button that shows and hides the pages below it (`aria-expanded`, `aria-controls`, named "Show Orders pages" / "Hide Orders pages" from the new strings `showPages` and `hidePages`). Tab reaches both. The parent is current on its own page and shows "contains the current page" when a child is. Opening a parent page or one of its children opens the parent, also when `current` changes later, without shutting parents the reader opened. Collapsed, a click on the parent's icon opens its page and hover or → shows the flyout with the parent page first, then its children. In the phone drawer the label navigates and closes the drawer, the chevron only toggles. Parents without `href` keep one button for the whole row.
+
+### Patch Changes
+
+- [#65](https://github.com/twentyfirstmedia/ui/pull/65) [`d822653`](https://github.com/twentyfirstmedia/ui/commit/d82265377e0a2b0b74158a952bdf3a6ff4f888bb) Thanks [@robintrepte](https://github.com/robintrepte)! - shadcn bridge: switches take the kit's geometry, not only its colours. The bridged `[data-slot="switch"]` is the kit's own switch in both kits (Halo: 40×24 track, 3px inset, an 18px round knob that moves 16px; Pro: the 28×16 hairline switch with a 10px knob that moves 12px), for shadcn's v3 and v4 sizes. The knob is placed with `translate`, which wins over Tailwind's translate utilities, has no shadow, takes the primary foreground when on and stays solid on glass. The "Moving from shadcn/ui" guide shows a shadcn Switch next to the kit Switch.
+
 ## 0.11.1
 
 ### Patch Changes
