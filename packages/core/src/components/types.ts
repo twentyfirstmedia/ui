@@ -11,7 +11,7 @@ import type {
 } from "react";
 import type { IconName } from "../icons.js";
 import type { ToastOptions } from "../toast-store.js";
-import type { Surface } from "../provider.js";
+import type { Density, Kit, Motion, Surface, Theme } from "../provider.js";
 
 export type { IconName, ToastOptions, Surface };
 
@@ -1009,6 +1009,8 @@ export interface PopoverProps extends BaseProps {
   flush?: boolean;
   block?: boolean;
   role?: string;
+  /** Accessible name of the panel (a dialog should have one). */
+  label?: string;
   children?: ReactNode | ((s: { close: () => void }) => ReactNode);
 }
 export interface AlertProps extends BaseProps {
@@ -4030,4 +4032,46 @@ export interface ConflictCheckProps extends BaseProps {
   /** Shows "Clear to proceed" and "Decline matter". */
   onDecide?: (decision: "cleared" | "declined") => void;
   decision?: "cleared" | "declined";
+}
+
+/** What a reader can choose about the look of an app (see `AppearanceMenu`). */
+export interface Appearance {
+  /** Only matters when both kits are loaded (`themes.css`). */
+  kit?: Kit;
+  theme: Theme;
+  /** `"auto"`: the kit's own density (Halo comfortable, Pro compact). */
+  density: Density | "auto";
+  surface: Surface;
+  motion: Motion;
+}
+export type AppearanceRow = "kit" | "theme" | "density" | "motion" | "surface";
+export interface AppearanceMenuProps extends BaseProps {
+  /** The current look; without it the menu reads and writes the nearest `AppearanceProvider`. */
+  value?: Appearance;
+  onChange?: (patch: Partial<Appearance>) => void;
+  /** Kits to choose from; with two or more the menu shows the Style row. */
+  kits?: Kit[];
+  /** The rows to show (default: style when there are kits, theme, density, motion and glass). */
+  rows?: AppearanceRow[];
+  /** Under the title, e.g. "Saved for your account" (default "Saved on this device"). */
+  hint?: ReactNode;
+  /** Which edge of the trigger the menu lines up with (default `end`, for the top bar's end). */
+  align?: "start" | "end";
+  /** Opens below the trigger (default) or above it. */
+  side?: "top" | "bottom";
+  /** Controls whether the menu is open (e.g. to show it open in a tour). */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+export interface SearchTriggerProps extends BaseProps {
+  /** The text in the field (default "Search"). */
+  placeholder?: string;
+  /** Accessible name instead of the visible text (keep the visible text in it). */
+  label?: string;
+  /** The key hint, e.g. "⌘K" (hidden on touch screens). */
+  shortcut?: string;
+  /** ⌘/Ctrl + the hint's last key opens it too, except while typing in a field. */
+  bindShortcut?: boolean;
+  /** Opens your search, e.g. a `CommandPalette`. */
+  onClick?: () => void;
 }

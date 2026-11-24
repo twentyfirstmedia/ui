@@ -208,7 +208,7 @@ for (const kit of KITS)
           expect(await compare(), "with content scrolled under the bar").toBeLessThanOrEqual(8);
         });
 
-        test("phone: the sidebar's bar with the end actions, search over the bar", async ({
+        test("phone: the sidebar's bar with the end actions and the search button", async ({
           page,
         }) => {
           await page.setViewportSize({ width: 390, height: 844 });
@@ -217,11 +217,13 @@ for (const kit of KITS)
           const menu = preview.getByRole("button", { name: "Open navigation" });
           const find = preview.getByRole("button", { name: "Search", exact: true });
           const end = preview.getByRole("button", { name: "New order" });
+          const look = preview.getByRole("button", { name: "Appearance" });
           await expect(menu).toBeVisible();
           await expect(find).toBeVisible();
           await expect(end).toBeVisible();
-          const search = preview.getByRole("searchbox", { name: "Search orders" });
-          await expect(search).toBeHidden();
+          await expect(look).toBeVisible();
+          // the wide search field gives way to the icon button (topStartCompact)
+          await expect(preview.locator(".tf-search-trigger")).toBeHidden();
           const [mb, fb, eb, sb] = await Promise.all([
             menu.boundingBox(),
             find.boundingBox(),
@@ -234,14 +236,32 @@ for (const kit of KITS)
           expect(Math.abs(mid(mb) - mid(eb))).toBeLessThanOrEqual(2);
           expect(fb!.x).toBeLessThan(eb!.x);
           expect(sb!.y).toBeGreaterThanOrEqual(eb!.y + eb!.height);
+          // the search button opens the command palette
           await find.click();
-          await expect(search).toBeVisible();
-          await expect(search).toBeFocused();
-          await expect(menu).toBeHidden();
+          const palette = page
+            .getByRole("dialog", { name: "Command palette" })
+            .getByRole("textbox", { name: "Search" });
+          await expect(palette).toBeFocused();
           await page.keyboard.press("Escape");
-          await expect(search).toBeHidden();
-          await expect(find).toBeFocused();
-          await expect(menu).toBeVisible();
+          await expect(palette).toBeHidden();
+        });
+
+        test("the look menu changes the preview's theme and kit", async ({ page }) => {
+          test.skip(density === "compact", "one density is enough");
+          await page.setViewportSize({ width: 1440, height: 900 });
+          await open(page, kit, theme, density);
+          const preview = page.locator(".docs-preview");
+          await preview.getByRole("button", { name: "Appearance" }).click();
+          const dialog = page.getByRole("dialog", { name: "Appearance" });
+          const other = theme === "light" ? "Dark" : "Light";
+          await dialog.getByRole("radio", { name: other }).click();
+          await dialog.getByRole("radio", { name: kit === "halo" ? "Pro" : "Halo" }).click();
+          const root = preview
+            .locator("[data-kit]")
+            .filter({ has: page.locator(".tf-shell") })
+            .last();
+          await expect(root).toHaveAttribute("data-theme", other.toLowerCase());
+          await expect(root).toHaveAttribute("data-kit", kit === "halo" ? "pro" : "halo");
         });
       });
 

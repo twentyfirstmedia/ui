@@ -376,6 +376,14 @@ Notiz (Meldungen aus FollowerPilot): Lightning CSS, der CSS-Optimierer von Next.
 
 Notiz: Die Umschalttaste kommt beim Klick aus dem Mausereignis. Bei Leertaste meldet der Browser einen Klick ohne Umschalttaste, darum merkt sich die Tabelle sie beim Tastendruck. Die Auswahl ändert weiter das native `change`, ohne `preventDefault`, sonst springt das Häkchen einer gesteuerten Checkbox zurück. shadcns Alert setzt kein `data-variant`; „destructive“ wird zusätzlich an der Klasse `text-destructive` erkannt. Die BulkBar nutzt die Rahmenfarbe; durchsichtig wird sie nur in einer Glas-Shell, also wird sie auch nur dort fest gemacht. Inhalte der festen Ebenen bekommen ihre Tokens (`--surface` …) per `inherit` zurück; liegt eine solche Ebene im DOM innerhalb einer Glasfläche statt in einem Portal, erbt sie deren Werte.
 
+### Phase 41: Standard-Rahmen für Apps (0.14.0)
+- [x] `AppearanceMenu` (Popover in der Topbar: Stil, Theme, Dichte, Bewegung, Glas) und `AppearanceProvider` mit `useAppearance`, `appearanceScript` gegen Aufblitzen, Speicherung im Gerät oder per `initial`/`onChange` im Konto
+- [x] `SearchTrigger`: Suchfeld-Optik als Knopf für die `CommandPalette`, mit ⌘K
+- [x] Demos AppShell, Dashboard und SidebarShellScreen im Standard-Rahmen (Sidebar, Topbar mit Suche und Aussehen-Menü); eigene Seiten für AppearanceMenu und SearchTrigger; README-Bilder neu
+- [x] Installationsanleitung, `init`-Vorlage der CLI und `build_screen` des MCP-Servers beginnen mit dem Standard-Rahmen; Tests (Unit, e2e)
+
+Notiz (Wunsch aus FollowerPilot): Der Admin von FollowerPilot hatte das Aussehen-Menü oben rechts und die Topbar mit Suche selbst gebaut. Das ist jetzt der Standard des Kits; Apps dürfen weiter ihren eigenen Rahmen bauen. Die Texte kommen aus `APPEARANCE_STRINGS`. Der Suchknopf bekommt seinen Namen aus dem sichtbaren Text (axe `label-content-name-mismatch`), `label` nur, wenn er den Text enthält.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`

@@ -761,7 +761,7 @@ export function createServer(k: Knowledge, options: ServerOptions): McpServer {
               "",
               "Work like this:",
               "1. Plan the screen: list its regions and the UI parts each needs.",
-              "2. Look for a pattern that is close (list_components with group Patterns, or search_docs) and start from its code with get_pattern.",
+              '2. Look for a pattern that is close (list_components with group Patterns, or search_docs) and start from its code with get_pattern. A whole app or admin area starts from the standard frame unless the user wants another: AppShell with navigation="sidebar" and topbar (brand, a SearchTrigger opening a CommandPalette, the AppearanceMenu at the end), inside an AppearanceProvider (get_component AppShell, AppearanceMenu).',
               "3. For every part, find the component with search_docs and read its props and example with get_component. Do not guess names or props.",
               "4. Write the code with kit components, tokens and the formatters; no custom markup where a component exists.",
               "5. Run check_usage on the finished code and fix every finding.",

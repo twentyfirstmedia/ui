@@ -207,6 +207,23 @@ export interface UIStrings {
   collapsePanel: string;
   /** AppShell top bar on phones: closes the search that opened over the bar */
   closeSearch: string;
+  /* AppearanceMenu */
+  appearance: string;
+  /** Under the menu's title: where the choice is kept */
+  appearanceHint: string;
+  appearanceStyle: string;
+  appearanceTheme: string;
+  appearanceDensity: string;
+  appearanceMotion: string;
+  appearanceGlass: string;
+  appearanceAuto: string;
+  appearanceLight: string;
+  appearanceDark: string;
+  appearanceRoomy: string;
+  appearanceCompact: string;
+  appearanceNormal: string;
+  appearanceLively: string;
+  appearanceOff: string;
   /* Site: ChatLauncher, CookieConsent */
   assistant: string;
   openAssistant: string;
@@ -1773,6 +1790,42 @@ export const SHELL_STRINGS: Pick<
   closeSearch: "Close search",
 };
 
+/** Strings of the components in `appearance.tsx`. */
+export const APPEARANCE_STRINGS: Pick<
+  UIStrings,
+  | "appearance"
+  | "appearanceHint"
+  | "appearanceStyle"
+  | "appearanceTheme"
+  | "appearanceDensity"
+  | "appearanceMotion"
+  | "appearanceGlass"
+  | "appearanceAuto"
+  | "appearanceLight"
+  | "appearanceDark"
+  | "appearanceRoomy"
+  | "appearanceCompact"
+  | "appearanceNormal"
+  | "appearanceLively"
+  | "appearanceOff"
+> = {
+  appearance: "Appearance",
+  appearanceHint: "Saved on this device",
+  appearanceStyle: "Style",
+  appearanceTheme: "Theme",
+  appearanceDensity: "Density",
+  appearanceMotion: "Motion",
+  appearanceGlass: "Glass surfaces",
+  appearanceAuto: "Auto",
+  appearanceLight: "Light",
+  appearanceDark: "Dark",
+  appearanceRoomy: "Roomy",
+  appearanceCompact: "Compact",
+  appearanceNormal: "Normal",
+  appearanceLively: "Lively",
+  appearanceOff: "Off",
+};
+
 /** Strings of the components in `site.tsx`. */
 export const SITE_STRINGS: Pick<
   UIStrings,
@@ -2558,6 +2611,7 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   RICH_TEXT_EDITOR_STRINGS,
   SELECT_MENU_STRINGS,
   SHELL_STRINGS,
+  APPEARANCE_STRINGS,
   SITE_STRINGS,
   WORKSPACE_STRINGS,
 );

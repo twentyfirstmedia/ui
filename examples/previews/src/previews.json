@@ -306,15 +306,17 @@
     "height": 880,
     "components": [
       "AppShell",
+      "AppearanceMenu",
       "Badge",
       "Button",
       "Card",
       "Chip",
+      "CommandPalette",
       "EventCard",
       "IconButton",
       "PageHeader",
       "Panel",
-      "SearchField",
+      "SearchTrigger",
       "Stagger",
       "StatTile",
       "Tabs",
@@ -1235,19 +1237,21 @@
     "height": 820,
     "components": [
       "AppShell",
-      "Sidebar",
-      "WorkspaceSwitcher",
-      "UserMenu",
+      "AppearanceMenu",
       "Badge",
       "Button",
+      "CommandPalette",
       "IconButton",
       "KeyValue",
       "PageHeader",
       "Panel",
       "Progress",
-      "SearchField",
+      "SearchTrigger",
+      "Sidebar",
       "Stagger",
-      "StatTile"
+      "StatTile",
+      "UserMenu",
+      "WorkspaceSwitcher"
     ]
   },
   {
@@ -1983,6 +1987,27 @@
     "group": "Navigation",
     "width": 1100,
     "height": 580,
-    "components": ["AppShell", "PageHeader", "Panel"]
+    "components": [
+      "AppShell",
+      "AppearanceMenu",
+      "CommandPalette",
+      "PageHeader",
+      "Panel",
+      "SearchTrigger"
+    ]
+  },
+  {
+    "name": "AppearanceMenu",
+    "group": "Navigation",
+    "width": 720,
+    "height": 480,
+    "components": ["AppearanceMenu"]
+  },
+  {
+    "name": "SearchTrigger",
+    "group": "Navigation",
+    "width": 720,
+    "height": 200,
+    "components": ["SearchTrigger", "CommandPalette"]
   }
 ]

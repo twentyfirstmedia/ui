@@ -37,7 +37,7 @@ describe("twentyfirst-ui", () => {
     );
     expect(css).toContain('@import "@twentyfirstmedia/halo/tailwind.css";');
     const provider = file("components/ui-root.tsx");
-    expect(provider).toContain("<UIProvider>");
+    expect(provider).toContain("<AppearanceProvider>");
     const layout = file("app/layout.tsx");
     expect(layout).toContain('import { UIRoot } from "../components/ui-root";');
     expect(layout).toContain("<UIRoot>{children}</UIRoot>");
