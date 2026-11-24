@@ -15,11 +15,19 @@ export interface InitOptions {
 
 const PROVIDER = (kit: Kit, both: boolean) => `"use client";
 import type { ReactNode } from "react";
-import { UIProvider } from "${SCOPE}/${kit}";
+import { AppearanceProvider } from "${SCOPE}/${kit}";
 
-/** Kit settings for the whole app. Created by \`twentyfirst-ui init\`. */
+/**
+ * Kit settings for the whole app. The reader chooses theme, density, glass and motion${both ? " (and the kit)" : ""}
+ * with \`<AppearanceMenu />\` in the top bar; the choice is kept in this browser.
+ * Created by \`twentyfirst-ui init\`.
+ */
 export function UIRoot({ children }: { children: ReactNode }) {
-  return <UIProvider${both ? ` kit="${kit}"` : ""}>{children}</UIProvider>;
+  return (
+    <AppearanceProvider${both ? ` kits={["${kit}", "${kit === "halo" ? "pro" : "halo"}"]}` : ""}>
+      {children}
+    </AppearanceProvider>
+  );
 }
 `;
 

@@ -69,6 +69,7 @@ export function Popover(p: PopoverProps) {
             p.flush && "flush",
           )}
           role={p.role || "dialog"}
+          aria-label={p.label}
           style={
             p.width == null
               ? undefined

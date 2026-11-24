@@ -3,6 +3,12 @@
 The frame of an app: navigation on the frame (a sidebar with `navigation="sidebar"`, or a top bar)
 and the page on a sheet beside it, with an optional side panel and dock.
 
+**The standard frame** (the example above, and what new apps start with): `navigation="sidebar"`
+with `topbar`; the brand above the sidebar, a `SearchTrigger` that opens a `CommandPalette` as
+`topStart`, page actions and the `AppearanceMenu` as `topEnd`, no dock, the account at the foot of
+the sidebar, and the whole app inside an `AppearanceProvider` that keeps the reader's look. Apps
+can leave out or replace any part; the top navigation (`navigation="top"`) stays available.
+
 - `sidebarGroups`, `active` and `onNavigate` drive the sidebar; `workspaces` puts a workspace switcher
   and `user` with `userMenu` a user menu on it.
 - The shell reflows by its own width (container queries), so it also works inside a smaller area.

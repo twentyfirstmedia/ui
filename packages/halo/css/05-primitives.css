@@ -1487,3 +1487,50 @@ a.tf-iconbtn {
   box-sizing: border-box;
   text-decoration: none;
 }
+
+/* AppearanceMenu: the look menu of the top bar */
+.tf-appearance {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.tf-appearance-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tf-appearance-head strong {
+  font: 700 14px/20px var(--font-sans);
+  color: var(--ink);
+}
+.tf-appearance-head small,
+.tf-appearance-label {
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-appearance-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* SearchTrigger: looks like the search field, opens the search */
+.tf-search-trigger {
+  width: 100%;
+  border: 0;
+  font: 500 14px/20px var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+}
+.tf-search-trigger-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink-subtle);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.tf-search-trigger:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

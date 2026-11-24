@@ -30,6 +30,33 @@ export function App() {
 }
 ```
 
+## 3. The standard app frame
+
+Apps built with the kit share one frame: the brand, a search that opens the command palette and the look menu in a bar across the top, the navigation in a sidebar below it, the page on the sheet. `AppearanceProvider` stands in for `UIProvider` and keeps what the reader chooses in the `AppearanceMenu` (theme, density, glass, motion, and with both kits the kit) in this browser. It is the default, not a rule: every part can be left out or replaced.
+
+```tsx
+// app/layout.tsx: the stored look before the first paint, so a reload does not flash
+<head>
+  <script dangerouslySetInnerHTML={{ __html: appearanceScript() }} />
+</head>
+<body>
+  <AppearanceProvider>{children}</AppearanceProvider>
+</body>
+
+// app/(app)/layout.tsx
+<AppShell fill navigation="sidebar" topbar dock={false} brand="Acme"
+  topStart={<SearchTrigger placeholder="Search…" shortcut="⌘K" bindShortcut onClick={openSearch} />}
+  topStartCompact={<IconButton icon="search" label="Search" variant="ghost" onClick={openSearch} />}
+  topEnd={<AppearanceMenu />}
+  sidebarGroups={groups} active={section} sidebar={{ linkAs: Link, storageKey: "nav" }}
+  user={{ name, email }} userMenu={account}>
+  {children}
+</AppShell>
+<CommandPalette open={searchOpen} onClose={closeSearch} items={pages} />
+```
+
+`twentyfirst-ui init` sets up the provider this way. To keep the look per account instead, pass `initial` (the stored value) and `onChange` (save it) to `AppearanceProvider`, and a `hint` such as "Saved for your account" to `AppearanceMenu`. See [AppShell](/{{kit}}/components/AppShell/) and [AppearanceMenu](/{{kit}}/components/AppearanceMenu/).
+
 ## Tailwind v4
 
 The kit ships a preset that maps every token to Tailwind and clears the default palette, so utilities can only use kit values.
@@ -45,9 +72,10 @@ Import `@twentyfirstmedia/ui-core/themes.css` instead (both kits, scoped under `
 
 ```tsx
 import "@twentyfirstmedia/ui-core/themes.css";
-import { UIProvider } from "@twentyfirstmedia/{{kit}}";
+import { AppearanceProvider } from "@twentyfirstmedia/{{kit}}";
 
-<UIProvider kit={userPrefersPro ? "pro" : "halo"}>{children}</UIProvider>;
+// the reader picks the kit in the AppearanceMenu; or set it yourself: <UIProvider kit="pro">
+<AppearanceProvider kits={["halo", "pro"]}>{children}</AppearanceProvider>;
 ```
 
 ## Fonts for share images
