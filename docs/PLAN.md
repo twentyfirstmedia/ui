@@ -355,6 +355,12 @@ Notiz: Ein `backdrop-filter` auf der Shell macht sie zur Backdrop-Root für alle
 
 Notiz (Wunsch aus FollowerPilot): Bisher war ein Eintrag mit `items` immer ein einziger Button, sein `href` wurde ignoriert. Seiten wie „Orders“ über „SMM Orders“ waren so aus der Sidebar nicht erreichbar. Deutsche Texte liefert das Kit nicht mit (es ist nur Englisch); Apps setzen `showPages`/`hidePages` über `UIProvider messages`. Das Aufklappen beim Navigieren fügt nur hinzu: Ein von Hand zugeklappter Eintrag öffnet sich erst wieder, wenn der Leser auf eine seiner Seiten wechselt.
 
+### Phase 38: shadcn-Brücke, Switch mit der Geometrie des Kits
+- [x] `[data-slot="switch"]` und `switch-thumb` bekommen Maße, Einzug und Weg des Kit-Switches (Halo 40×24, Pro 28×16 mit Haarlinie), für shadcn v3 und v4; Knopf ohne Schatten, fest auf Glas
+- [x] Test vergleicht die Brücke mit dem echten `.tf-switch` beider Kits; Demo im Leitfaden „Moving from shadcn/ui“
+
+Notiz (Meldung aus FollowerPilot): Die Brücke hat den Switch nur umgefärbt. shadcns Maße blieben, der Knopf saß schief und gequetscht. Gewünscht war 40×24 in beiden Kits. Pro hat aber laut `reference/pro` einen eigenen Switch (28×16, Haarlinie, 10px-Knopf mit 1px Radius); die Brücke folgt in Pro also diesem, sonst sähe ein shadcn-Switch anders aus als der des Kits. Leitfäden können jetzt Live-Demos per Marker `<!-- demo: name -->` einbetten.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`

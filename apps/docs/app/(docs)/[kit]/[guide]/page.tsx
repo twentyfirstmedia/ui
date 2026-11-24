@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { Markdown, PageHead } from "@/components/docs";
+import { ShadcnSwitchDemo } from "@/components/shadcn-demo";
 import { forKit, knowledge, type KitName } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
 
 /** Guides that are only Markdown (apps/docs/content); theming and status have their own pages. */
+/** Live demos a guide places with a marker such as `<!-- demo: shadcn-switch -->`. */
+const DEMOS: Record<string, () => ReactNode> = {
+  "shadcn-switch": () => <ShadcnSwitchDemo />,
+};
 const SLUGS = ["installation", "cli", "text", "ai", "html", "shadcn", "changelog"];
 
 export const dynamicParams = false;
@@ -41,7 +47,11 @@ export default async function GuidePage({
         title={g.title}
         lead={forKit(knowledge, g.description, kit)}
       />
-      <Markdown text={forKit(knowledge, g.markdown, kit)} />
+      {forKit(knowledge, g.markdown, kit)
+        .split(/<!-- demo: ([\w-]+) -->/)
+        .map((part, i) =>
+          i % 2 ? <div key={i}>{DEMOS[part]?.()}</div> : <Markdown key={i} text={part} />,
+        )}
     </>
   );
 }
