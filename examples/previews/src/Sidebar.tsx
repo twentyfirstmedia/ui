@@ -30,12 +30,24 @@ const groups: SidebarGroup[] = [
     collapsible: true,
     items: [
       {
+        // a parent that is a page itself: the label opens Billing, the chevron its pages
         id: "billing",
         label: "Billing",
         icon: "card",
+        href: "#billing",
         items: [
-          { id: "invoices", label: "Invoices", icon: "file" },
-          { id: "payouts", label: "Payouts", icon: "download" },
+          { id: "invoices", label: "Invoices", icon: "file", href: "#invoices" },
+          { id: "payouts", label: "Payouts", icon: "download", href: "#payouts" },
+        ],
+      },
+      {
+        // a parent without a page of its own: the whole row opens its pages
+        id: "team",
+        label: "Team",
+        icon: "users",
+        items: [
+          { id: "members", label: "Members", icon: "user" },
+          { id: "roles", label: "Roles", icon: "lock" },
         ],
       },
       { id: "reports", label: "Reports", icon: "chart" },

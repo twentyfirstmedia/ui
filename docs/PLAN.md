@@ -347,6 +347,14 @@ Notiz (Wunsch aus FollowerPilot): Die Leiste ist ein Subgrid über beide Spalten
 
 Notiz: Ein `backdrop-filter` auf der Shell macht sie zur Backdrop-Root für alles darin. Jeder Filter in ihr (Leiste, Karten) sieht nur die halbtransparente Tönung der Shell und malt sie ein zweites Mal darüber; deshalb war die Leiste fast deckend. Der Vorschlag aus FollowerPilot war, der Shell den Filter ganz zu nehmen und die Farbanhebung auf den Hintergrund (Ambient) zu legen. Dann wäre der Rahmen über Fotos und Karten nicht mehr weichgezeichnet, und Glaskarten in der Shell sähen anders aus. Stattdessen liegt die Glasfläche einer Shell mit `fill` und Leiste auf `::before` hinter dem Inhalt. Die Shell selbst hat keinen Filter, die Leiste blendet nur weich (`--glass-blur`) ohne eigene Tönung. Gemessen über einem flachen Hintergrund: Abstand Leiste zu Sidebar vorher 8 bis 50 Farbstufen, jetzt höchstens 4; Glaskarten weichen höchstens um 1 ab. Ohne `fill` bleibt die Shell, wie sie war. Sidebar: Die Schreib-Wirkung lief im selben Commit wie die Lese-Wirkung und schrieb den Anfangswert, bevor der gespeicherte Wert ankam. Jetzt wartet sie, bis der Zustand den gespeicherten Wert zeigt.
 
+### Phase 37: Sidebar-Eltern, die selbst Seiten sind (0.12.0)
+- [x] Eltern mit `items` und `href`: Beschriftung als Link zur Seite, Chevron als eigener Button (`aria-expanded`, `aria-controls`, „Show/Hide … pages“ aus den Strings)
+- [x] Aktuell auf der eigenen Seite, „enthält die aktuelle Seite“ bei einem Kind; beim Navigieren aufklappen, ohne vom Leser geöffnete Eltern zu schließen
+- [x] Eingeklappt: Klick aufs Icon öffnet die Seite, Hover oder → das Flyout mit der Elternseite zuerst; Handy-Drawer: Beschriftung navigiert und schließt, Chevron klappt nur
+- [x] Eltern ohne `href` wie bisher; Tests für beide Arten; Beispiel auf der Sidebar-Seite
+
+Notiz (Wunsch aus FollowerPilot): Bisher war ein Eintrag mit `items` immer ein einziger Button, sein `href` wurde ignoriert. Seiten wie „Orders“ über „SMM Orders“ waren so aus der Sidebar nicht erreichbar. Deutsche Texte liefert das Kit nicht mit (es ist nur Englisch); Apps setzen `showPages`/`hidePages` über `UIProvider messages`. Das Aufklappen beim Navigieren fügt nur hinzu: Ein von Hand zugeklappter Eintrag öffnet sich erst wieder, wenn der Leser auf eine seiner Seiten wechselt.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`
