@@ -1,4 +1,9 @@
+import { registerIcons } from "@twentyfirstmedia/ui-core";
 import type { PipelineStage, RecordEntry, SidebarGroup } from "@twentyfirstmedia/ui-core";
+import { building } from "@twentyfirstmedia/ui-core/icons";
+
+// the CRM navigation uses an icon from the library
+registerIcons({ building });
 
 /** The navigation of the CRM examples. */
 export const CRM_NAV: SidebarGroup[] = [
