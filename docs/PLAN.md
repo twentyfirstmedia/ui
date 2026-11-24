@@ -364,6 +364,7 @@ Notiz (Meldung aus FollowerPilot): Die Brücke hat den Switch nur umgefärbt. sh
 ### Phase 39: Nacharbeiten zu 0.12.0 (0.12.1)
 - [x] shadcn-Brücke: `transform: none` und der Ruheplatz per `translate` stehen in getrennten Regeln; der Test prüft die Brücke auch so, wie Lightning CSS sie verkleinert
 - [x] Glas-AppShell auf dem Handy: Die Sidebar-Schublade zeichnet die Seite darunter weich (`--glass-filter`), in beiden Kits
+- [x] CI: Die Browser-Tests laufen auf sechs parallelen Runnern statt auf einem (etwa 10 statt 40 Minuten); der Check `e2e` fasst sie zusammen
 
 Notiz (Meldungen aus FollowerPilot): Lightning CSS, der CSS-Optimierer von Next.js, fasst `transform: none` und `translate` einer Regel zu `transform: translate(3px)` zusammen. Das `translate` der Regel für „an“ kam dann obendrauf, der Knopf saß rechts am Rand. Die Schublade hatte auf Glas nur die halbtransparente Füllung des Rahmens ohne Weichzeichnung, der Seiteninhalt schien scharf durch das Menü.
 
