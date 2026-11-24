@@ -1,5 +1,22 @@
 # @twentyfirstmedia/halo
 
+## 0.14.0
+
+### Minor Changes
+
+- [#72](https://github.com/twentyfirstmedia/ui/pull/72) [`29657bc`](https://github.com/twentyfirstmedia/ui/commit/29657bc08bcc4fde96cad047a17908865cb7ba6c) Thanks [@robintrepte](https://github.com/robintrepte)! - The standard app frame: sidebar and top bar with search and a look menu.
+  
+  - `AppearanceMenu`: the sun/moon button for the top bar that opens a popover with style (Halo/Pro, when an app ships both kits), theme (Auto/Light/Dark), density (Auto/Roomy/Compact), motion (Normal/Lively/Off) and "Glass surfaces". `rows` picks the rows, `hint` replaces "Saved on this device", `value`/`onChange` make it controlled.
+  - `AppearanceProvider`: a `UIProvider` that holds the choice, saves it in `localStorage` (`storageKey`, `false` to keep it in memory) and switches with a view transition. `kits={["halo", "pro"]}` turns on the style row; `initial` and `onChange` load and save the choice per account instead. `useAppearance()` is the same state as a hook, `appearanceScript()` an inline `<head>` script that sets the saved look before the first paint.
+  - `SearchTrigger`: the search field look for the top bar as a button that opens a `CommandPalette`; `shortcut="⌘K"` shows the key and `bindShortcut` binds it.
+  - `Popover` takes `label`, the accessible name of its panel.
+  - The AppShell, Dashboard and SidebarShellScreen demos show the standard frame; new pages for AppearanceMenu and SearchTrigger; the installation guide starts apps from it, `twentyfirst-ui init` writes `<AppearanceProvider>` and the MCP server's `build_screen` starts whole apps from it. Apps stay free to build their own frame.
+
+### Patch Changes
+
+- Updated dependencies [[`29657bc`](https://github.com/twentyfirstmedia/ui/commit/29657bc08bcc4fde96cad047a17908865cb7ba6c)]:
+  - @twentyfirstmedia/ui-core@0.14.0
+
 ## 0.13.0
 
 ### Minor Changes
