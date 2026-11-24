@@ -43,6 +43,8 @@ starts under the bar, rounded where it meets them.
   (`--glass-blur`) without adding a tint of its own. For that the pane is drawn on a layer behind
   the shell's content rather than on the shell itself (a backdrop-filter on the shell would make
   every filter inside it see only the shell).
+- On phones the sidebar opens as a drawer over the page; on glass it blurs what lies under it
+  (`--glass-filter`), so the page never shows sharply through the menu.
 
 ```tsx
 <AppShell fill navigation="sidebar" topbar brand="Admin" sidebarGroups={groups} active={section}
