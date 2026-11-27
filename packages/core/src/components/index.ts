@@ -293,4 +293,5 @@ export {
   InvoicePreview,
   TransactionRow,
 } from "./workspace.js";
+export { BulkActionBar, DaySeparator, Highlight, highlightParts } from "./common.js";
 export type * from "./types.js";

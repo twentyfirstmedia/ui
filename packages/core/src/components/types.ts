@@ -4075,3 +4075,52 @@ export interface SearchTriggerProps extends BaseProps {
   /** Opens your search, e.g. a `CommandPalette`. */
   onClick?: () => void;
 }
+
+/* ── Shared pieces (common.tsx) ── */
+export interface BulkActionBarAction {
+  /** Stable key (default the label). */
+  id?: string;
+  label: string;
+  icon?: IconName;
+  /** Draws the action in the danger colour (delete, cancel …). */
+  danger?: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+}
+export interface BulkActionBarProps extends BaseProps {
+  /** How many items are selected; the bar hides at 0 (unless `keepOpen`). */
+  count: number;
+  actions?: BulkActionBarAction[];
+  /** Shows "Clear" and is called by it. */
+  onClear?: () => void;
+  /** Accessible name of the toolbar (default "Bulk actions"). */
+  label?: string;
+  /** Stays visible with 0 selected (e.g. while an exit animation runs in your list). */
+  keepOpen?: boolean;
+  /**
+   * Default: the bar floats, sticky at the bottom of its scroll area (as in DataTable). `false`
+   * keeps it in the flow, e.g. at the top of a mail list.
+   */
+  floating?: boolean;
+  /** More controls after the actions (a menu, a select). */
+  children?: ReactNode;
+}
+export interface DaySeparatorProps extends BaseProps {
+  /** The day: shows "Today", "Yesterday" or the weekday and date in the provider's locale. */
+  date?: Date | string | number;
+  /** Text instead of the date (e.g. "New messages"). */
+  label?: string;
+  /** "accent" for the "new messages" line (the signal colour). */
+  tone?: "neutral" | "accent";
+  /** What counts as today (default now), for stable tests and server rendering. */
+  now?: Date | string | number;
+}
+export interface HighlightProps extends BaseProps {
+  text: string;
+  /** Search input: each word is marked (or the whole input with `exact`). */
+  query?: string;
+  /** The terms to mark, instead of `query`. */
+  terms?: string[];
+  /** Marks `query` as one phrase instead of word by word. */
+  exact?: boolean;
+}

@@ -331,6 +331,13 @@
     "components": ["Avatar", "Badge", "DataTable", "FilterBar"]
   },
   {
+    "name": "BulkActionBar",
+    "group": "Data",
+    "width": 720,
+    "height": 420,
+    "components": ["BulkActionBar", "ListRow", "Checkbox"]
+  },
+  {
     "name": "DatePicker",
     "group": "Forms",
     "width": 760,
@@ -1108,6 +1115,20 @@
     "width": 960,
     "height": 420,
     "components": ["Separator", "Label", "AspectRatio", "Input", "Button"]
+  },
+  {
+    "name": "DaySeparator",
+    "group": "Foundations",
+    "width": 720,
+    "height": 360,
+    "components": ["DaySeparator"]
+  },
+  {
+    "name": "Highlight",
+    "group": "Foundations",
+    "width": 720,
+    "height": 320,
+    "components": ["Highlight", "TextField"]
   },
   {
     "name": "ButtonGroup",

@@ -3,7 +3,7 @@
  * The context `UIProvider` fills, and the hooks components read it with. Kept apart from the
  * provider so a component that only needs its strings or formatters does not pull in theming.
  */
-import { createContext, useContext } from "react";
+import { createContext, useContext, type ElementType } from "react";
 import {
   LOCALE,
   formatDate,
@@ -33,6 +33,8 @@ export interface UIContextValue {
   messages: UIMessages;
   /** Element portals render into (null: document.body). */
   portalRoot: HTMLElement | null;
+  /** The router link every navigating component renders (`UIProvider linkAs`), else `<a>`. */
+  linkAs: ElementType | undefined;
 }
 
 export const UIContext = createContext<UIContextValue>({
@@ -44,11 +46,21 @@ export const UIContext = createContext<UIContextValue>({
   locale: LOCALE,
   messages: {},
   portalRoot: null,
+  linkAs: undefined,
 });
 
 /** Current kit, theme, density, locale, strings and portal target. */
 export function useUI(): UIContextValue {
   return useContext(UIContext);
+}
+
+/**
+ * The element a link renders as: the component's own `linkAs`, else the provider's (`UIProvider
+ * linkAs={Link}` once for the whole app), else a plain `<a>`.
+ */
+export function useLinkAs(own?: ElementType): ElementType {
+  const fromProvider = useContext(UIContext).linkAs;
+  return own || fromProvider || "a";
 }
 
 // Resolved strings per (messages, defaults): components get stable objects, and an app without

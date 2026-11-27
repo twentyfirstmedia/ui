@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useStrings } from "../context.js";
+import { useLinkAs, useStrings } from "../context.js";
 import { NAVIGATION_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
@@ -111,7 +111,7 @@ export function Tabs(p: TabsProps) {
 export function Breadcrumb(p: BreadcrumbProps) {
   const t = useStrings(NAVIGATION_STRINGS);
   const items = (p.items || []).map((it) => (typeof it === "string" ? { label: it } : it));
-  const Link = (p.linkAs || "a") as React.ElementType;
+  const Link = useLinkAs(p.linkAs);
   return (
     <nav
       style={p.style}
@@ -162,7 +162,7 @@ export function Pagination(p: PaginationProps) {
     if (i === 1 || i === total || Math.abs(i - cur) <= 1) pages.push(i);
     else if (pages[pages.length - 1] !== "…") pages.push("…");
   }
-  const Link = (p.linkAs || "a") as React.ElementType;
+  const Link = useLinkAs(p.linkAs);
   const step = (to: number, icon: "chevronLeft" | "chevronRight", label: string) => {
     const off = to < 1 || to > total;
     // links cannot be disabled: at the ends the arrow is a disabled button
@@ -528,7 +528,7 @@ export function Sidebar(p: SidebarProps) {
   const toggleRef = React.useRef<HTMLButtonElement>(null);
   const timer = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const uid = useId("side");
-  const Link = (p.linkAs || "a") as React.ElementType;
+  const Link = useLinkAs(p.linkAs);
 
   // remember the collapsed state. The stored value is applied first; nothing is written until the
   // state shows it (a controlled parent applies it a render later, and StrictMode runs the effects

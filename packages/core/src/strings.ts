@@ -1826,6 +1826,18 @@ export const APPEARANCE_STRINGS: Pick<
   appearanceOff: "Off",
 };
 
+/** Strings of the components in `common.tsx`. */
+export interface UIStrings {
+  today: string;
+  yesterday: string;
+}
+export const COMMON_STRINGS: Pick<UIStrings, "bulkActions" | "clear" | "today" | "yesterday"> = {
+  bulkActions: "Bulk actions",
+  clear: "Clear",
+  today: "Today",
+  yesterday: "Yesterday",
+};
+
 /** Strings of the components in `site.tsx`. */
 export const SITE_STRINGS: Pick<
   UIStrings,
@@ -2612,6 +2624,7 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   SELECT_MENU_STRINGS,
   SHELL_STRINGS,
   APPEARANCE_STRINGS,
+  COMMON_STRINGS,
   SITE_STRINGS,
   WORKSPACE_STRINGS,
 );

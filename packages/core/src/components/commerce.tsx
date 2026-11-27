@@ -2,7 +2,7 @@
 import * as React from "react";
 import { cx } from "../cx.js";
 import { formatMoney } from "../format.js";
-import { useFormat, useStrings } from "../context.js";
+import { useFormat, useLinkAs, useStrings } from "../context.js";
 import { COMMERCE_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { useControlled } from "../hooks.js";
@@ -500,7 +500,7 @@ export function OrderTimeline(p: OrderTimelineProps) {
 export function PlanCard(p: PlanCardProps) {
   const t = useStrings(COMMERCE_STRINGS);
   const money = useMoney();
-  const Link = (p.linkAs || "a") as React.ElementType;
+  const Link = useLinkAs(p.linkAs);
   return (
     <div
       style={p.style}
