@@ -100,8 +100,8 @@
     "name": "ApprovalCard",
     "group": "AI",
     "width": 820,
-    "height": 1180,
-    "components": ["ApprovalCard", "ChangePreview"]
+    "height": 1720,
+    "components": ["ApprovalCard", "ChangePreview", "MessagePreview"]
   },
   {
     "name": "ApprovalInbox",

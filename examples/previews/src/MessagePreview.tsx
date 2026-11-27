@@ -53,17 +53,19 @@ export default function Preview() {
           text="Spring is here. The new collection is live in the shop."
         />
       </ApprovalCard>
-      <MessagePreview
-        channel="WhatsApp"
-        recipient="Noah B. (…7731)"
-        window={{ state: "closed", until: "2026-04-14T11:00:00" }}
-        template={{
-          name: "order_update",
-          language: "en",
-          category: "Utility",
-          params: ["Noah", "2058", "Thursday"],
-        }}
-      />
+      <div className="tf-panel">
+        <MessagePreview
+          channel="WhatsApp"
+          recipient="Noah B. (…7731)"
+          window={{ state: "closed", until: "2026-04-14T11:00:00" }}
+          template={{
+            name: "order_update",
+            language: "en",
+            category: "Utility",
+            params: ["Noah", "2058", "Thursday"],
+          }}
+        />
+      </div>
     </div>
   );
 }

@@ -230,34 +230,36 @@ export function ChangePreview(p: ChangePreviewProps) {
     <div className={cx("tf-apreview", "tf-change", p.className)} style={p.style}>
       <Head title={p.title} />
       {p.facts && p.facts.length > 0 && <KeyValue items={p.facts} dense />}
-      <table className="tf-change-table">
-        <thead>
-          <tr>
-            <th scope="col">{p.fieldHeading || t.previewField}</th>
-            <th scope="col">{t.previewBefore}</th>
-            <th scope="col">{t.previewAfter}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((f, i) => {
-            const changed = (f.before ?? null) !== (f.after ?? null);
-            return (
-              <tr key={i} className={changed ? "changed" : undefined}>
-                <th scope="row">
-                  {f.label}
-                  {changed && <span className="tf-sr-only">{" · " + t.previewChanged}</span>}
-                </th>
-                <td data-label={t.previewBefore} className="before">
-                  {value(f.before, f.mono)}
-                </td>
-                <td data-label={t.previewAfter} className="after">
-                  {value(f.after, f.mono)}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {rows.length > 0 && (
+        <table className="tf-change-table">
+          <thead>
+            <tr>
+              <th scope="col">{p.fieldHeading || t.previewField}</th>
+              <th scope="col">{t.previewBefore}</th>
+              <th scope="col">{t.previewAfter}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((f, i) => {
+              const changed = (f.before ?? null) !== (f.after ?? null);
+              return (
+                <tr key={i} className={changed ? "changed" : undefined}>
+                  <th scope="row">
+                    {f.label}
+                    {changed && <span className="tf-sr-only">{" · " + t.previewChanged}</span>}
+                  </th>
+                  <td data-label={t.previewBefore} className="before">
+                    {value(f.before, f.mono)}
+                  </td>
+                  <td data-label={t.previewAfter} className="after">
+                    {value(f.after, f.mono)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
       {p.diff && <LineDiff before={p.diff.before} after={p.diff.after} context={p.diff.context} />}
       <Warnings items={p.warnings} />
     </div>

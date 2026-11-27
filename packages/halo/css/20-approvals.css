@@ -32,6 +32,7 @@
   opacity: 0.8;
 }
 .tf-approval-error {
+  margin: 16px 16px 0;
   display: flex;
   align-items: flex-start;
   gap: 8px;
@@ -87,6 +88,21 @@
   white-space: normal;
 }
 
+/* narrow cards keep the key icon; its words stay for screen readers */
+.tf-approval:not(.tf-approval-done) {
+  container: tf-approval / inline-size;
+}
+@container tf-approval (max-width: 440px) {
+  .tf-approval-key-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 /* compact: side panels */
 .tf-approval.compact .tf-approval-top {
   padding: 8px 12px;
@@ -113,7 +129,9 @@
   flex: 1 1 140px;
   min-width: 0;
 }
-.tf-approval.compact .tf-approval-opts > .tf-approval-error,
+.tf-approval.compact .tf-approval-error {
+  margin: 12px 12px 0;
+}
 .tf-approval.compact .tf-approval-opts > div:has(.tf-approval-input) {
   flex-basis: 100%;
 }
@@ -150,6 +168,10 @@
   min-height: 0;
   overflow-y: auto;
   padding-bottom: 16px;
+}
+.tf-approval.screen .tf-approval-main:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
 }
 .tf-approval.screen .tf-approval-opts {
   position: sticky;
@@ -246,7 +268,11 @@ a.tf-inbox-row {
   color: var(--ink);
   font: 700 11px/1 var(--font-mono);
 }
-@container tf-shell (max-width: 760px) {
+/* the family badge goes when the list is narrow (a side column, a phone) */
+.tf-inbox {
+  container: tf-inbox / inline-size;
+}
+@container tf-inbox (max-width: 520px) {
   .tf-inbox-row {
     grid-template-columns: 12px minmax(0, 1fr) auto;
   }
@@ -254,13 +280,9 @@ a.tf-inbox-row {
     display: none;
   }
 }
-@media (max-width: 480px) {
+@container tf-inbox (max-width: 360px) {
   .tf-inbox-row {
-    grid-template-columns: 12px minmax(0, 1fr) auto;
     padding: 8px 12px;
-  }
-  .tf-inbox-row .tf-family {
-    display: none;
   }
 }
 
@@ -433,6 +455,8 @@ a.tf-inbox-row {
 }
 .tf-change-table tr.changed td.before {
   color: var(--ink-muted);
+}
+.tf-change-table tr.changed td.before > span:not(.tf-change-empty) {
   text-decoration: line-through;
   text-decoration-color: var(--line-strong);
 }
@@ -492,8 +516,16 @@ a.tf-inbox-row {
     content: attr(data-label) " · ";
     font-weight: 500;
     color: var(--ink-subtle);
-    text-decoration: none;
-    display: inline;
+  }
+  /* unchanged: one value is enough */
+  .tf-change-table tr:not(.changed) td.before {
+    display: none;
+  }
+  .tf-change-table tr:not(.changed) td.after::before {
+    content: none;
+  }
+  .tf-change-table tr:not(.changed) td.after {
+    padding: 2px 0;
   }
 }
 
@@ -554,6 +586,11 @@ a.tf-inbox-row {
 }
 .tf-msgpreview-params {
   margin: 8px 0 0;
+}
+.tf-msgpreview-params:first-child {
+  margin-top: 0;
+}
+.tf-msgpreview-params {
   padding: 0;
   list-style: none;
   font: 500 12px/18px var(--font-sans);
@@ -839,8 +876,6 @@ a.tf-inbox-row {
 }
 .tf-wl-blocked .tf-wl-template {
   color: var(--danger);
-  text-decoration: line-through;
-  text-decoration-color: var(--line-strong);
 }
 .tf-wl-blocked .tf-wl-row {
   grid-template-columns: minmax(0, 1fr);

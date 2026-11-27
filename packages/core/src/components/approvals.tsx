@@ -191,7 +191,8 @@ export function ApprovalCard(p: ApprovalCardProps) {
         )}
         {p.age && <span className="tf-approval-age">{p.age}</span>}
       </div>
-      <div className="tf-approval-main">
+      {/* screen: the content scrolls on its own, so it takes keyboard focus */}
+      <div className="tf-approval-main" tabIndex={p.screen ? 0 : undefined}>
         {p.title && (
           <p className="tf-approval-title">
             {p.href ? (
@@ -219,13 +220,13 @@ export function ApprovalCard(p: ApprovalCardProps) {
         )}
         {p.children && !folded && <div className="tf-approval-body">{p.children}</div>}
       </div>
+      {error && (
+        <div className="tf-approval-error" role="alert">
+          <Icon name="ban" size={14} />
+          <span>{error}</span>
+        </div>
+      )}
       <div className="tf-approval-opts" role="list">
-        {error && (
-          <div className="tf-approval-error" role="alert">
-            <Icon name="ban" size={14} />
-            <span>{error}</span>
-          </div>
-        )}
         {opts.map((o, i) => {
           const isBusy = busy === o.key;
           const key = needsKey(o.key);
@@ -258,7 +259,7 @@ export function ApprovalCard(p: ApprovalCardProps) {
                 {key && !isBusy && (
                   <small className="tf-approval-key">
                     <Icon name="key" size={12} />
-                    {t.needsPasskey}
+                    <span className="tf-approval-key-text">{t.needsPasskey}</span>
                   </small>
                 )}
                 {o.input && open[0] !== o.key && <Icon name="chevronRight" size={14} />}
@@ -314,10 +315,10 @@ export function ApprovalCard(p: ApprovalCardProps) {
             </div>
           );
         })}
-        <span className="tf-sr-only" role="status">
-          {busy ? (needsKey(busy) ? t.confirmWithPasskey : t.sendingAnswer) : ""}
-        </span>
       </div>
+      <span className="tf-sr-only" role="status">
+        {busy ? (needsKey(busy) ? t.confirmWithPasskey : t.sendingAnswer) : ""}
+      </span>
       {(p.escalation || p.trace || p.note) && (
         <div className="tf-approval-foot">
           {p.escalation && (
