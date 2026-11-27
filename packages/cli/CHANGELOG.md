@@ -1,5 +1,106 @@
 # @twentyfirstmedia/ui
 
+## 0.15.0
+
+### Minor Changes
+
+- [#74](https://github.com/twentyfirstmedia/ui/pull/74) [`6f5d7bf`](https://github.com/twentyfirstmedia/ui/commit/6f5d7bfbfcf0adc6164a23d57934a4eb5eedc7df) Thanks [@robintrepte](https://github.com/robintrepte)! - Approvals: previews of exactly what runs, passkey step-up, inbox filters; infrastructure pieces.
+  
+  - New previews to put inside `ApprovalCard`: `ChangePreview` (before/after per field, changed rows marked, stacks on phones, optional folded line diff), `CommandPreview` (command, argv, server, risk, timeout, state read before, "Runs once after A"), `MessagePreview` (channel, masked recipient, reply window open/closing/closed, last messages, text or template, image or video of a post), `CampaignPreview` (contacts with source, first sentence, script, calling hours, budget in minutes and money, booking calendar), `DocumentPreview` (text diff or spreadsheet cells), `EventPreview` (time, place, guests with their answer, conflicts) and `MoneyPreview` (amount with cents, masked recipient, bookings with their sum or a refund, "Needs a fresh passkey"). Helpers `LineDiff`, `diffLines`, `foldDiff` and `maskRecipient`.
+  - New `CommandWhitelist` (allowed commands per server with parameters, risk and approval, blocked patterns) and `DomainHeader` (expiry with days left, SSL, the MX/SPF/DKIM/DMARC lights); `expiryStatus` is exported.
+  - Extended `ApprovalCard`: `stepUp` (A and B need a passkey: "Needs your passkey", then "Confirm with passkey" while pending), `onDecide` may return a Promise (busy answer, every answer waits, a rejection shows an error and keeps the card open, a resolve collapses a card without `decision`), controlled `busy` and `error`, `screen` (A–D sticky at the bottom in thumb reach on phones), a tighter `compact` with the payload behind "Show what runs", `href` / `linkAs` on the title, 48px answers on touch screens, glass on its own over maps and photos.
+  - Extended `ApprovalInbox`: filters by project, family and agent (`filters`, controlled or not), an escalation warning above the list, A–D on the selected row (`onDecide(id, key)`), a "Done" view for decided items (`decision` on the item), `href` rows with `linkAs`, roving focus with J/K.
+  - Extended `OverrideDiff`: `context` folds long unchanged runs into "… n unchanged lines" (it now uses a longest-common-subsequence diff). Extended `DomainList`: `href` per row and `linkAs`.
+  - New pattern `ApprovalsScreen`; the "Status and approvals" guide shows which preview goes with which action and how step-up works.
+
+- [#76](https://github.com/twentyfirstmedia/ui/pull/76) [`11c0f93`](https://github.com/twentyfirstmedia/ui/commit/11c0f930303a25088d9306f7dcceadccdc0fb98a) Thanks [@robintrepte](https://github.com/robintrepte)! - Calendar and webmail components.
+  
+  New:
+  
+  - `CalendarView`: day, week, month and agenda for several calendars (tints, visibility toggles, read-only calendars such as public holidays), an all-day row and a now line, create by clicking or dragging an empty slot or with Enter on a focused slot (arrow keys move between slots and days), event details as a popover (desktop) or a bottom sheet (phones) with guests and their replies, "Going?" (`onRsvp`) and your own actions; a week or month shows as a list on phones. Controlled `view`, `date`, `selected` and `hidden`; `onRangeChange` reports the visible range. `calendarRange` is exported.
+  - `EventInvite`: an invitation inside a mail with time, place, organizer, guests and what else is in the calendar then; Accept, Maybe, Decline and "Add to calendar"; updated and cancelled states.
+  - `MailHtml`: an HTML mail in a sandboxed frame (no scripts, no forms, its own CSP), remote images only after "Load images", links in a new tab without referrer, auto height, paper or theme colours. `mailDocument` and `countRemoteImages` are exported.
+  - `RecipientInput`: address chips with suggestions (static or asked while typing), validation and paste of several addresses (`parseRecipients`, `isEmailAddress`).
+  - `MailComposer`: from-address select, To/Cc/Bcc, subject, rich text body, signature switch, attachments from the device or app sources with upload progress, draft state, "Send later" and Undo in a toast; ⌘/Ctrl+Enter sends.
+  - `MailFolders`: the folder tree with standard and own folders, unread counts and a context menu (new folder inside, rename, delete, empty trash and junk) from a button, a right click or Shift+F10.
+  - `MailFilterBar`: account, domain, unread, starred, with attachments and agent.
+  - `MailRulesEditor`: conditions → actions (move, archive, mark read, star, forward, hand to an agent, delete).
+  - `AutoReplyEditor`: the out-of-office reply with a period, subject, message and "only contacts".
+  - `MailRouteList`: aliases and forwards of a domain with add and delete.
+  - Patterns: `MailScreen` (a full webmail) and `CalendarScreen` now built on `CalendarView` and `EventInvite`.
+  
+  Extended:
+  
+  - `InboxList`: `selectable` with checked ids (controlled or not), `bulkActions` in a `BulkActionBar` above the list, `onStar`, an attachment mark and rows as links (`href`, `linkAs`). Without these the markup stays as before.
+  - `MailThread`: `unsubscribe` (one-click unsubscribe for newsletters, done and busy states) and `actions` next to the subject.
+  - `RichTextEditor`: `hideLabel`.
+
+- [#76](https://github.com/twentyfirstmedia/ui/pull/76) [`11c0f93`](https://github.com/twentyfirstmedia/ui/commit/11c0f930303a25088d9306f7dcceadccdc0fb98a) Thanks [@robintrepte](https://github.com/robintrepte)! - Chat that works as well on a phone as on a desktop.
+  
+  New:
+  
+  - `ChatThread`: the scrolling log of a conversation; follows the newest message while it streams, offers "jump to the latest" when scrolled up, and `jumpTo` scrolls to a message (a search hit) and marks it.
+  - `MessageEditor` (edit a sent message in place: Enter sends, Shift+Enter is a new line, Esc cancels) and `VersionSwitch` ("‹ 1/2 ›", controlled, with a busy state).
+  - Thread lines: `HandoffLine` (agent A → agent B with the reason), `SystemLine`, `VoiceNote` (player, length, transcript), `VoiceLog` (a finished voice conversation folded into one record), `TypingIndicator`, `ReadOnlyBar` ("You are reading along" with "Step in"), `MentionText`.
+  - `parseChatQuery` (chat search tokens `from:`, `in:`, `before:`, `after:`), `safeHref`, `shiftMentions`-backed mentions in `Composer`.
+  - Kit icons `mic`, `micOff` and `camera` (still exported from the icon library for existing imports).
+  
+  Extended:
+  
+  - `RichText`: the full Markdown subset: tables with alignment (scrolling on their own), nested and task lists, quotes, rules, italic and strike, bare URLs, safe links only (no `javascript:` or `data:`), long words and URLs wrap; `highlight` marks search words, `linkAs` for relative links.
+  - `ChatMessage`: copy on every message, edit in place on one's own (`onEdit`), regenerate, versions (`versionCount`, `versionIndex`, `onVersionChange`, `versionBusy`), thumbs with a comment on thumbs down (`onFeedbackComment`, via `FeedbackRating`), actions on hover and focus (always on touch and on the last answer, `actionsVisible`), `mentions`, `highlight`, `voice`, `dictated` and `inVoice` markers, image thumbnails and file downloads, `id` for jumping.
+  - `ToolCall`: a "Trace" link (`traceHref`, `onTrace`, `traceLabel`, `linkAs`).
+  - `Composer`: `@` mentions (grouped suggestions by keyboard and mouse, tinted chips in the field through a mirror layer, removed whole by Backspace, sent as `{id, label, start, end}`), attachments by paste and drop with thumbnails, progress and errors, a camera button on touch screens, dictation run by the app (`dictation`, `onDictate`, ⌥ Space; the kit sends nothing anywhere), voice messages (hold to record, slide away to cancel, let go to send: `onVoiceMessage`), `typing` / `onTyping`, `readOnly` / `onStepIn`; `onSend` now also gets `{ mentions, dictated }`.
+  - `FeedbackRating`: `inline` for action rows, `upLabel` / `downLabel`; it moved to the chat components (same import).
+  - `ChatList`: search tokens shown as removable chips, controlled `query`, `onSearch(q, parsed)`, `filter={false}` for server search, rows as links (`href`, `linkAs`), `date` shown relative, unread counts with an accessible name, avatars for people.
+  - `ChatWorkspace`: one pane at a time on phones (list → thread with a back button: `view`, `onViewChange`), a resizable details pane on desktop (`detailsWidth`), layout by its own width (container queries).
+  - `SearchHits`: marks every word of the query; hits carry `messageId` for `ChatThread jumpTo`.
+  - `VoiceMode`: live `turns`, the barge-in state ("interrupted"), "connecting", `onInterrupt`, full screen on phones (`fullscreen`).
+
+- [#76](https://github.com/twentyfirstmedia/ui/pull/76) [`11c0f93`](https://github.com/twentyfirstmedia/ui/commit/11c0f930303a25088d9306f7dcceadccdc0fb98a) Thanks [@robintrepte](https://github.com/robintrepte)! - Coordination views for multi-agent systems and shared pieces:
+  
+  - `AgentNetwork`: the hierarchy of an orchestrator, its leads and the agents that do the work as a live graph (zoom, pan, fit). Each node shows status and an approval beacon; every new handoff from your event stream (`{ id, from, to, label }`) sends a packet along the edges and is announced to screen readers. With reduced motion the receiver is marked instead. A details card with a link opens on click; narrower than 560px it is a list.
+  - `CoordinationTicker`: the latest handoffs, runs and approvals as a live list with a link per line.
+  - `MissionControlScreen` pattern: the main agent's chat in the middle with prompt starters, open approvals, today's costs, the agent network and the ticker around it; tabs on phones; glass over `Ambient`.
+  - `UIProvider linkAs` and `useLinkAs`: one router link for every navigating component.
+  - `BulkActionBar` (DataTable now uses it), `DaySeparator` and `Highlight`.
+
+- [#74](https://github.com/twentyfirstmedia/ui/pull/74) [`6f5d7bf`](https://github.com/twentyfirstmedia/ui/commit/6f5d7bfbfcf0adc6164a23d57934a4eb5eedc7df) Thanks [@robintrepte](https://github.com/robintrepte)! - The app frame: routes, the bell, the look menu with a brand colour, a tab bar for phones, a stepper and input groups.
+  
+  New:
+  
+  - `NotificationCenter`: the bell for the top bar with the unread count (its accessible name says how many), behind it the notification list in a popover (a bottom sheet on phones), grouped by day, with a deep link per item and "Mark all read"; controlled `open`.
+  - `Stepper`: wizard steps in a row on wide screens (done, current, upcoming, error; `onStepClick` goes back to done steps), "Step 2 of 5" with a progress bar on phones or with `variant="compact"`.
+  - `InputGroup`: a text field with `start` and `end` affixes in one outline (text read with the field, an icon, a unit select or a button).
+  - `matchPath(pathname, entries)`: the entry whose `href` matches the path, the longest match winning.
+  
+  Extended:
+  
+  - `AppShell`: `pathname` marks the page whose `href` matches (top nav and sidebar), `linkAs` renders every nav link (sidebar, top nav, tab bar, rail, dock) through your router, `notifications` puts a `NotificationCenter` and `appearance` the `AppearanceMenu` at the end of the top bar, `tabBar` shows a `MobileTabBar` with "More" on phones, a "Skip to content" link jumps to `<main>` (`skipLink`, `mainId`), and with `fill` the frame keeps clear of the notch and the home indicator (safe areas).
+  - `AppearanceMenu` and `AppearanceProvider`: a brand colour row (the kit's own, the six `THEME_PRESETS`, a custom colour through `brandTheme`; `brand` in `Appearance` and in `appearanceScript`), a preview while a choice is hovered (`onPreview`), a bottom sheet on phones (`sheet`), and `Ambient` behind the app while glass is on (`ambient`). `appearanceBrandTheme(brand)` gives the theme of a brand value.
+  - `MobileTabBar`: tabs with `href` (and `linkAs`), `countTone: "signal"`, and `more` for the pages that do not fit, in a sheet grouped by `group`.
+  - `NotificationList`: day groups from `date`, `href` per item (with `linkAs`), `hideFilter`.
+  - Nav items (`NavItem`, `SidebarItem`) take `countTone: "signal"`; top nav items take `id` and `href`; `SideRail` and `Dock` items take `href` (with `linkAs`).
+  - `Segmented` takes `onPreview` (called while an option is hovered).
+
+- [#76](https://github.com/twentyfirstmedia/ui/pull/76) [`11c0f93`](https://github.com/twentyfirstmedia/ui/commit/11c0f930303a25088d9306f7dcceadccdc0fb98a) Thanks [@robintrepte](https://github.com/robintrepte)! - Files, finance and brand studio components.
+  
+  New:
+  
+  - `FileBrowser`: a folder as a grid or a list with breadcrumbs, search, an image or PDF preview drawer, upload by drop and picker with progress per file (also in parts), new folder, rename in place (F2), move through a folder picker, trash after a confirmation, the bulk action bar for a selection and keyboard paths. View, selection, search and preview work controlled or uncontrolled. `fileKindOf(item)` works out a file's kind.
+  - `InvoiceEditor`: customer picker, line items with quantity, unit, unit price, VAT rate (data, default 19 %, 7 %, 0 %) and discount, a discount on the whole invoice, totals per rate, beside a live `InvoicePreview` (under the form below 1100px, tabs on phones). Numbers are typed in the provider's locale.
+  - `invoiceTotals(lines, { discount })` and `roundMoney`: invoice sums rounded per line and once per VAT rate, for the editor, the preview and your server.
+  - `ImportSuggestions`: bank statement lines with a suggested category and booking, select all, an optional category picker, and the selection booked in one step (`onConfirm(ids)` with a pending state).
+  - `PeriodLock`: a month open or locked, with lock and unlock after a confirmation ("Confirm with passkey" with `stepUp`) and a pending state while your callback's Promise runs.
+  - `PaletteSwatches`: a palette as data with HEX and OKLCH (click to copy) and the WCAG contrast on light and dark. The maths is exported: `contrastRatio`, `wcagLevel`, `hexToOklch`, `formatOklch`, `relativeLuminance`, `parseHex`.
+  - `AssetCard`: a generated image or asset with its state (queued, generating, ready, failed), a watermark badge, a version stepper, make current, regenerate with a prompt and download.
+  
+  Extended:
+  
+  - `ExportDialog` gains the accounting export (e.g. DATEV): `check` (bookings, sum, drafts left out, own lines), `missing` settings with a link to fix them (Export stays off while any is listed, `linkAs` for router links) and `lockPeriod` ("Lock the month with the export", passed to `onExport` as `lock`).
+  - `InvoicePreview` takes a `discount` per line and on the whole invoice and now rounds VAT once per rate with `invoiceTotals`.
+  - The FilesScreen and InvoiceScreen patterns use `FileBrowser` and `InvoiceEditor`.
+
 ## 0.14.0
 
 ### Minor Changes
