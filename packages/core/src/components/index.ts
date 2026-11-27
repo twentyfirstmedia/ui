@@ -273,6 +273,7 @@ export {
   appearanceProps,
   appearanceScript,
   parseAppearance,
+  appearanceBrandTheme,
   DEFAULT_APPEARANCE,
   type AppearanceProviderProps,
   type UseAppearanceOptions,
@@ -300,4 +301,5 @@ export {
   layoutAgentNetwork,
   handoffPath,
 } from "./coordination.js";
+export { NotificationCenter, Stepper, InputGroup, matchPath } from "./frame.js";
 export type * from "./types.js";

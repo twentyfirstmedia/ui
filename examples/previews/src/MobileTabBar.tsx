@@ -46,6 +46,7 @@ function App() {
               label: "Approvals",
               icon: "check",
               count: 3,
+              countTone: "signal",
             },
             {
               id: "mail",
@@ -53,10 +54,16 @@ function App() {
               icon: "mail",
             },
             {
-              id: "more",
-              label: "More",
-              icon: "menu",
+              id: "agents",
+              label: "Agents",
+              icon: "bot",
             },
+          ]}
+          more={[
+            { id: "calendar", label: "Calendar", icon: "calendar", group: "Work" },
+            { id: "files", label: "Files", icon: "folder", group: "Work" },
+            { id: "billing", label: "Billing", icon: "card", count: 1, group: "Settings" },
+            { id: "team", label: "Team", icon: "users", group: "Settings" },
           ]}
         />
       </div>

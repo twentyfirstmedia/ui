@@ -222,6 +222,7 @@ export function Segmented(p: SegmentedProps) {
       className={cx("tf-seg", p.size === "sm" && "sm", p.block && "block", p.className)}
       role="radiogroup"
       aria-label={p.label}
+      onPointerLeave={p.onPreview ? () => p.onPreview?.(null) : undefined}
     >
       {(p.options || []).map((o) => {
         const opt =
@@ -233,7 +234,11 @@ export function Segmented(p: SegmentedProps) {
               : o,
           on = v[0] === opt.value;
         return (
-          <label key={opt.value} className={cx("tf-seg-item", on && "on")}>
+          <label
+            key={opt.value}
+            className={cx("tf-seg-item", on && "on")}
+            onPointerEnter={p.onPreview ? () => p.onPreview?.(opt.value) : undefined}
+          >
             {opt.icon && <Icon name={opt.icon} size={14} />}
             {/* the radio covers the whole segment (positioned on the label); inside the text's
                 span, a click on the text and a click on the radio hit the same target */}

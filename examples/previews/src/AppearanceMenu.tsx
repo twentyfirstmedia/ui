@@ -15,16 +15,17 @@ export default function Preview() {
       defaults={{ kit: ui.kit, theme: ui.theme === "dark" ? "dark" : "light" }}
     >
       <div
-        // overflow: on the narrowest docs pages the menu is wider than the preview box
+        // overflow: on the narrowest docs pages the menu is wider than the preview box; in an app
+        // the menu opens as a bottom sheet on phones, here it stays a popover
         style={{
           display: "flex",
           alignItems: "flex-end",
           justifyContent: "flex-end",
-          minHeight: 420,
+          minHeight: 520,
           overflow: "hidden",
         }}
       >
-        <AppearanceMenu side="top" open={open} onOpenChange={setOpen} />
+        <AppearanceMenu side="top" open={open} onOpenChange={setOpen} sheet={false} />
       </div>
     </AppearanceProvider>
   );

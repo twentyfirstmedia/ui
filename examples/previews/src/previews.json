@@ -1028,6 +1028,13 @@
     "components": ["TextField"]
   },
   {
+    "name": "InputGroup",
+    "group": "Forms",
+    "width": 760,
+    "height": 360,
+    "components": ["InputGroup", "Icon", "Button"]
+  },
+  {
     "name": "Toaster",
     "group": "Overlays",
     "width": 760,
@@ -2021,11 +2028,13 @@
     "name": "AppShell",
     "group": "Navigation",
     "width": 1100,
-    "height": 580,
+    "height": 660,
     "components": [
       "AppShell",
       "AppearanceMenu",
       "CommandPalette",
+      "MobileTabBar",
+      "NotificationCenter",
       "PageHeader",
       "Panel",
       "SearchTrigger"
@@ -2035,8 +2044,22 @@
     "name": "AppearanceMenu",
     "group": "Navigation",
     "width": 720,
-    "height": 480,
+    "height": 580,
     "components": ["AppearanceMenu"]
+  },
+  {
+    "name": "NotificationCenter",
+    "group": "Navigation",
+    "width": 720,
+    "height": 560,
+    "components": ["NotificationCenter", "NotificationList", "DaySeparator"]
+  },
+  {
+    "name": "Stepper",
+    "group": "Navigation",
+    "width": 900,
+    "height": 300,
+    "components": ["Stepper", "Button"]
   },
   {
     "name": "SearchTrigger",

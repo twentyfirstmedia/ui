@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useStrings } from "../context.js";
+import { useLinkAs, useStrings } from "../context.js";
 import { SHELL_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { cx, reduced } from "../cx.js";
@@ -9,13 +9,18 @@ import { Tooltip } from "./overlays.js";
 import { useControlled, useId } from "../hooks.js";
 import { Sidebar, UserMenu } from "./navigation.js";
 import { WorkspaceSwitcher } from "./admin.js";
+import { MobileTabBar } from "./app-chrome.js";
+import { AppearanceMenu } from "./appearance.js";
+import { NotificationCenter, matchPath } from "./frame.js";
 import type {
   AppShellProps,
   DockItem,
   AmbientProps,
   DockProps,
   FloatingLayoutProps,
+  MobileTabBarItem,
   NavItem,
+  SidebarGroup,
   RailItem,
   SideRailProps,
   TopBarProps,
@@ -51,8 +56,12 @@ function useTight(nav: React.RefObject<HTMLDivElement | null>, key: string) {
   return tight;
 }
 
+const countClass = (tone?: "neutral" | "signal") =>
+  cx("tf-nav-count", tone === "signal" && "signal");
+
 export function TopBar(p: TopBarProps) {
   const t = useStrings(SHELL_STRINGS);
+  const Link = useLinkAs(p.linkAs);
   const navRef = React.useRef<HTMLDivElement>(null);
   // labels give way to icons when the bar runs out of room, before anything scrolls
   const tight = useTight(navRef, (p.items || []).map((it) => it.label).join("|"));
@@ -67,21 +76,38 @@ export function TopBar(p: TopBarProps) {
       )}
       <div ref={navRef} className={cx("tf-nav", tight && "tight")}>
         {(p.items || []).map((it) => {
-          const active = it.label === p.active;
-          return (
+          const id = it.id || it.label;
+          const active = id === p.active || it.label === p.active;
+          const inner = (
+            <>
+              <Icon name={it.icon} />
+              <span className="tf-nav-label">{it.label}</span>
+              {it.count ? <span className={countClass(it.countTone)}>{it.count}</span> : null}
+            </>
+          );
+          return it.href ? (
+            <Link
+              key={id}
+              href={it.href}
+              className="tf-nav-item"
+              aria-current={active ? "page" : undefined}
+              title={it.label}
+              onClick={() => p.onNavigate?.(id)}
+            >
+              {inner}
+            </Link>
+          ) : (
             <button
-              key={it.label}
+              key={id}
               type="button"
               className="tf-nav-item"
               aria-current={active ? "page" : undefined}
               title={it.label}
               onClick={() => {
-                p.onNavigate && p.onNavigate(it.label);
+                p.onNavigate && p.onNavigate(id);
               }}
             >
-              <Icon name={it.icon} />
-              <span className="tf-nav-label">{it.label}</span>
-              {it.count ? <span className="tf-nav-count">{it.count}</span> : null}
+              {inner}
             </button>
           );
         })}
@@ -108,11 +134,12 @@ export function TopBar(p: TopBarProps) {
   );
 }
 
-function railBtn(it: RailItem, i: number, expanded: boolean) {
+function railBtn(it: RailItem, i: number, expanded: boolean, Link: React.ElementType) {
+  const Tag: React.ElementType = it.href ? Link : "button";
   const btn = (
-    <button
+    <Tag
       key={it.label}
-      type="button"
+      {...(it.href ? { href: it.href } : { type: "button" })}
       className="tf-rail-btn"
       style={{
         animationDelay: `calc(${200 + i * 50}ms * var(--motion-time, 1))`,
@@ -128,7 +155,7 @@ function railBtn(it: RailItem, i: number, expanded: boolean) {
         </span>
       )}
       {it.count ? <span className="tf-dotcount">{it.count}</span> : null}
-    </button>
+    </Tag>
   );
   return expanded ? (
     btn
@@ -141,6 +168,7 @@ function railBtn(it: RailItem, i: number, expanded: boolean) {
 
 export function SideRail(p: SideRailProps) {
   const t = useStrings(SHELL_STRINGS);
+  const Link = useLinkAs(p.linkAs);
   const [expanded, setExpanded] = useControlled(
     p.expanded,
     !!p.defaultExpanded,
@@ -169,9 +197,11 @@ export function SideRail(p: SideRailProps) {
       className={cx("tf-rail", expanded && "expanded", p.className)}
       aria-label={p.label || t.tools}
     >
-      <div className="tf-rail-group">{(p.top || []).map((it, i) => railBtn(it, i, expanded))}</div>
       <div className="tf-rail-group">
-        {(p.bottom || []).map((it, i) => railBtn(it, i + 3, expanded))}
+        {(p.top || []).map((it, i) => railBtn(it, i, expanded, Link))}
+      </div>
+      <div className="tf-rail-group">
+        {(p.bottom || []).map((it, i) => railBtn(it, i + 3, expanded, Link))}
         {p.toggle &&
           (expanded ? (
             toggle
@@ -187,6 +217,7 @@ export function SideRail(p: SideRailProps) {
 
 export function Dock(p: DockProps) {
   const t = useStrings(SHELL_STRINGS);
+  const Link = useLinkAs(p.linkAs);
   return (
     <div
       className={cx("tf-dock", p.surface && "tf-" + p.surface, p.className)}
@@ -194,18 +225,21 @@ export function Dock(p: DockProps) {
       role="toolbar"
       aria-label={p.label || t.quickActions}
     >
-      {(p.items || []).map((it) => (
-        <button
-          key={it.label}
-          type="button"
-          className={cx("tf-dock-btn", "tf-t-" + (it.tint || "plain"))}
-          aria-label={it.label}
-          title={it.label}
-          onClick={it.onClick}
-        >
-          <Icon name={it.icon} />
-        </button>
-      ))}
+      {(p.items || []).map((it) => {
+        const Tag: React.ElementType = it.href ? Link : "button";
+        return (
+          <Tag
+            key={it.label}
+            {...(it.href ? { href: it.href } : { type: "button" })}
+            className={cx("tf-dock-btn", "tf-t-" + (it.tint || "plain"))}
+            aria-label={it.label}
+            title={it.label}
+            onClick={it.onClick}
+          >
+            <Icon name={it.icon} />
+          </Tag>
+        );
+      })}
     </div>
   );
 }
@@ -489,6 +523,7 @@ function ShellBar(p: {
   shell: AppShellProps;
   find: boolean;
   setFind: (open: boolean) => void;
+  extras: React.ReactNode;
 }) {
   const t = useStrings(SHELL_STRINGS);
   const s = p.shell;
@@ -504,7 +539,7 @@ function ShellBar(p: {
       )
       ?.focus();
   }, [p.find]);
-  const end = s.topExtra != null || s.topEnd != null;
+  const end = s.topExtra != null || s.topEnd != null || p.extras != null;
   return (
     <header className={cx("tf-shell-bar", p.find && "find-open")}>
       <div className="tf-shell-bar-brand">{p.brand}</div>
@@ -547,6 +582,7 @@ function ShellBar(p: {
           <div className="tf-shell-bar-end">
             {s.topExtra}
             {s.topEnd}
+            {p.extras}
           </div>
         )}
       </div>
@@ -554,7 +590,40 @@ function ShellBar(p: {
   );
 }
 
+/** A page the shell knows: its id, address, icon and group, for routes and the tab bar. */
+type ShellPage = MobileTabBarItem & { group?: string; parent?: string };
+
+function pagesOf(groups: SidebarGroup[]): ShellPage[] {
+  const out: ShellPage[] = [];
+  for (const g of groups)
+    for (const it of g.items || []) {
+      // filter options (checkboxes, radios) are not pages
+      if (it.checked !== undefined || it.onCheckedChange) continue;
+      const id = it.id || it.label;
+      out.push({
+        id,
+        label: it.label,
+        icon: it.icon || "file",
+        href: it.href,
+        count: it.count,
+        countTone: it.countTone,
+        group: g.label,
+      });
+      for (const c of it.items || [])
+        out.push({
+          id: c.id || c.label,
+          label: c.label,
+          icon: c.icon || it.icon || "file",
+          href: c.href,
+          group: g.label,
+          parent: id,
+        });
+    }
+  return out;
+}
+
 export function AppShell(p: AppShellProps) {
+  const t = useStrings(SHELL_STRINGS);
   const bar = p.navigation === "sidebar" && p.topbar != null && p.topbar !== false;
   // with the bar the brand sits above the sidebar, so the shell follows the collapsed state
   const [collapsed, setCollapsed] = useControlled(
@@ -563,17 +632,71 @@ export function AppShell(p: AppShellProps) {
     p.sidebar?.onCollapsedChange,
   );
   const [find, setFind] = React.useState(false);
-  if (p.navigation === "sidebar") {
-    const groups = p.sidebarGroups || [
-      {
-        items: (p.nav || NAV()).map((n) => ({
-          id: n.label,
-          label: n.label,
-          icon: n.icon,
-          count: n.count,
-        })),
-      },
-    ];
+  const autoId = useId("main");
+  const mainId = p.mainId || autoId;
+  const linkAs = p.linkAs ?? p.sidebar?.linkAs;
+  const sidebarMode = p.navigation === "sidebar";
+  const nav = p.nav || NAV();
+  const groups: SidebarGroup[] = p.sidebarGroups || [
+    {
+      items: nav.map((n) => ({
+        id: n.id || n.label,
+        label: n.label,
+        icon: n.icon,
+        count: n.count,
+        countTone: n.countTone,
+        href: n.href,
+      })),
+    },
+  ];
+  const pages: ShellPage[] = sidebarMode
+    ? pagesOf(groups)
+    : nav.map((n) => ({
+        id: n.id || n.label,
+        label: n.label,
+        icon: n.icon,
+        href: n.href,
+        count: n.count,
+        countTone: n.countTone,
+      }));
+  // the current page: given, or the page whose address the path is in
+  const active = p.active ?? matchPath(p.pathname, pages)?.id;
+
+  // bell and look menu at the end of the top bar
+  const extras =
+    p.notifications || p.appearance ? (
+      <>
+        {p.notifications && <NotificationCenter linkAs={linkAs} {...p.notifications} />}
+        {p.appearance && (
+          <AppearanceMenu {...(typeof p.appearance === "object" ? p.appearance : null)} />
+        )}
+      </>
+    ) : null;
+
+  // the tab bar on phones: the first pages, the rest behind "More"
+  const tabCount = p.tabBar ? (typeof p.tabBar === "number" ? p.tabBar : 4) : 0;
+  const top = pages.filter((pg) => !pg.parent);
+  const fits = top.length <= tabCount + 1;
+  const tabs = fits ? top : top.slice(0, tabCount);
+  const more = fits ? [] : pages.filter((pg) => !tabs.includes(pg));
+  const activeTop = pages.find((pg) => pg.id === active)?.parent ?? active;
+  const tabBar = tabCount > 0 && (
+    <MobileTabBar
+      className="tf-shell-tabbar"
+      items={tabs}
+      more={more}
+      active={tabs.some((pg) => pg.id === activeTop) ? activeTop : active}
+      onPick={p.onNavigate}
+      linkAs={linkAs}
+    />
+  );
+  const skip = p.skipLink !== false && (
+    <a className="tf-skip" href={`#${mainId}`}>
+      {t.skipToContent}
+    </a>
+  );
+
+  if (sidebarMode) {
     const brand = (collapsed: boolean) =>
       p.workspaces ? (
         <WorkspaceSwitcher variant="frame" {...p.workspaces} compact={collapsed} />
@@ -584,6 +707,7 @@ export function AppShell(p: AppShellProps) {
           {p.tag && !collapsed && <span className="tf-brand-tag">{p.tag}</span>}
         </span>
       ) : null;
+    const tools = !bar && (p.topExtra || extras);
     return (
       <div
         className={cx(
@@ -592,16 +716,27 @@ export function AppShell(p: AppShellProps) {
           bar && "tf-shell-has-bar",
           bar && find && "tf-shell-find",
           p.fill && "tf-shell-fill",
+          tabCount > 0 && "tf-shell-tabbed",
           p.className,
         )}
         style={p.style}
       >
-        {bar && <ShellBar brand={brand(collapsed)} shell={p} find={find} setFind={setFind} />}
+        {skip}
+        {bar && (
+          <ShellBar
+            brand={brand(collapsed)}
+            shell={p}
+            find={find}
+            setFind={setFind}
+            extras={extras}
+          />
+        )}
         <Sidebar
           variant="shell"
           groups={groups}
-          current={p.active}
+          current={active}
           onPick={p.onNavigate}
+          linkAs={linkAs}
           header={({ collapsed }) => brand(collapsed)}
           footer={({ collapsed }) =>
             p.user ? (
@@ -620,45 +755,83 @@ export function AppShell(p: AppShellProps) {
           className={cx("tf-sheet", !p.railTop && "tf-sheet-norail", !p.side && "tf-sheet-2")}
           style={p.sheetStyle}
         >
-          {p.railTop && <SideRail top={p.railTop} bottom={p.railBottom} />}
-          <main key={p.contentKey} className={cx("tf-main", p.dock !== false && "tf-main-dock")}>
-            {p.topExtra && !bar && <div className="tf-shell-tools">{p.topExtra}</div>}
+          {p.railTop && <SideRail top={p.railTop} bottom={p.railBottom} linkAs={linkAs} />}
+          <main
+            key={p.contentKey}
+            id={mainId}
+            tabIndex={-1}
+            className={cx("tf-main", p.dock !== false && "tf-main-dock")}
+          >
+            {tools && (
+              <div className="tf-shell-tools">
+                {p.topExtra}
+                {extras}
+              </div>
+            )}
             {p.children}
           </main>
           {p.side || null}
           {p.dock !== false && (
             <div className="tf-dock-float">
-              <Dock items={p.dockItems || DOCK()} />
+              <Dock items={p.dockItems || DOCK()} linkAs={linkAs} />
             </div>
           )}
         </div>
+        {tabBar}
       </div>
     );
   }
   return (
-    <div className={cx("tf-shell", p.fill && "tf-shell-fill", p.className)} style={p.style}>
+    <div
+      className={cx(
+        "tf-shell",
+        p.fill && "tf-shell-fill",
+        tabCount > 0 && "tf-shell-tabbed",
+        p.className,
+      )}
+      style={p.style}
+    >
+      {skip}
       <TopBar
         brand={p.brand}
         brandDot={p.brandDot}
         tag={p.tag}
-        active={p.active}
-        items={p.nav || NAV()}
+        active={active}
+        items={nav}
         onNavigate={p.onNavigate}
         user={p.user}
-        extra={p.topExtra}
+        linkAs={linkAs}
+        extra={
+          p.topExtra || extras ? (
+            <>
+              {p.topExtra}
+              {extras}
+            </>
+          ) : undefined
+        }
       />
       <div className={cx("tf-sheet", !p.side && "tf-sheet-2")} style={p.sheetStyle}>
-        <SideRail top={p.railTop || RAIL_TOP()} bottom={p.railBottom || RAIL_BOTTOM()} />
-        <main key={p.contentKey} className={cx("tf-main", p.dock !== false && "tf-main-dock")}>
+        <SideRail
+          top={p.railTop || RAIL_TOP()}
+          bottom={p.railBottom || RAIL_BOTTOM()}
+          linkAs={linkAs}
+        />
+        <main
+          key={p.contentKey}
+          id={mainId}
+          tabIndex={-1}
+          className={cx("tf-main", p.dock !== false && "tf-main-dock")}
+        >
           {p.children}
         </main>
         {p.side || null}
         {p.dock !== false && (
           <div className="tf-dock-float">
-            <Dock items={p.dockItems || DOCK()} />
+            <Dock items={p.dockItems || DOCK()} linkAs={linkAs} />
           </div>
         )}
       </div>
+      {tabBar}
     </div>
   );
 }

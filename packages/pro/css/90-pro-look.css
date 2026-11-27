@@ -788,3 +788,36 @@ select.tf-input {
 .tf-togglegroup.sm .tf-toggle.icon {
   width: 20px;
 }
+
+/* App frame (0.15): InputGroup takes the field look of Pro: the canvas, a hairline, the density's
+   height; the focus is the hairline in the focus colour */
+.tf-inputgroup {
+  height: var(--density-control);
+  background: var(--canvas);
+}
+.tf-inputgroup:hover:not(.disabled):not(:focus-within) {
+  box-shadow: inset 0 0 0 var(--line-width) var(--fg-300);
+}
+.tf-inputgroup:focus-within {
+  box-shadow: inset 0 0 0 1px var(--focus);
+}
+.tf-inputgroup.invalid {
+  box-shadow: inset 0 0 0 var(--line-width) var(--danger);
+}
+.tf-inputgroup > .tf-input {
+  padding: 0 var(--space-2);
+}
+.tf-ig-affix.text {
+  padding-left: var(--space-2);
+  font: 400 var(--density-font-size)/var(--density-line-height) var(--font-sans);
+}
+.tf-ig-affix.text.end {
+  padding: 0 var(--space-2) 0 0;
+}
+/* Pro's counts already use the signal colour; a signal count keeps that look */
+.tf-nav-count.signal,
+.tf-sidebar-count.signal,
+.tf-dotcount.signal {
+  background: var(--count);
+  color: var(--on-count);
+}
