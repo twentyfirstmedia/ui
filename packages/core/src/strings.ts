@@ -1128,10 +1128,6 @@ export const AGENTS_STRINGS: Pick<
   | "searchChats"
   | "noChatsMatch"
   | "nothingFound"
-  | "thanksNoted"
-  | "good"
-  | "notGood"
-  | "whatShouldBeDifferent"
   | "needsYou"
   | "suggestions"
   | "budgetUsedUp"
@@ -1151,6 +1147,14 @@ export const AGENTS_STRINGS: Pick<
   | "unmute"
   | "mute"
   | "endConversation"
+  | "backToChats"
+  | "resizeDetails"
+  | "removeFilter"
+  | "unreadCount"
+  | "voiceWith"
+  | "interrupted"
+  | "interrupt"
+  | "connecting"
 > = {
   chatWith: (name) => `Chat with ${name}`,
   costToday: "Cost today",
@@ -1158,10 +1162,6 @@ export const AGENTS_STRINGS: Pick<
   searchChats: "Search chats",
   noChatsMatch: "No chats match",
   nothingFound: "Nothing found",
-  thanksNoted: "Thanks, noted",
-  good: "Good",
-  notGood: "Not good",
-  whatShouldBeDifferent: "What should be different?",
   needsYou: "Needs you",
   suggestions: "Suggestions",
   budgetUsedUp: "Budget used up · agents paused",
@@ -1181,6 +1181,14 @@ export const AGENTS_STRINGS: Pick<
   unmute: "Unmute",
   mute: "Mute",
   endConversation: "End conversation",
+  backToChats: "Back to chats",
+  resizeDetails: "Resize the details",
+  removeFilter: (token) => `Remove ${token}`,
+  unreadCount: (n, formatted) => `${formatted ?? n} unread`,
+  voiceWith: (name) => `Voice conversation with ${name}`,
+  interrupted: "Go ahead, I'm listening",
+  interrupt: "Interrupt",
+  connecting: "Connecting…",
 };
 
 /** Strings of the components in `app-chrome.tsx`. */
@@ -1279,6 +1287,38 @@ export const CHAT_STRINGS: Pick<
   | "timeline"
   | "stepRunning"
   | "context"
+  | "table"
+  | "taskDone"
+  | "taskOpen"
+  | "copyMessage"
+  | "editMessage"
+  | "dictated"
+  | "inVoice"
+  | "downloadFile"
+  | "openImage"
+  | "trace"
+  | "openTrace"
+  | "mentionSuggestions"
+  | "agentsGroup"
+  | "peopleGroup"
+  | "dictate"
+  | "stopDictating"
+  | "dictating"
+  | "dictateOrHold"
+  | "recordVoice"
+  | "recordingVoice"
+  | "slideToCancel"
+  | "releaseToCancel"
+  | "cancelRecording"
+  | "sendVoice"
+  | "micUnavailable"
+  | "takePhoto"
+  | "uploading"
+  | "uploadFailed"
+  | "good"
+  | "notGood"
+  | "thanksNoted"
+  | "whatShouldBeDifferent"
 > = {
   copyCode: "Copy code",
   working: "Working",
@@ -1310,6 +1350,38 @@ export const CHAT_STRINGS: Pick<
   timeline: (total) => `Timeline · ${total}`,
   stepRunning: "running…",
   context: "Context",
+  table: "Table",
+  taskDone: "Done",
+  taskOpen: "Not done",
+  copyMessage: "Copy message",
+  editMessage: "Edit message",
+  dictated: "Dictated",
+  inVoice: "In voice conversation",
+  downloadFile: (name) => `Download ${name}`,
+  openImage: (name) => `Open ${name}`,
+  trace: "Trace",
+  openTrace: (name) => `Open the trace of ${name}`,
+  mentionSuggestions: "Mention someone",
+  agentsGroup: "Agents",
+  peopleGroup: "People",
+  dictate: "Dictate",
+  stopDictating: "Stop dictating",
+  dictating: "Listening…",
+  dictateOrHold: "Tap to dictate, hold for a voice message",
+  recordVoice: "Hold to record a voice message",
+  recordingVoice: (elapsed) => `Recording ${elapsed}`,
+  slideToCancel: "Slide away to cancel",
+  releaseToCancel: "Release to cancel",
+  cancelRecording: "Cancel recording",
+  sendVoice: "Send voice message",
+  micUnavailable: "No microphone available",
+  takePhoto: "Take a photo",
+  uploading: (percent) => `Uploading ${percent}`,
+  uploadFailed: "Upload failed",
+  good: "Good",
+  notGood: "Not good",
+  thanksNoted: "Thanks, noted",
+  whatShouldBeDifferent: "What should be different?",
 };
 
 /** Strings of the components in `commerce.tsx`. */
@@ -1836,6 +1908,112 @@ export const COMMON_STRINGS: Pick<UIStrings, "bulkActions" | "clear" | "today" |
   clear: "Clear",
   today: "Today",
   yesterday: "Yesterday",
+};
+
+/** Strings added to the chat components (chat.tsx, agents.tsx, chat-thread.tsx). */
+export interface UIStrings {
+  table: string;
+  taskDone: string;
+  taskOpen: string;
+  copyMessage: string;
+  editMessage: string;
+  dictated: string;
+  inVoice: string;
+  downloadFile: (name: string) => string;
+  openImage: (name: string) => string;
+  trace: string;
+  openTrace: (name: string) => string;
+  mentionSuggestions: string;
+  agentsGroup: string;
+  peopleGroup: string;
+  dictate: string;
+  stopDictating: string;
+  dictating: string;
+  dictateOrHold: string;
+  recordVoice: string;
+  recordingVoice: (elapsed: string) => string;
+  slideToCancel: string;
+  releaseToCancel: string;
+  cancelRecording: string;
+  sendVoice: string;
+  micUnavailable: string;
+  takePhoto: string;
+  uploading: (percent: string) => string;
+  uploadFailed: string;
+  backToChats: string;
+  resizeDetails: string;
+  removeFilter: (token: string) => string;
+  unreadCount: (n: number, formatted?: string) => string;
+  voiceWith: (name: string) => string;
+  interrupted: string;
+  interrupt: string;
+  connecting: string;
+  editHint: string;
+  previousVersion: string;
+  nextVersion: string;
+  versionOf: (index: string, count: string) => string;
+  versionLabel: (index: string, count: string) => string;
+  handedOverTo: string;
+  play: string;
+  voiceMessage: string;
+  showTranscript: string;
+  hideTranscript: string;
+  voiceConversation: string;
+  voiceTurns: (n: number, formatted?: string) => string;
+  typingOne: (name: string) => string;
+  typingTwo: (a: string, b: string) => string;
+  typingMany: (n: number, formatted?: string) => string;
+  readingAlong: string;
+  stepIn: string;
+  jumpToLatest: string;
+  conversation: string;
+}
+/** Strings of the components in `chat-thread.tsx`. */
+export const CHAT_THREAD_STRINGS: Pick<
+  UIStrings,
+  | "editHint"
+  | "previousVersion"
+  | "nextVersion"
+  | "versionOf"
+  | "versionLabel"
+  | "handedOverTo"
+  | "play"
+  | "pause"
+  | "voiceMessage"
+  | "showTranscript"
+  | "hideTranscript"
+  | "voiceConversation"
+  | "voiceTurns"
+  | "typingOne"
+  | "typingTwo"
+  | "typingMany"
+  | "readingAlong"
+  | "stepIn"
+  | "jumpToLatest"
+  | "conversation"
+  | "you"
+> = {
+  editHint: "The conversation runs again from here",
+  previousVersion: "Previous version",
+  nextVersion: "Next version",
+  versionOf: (index, count) => `${index}/${count}`,
+  versionLabel: (index, count) => `Version ${index} of ${count}`,
+  handedOverTo: "handed over to",
+  play: "Play",
+  pause: "Pause",
+  voiceMessage: "Voice message",
+  showTranscript: "Show transcript",
+  hideTranscript: "Hide transcript",
+  voiceConversation: "Voice conversation",
+  voiceTurns: (n, formatted) => `${formatted ?? n} ${n === 1 ? "turn" : "turns"}`,
+  typingOne: (name) => `${name} is typing…`,
+  typingTwo: (a, b) => `${a} and ${b} are typing…`,
+  typingMany: (n, formatted) => `${formatted ?? n} people are typing…`,
+  readingAlong: "You are reading along",
+  stepIn: "Step in",
+  jumpToLatest: "Jump to the latest message",
+  conversation: "Conversation",
+  you: "You",
 };
 
 /** Strings of the components in `site.tsx`. */
@@ -2625,6 +2803,7 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   SHELL_STRINGS,
   APPEARANCE_STRINGS,
   COMMON_STRINGS,
+  CHAT_THREAD_STRINGS,
   SITE_STRINGS,
   WORKSPACE_STRINGS,
 );

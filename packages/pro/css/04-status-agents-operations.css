@@ -2143,13 +2143,6 @@
   width: 40px;
 }
 @media (max-width: 900px) {
-  .tf-chatws,
-  .tf-chatws.with-details {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .tf-chatws-details {
-    display: none !important;
-  }
   .tf-settings-row {
     grid-template-columns: minmax(0, 1fr);
     gap: 12px;
