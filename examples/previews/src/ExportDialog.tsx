@@ -1,15 +1,21 @@
+import * as React from "react";
 import { ExportDialog } from "@twentyfirstmedia/ui-core";
 
 export default function Preview() {
   return (
     <div
-      style={{
-        display: "grid",
-        placeItems: "center",
-        padding: 24,
-        background: "var(--canvas)",
-        borderRadius: "var(--radius-lg)",
-      }}
+      className="tf-grid"
+      style={
+        {
+          "--cols": "1fr 1fr",
+          gap: 24,
+          alignItems: "start",
+          justifyItems: "center",
+          padding: 24,
+          background: "var(--canvas)",
+          borderRadius: "var(--radius-lg)",
+        } as React.CSSProperties
+      }
     >
       <ExportDialog
         inline
@@ -66,6 +72,19 @@ export default function Preview() {
             }, 300);
           })
         }
+        onClose={() => {}}
+      />
+      <ExportDialog
+        inline
+        title="DATEV export · October 2026"
+        text="Bookings of Halo Workspace GmbH for the tax advisor."
+        formats={["DATEV", "CSV"]}
+        ranges={false}
+        check={{ count: 128, sum: 48210.5, drafts: 2 }}
+        missing={[{ label: "Consultant number is missing", href: "#settings" }]}
+        lockPeriod
+        defaultLock
+        onExport={() => new Promise<void>((r) => setTimeout(r, 900))}
         onClose={() => {}}
       />
     </div>

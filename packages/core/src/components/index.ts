@@ -76,10 +76,10 @@ export {
   AgentCard,
   AgentDetails,
   ChatList,
+  parseChatQuery,
   ChatWorkspace,
   SearchHits,
   ThinkingLine,
-  FeedbackRating,
   ActivityFeed,
   DailyBriefing,
   BudgetStop,
@@ -121,6 +121,7 @@ export {
   TypingDots,
   AgentMark,
   ChatMessage,
+  FeedbackRating,
   ToolCall,
   Reasoning,
   PromptStarters,
@@ -129,6 +130,7 @@ export {
   AgentStatus,
   RunTrace,
   UsageMeter,
+  safeHref,
 } from "./chat.js";
 export {
   ProductArt,
@@ -317,4 +319,34 @@ export {
   maskRecipient,
 } from "./approval-previews.js";
 export { CommandWhitelist, DomainHeader } from "./infra.js";
+export {
+  ChatThread,
+  MentionText,
+  MessageEditor,
+  VersionSwitch,
+  HandoffLine,
+  SystemLine,
+  VoiceNote,
+  VoiceLog,
+  TypingIndicator,
+  ReadOnlyBar,
+} from "./chat-thread.js";
+export { CalendarView, EventInvite, calendarRange } from "./calendar.js";
+export {
+  MailHtml,
+  RecipientInput,
+  MailComposer,
+  MailFolders,
+  MailFilterBar,
+  MailRulesEditor,
+  AutoReplyEditor,
+  MailRouteList,
+  mailDocument,
+  countRemoteImages,
+  parseRecipients,
+  isEmailAddress,
+} from "./webmail.js";
+export { FileBrowser, fileKindOf } from "./files.js";
+export { InvoiceEditor, ImportSuggestions, PeriodLock } from "./finance.js";
+export { PaletteSwatches, AssetCard } from "./brand-studio.js";
 export type * from "./types.js";

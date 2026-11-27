@@ -87,7 +87,13 @@ function App() {
             <UsageMeter label="Context" used={19} limit={200} format={(v) => v + "k"} />
           </div>
         </div>
-        <ChatMessage role="user" text="Draft a reply to Northwind about the seat upgrade" />
+        <ChatMessage
+          role="user"
+          text="Draft a reply to Northwind about the seat upgrade"
+          onEdit={() => {}}
+          versionCount={2}
+          versionIndex={1}
+        />
         <ChatMessage
           role="assistant"
           name="Atlas"
@@ -105,6 +111,7 @@ function App() {
             },
           ]}
           usage="1,527 tokens · €0.06"
+          onRetry={() => {}}
           before={
             <div
               className="tf-col"
@@ -116,7 +123,13 @@ function App() {
                 duration="1.4 s"
                 steps={["Find the thread", "Check pricing", "Draft, then ask"]}
               />
-              <ToolCall name="Mailbox" icon="mail" summary="Read 3 messages" duration="0.8 s" />
+              <ToolCall
+                name="Mailbox"
+                icon="mail"
+                summary="Read 3 messages"
+                duration="0.8 s"
+                traceHref="#trace"
+              />
               <ToolCall
                 name="Knowledge base"
                 icon="book"
@@ -139,7 +152,12 @@ function App() {
           }
         />
         <Composer
-          placeholder="Ask Atlas something, or type / for commands"
+          placeholder="Ask Atlas something, @ to mention, / for commands"
+          mentionOptions={[
+            { id: "ledger", label: "Ledger", group: "Agents", role: "Invoices", tint: "butter" },
+            { id: "lena", label: "Lena Hart", kind: "person", group: "People", role: "Sales lead" },
+          ]}
+          onDictate={() => {}}
           models={[
             {
               id: "s",

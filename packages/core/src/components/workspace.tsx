@@ -8,6 +8,7 @@ import { WORKSPACE_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { useScrollFocus, useTrap } from "../hooks.js";
 import { cx } from "../cx.js";
+import { invoiceTotals } from "../invoice.js";
 import { Avatar, Badge, Button, IconButton, TintIcon } from "./foundation.js";
 import { Spinner } from "./building-blocks.js";
 import { Tabs } from "./navigation.js";
@@ -674,17 +675,10 @@ export function InvoicePreview(p: InvoicePreviewProps) {
   const money2 = useMoney2();
   const { formatPercent } = useFormat();
   const lines = p.lines || [];
-  let net = 0;
-  const vat: Record<number, number> = {};
-  lines.forEach((l) => {
-    const x = l.q * l.u;
-    net += x;
-    vat[l.v] = (vat[l.v] || 0) + (x * l.v) / 100;
-  });
-  let tax = 0;
-  Object.keys(vat).forEach((k) => {
-    tax += vat[Number(k)] ?? 0;
-  });
+  const sums = invoiceTotals(
+    lines.map((l) => ({ quantity: l.q, price: l.u, vat: l.v, discount: l.discount })),
+    { discount: p.discount },
+  );
   const fmt = p.format || money2;
   return (
     <div style={p.style} className={cx("tf-paper", p.className)}>
@@ -726,27 +720,51 @@ export function InvoicePreview(p: InvoicePreviewProps) {
       <div className="tf-paper-lines">
         {lines.map((l, i) => (
           <div key={i}>
-            <span>{(l.d || t.untitledLine) + (l.q !== 1 ? " × " + l.q : "")}</span>
-            <b>{fmt(l.q * l.u)}</b>
+            <span>
+              {(l.d || t.untitledLine) + (l.q !== 1 ? " × " + l.q : "")}
+              {l.discount ? (
+                <small>
+                  {" · " +
+                    t.discount +
+                    " " +
+                    formatPercent(l.discount, { maximumFractionDigits: 2 })}
+                </small>
+              ) : null}
+            </span>
+            <b>{fmt(sums.lines[i] ?? 0)}</b>
           </div>
         ))}
       </div>
       <div className="tf-paper-totals">
+        {sums.discount !== 0 && (
+          <>
+            <div>
+              <span>{t.subtotal}</span>
+              <b>{fmt(sums.subtotal)}</b>
+            </div>
+            <div>
+              <span>
+                {t.discount + " " + formatPercent(p.discount || 0, { maximumFractionDigits: 2 })}
+              </span>
+              <b>{"−" + fmt(sums.discount)}</b>
+            </div>
+          </>
+        )}
         <div>
           <span>{t.net}</span>
-          <b>{fmt(net)}</b>
+          <b>{fmt(sums.net)}</b>
         </div>
-        {Object.keys(vat)
-          .filter((k) => +k > 0)
-          .map((k) => (
-            <div key={k}>
-              <span>{t.vatAt(formatPercent(Number(k), { maximumFractionDigits: 2 }))}</span>
-              <b>{fmt(vat[Number(k)] ?? 0)}</b>
+        {sums.rates
+          .filter((r) => r.rate > 0)
+          .map((r) => (
+            <div key={r.rate}>
+              <span>{t.vatAt(formatPercent(r.rate, { maximumFractionDigits: 2 }))}</span>
+              <b>{fmt(r.vat)}</b>
             </div>
           ))}
         <div className="grand">
           <span>{t.totalDue}</span>
-          <b>{fmt(net + tax)}</b>
+          <b>{fmt(sums.total)}</b>
         </div>
       </div>
       {p.note && <div className="tf-paper-small">{p.note}</div>}

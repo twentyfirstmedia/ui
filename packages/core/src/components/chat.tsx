@@ -1,21 +1,36 @@
 "use client";
 import * as React from "react";
-import { useFormat, useStrings } from "../context.js";
+import { useFormat, useLinkAs, useStrings } from "../context.js";
 import { CHAT_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
-import { useControlled } from "../hooks.js";
-import { Avatar, Badge, TintIcon } from "./foundation.js";
+import { useControlled, useId, useScrollFocus } from "../hooks.js";
+import { highlightParts } from "./common.js";
+import { Avatar, Badge, Button, TintIcon } from "./foundation.js";
+import {
+  MentionText,
+  MessageEditor,
+  ReadOnlyBar,
+  SystemLine,
+  TypingIndicator,
+  VersionSwitch,
+  VoiceNote,
+} from "./chat-thread.js";
 import { Popover, Tooltip } from "./overlays.js";
 import type {
   BaseProps,
   AgentMarkProps,
   AgentStatusProps,
+  ChatAttachment,
   ChatMessageProps,
+  FeedbackRatingProps,
   CodeBlockProps,
+  ComposerAttachment,
   ComposerCommand,
   ComposerProps,
   IconName,
+  Mention,
+  MentionOption,
   ModelPickerProps,
   PromptStartersProps,
   ReasoningProps,
@@ -28,104 +43,341 @@ import type {
 
 /* ════════ Kit 3: AI chat & agents, e-commerce, system screens ════════ */
 
-/* ── Rich text: paragraphs, **bold**, `code`, - lists, 1. lists, ```code blocks``` ── */
-/** Only http(s), mailto and relative links are rendered as links. */
-function safeHref(url: string): string | undefined {
-  return /^(https?:|mailto:|\/|#|\.)/i.test(url.trim()) ? url : undefined;
+/* ── Rich text: a Markdown subset for chat answers ── */
+/**
+ * Only http(s), mailto, tel and relative links become links; `javascript:`, `data:` and other
+ * schemes render as plain text. Control characters and spaces are dropped first, because browsers
+ * ignore them inside a scheme ("java\tscript:").
+ */
+export function safeHref(url: string): string | undefined {
+  // eslint-disable-next-line no-control-regex
+  const u = url.replace(/[\u0000- \u007f]/g, "");
+  if (!u) return undefined;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(u)) return /^(https?:|mailto:|tel:)/i.test(u) ? u : undefined;
+  return u;
 }
 
-function inline(s: string, k: string): React.ReactNode[] {
-  const out: React.ReactNode[] = [],
-    re = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/g;
+interface RtContext {
+  terms: string[];
+  streaming?: boolean;
+  t: typeof CHAT_STRINGS;
+  linkAs: React.ElementType;
+}
+
+// 1 backticks, 2 code, 3 **bold**, 4 __bold__, 5 ~~strike~~, 6 *em*, 7 _em_, 8 link text,
+// 9 link target, 10 bare URL
+const INLINE =
+  "(`+)([\\s\\S]*?[^`])\\1(?!`)" +
+  "|\\*\\*(?=\\S)([\\s\\S]*?\\S)\\*\\*" +
+  "|__(?=\\S)([\\s\\S]*?\\S)__" +
+  "|~~(?=\\S)([\\s\\S]*?\\S)~~" +
+  "|\\*(?=[^\\s*])([^*]*?[^\\s*]|[^\\s*])\\*" +
+  "|(?<![\\p{L}\\p{N}_])_(?=[^\\s_])([^_]*?[^\\s_]|[^\\s_])_(?![\\p{L}\\p{N}_])" +
+  '|\\[([^\\]]+)\\]\\(\\s*<?([^)\\s>]+)>?(?:\\s+"[^"]*")?\\s*\\)' +
+  "|(?<![\\w/@])((?:https?:\\/\\/|www\\.)[^\\s<]*[^\\s<.,;:!?)\\]'\"*_~])";
+
+function marked(s: string, k: string, ctx: RtContext): React.ReactNode[] {
+  if (!ctx.terms.length) return [s];
+  return highlightParts(s, ctx.terms).map((part, i) =>
+    part.hit ? <mark key={k + "m" + i}>{part.text}</mark> : part.text,
+  );
+}
+
+function inline(s: string, k: string, ctx: RtContext): React.ReactNode[] {
+  const out: React.ReactNode[] = [];
+  const re = new RegExp(INLINE, "gu");
   let last = 0,
     m: RegExpExecArray | null,
     i = 0;
   while ((m = re.exec(s))) {
-    if (m.index > last) out.push(s.slice(last, m.index));
-    const t = m[0];
-    if (t[0] === "*") out.push(<b key={k + "b" + i++}>{t.slice(2, -2)}</b>);
-    else if (t[0] === "`")
+    if (m.index > last) out.push(...marked(s.slice(last, m.index), k + "t" + i, ctx));
+    const key = k + "-" + i++;
+    if (m[2] !== undefined)
       out.push(
-        <code key={k + "c" + i++} className="tf-icode">
-          {t.slice(1, -1)}
+        <code key={key} className="tf-icode">
+          {marked(m[2].replace(/^ (.+) $/, "$1"), key, ctx)}
         </code>,
       );
+    else if (m[3] !== undefined || m[4] !== undefined)
+      out.push(<b key={key}>{inline((m[3] ?? m[4]) as string, key, ctx)}</b>);
+    else if (m[5] !== undefined) out.push(<s key={key}>{inline(m[5], key, ctx)}</s>);
+    else if (m[6] !== undefined || m[7] !== undefined)
+      out.push(<em key={key}>{inline((m[6] ?? m[7]) as string, key, ctx)}</em>);
     else {
-      const mm = /\[([^\]]+)\]\(([^)]+)\)/.exec(t) as RegExpExecArray;
+      const label = m[8] !== undefined ? inline(m[8], key, ctx) : marked(m[10] as string, key, ctx);
+      const raw = (m[9] ?? m[10]) as string;
+      const href = safeHref(/^www\./i.test(raw) ? "https://" + raw : raw);
+      const external = !!href && /^https?:/i.test(href);
+      const Link = external ? "a" : ctx.linkAs;
       out.push(
-        <a key={k + "a" + i++} href={safeHref(mm[2] as string)} target="_blank" rel="noreferrer">
-          {mm[1]}
-        </a>,
+        href ? (
+          <Link
+            key={key}
+            href={href}
+            target={external ? "_blank" : undefined}
+            rel={external ? "noopener noreferrer" : undefined}
+          >
+            {label}
+          </Link>
+        ) : (
+          <span key={key}>{label}</span>
+        ),
       );
     }
-    last = m.index + t.length;
+    last = m.index + m[0].length;
   }
-  if (last < s.length) out.push(s.slice(last));
+  if (last < s.length) out.push(...marked(s.slice(last), k + "t" + i, ctx));
+  return out;
+}
+
+const FENCE = /^\s{0,3}(`{3,}|~{3,})\s*([\w+#.-]*)[^`]*$/;
+const HEADING = /^\s{0,3}(#{1,6})\s+(.*?)(?:\s+#+)?\s*$/;
+const RULE = /^\s{0,3}([-*_])(?:\s*\1){2,}\s*$/;
+const QUOTE = /^\s{0,3}>/;
+const LIST = /^(\s*)([-*+]|\d{1,9}[.)])\s+(.*)$/;
+const TABLE_SEP = /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/;
+const indentOf = (s: string) => s.replace(/\t/g, "    ").length;
+const isTableStart = (lines: string[], i: number) =>
+  (lines[i] as string).includes("|") &&
+  i + 1 < lines.length &&
+  (lines[i + 1] as string).includes("-") &&
+  TABLE_SEP.test(lines[i + 1] as string) &&
+  ((lines[i + 1] as string).includes("|") || (lines[i] as string).trim().startsWith("|"));
+const startsBlock = (lines: string[], i: number) => {
+  const l = lines[i] as string;
+  return (
+    FENCE.test(l) ||
+    HEADING.test(l) ||
+    RULE.test(l) ||
+    QUOTE.test(l) ||
+    LIST.test(l) ||
+    isTableStart(lines, i)
+  );
+};
+const cells = (row: string) =>
+  row
+    .trim()
+    .replace(/^\|/, "")
+    .replace(/(?<!\\)\|$/, "")
+    .split(/(?<!\\)\|/)
+    .map((c) => c.trim().replace(/\\\|/g, "|"));
+
+interface ListEntry {
+  indent: number;
+  ordered: boolean;
+  num: number;
+  text: string;
+}
+
+function RtTable(p: {
+  head: string[];
+  align: string[];
+  rows: string[][];
+  k: string;
+  ctx: RtContext;
+}) {
+  const box = React.useRef<HTMLDivElement>(null);
+  useScrollFocus(box);
+  const align = (i: number) =>
+    (p.align[i] || undefined) as React.CSSProperties["textAlign"] | undefined;
+  return (
+    <div ref={box} className="tf-rt-table" role="region" aria-label={p.ctx.t.table}>
+      <table>
+        <thead>
+          <tr>
+            {p.head.map((c, i) => (
+              <th key={i} scope="col" style={{ textAlign: align(i) }}>
+                {inline(c, p.k + "h" + i, p.ctx)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {p.rows.map((r, ri) => (
+            <tr key={ri}>
+              {p.head.map((_, ci) => (
+                <td key={ci} style={{ textAlign: align(ci) }}>
+                  {inline(r[ci] ?? "", p.k + "c" + ri + "-" + ci, p.ctx)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function renderList(entries: ListEntry[], k: string, ctx: RtContext): React.ReactNode {
+  const base = (entries[0] as ListEntry).indent;
+  const items: { e: ListEntry; children: ListEntry[] }[] = [];
+  for (const e of entries) {
+    const prev = items[items.length - 1];
+    if (prev && e.indent >= base + 2) prev.children.push(e);
+    else items.push({ e, children: [] });
+  }
+  const first = entries[0] as ListEntry;
+  const Tag = first.ordered ? "ol" : "ul";
+  return (
+    <Tag key={k} start={first.ordered && first.num !== 1 ? first.num : undefined}>
+      {items.map(({ e, children }, ii) => {
+        const task = /^\[([ xX])\]\s+([\s\S]*)$/.exec(e.text);
+        const done = !!task && task[1] !== " ";
+        return (
+          <li key={ii} className={task ? "tf-rt-task" : undefined}>
+            {task ? (
+              <>
+                <span
+                  className={cx("tf-rt-check", done && "on")}
+                  role="img"
+                  aria-label={done ? ctx.t.taskDone : ctx.t.taskOpen}
+                >
+                  {done && <Icon name="check" size={12} />}
+                </span>
+                <span>{inline(task[2] as string, k + ii, ctx)}</span>
+              </>
+            ) : (
+              inline(e.text, k + ii, ctx)
+            )}
+            {children.length > 0 && renderList(children, k + ii + "n", ctx)}
+          </li>
+        );
+      })}
+    </Tag>
+  );
+}
+
+function rtBlocks(lines: string[], k: string, ctx: RtContext): React.ReactNode[] {
+  const out: React.ReactNode[] = [];
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i] as string;
+    const key = k + "-" + i;
+    if (!line.trim()) {
+      i++;
+      continue;
+    }
+    let m = FENCE.exec(line);
+    if (m) {
+      const fence = m[1] as string;
+      const body: string[] = [];
+      let closed = false;
+      i++;
+      while (i < lines.length) {
+        const l = lines[i] as string;
+        if (l.trim().startsWith(fence) && /^\s*(`{3,}|~{3,})\s*$/.test(l)) {
+          closed = true;
+          i++;
+          break;
+        }
+        body.push(l);
+        i++;
+      }
+      out.push(
+        <CodeBlock
+          key={key}
+          lang={m[2] || ""}
+          code={body.join("\n")}
+          open={!closed && ctx.streaming}
+        />,
+      );
+      continue;
+    }
+    if ((m = HEADING.exec(line))) {
+      out.push(
+        <p key={key} className={cx("tf-rt-h", "h" + (m[1] as string).length)}>
+          {inline(m[2] as string, key, ctx)}
+        </p>,
+      );
+      i++;
+      continue;
+    }
+    if (RULE.test(line)) {
+      out.push(<hr key={key} className="tf-rt-hr" />);
+      i++;
+      continue;
+    }
+    if (QUOTE.test(line)) {
+      const inner: string[] = [];
+      while (i < lines.length && QUOTE.test(lines[i] as string))
+        inner.push((lines[i++] as string).replace(/^\s{0,3}> ?/, ""));
+      out.push(<blockquote key={key}>{rtBlocks(inner, key, ctx)}</blockquote>);
+      continue;
+    }
+    if (isTableStart(lines, i)) {
+      const head = cells(line);
+      const align = cells(lines[i + 1] as string).map((c) =>
+        /^:-+:$/.test(c) ? "center" : /-:$/.test(c) ? "right" : /^:/.test(c) ? "left" : "",
+      );
+      const rows: string[][] = [];
+      i += 2;
+      while (i < lines.length && (lines[i] as string).includes("|") && (lines[i] as string).trim())
+        rows.push(cells(lines[i++] as string));
+      out.push(<RtTable key={key} k={key} head={head} align={align} rows={rows} ctx={ctx} />);
+      continue;
+    }
+    if (LIST.test(line)) {
+      const entries: ListEntry[] = [];
+      while (i < lines.length) {
+        const l = lines[i] as string;
+        const lm = LIST.exec(l);
+        if (lm && !RULE.test(l)) {
+          entries.push({
+            indent: indentOf(lm[1] as string),
+            ordered: /\d/.test(lm[2] as string),
+            num: parseInt(lm[2] as string, 10) || 1,
+            text: lm[3] as string,
+          });
+          i++;
+        } else if (!l.trim()) {
+          // a blank line inside a list: the list goes on if an item or an indented line follows
+          let j = i + 1;
+          while (j < lines.length && !(lines[j] as string).trim()) j++;
+          const next = lines[j];
+          if (next !== undefined && (LIST.test(next) || /^\s{2,}\S/.test(next))) i = j;
+          else break;
+        } else if (/^\s{2,}\S/.test(l) && entries.length) {
+          const last = entries[entries.length - 1] as ListEntry;
+          last.text += " " + l.trim();
+          i++;
+        } else break;
+      }
+      out.push(renderList(entries, key, ctx));
+      continue;
+    }
+    const para: string[] = [line];
+    i++;
+    while (i < lines.length && (lines[i] as string).trim() && !startsBlock(lines, i))
+      para.push(lines[i++] as string);
+    out.push(
+      <p key={key}>
+        {para.map((l, li) => (
+          <React.Fragment key={li}>
+            {li > 0 && <br />}
+            {inline(l.trim(), key + "l" + li, ctx)}
+          </React.Fragment>
+        ))}
+      </p>,
+    );
+  }
   return out;
 }
 
 export function RichText(p: RichTextProps) {
-  const src = String(p.text || ""),
-    blocks: React.ReactNode[] = [],
-    parts = src.split(/```/);
-  parts.forEach((part, pi) => {
-    if (pi % 2 === 1) {
-      const nl = part.indexOf("\n"),
-        lang = nl > -1 ? part.slice(0, nl).trim() : "",
-        code = nl > -1 ? part.slice(nl + 1) : part;
-      blocks.push(
-        <CodeBlock
-          key={"cb" + pi}
-          lang={lang}
-          code={code.replace(/\n$/, "")}
-          open={p.streaming && pi === parts.length - 1}
-        />,
-      );
-      return;
-    }
-    part.split(/\n{2,}/).forEach((para, j) => {
-      const lines = para.split("\n").filter((l) => l.trim() !== "");
-      if (!lines.length) return;
-      const key = pi + "-" + j;
-      if (lines.every((l) => /^\s*[-*] /.test(l)))
-        blocks.push(
-          <ul key={key}>
-            {lines.map((l, li) => (
-              <li key={li}>{inline(l.replace(/^\s*[-*] /, ""), key + li)}</li>
-            ))}
-          </ul>,
-        );
-      else if (lines.every((l) => /^\s*\d+\. /.test(l)))
-        blocks.push(
-          <ol key={key}>
-            {lines.map((l, li) => (
-              <li key={li}>{inline(l.replace(/^\s*\d+\. /, ""), key + li)}</li>
-            ))}
-          </ol>,
-        );
-      else if (/^#{1,3} /.test(lines[0] as string))
-        blocks.push(
-          <p key={key} className="tf-rt-h">
-            {inline((lines[0] as string).replace(/^#+ /, ""), key)}
-          </p>,
-          lines.length > 1 && <p key={key + "r"}>{inline(lines.slice(1).join(" "), key + "r")}</p>,
-        );
-      else
-        blocks.push(
-          <p key={key}>
-            {lines.map((l, li) => (
-              <React.Fragment key={li}>
-                {li > 0 && <br />}
-                {inline(l, key + li)}
-              </React.Fragment>
-            ))}
-          </p>,
-        );
-    });
-  });
+  const t = useStrings(CHAT_STRINGS);
+  const linkAs = useLinkAs(p.linkAs);
+  const ctx: RtContext = {
+    terms: p.highlight ? p.highlight.split(/\s+/).filter(Boolean) : [],
+    streaming: p.streaming,
+    t,
+    linkAs,
+  };
+  const lines = String(p.text || "")
+    .replace(/\r\n?/g, "\n")
+    .split("\n");
   return (
     <div style={p.style} className={cx("tf-rt", p.className)}>
-      {blocks}
+      {rtBlocks(lines, "b", ctx)}
       {p.streaming && <span className="tf-caret" aria-hidden />}
     </div>
   );
@@ -226,30 +478,97 @@ export function AgentMark(p: AgentMarkProps) {
   );
 }
 
+function copyText(text: string) {
+  try {
+    void navigator.clipboard?.writeText(text);
+  } catch {
+    /* clipboard unavailable */
+  }
+}
+
+const isImage = (a: ChatAttachment) => a.kind === "image" || a.kind === "img";
+
+function MessageAttachments(p: { items: ChatAttachment[] }) {
+  const t = useStrings(CHAT_STRINGS);
+  const images = p.items.filter(isImage);
+  const files = p.items.filter((a) => !isImage(a));
+  return (
+    <>
+      {images.length > 0 && (
+        <div className="tf-msg-images">
+          {images.map((a, i) =>
+            a.url ? (
+              <a
+                key={a.name + i}
+                className="tf-msg-image"
+                href={a.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t.openImage(a.name)}
+              >
+                <img src={a.thumb || a.url} alt={a.name} loading="lazy" />
+              </a>
+            ) : (
+              <span key={a.name + i} className="tf-msg-image">
+                {a.thumb ? (
+                  <img src={a.thumb} alt={a.name} loading="lazy" />
+                ) : (
+                  <Icon name="image" size={20} />
+                )}
+              </span>
+            ),
+          )}
+        </div>
+      )}
+      {files.length > 0 && (
+        <div className="tf-msg-attach">
+          {files.map((a, i) => (
+            <span key={a.name + i} className="tf-attach-chip">
+              <Icon name="paperclip" size={13} />
+              <span className="tf-attach-name">{a.name}</span>
+              {a.size && <small>{a.size}</small>}
+              {a.url && (
+                <a href={a.url} download={a.name} aria-label={t.downloadFile(a.name)}>
+                  <Icon name="download" size={12} />
+                </a>
+              )}
+            </span>
+          ))}
+        </div>
+      )}
+    </>
+  );
+}
+
 export function ChatMessage(p: ChatMessageProps) {
   const t = useStrings(CHAT_STRINGS);
   const me = p.role === "user",
-    copied = React.useState(false),
-    fb = React.useState(p.feedback || null);
+    [copied, setCopied] = React.useState(false);
+  const [editing, setEditing] = useControlled(p.editing, false, p.onEditingChange);
+  const [fb, setFb] = useControlled<"up" | "down" | null>(p.feedback, null, p.onFeedback);
   if (p.role === "system")
     return (
-      <div className="tf-msg-system">
-        <span>{p.children || p.text}</span>
-      </div>
+      <SystemLine id={p.id} icon={p.icon} time={p.time} className={p.className} style={p.style}>
+        {p.children || p.text}
+      </SystemLine>
     );
   function copy() {
-    try {
-      navigator.clipboard.writeText(p.text || "");
-    } catch {
-      /* clipboard unavailable */
-    }
-    copied[1](true);
+    copyText(p.text || "");
+    setCopied(true);
     setTimeout(() => {
-      copied[1](false);
+      setCopied(false);
     }, 1400);
   }
+  const versioned = (p.versionCount || 0) > 1;
+  const showActions = p.actions !== false && !p.streaming && !editing;
+  const visible = p.actionsVisible || ((!me && p.onRetry) || versioned ? "always" : "hover");
+  const hasBody = !!(p.text || p.children || p.streaming);
   return (
-    <div style={p.style} className={cx("tf-msg", me ? "me" : "ai", p.className)}>
+    <div
+      style={p.style}
+      className={cx("tf-msg", me ? "me" : "ai", editing && "editing", p.className)}
+      data-message-id={p.id}
+    >
       {me ? (
         <Avatar name={p.name || t.you} size={32} />
       ) : (
@@ -264,27 +583,63 @@ export function ChatMessage(p: ChatMessageProps) {
           </div>
         )}
         {p.before}
-        {(p.text || p.children || p.streaming) && (
-          <div className="tf-bubble">
-            {p.children ||
-              (me ? (
-                <p className="tf-rt-plain">{p.text}</p>
-              ) : p.text ? (
-                <RichText text={p.text} streaming={p.streaming} />
-              ) : (
-                <TypingDots />
-              ))}
-          </div>
+        {editing ? (
+          <MessageEditor
+            defaultValue={p.text || ""}
+            onCancel={() => setEditing(false)}
+            onSubmit={(text) => {
+              setEditing(false);
+              p.onEdit?.(text);
+            }}
+          />
+        ) : p.voice ? (
+          <VoiceNote
+            mine={me}
+            src={p.voice.src}
+            duration={p.voice.duration}
+            transcript={p.voice.transcript}
+            peaks={p.voice.peaks}
+          />
+        ) : (
+          hasBody && (
+            <div className="tf-bubble">
+              {p.children ||
+                (me ? (
+                  <p className="tf-rt-plain">
+                    <MentionText
+                      text={p.text || ""}
+                      mentions={p.mentions}
+                      highlight={p.highlight}
+                    />
+                  </p>
+                ) : p.text ? (
+                  <RichText
+                    text={p.text}
+                    streaming={p.streaming}
+                    highlight={p.highlight}
+                    linkAs={p.linkAs}
+                  />
+                ) : (
+                  <TypingDots />
+                ))}
+            </div>
+          )
         )}
-        {p.attachments && p.attachments.length > 0 && (
-          <div className="tf-msg-attach">
-            {p.attachments.map((a) => (
-              <span key={a.name} className="tf-attach-chip">
-                <Icon name={a.kind === "img" ? "file" : "paperclip"} size={13} />
-                {a.name}
-                {a.size && <small>{a.size}</small>}
+        {p.attachments && p.attachments.length > 0 && <MessageAttachments items={p.attachments} />}
+        {(p.dictated || p.inVoice) && (
+          <div className="tf-msg-markers">
+            {p.dictated && (
+              <span className="tf-msg-marker">
+                <Icon name="mic" size={12} />
+                {t.dictated}
               </span>
-            ))}
+            )}
+            {p.inVoice && (
+              <span className="tf-msg-marker">
+                <Icon name="volume" size={12} />
+                {t.inVoice}
+              </span>
+            )}
           </div>
         )}
         {p.sources && p.sources.length > 0 && (
@@ -320,14 +675,31 @@ export function ChatMessage(p: ChatMessageProps) {
             })}
           </div>
         )}
-        {!me && !p.streaming && p.actions !== false && (
-          <div className="tf-msg-actions">
-            <Tooltip label={copied[0] ? t.copied : t.copy}>
-              <button type="button" className="tf-msg-act" aria-label={t.copyReply} onClick={copy}>
-                <Icon name={copied[0] ? "check" : "file"} size={14} />
+        {showActions && (
+          <div className={cx("tf-msg-actions", visible === "hover" && "reveal")}>
+            <Tooltip label={copied ? t.copied : t.copy}>
+              <button
+                type="button"
+                className="tf-msg-act"
+                aria-label={me ? t.copyMessage : t.copyReply}
+                onClick={copy}
+              >
+                <Icon name={copied ? "check" : "copy"} size={14} />
               </button>
             </Tooltip>
-            {p.onRetry && (
+            {me && p.onEdit && (
+              <Tooltip label={t.edit}>
+                <button
+                  type="button"
+                  className="tf-msg-act"
+                  aria-label={t.editMessage}
+                  onClick={() => setEditing(true)}
+                >
+                  <Icon name="edit" size={14} />
+                </button>
+              </Tooltip>
+            )}
+            {!me && p.onRetry && (
               <Tooltip label={t.regenerate}>
                 <button
                   type="button"
@@ -339,39 +711,132 @@ export function ChatMessage(p: ChatMessageProps) {
                 </button>
               </Tooltip>
             )}
-            <Tooltip label={t.goodReply}>
-              <button
-                type="button"
-                className={cx("tf-msg-act", fb[0] === "up" && "on")}
-                aria-pressed={fb[0] === "up"}
-                aria-label={t.goodReply}
-                onClick={() => {
-                  fb[1](fb[0] === "up" ? null : "up");
-                  p.onFeedback && p.onFeedback("up");
-                }}
-              >
-                <Icon name="thumbUp" size={14} />
-              </button>
-            </Tooltip>
-            <Tooltip label={t.badReply}>
-              <button
-                type="button"
-                className={cx("tf-msg-act", fb[0] === "down" && "on")}
-                aria-pressed={fb[0] === "down"}
-                aria-label={t.badReply}
-                onClick={() => {
-                  fb[1](fb[0] === "down" ? null : "down");
-                  p.onFeedback && p.onFeedback("down");
-                }}
-              >
-                <Icon name="thumbDown" size={14} />
-              </button>
-            </Tooltip>
+            {versioned && (
+              <VersionSwitch
+                count={p.versionCount as number}
+                index={p.versionIndex}
+                onChange={p.onVersionChange}
+                busy={p.versionBusy}
+              />
+            )}
+            {!me && (
+              <FeedbackRating
+                inline
+                value={fb}
+                onRate={(v) => setFb(v)}
+                onSubmit={p.onFeedbackComment}
+                upLabel={t.goodReply}
+                downLabel={t.badReply}
+                askOnUp={false}
+              />
+            )}
             {p.usage && <span className="tf-msg-usage">{p.usage}</span>}
           </div>
         )}
         {p.after}
       </div>
+    </div>
+  );
+}
+
+export function FeedbackRating(p: FeedbackRatingProps) {
+  const t = useStrings(CHAT_STRINGS);
+  const [v, setV] = useControlled<"up" | "down" | null>(p.value, null, p.onRate),
+    [comment, setComment] = React.useState(""),
+    [sent, setSent] = React.useState(false),
+    [asking, setAsking] = React.useState(false);
+  if (sent && !p.inline)
+    return (
+      <span className="tf-feedback-done">
+        <Icon name="check" size={13} />
+        {p.thanks || t.thanksNoted}
+      </span>
+    );
+  const press = (x: "up" | "down") => {
+    if (p.inline && v === x) {
+      setV(null);
+      setAsking(false);
+      return;
+    }
+    setV(x);
+    if (x === "down" || p.askOnUp) setAsking(true);
+    else {
+      setAsking(false);
+      setSent(true);
+      p.onSubmit?.("up", "");
+    }
+  };
+  const buttons = (
+    <>
+      {p.label && <span className="tf-card-desc">{p.label}</span>}
+      <button
+        type="button"
+        className={cx("tf-msg-act", v === "up" && "on")}
+        aria-pressed={v === "up"}
+        aria-label={p.upLabel || t.good}
+        onClick={() => press("up")}
+      >
+        <Icon name="thumbUp" size={14} />
+      </button>
+      <button
+        type="button"
+        className={cx("tf-msg-act", v === "down" && "on")}
+        aria-pressed={v === "down"}
+        aria-label={p.downLabel || t.notGood}
+        onClick={() => press("down")}
+      >
+        <Icon name="thumbDown" size={14} />
+      </button>
+    </>
+  );
+  const form = asking && v && (
+    <form
+      className="tf-feedback-form tf-in"
+      onSubmit={(e) => {
+        e.preventDefault();
+        setSent(true);
+        setAsking(false);
+        p.onSubmit?.(v, comment);
+        setComment("");
+      }}
+    >
+      <input
+        className="tf-input"
+        autoFocus
+        aria-label={p.placeholder || t.whatShouldBeDifferent}
+        placeholder={p.placeholder || t.whatShouldBeDifferent}
+        value={comment}
+        onChange={(e) => {
+          setComment(e.target.value);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") setAsking(false);
+        }}
+      />
+      <Button type="submit" size="sm">
+        {t.send}
+      </Button>
+    </form>
+  );
+  if (p.inline)
+    return (
+      <>
+        {buttons}
+        {sent && !asking && v && (
+          <span className="tf-feedback-done" role="status">
+            <Icon name="check" size={13} />
+            {p.thanks || t.thanksNoted}
+          </span>
+        )}
+        {form}
+      </>
+    );
+  return (
+    <div style={p.style} className={cx("tf-feedback", p.className)}>
+      <div className="tf-row" style={{ gap: 4, flexWrap: "nowrap" }}>
+        {buttons}
+      </div>
+      {form}
     </div>
   );
 }
@@ -385,31 +850,53 @@ const TOOL_ICON: Record<string, IconName | null> = {
 
 export function ToolCall(p: ToolCallProps) {
   const t = useStrings(CHAT_STRINGS);
+  const Link = useLinkAs(p.linkAs);
   const open = React.useState(!!p.defaultOpen),
     st = p.status || "done";
+  const trace = (p.traceHref || p.onTrace) && (
+    <Link
+      className="tf-tool-trace"
+      href={p.traceHref || "#"}
+      aria-label={t.openTrace(p.name)}
+      onClick={
+        p.onTrace
+          ? (e: React.MouseEvent) => {
+              e.preventDefault();
+              p.onTrace?.();
+            }
+          : undefined
+      }
+    >
+      {p.traceLabel || t.trace}
+      <Icon name="arrowUpRight" size={12} />
+    </Link>
+  );
   return (
     <div style={p.style} className={cx("tf-tool", "is-" + st, open[0] && "open", p.className)}>
-      <button
-        type="button"
-        className="tf-tool-head"
-        aria-expanded={open[0]}
-        onClick={() => {
-          open[1](!open[0]);
-        }}
-      >
-        <span className="tf-tool-ico">
-          {st === "running" ? (
-            <span className="tf-spin" aria-hidden />
-          ) : (
-            <Icon name={TOOL_ICON[st] || "zap"} size={12} />
-          )}
-        </span>
-        <Icon name={p.icon || "zap"} size={14} className="tf-tool-kind" />
-        <b>{p.name}</b>
-        <span className="tf-tool-sum">{p.summary}</span>
-        {p.duration && <span className="tf-tool-time">{p.duration}</span>}
-        <Icon name="chevronDown" size={14} className="tf-tool-chev" />
-      </button>
+      <div className="tf-tool-top">
+        <button
+          type="button"
+          className="tf-tool-head"
+          aria-expanded={open[0]}
+          onClick={() => {
+            open[1](!open[0]);
+          }}
+        >
+          <span className="tf-tool-ico">
+            {st === "running" ? (
+              <span className="tf-spin" aria-hidden />
+            ) : (
+              <Icon name={TOOL_ICON[st] || "zap"} size={12} />
+            )}
+          </span>
+          <Icon name={p.icon || "zap"} size={14} className="tf-tool-kind" />
+          <b>{p.name}</b>
+          <span className="tf-tool-sum">{p.summary}</span>
+          {p.duration && <span className="tf-tool-time">{p.duration}</span>}
+          <Icon name="chevronDown" size={14} className="tf-tool-chev" />
+        </button>
+        {trace}
+      </div>
       {open[0] && (
         <div className="tf-tool-body">
           {p.input != null && (
@@ -548,61 +1035,354 @@ export function ModelPicker(p: ModelPickerProps) {
   );
 }
 
+/** Mentions after an edit of the text: before the edit they stay, after it they move, inside it they go. */
+export function shiftMentions(prev: string, next: string, mentions: Mention[]): Mention[] {
+  let a = 0;
+  while (a < prev.length && a < next.length && prev[a] === next[a]) a++;
+  let b = 0;
+  while (
+    b < prev.length - a &&
+    b < next.length - a &&
+    prev[prev.length - 1 - b] === next[next.length - 1 - b]
+  )
+    b++;
+  const oldEnd = prev.length - b,
+    delta = next.length - prev.length;
+  return mentions.flatMap((m) =>
+    m.end <= a
+      ? [m]
+      : m.start >= oldEnd && oldEnd >= a && !(oldEnd === a && m.start === a && delta < 0)
+        ? [{ ...m, start: m.start + delta, end: m.end + delta }]
+        : [],
+  );
+}
+
+/** The `@query` the caret is in, if any. */
+function mentionQuery(text: string, caret: number, mentions: Mention[]) {
+  const before = text.slice(0, caret);
+  const m = /(^|\s)@([^\s@]{0,40})$/.exec(before);
+  if (!m) return null;
+  const start = caret - (m[2] as string).length - 1;
+  if (mentions.some((x) => start >= x.start && start < x.end)) return null;
+  return { start, query: (m[2] as string).toLowerCase() };
+}
+
+const HOLD_MS = 350,
+  CANCEL_PX = 72;
+
+function useObjectUrls(files: (File | ComposerAttachment)[]): (string | undefined)[] {
+  const urls = React.useMemo(
+    () =>
+      files.map((f) =>
+        typeof File !== "undefined" &&
+        f instanceof File &&
+        f.type.startsWith("image/") &&
+        typeof URL !== "undefined" &&
+        URL.createObjectURL
+          ? URL.createObjectURL(f)
+          : (f as ComposerAttachment).thumb,
+      ),
+    [files],
+  );
+  React.useEffect(
+    () => () => {
+      files.forEach((f, i) => {
+        if (typeof File !== "undefined" && f instanceof File && urls[i])
+          URL.revokeObjectURL(urls[i]);
+      });
+    },
+    [files, urls],
+  );
+  return urls;
+}
+
 export function Composer(p: ComposerProps) {
   const t = useStrings(CHAT_STRINGS);
+  const { formatNumber, formatPercent } = useFormat();
+  const uid = useId("composer");
   const fileRef = React.useRef<HTMLInputElement>(null);
-  const ta = React.useRef<HTMLTextAreaElement>(null),
-    v = useControlled(p.value, "", p.onChange),
-    files = p.attachments || [],
-    slash = React.useState(0);
-  const cmds = (p.commands || []).filter(
-    (c) => /^\/\S*$/.test(v[0]) && ("/" + c.name).indexOf(v[0]) === 0,
-  );
+  const camRef = React.useRef<HTMLInputElement>(null);
+  const ta = React.useRef<HTMLTextAreaElement>(null);
+  const mirror = React.useRef<HTMLDivElement>(null);
+  const [value, setValueRaw] = useControlled(p.value, "", p.onChange);
+  const [mentions, setMentions] = useControlled(p.mentions, [] as Mention[], p.onMentionsChange);
+  const files = p.attachments || [];
+  const thumbs = useObjectUrls(files);
+  const [slash, setSlash] = React.useState(0);
+  const [active, setActive] = React.useState(0);
+  const [caret, setCaret] = React.useState(0);
+  const [closedAt, setClosedAt] = React.useState<string | null>(null);
+  const pendingCaret = React.useRef<number | null>(null);
+  const dictated = React.useRef(false);
+  const lastTyping = React.useRef(0);
+  const [rec, setRec] = React.useState<{
+    started: number;
+    cancel: boolean;
+    keyboard: boolean;
+  } | null>(null);
+  const [, tick] = React.useState(0);
+  const [micError, setMicError] = React.useState<string | null>(null);
+  const recorder = React.useRef<{
+    mr?: MediaRecorder;
+    stream?: MediaStream;
+    chunks: Blob[];
+    cancel: boolean;
+    started: number;
+  } | null>(null);
+  const hold = React.useRef<{ timer?: ReturnType<typeof setTimeout>; x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+
+  React.useEffect(() => {
+    if (p.dictation?.active) dictated.current = true;
+  }, [p.dictation?.active]);
+
   React.useLayoutEffect(() => {
-    const el = ta.current;
-    if (!el) return;
-    el.style.height = "auto";
-    el.style.height = Math.min(el.scrollHeight, 200) + "px";
-  }, [v[0]]);
+    if (pendingCaret.current == null || !ta.current) return;
+    const at = pendingCaret.current;
+    pendingCaret.current = null;
+    ta.current.setSelectionRange(at, at);
+    setCaret(at);
+  }, [value, mentions]);
+
+  // the recording timer
+  React.useEffect(() => {
+    if (!rec) return;
+    const id = setInterval(() => tick((n) => n + 1), 250);
+    return () => clearInterval(id);
+  }, [rec]);
+
+  function setText(next: string, nextMentions?: Mention[]) {
+    const ms = nextMentions ?? shiftMentions(value, next, mentions);
+    if (ms !== mentions) setMentions(ms);
+    setValueRaw(next);
+    if (p.onTyping && next.trim()) {
+      const now = Date.now();
+      if (now - lastTyping.current > (p.typingInterval ?? 3000)) {
+        lastTyping.current = now;
+        p.onTyping();
+      }
+    } else if (!next.trim()) lastTyping.current = 0;
+  }
+
+  const cmds = (p.commands || []).filter(
+    (c) => /^\/\S*$/.test(value) && ("/" + c.name).indexOf(value) === 0,
+  );
+  const mq =
+    p.mentionOptions && !cmds.length && closedAt !== value
+      ? mentionQuery(value, caret, mentions)
+      : null;
+  const options = mq
+    ? (p.mentionOptions || [])
+        .filter((o) =>
+          (o.label + " " + o.id + " " + (o.keywords || "") + " " + (o.role || ""))
+            .toLowerCase()
+            .includes(mq.query),
+        )
+        .slice(0, 8)
+    : [];
+  const groups: { title: string; items: MentionOption[] }[] = [];
+  for (const o of options) {
+    const title = o.group || (o.kind === "person" ? t.peopleGroup : t.agentsGroup);
+    let g = groups.find((x) => x.title === title);
+    if (!g) groups.push((g = { title, items: [] }));
+    g.items.push(o);
+  }
+  const flat = groups.flatMap((g) => g.items);
+  const cur = Math.min(active, Math.max(flat.length - 1, 0));
+
   function send() {
-    if (p.busy) return;
-    if (!v[0].trim() && !files.length) return;
-    p.onSend && p.onSend(v[0], files);
-    v[1]("");
+    if (p.busy || rec) return;
+    if (!value.trim() && !files.length) return;
+    p.onSend?.(value, files, { mentions, dictated: dictated.current });
+    dictated.current = false;
+    lastTyping.current = 0;
+    setClosedAt(null);
+    setText("", []);
   }
-  function pick(c: ComposerCommand) {
-    v[1]("");
-    p.onCommand ? p.onCommand(c) : v[1]((c.insert || "") + " ");
-    ta.current && ta.current.focus();
+  function pickCommand(c: ComposerCommand) {
+    setText("", []);
+    p.onCommand ? p.onCommand(c) : setText((c.insert || "") + " ", []);
+    ta.current?.focus();
   }
+  function pickMention(o: MentionOption) {
+    if (!mq) return;
+    const label = "@" + o.label;
+    const next = value.slice(0, mq.start) + label + " " + value.slice(caret);
+    const shifted = shiftMentions(value, next, mentions).filter(
+      (m) => m.end <= mq.start || m.start >= mq.start + label.length + 1,
+    );
+    const mention: Mention = {
+      id: o.id,
+      label: o.label,
+      start: mq.start,
+      end: mq.start + label.length,
+      tint: o.tint,
+    };
+    setText(
+      next,
+      [...shifted, mention].sort((a, b) => a.start - b.start),
+    );
+    pendingCaret.current = mq.start + label.length + 1;
+    setActive(0);
+    ta.current?.focus();
+  }
+  function removeMentionAt(pos: number, forward: boolean): boolean {
+    const m = mentions.find((x) =>
+      forward ? pos >= x.start && pos < x.end : pos > x.start && pos <= x.end,
+    );
+    if (!m) return false;
+    const next = value.slice(0, m.start) + value.slice(m.end);
+    const len = m.end - m.start;
+    setText(
+      next,
+      mentions
+        .filter((x) => x !== m)
+        .map((x) => (x.start >= m.end ? { ...x, start: x.start - len, end: x.end - len } : x)),
+    );
+    pendingCaret.current = m.start;
+    return true;
+  }
+  function attach(list: FileList | File[]) {
+    if (list.length) p.onAttach?.(list);
+  }
+
+  /* ── voice messages: hold the microphone ── */
+  async function startRecording(keyboard: boolean) {
+    setMicError(null);
+    if (
+      typeof navigator === "undefined" ||
+      !navigator.mediaDevices?.getUserMedia ||
+      typeof MediaRecorder === "undefined"
+    ) {
+      setMicError(t.micUnavailable);
+      return;
+    }
+    const started = Date.now();
+    recorder.current = { chunks: [], cancel: false, started };
+    setRec({ started, cancel: false, keyboard });
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const r = recorder.current;
+      if (!r || r.cancel) {
+        stream.getTracks().forEach((x) => x.stop());
+        return;
+      }
+      const mr = new MediaRecorder(stream);
+      r.mr = mr;
+      r.stream = stream;
+      mr.ondataavailable = (e) => {
+        if (e.data.size) r.chunks.push(e.data);
+      };
+      mr.onstop = () => {
+        stream.getTracks().forEach((x) => x.stop());
+        if (!r.cancel && r.chunks.length)
+          p.onVoiceMessage?.(
+            new Blob(r.chunks, { type: mr.mimeType || "audio/webm" }),
+            Date.now() - r.started,
+          );
+      };
+      mr.start();
+    } catch {
+      recorder.current = null;
+      setRec(null);
+      setMicError(t.micUnavailable);
+    }
+  }
+  function stopRecording(cancel: boolean) {
+    const r = recorder.current;
+    recorder.current = null;
+    setRec(null);
+    if (!r) return;
+    r.cancel = cancel;
+    if (r.mr && r.mr.state !== "inactive") r.mr.stop();
+    else r.stream?.getTracks().forEach((x) => x.stop());
+  }
+  React.useEffect(() => () => stopRecording(true), []);
+
+  const micShown = !!(p.onDictate || p.onVoiceMessage);
+  const listening = !!p.dictation?.active;
+  const micLabel = rec
+    ? t.sendVoice
+    : listening
+      ? t.stopDictating
+      : p.onDictate && p.onVoiceMessage
+        ? t.dictateOrHold
+        : p.onDictate
+          ? t.dictate
+          : t.recordVoice;
+  const elapsed = rec ? (Date.now() - rec.started) / 1000 : 0;
+  const clock = `${formatNumber(Math.floor(elapsed / 60))}:${formatNumber(Math.floor(elapsed % 60), { minimumIntegerDigits: 2 })}`;
+  const hint =
+    micError ||
+    p.dictation?.error ||
+    (listening ? t.dictating : p.hint != null ? p.hint : t.composerHint);
+  const interim = listening && p.dictation?.interim ? p.dictation.interim : "";
+  const listId = uid + "-mentions";
+  const optId = (i: number) => uid + "-opt-" + i;
+
+  if (p.readOnly)
+    return (
+      <ReadOnlyBar
+        className={p.className}
+        style={p.style}
+        text={p.readOnlyText}
+        onAction={p.onStepIn}
+      />
+    );
+
+  // the text as the mirror draws it: mentions as tinted chips, dictation's words greyed after it
+  const mirrorParts: React.ReactNode[] = [];
+  let at = 0;
+  [...mentions]
+    .sort((a, b) => a.start - b.start)
+    .forEach((m, i) => {
+      if (m.start < at || m.end > value.length) return;
+      mirrorParts.push(value.slice(at, m.start));
+      mirrorParts.push(
+        <span key={i} className={cx("tf-mention", "tf-t-" + (m.tint || "sky"))}>
+          {value.slice(m.start, m.end)}
+        </span>,
+      );
+      at = m.end;
+    });
+  mirrorParts.push(value.slice(at));
+
   return (
     <div
       style={p.style}
-      className={cx("tf-composer", p.busy && "busy", p.className)}
+      className={cx(
+        "tf-composer",
+        p.busy && "busy",
+        listening && "dictating",
+        rec && "recording",
+        p.className,
+      )}
       onDragOver={(e) => {
         if (p.onAttach) e.preventDefault();
       }}
       onDrop={(e) => {
         if (!p.onAttach) return;
         e.preventDefault();
-        p.onAttach?.(e.dataTransfer.files);
+        attach(e.dataTransfer.files);
       }}
     >
       {cmds.length > 0 && (
-        <div className="tf-popover tf-composer-cmds top" role="listbox">
+        <div className="tf-popover tf-composer-cmds top" role="listbox" aria-label={t.commands}>
           <div className="tf-menu-label">{t.commands}</div>
           {cmds.map((c, i) => (
             <button
               key={c.name}
               type="button"
               role="option"
-              aria-selected={i === slash[0]}
-              className={cx("tf-option", i === slash[0] && "active")}
+              aria-selected={i === slash}
+              className={cx("tf-option", i === slash && "active")}
               onPointerDown={(e) => {
                 e.preventDefault();
               }}
               onClick={() => {
-                pick(c);
+                pickCommand(c);
               }}
             >
               <Icon name={c.icon || "zap"} size={15} />
@@ -614,63 +1394,212 @@ export function Composer(p: ComposerProps) {
           ))}
         </div>
       )}
-      {files.length > 0 && (
-        <div className="tf-composer-files">
-          {files.map((f, i) => (
-            <span key={f.name + i} className="tf-attach-chip">
-              <Icon name="paperclip" size={13} />
-              {f.name}
-              {p.onRemoveAttachment && (
-                <button
-                  type="button"
-                  aria-label={t.removeItem(f.name)}
-                  onClick={() => {
-                    p.onRemoveAttachment?.(i);
-                  }}
-                >
-                  <Icon name="x" size={12} />
-                </button>
-              )}
-            </span>
+      {flat.length > 0 && (
+        <div
+          className="tf-popover tf-composer-cmds tf-composer-mentions top"
+          role="listbox"
+          id={listId}
+          aria-label={t.mentionSuggestions}
+        >
+          {groups.map((g) => (
+            <div key={g.title} role="group" aria-label={g.title}>
+              <div className="tf-menu-label" aria-hidden>
+                {g.title}
+              </div>
+              {g.items.map((o) => {
+                const i = flat.indexOf(o);
+                return (
+                  <button
+                    key={o.id}
+                    id={optId(i)}
+                    type="button"
+                    role="option"
+                    tabIndex={-1}
+                    aria-selected={i === cur}
+                    className={cx("tf-option", i === cur && "active")}
+                    onPointerDown={(e) => {
+                      e.preventDefault();
+                    }}
+                    onPointerEnter={() => setActive(i)}
+                    onClick={() => {
+                      pickMention(o);
+                    }}
+                  >
+                    {o.kind === "person" ? (
+                      <Avatar name={o.label} src={o.avatarSrc} size={24} />
+                    ) : (
+                      <AgentMark tint={o.tint} size={24} />
+                    )}
+                    <span className="tf-option-text">
+                      <b>{o.label}</b>
+                      {o.role && <small>{o.role}</small>}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           ))}
         </div>
       )}
-      <textarea
-        ref={ta}
-        rows={1}
-        className="tf-composer-input"
-        placeholder={p.placeholder || t.messagePlaceholder}
-        aria-label={p.label || p.placeholder || t.message}
-        value={v[0]}
-        disabled={p.disabled}
-        onChange={(e) => {
-          v[1](e.target.value);
-          slash[1](0);
-        }}
-        onKeyDown={(e) => {
-          if (cmds.length) {
-            if (e.key === "ArrowDown") {
-              e.preventDefault();
-              slash[1]((slash[0] + 1) % cmds.length);
-              return;
-            }
-            if (e.key === "ArrowUp") {
-              e.preventDefault();
-              slash[1]((slash[0] - 1 + cmds.length) % cmds.length);
-              return;
-            }
-            if (e.key === "Enter" || e.key === "Tab") {
-              e.preventDefault();
-              pick(cmds[slash[0]]);
-              return;
-            }
-          }
-          if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
-            e.preventDefault();
-            send();
-          }
-        }}
-      />
+      {p.typing && p.typing.length > 0 && (
+        <TypingIndicator names={p.typing} className="tf-composer-typing" />
+      )}
+      {files.length > 0 && (
+        <div className="tf-composer-files">
+          {files.map((f, i) => {
+            const a = f as ComposerAttachment;
+            const pct =
+              typeof a.progress === "number" ? Math.max(0, Math.min(1, a.progress)) : undefined;
+            return (
+              <span
+                key={f.name + i}
+                className={cx("tf-attach-chip", thumbs[i] && "has-thumb", a.error && "error")}
+                title={a.error}
+              >
+                {thumbs[i] ? (
+                  <img className="tf-attach-thumb" src={thumbs[i]} alt="" />
+                ) : (
+                  <Icon name={a.error ? "ban" : "paperclip"} size={13} />
+                )}
+                <span className="tf-attach-name">{f.name}</span>
+                {a.error ? (
+                  <small>{t.uploadFailed}</small>
+                ) : pct !== undefined && pct < 1 ? (
+                  <small
+                    className="tf-attach-progress"
+                    role="progressbar"
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={Math.round(pct * 100)}
+                    aria-label={t.uploading(formatPercent(pct))}
+                    style={{ "--p": pct } as React.CSSProperties}
+                  >
+                    {formatPercent(pct)}
+                  </small>
+                ) : (
+                  a.size && <small>{a.size}</small>
+                )}
+                {p.onRemoveAttachment && (
+                  <button
+                    type="button"
+                    aria-label={t.removeItem(f.name)}
+                    onClick={() => {
+                      p.onRemoveAttachment?.(i);
+                    }}
+                  >
+                    <Icon name="x" size={12} />
+                  </button>
+                )}
+              </span>
+            );
+          })}
+        </div>
+      )}
+      {rec ? (
+        <div className={cx("tf-composer-rec", rec.cancel && "cancel")} role="status">
+          <span className="tf-composer-recdot" aria-hidden />
+          <b>{t.recordingVoice(clock)}</b>
+          <span className="tf-composer-rechint">
+            {rec.cancel ? t.releaseToCancel : t.slideToCancel}
+          </span>
+        </div>
+      ) : (
+        <div className="tf-composer-field">
+          <div ref={mirror} className="tf-composer-mirror" aria-hidden>
+            {mirrorParts}
+            {interim && (
+              <span className="tf-composer-interim">
+                {(value && !/\s$/.test(value) ? " " : "") + interim}
+              </span>
+            )}
+            {"​"}
+          </div>
+          <textarea
+            ref={ta}
+            rows={1}
+            className="tf-composer-input"
+            placeholder={interim ? undefined : p.placeholder || t.messagePlaceholder}
+            aria-label={p.label || p.placeholder || t.message}
+            aria-autocomplete={p.mentionOptions || p.commands ? "list" : undefined}
+            aria-controls={flat.length ? listId : undefined}
+            aria-activedescendant={flat.length ? optId(cur) : undefined}
+            value={value}
+            disabled={p.disabled}
+            onScroll={(e) => {
+              if (mirror.current) mirror.current.scrollTop = e.currentTarget.scrollTop;
+            }}
+            onChange={(e) => {
+              setText(e.target.value);
+              setCaret(e.target.selectionStart ?? e.target.value.length);
+              setSlash(0);
+              setActive(0);
+            }}
+            onSelect={(e) => setCaret(e.currentTarget.selectionStart ?? 0)}
+            onPaste={(e) => {
+              if (!p.onAttach) return;
+              const list = Array.from(e.clipboardData?.files || []);
+              if (!list.length) return;
+              if (!e.clipboardData.getData("text/plain")) e.preventDefault();
+              attach(list);
+            }}
+            onKeyDown={(e) => {
+              if (e.altKey && e.code === "Space" && p.onDictate) {
+                e.preventDefault();
+                p.onDictate();
+                return;
+              }
+              if (cmds.length) {
+                if (e.key === "ArrowDown") {
+                  e.preventDefault();
+                  setSlash((slash + 1) % cmds.length);
+                  return;
+                }
+                if (e.key === "ArrowUp") {
+                  e.preventDefault();
+                  setSlash((slash - 1 + cmds.length) % cmds.length);
+                  return;
+                }
+                if (e.key === "Enter" || e.key === "Tab") {
+                  e.preventDefault();
+                  pickCommand(cmds[slash] as ComposerCommand);
+                  return;
+                }
+              }
+              if (flat.length) {
+                if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+                  e.preventDefault();
+                  const step = e.key === "ArrowDown" ? 1 : -1;
+                  setActive((cur + step + flat.length) % flat.length);
+                  return;
+                }
+                if (e.key === "Enter" || e.key === "Tab") {
+                  e.preventDefault();
+                  pickMention(flat[cur] as MentionOption);
+                  return;
+                }
+                if (e.key === "Escape") {
+                  e.preventDefault();
+                  setClosedAt(value);
+                  return;
+                }
+              }
+              const el = e.currentTarget;
+              if (
+                (e.key === "Backspace" || e.key === "Delete") &&
+                el.selectionStart === el.selectionEnd &&
+                removeMentionAt(el.selectionStart, e.key === "Delete")
+              ) {
+                e.preventDefault();
+                return;
+              }
+              if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+                e.preventDefault();
+                send();
+              }
+            }}
+          />
+        </div>
+      )}
       <div className="tf-composer-bar">
         {p.onAttach && (
           <Tooltip label={t.attachFiles}>
@@ -688,12 +1617,35 @@ export function Composer(p: ComposerProps) {
                 hidden
                 tabIndex={-1}
                 onChange={(e) => {
-                  if (e.target.files) p.onAttach?.(e.target.files);
+                  if (e.target.files) attach(e.target.files);
                   e.target.value = "";
                 }}
               />
             </button>
           </Tooltip>
+        )}
+        {p.onAttach && p.camera && (
+          <button
+            type="button"
+            className="tf-composer-tool tf-composer-camera"
+            aria-label={t.takePhoto}
+            title={t.takePhoto}
+            onClick={() => camRef.current?.click()}
+          >
+            <Icon name="camera" size={16} />
+            <input
+              ref={camRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              hidden
+              tabIndex={-1}
+              onChange={(e) => {
+                if (e.target.files) attach(e.target.files);
+                e.target.value = "";
+              }}
+            />
+          </button>
         )}
         {p.commands && (
           <Tooltip label={t.commands} shortcut="/">
@@ -702,7 +1654,7 @@ export function Composer(p: ComposerProps) {
               className="tf-composer-tool"
               aria-label={t.commands}
               onClick={() => {
-                v[1]("/");
+                setText("/", []);
                 ta.current && ta.current.focus();
               }}
             >
@@ -712,21 +1664,93 @@ export function Composer(p: ComposerProps) {
         )}
         {p.models && <ModelPicker models={p.models} value={p.model} onChange={p.onModel} />}
         {p.left}
-        <span className="tf-composer-hint">{p.hint != null ? p.hint : t.composerHint}</span>
+        <span
+          className={cx("tf-composer-hint", (micError || p.dictation?.error) && "error")}
+          aria-live="polite"
+        >
+          {hint}
+        </span>
+        {rec && (
+          <button
+            type="button"
+            className="tf-composer-tool"
+            aria-label={t.cancelRecording}
+            title={t.cancelRecording}
+            onClick={() => stopRecording(true)}
+          >
+            <Icon name="x" size={16} />
+          </button>
+        )}
+        {micShown && (
+          <button
+            type="button"
+            className={cx("tf-composer-tool", "tf-composer-mic", (listening || rec) && "on")}
+            aria-label={micLabel}
+            title={micLabel}
+            aria-pressed={p.onDictate && !rec ? listening : undefined}
+            disabled={p.disabled}
+            onPointerDown={(e) => {
+              if (e.button !== 0 || listening || !p.onVoiceMessage || rec) return;
+              e.currentTarget.setPointerCapture?.(e.pointerId);
+              hold.current = {
+                x: e.clientX,
+                y: e.clientY,
+                timer: setTimeout(() => {
+                  hold.current.timer = undefined;
+                  void startRecording(false);
+                }, HOLD_MS),
+              };
+            }}
+            onPointerMove={(e) => {
+              if (!rec || rec.keyboard) return;
+              const far =
+                Math.hypot(e.clientX - hold.current.x, e.clientY - hold.current.y) > CANCEL_PX;
+              if (far !== rec.cancel) setRec({ ...rec, cancel: far });
+            }}
+            onPointerUp={(e) => {
+              if (e.button !== 0) return;
+              if (hold.current.timer) {
+                clearTimeout(hold.current.timer);
+                hold.current.timer = undefined;
+                p.onDictate?.();
+                if (!p.onDictate) void startRecording(true);
+              } else if (rec && !rec.keyboard) stopRecording(rec.cancel);
+              else if (!p.onVoiceMessage || listening) {
+                if (p.onDictate) p.onDictate();
+              } else if (rec) stopRecording(false);
+            }}
+            onPointerCancel={() => {
+              if (hold.current.timer) clearTimeout(hold.current.timer);
+              hold.current.timer = undefined;
+              if (rec && !rec.keyboard) stopRecording(true);
+            }}
+            onClick={(e) => {
+              // keyboard (Enter, Space): dictation, or start and send a voice message
+              if (e.detail !== 0) return;
+              if (rec) stopRecording(false);
+              else if (p.onDictate) p.onDictate();
+              else void startRecording(true);
+            }}
+          >
+            <Icon name={rec ? "arrowUp" : "mic"} size={16} />
+          </button>
+        )}
         {p.busy ? (
           <button type="button" className="tf-send stop" aria-label={t.stop} onClick={p.onStop}>
             <span className="tf-stop-sq" />
           </button>
         ) : (
-          <button
-            type="button"
-            className="tf-send"
-            aria-label={t.send}
-            disabled={!v[0].trim() && !files.length}
-            onClick={send}
-          >
-            <Icon name="arrowUp" size={16} />
-          </button>
+          !rec && (
+            <button
+              type="button"
+              className="tf-send"
+              aria-label={t.send}
+              disabled={!value.trim() && !files.length}
+              onClick={send}
+            >
+              <Icon name="arrowUp" size={16} />
+            </button>
+          )
         )}
       </div>
     </div>

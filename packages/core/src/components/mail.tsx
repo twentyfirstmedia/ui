@@ -1,13 +1,14 @@
 "use client";
 import * as React from "react";
-import { useStrings } from "../context.js";
+import { useLinkAs, useStrings } from "../context.js";
 import { MAIL_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { cx } from "../cx.js";
 import { useControlled } from "../hooks.js";
 import { Popover } from "./overlays.js";
-import { SearchField } from "./inputs.js";
-import { Avatar, Badge } from "./foundation.js";
+import { Checkbox, SearchField } from "./inputs.js";
+import { Avatar, Badge, Button } from "./foundation.js";
+import { BulkActionBar } from "./common.js";
 import { AgentMark } from "./chat.js";
 import { TextField } from "./forms.js";
 import { Drawer } from "./workspace.js";
@@ -15,6 +16,7 @@ import { KeyValue } from "./building-blocks.js";
 import type {
   AccountSwitcherProps,
   AttachmentPreviewProps,
+  InboxListItem,
   InboxListProps,
   MailThreadProps,
   SignatureEditorProps,
@@ -104,55 +106,177 @@ export function AccountSwitcher(p: AccountSwitcherProps) {
 
 export function InboxList(p: InboxListProps) {
   const t = useStrings(MAIL_STRINGS);
+  const Link = useLinkAs(p.linkAs);
+  const [checked, setChecked] = useControlled<(string | number)[]>(
+    p.checked,
+    p.defaultChecked || [],
+    p.onCheckedChange,
+  );
+  const rich = !!(p.selectable || p.onStar || (p.items || []).some((m) => m.href));
+  const top = (m: InboxListItem) => (
+    <>
+      <span className="tf-mailrow-top">
+        <b>{m.from}</b>
+        {m.attachments && <Icon name="paperclip" size={13} label={t.mailHasAttachments} />}
+        <small className="tf-mono">{m.time}</small>
+      </span>
+      <span className="tf-mailrow-subject">{m.subject}</span>
+      <span className="tf-mailrow-snippet">{m.snippet}</span>
+      {(m.to || m.tags || m.agent) && (
+        <span className="tf-mailrow-tags">
+          {m.to && <span className="tf-mono">{m.to}</span>}
+          {m.agent && <Badge tone={m.agent.tone || "highlight"}>{m.agent.label}</Badge>}
+          {(m.tags || []).map((tag) => (
+            <Badge key={tag} tone="neutral" dot={false}>
+              {tag}
+            </Badge>
+          ))}
+        </span>
+      )}
+    </>
+  );
+  const dot = (m: InboxListItem) => (
+    <span
+      className="tf-mailrow-dot"
+      role={m.unread ? "img" : undefined}
+      aria-label={m.unread ? t.unread : undefined}
+    />
+  );
+  if (!rich)
+    return (
+      <div style={p.style} className={cx("tf-inboxlist", p.className)} role="list">
+        {(p.items || []).map((m) => (
+          <button
+            key={m.id}
+            type="button"
+            role="listitem"
+            className={cx("tf-mailrow", m.unread && "unread", m.id === p.selected && "on")}
+            onClick={() => {
+              p.onOpen && p.onOpen(m);
+            }}
+          >
+            {dot(m)}
+            <span className="tf-mailrow-main">{top(m)}</span>
+          </button>
+        ))}
+      </div>
+    );
+  const ids = (p.items || []).map((m) => m.id);
   return (
-    <div style={p.style} className={cx("tf-inboxlist", p.className)} role="list">
-      {(p.items || []).map((m) => (
-        <button
-          key={m.id}
-          type="button"
-          role="listitem"
-          className={cx("tf-mailrow", m.unread && "unread", m.id === p.selected && "on")}
-          onClick={() => {
-            p.onOpen && p.onOpen(m);
-          }}
-        >
-          <span
-            className="tf-mailrow-dot"
-            role={m.unread ? "img" : undefined}
-            aria-label={m.unread ? t.unread : undefined}
-          />
-          <span className="tf-mailrow-main">
-            <span className="tf-mailrow-top">
-              <b>{m.from}</b>
-              <small className="tf-mono">{m.time}</small>
-            </span>
-            <span className="tf-mailrow-subject">{m.subject}</span>
-            <span className="tf-mailrow-snippet">{m.snippet}</span>
-            {(m.to || m.tags || m.agent) && (
-              <span className="tf-mailrow-tags">
-                {m.to && <span className="tf-mono">{m.to}</span>}
-                {m.agent && <Badge tone={m.agent.tone || "highlight"}>{m.agent.label}</Badge>}
-                {(m.tags || []).map((t) => (
-                  <Badge key={t} tone="neutral" dot={false}>
-                    {t}
-                  </Badge>
-                ))}
-              </span>
-            )}
-          </span>
-        </button>
-      ))}
+    <div style={p.style} className={cx("tf-inboxlist", "rich", p.className)}>
+      {p.selectable && p.bulkActions && (
+        <BulkActionBar
+          floating={false}
+          count={checked.length}
+          label={t.mailMessageActions}
+          onClear={() => setChecked([])}
+          actions={p.bulkActions.map((a) => ({
+            label: a.label,
+            icon: a.icon,
+            danger: a.danger,
+            onClick: () => a.onClick(checked),
+          }))}
+        />
+      )}
+      <ul role="list" className="tf-inboxlist-rows">
+        {(p.items || []).map((m) => {
+          const on = checked.includes(m.id);
+          const open = {
+            className: "tf-mailrow-main tf-mailrow-open",
+            "aria-current": m.id === p.selected ? ("true" as const) : undefined,
+            onClick: () => p.onOpen?.(m),
+          };
+          return (
+            <li
+              key={m.id}
+              className={cx(
+                "tf-mailrow",
+                m.unread && "unread",
+                m.id === p.selected && "on",
+                on && "checked",
+              )}
+            >
+              {p.selectable ? (
+                <Checkbox
+                  className="tf-mailrow-check"
+                  checked={on}
+                  label={t.mailSelectMessage(m.subject)}
+                  onChange={() =>
+                    setChecked(
+                      on
+                        ? checked.filter((x) => x !== m.id)
+                        : ids.filter((x) => x === m.id || checked.includes(x)),
+                    )
+                  }
+                />
+              ) : (
+                dot(m)
+              )}
+              {m.href ? (
+                <Link href={m.href} {...open}>
+                  {top(m)}
+                </Link>
+              ) : (
+                <button type="button" {...open}>
+                  {top(m)}
+                </button>
+              )}
+              {p.selectable && m.unread && dot(m)}
+              {p.onStar && (
+                <button
+                  type="button"
+                  className={cx("tf-mailrow-star", m.starred && "on")}
+                  aria-pressed={!!m.starred}
+                  aria-label={m.starred ? t.mailUnstar(m.subject) : t.mailStar(m.subject)}
+                  onClick={() => p.onStar?.(m, !m.starred)}
+                >
+                  <Icon name="star" size={16} />
+                </button>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
 
 export function MailThread(p: MailThreadProps) {
+  const t = useStrings(MAIL_STRINGS);
   const open = React.useState(
     (p.messages || []).length ? [p.messages[p.messages.length - 1].id] : [],
   );
   return (
     <div style={p.style} className={cx("tf-thread", p.className)}>
-      {p.subject && <h3 className="tf-thread-subject">{p.subject}</h3>}
+      {(p.subject || p.actions) && (
+        <div className="tf-thread-head">
+          {p.subject && <h3 className="tf-thread-subject">{p.subject}</h3>}
+          {p.actions && <div className="tf-thread-actions">{p.actions}</div>}
+        </div>
+      )}
+      {p.unsubscribe && (
+        <div className="tf-unsub" role="note">
+          <Icon name="mail" size={16} />
+          <span>
+            {p.unsubscribe.sender ? t.mailNewsletterFrom(p.unsubscribe.sender) : t.mailNewsletter}
+          </span>
+          {p.unsubscribe.done ? (
+            <span className="tf-unsub-done" aria-live="polite">
+              <Icon name="check" size={14} />
+              {t.mailUnsubscribed}
+            </span>
+          ) : (
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={p.unsubscribe.busy}
+              onClick={p.unsubscribe.onUnsubscribe}
+            >
+              {t.mailUnsubscribe}
+            </Button>
+          )}
+        </div>
+      )}
       {(p.messages || []).map((m) => {
         const o = open[0].indexOf(m.id) > -1;
         return (

@@ -238,16 +238,16 @@
     "name": "CalendarScreen",
     "group": "Pages",
     "width": 1280,
-    "height": 880,
+    "height": 1100,
     "components": [
       "AppShell",
       "Button",
+      "CalendarView",
       "EventCard",
-      "IconButton",
+      "EventInvite",
       "PageHeader",
       "Panel",
-      "Stagger",
-      "Tabs"
+      "Stagger"
     ]
   },
   {
@@ -275,21 +275,73 @@
     "name": "ChatMessage",
     "group": "AI",
     "width": 820,
-    "height": 720,
-    "components": ["ChatMessage"]
+    "height": 1100,
+    "components": [
+      "ChatMessage",
+      "MessageEditor",
+      "VersionSwitch",
+      "FeedbackRating",
+      "VoiceNote",
+      "RichText"
+    ]
+  },
+  {
+    "name": "RichText",
+    "group": "AI",
+    "width": 820,
+    "height": 900,
+    "components": ["RichText", "CodeBlock"]
+  },
+  {
+    "name": "MessageEditor",
+    "group": "AI",
+    "width": 820,
+    "height": 320,
+    "components": ["MessageEditor", "VersionSwitch"]
   },
   {
     "name": "ChatWorkspace",
     "group": "AI",
     "width": 1100,
-    "height": 640,
+    "height": 800,
     "components": [
-      "ChatList",
-      "ChatMessage",
       "ChatWorkspace",
-      "FeedbackRating",
+      "ChatList",
+      "ChatThread",
+      "ChatMessage",
+      "Composer",
+      "DaySeparator",
+      "HandoffLine",
+      "VoiceLog",
+      "ToolCall",
+      "ApprovalCard",
+      "AgentDetails",
       "SearchHits",
-      "ThinkingLine"
+      "TypingIndicator"
+    ]
+  },
+  {
+    "name": "ChatList",
+    "group": "AI",
+    "width": 520,
+    "height": 600,
+    "components": ["ChatList"]
+  },
+  {
+    "name": "ChatThread",
+    "group": "AI",
+    "width": 820,
+    "height": 760,
+    "components": [
+      "ChatThread",
+      "DaySeparator",
+      "HandoffLine",
+      "SystemLine",
+      "VoiceLog",
+      "VoiceNote",
+      "TypingIndicator",
+      "ReadOnlyBar",
+      "ChatMessage"
     ]
   },
   {
@@ -298,6 +350,34 @@
     "width": 760,
     "height": 420,
     "components": ["Combobox", "TagInput"]
+  },
+  {
+    "name": "RecipientInput",
+    "group": "Forms",
+    "width": 720,
+    "height": 360,
+    "components": ["RecipientInput"]
+  },
+  {
+    "name": "MailComposer",
+    "group": "Forms",
+    "width": 900,
+    "height": 720,
+    "components": ["MailComposer", "RecipientInput", "RichTextEditor"]
+  },
+  {
+    "name": "MailRulesEditor",
+    "group": "Forms",
+    "width": 960,
+    "height": 820,
+    "components": ["MailRulesEditor"]
+  },
+  {
+    "name": "AutoReplyEditor",
+    "group": "Forms",
+    "width": 720,
+    "height": 620,
+    "components": ["AutoReplyEditor"]
   },
   {
     "name": "CommandPalette",
@@ -310,8 +390,8 @@
     "name": "Composer",
     "group": "AI",
     "width": 820,
-    "height": 520,
-    "components": ["AgentStatus", "Composer", "PromptStarters", "UsageMeter"]
+    "height": 560,
+    "components": ["Composer", "AgentStatus", "PromptStarters", "UsageMeter"]
   },
   {
     "name": "ConfigPRSummary",
@@ -451,10 +531,24 @@
     "components": ["EventCard"]
   },
   {
+    "name": "CalendarView",
+    "group": "Data",
+    "width": 1200,
+    "height": 980,
+    "components": ["CalendarView"]
+  },
+  {
+    "name": "EventInvite",
+    "group": "Data",
+    "width": 720,
+    "height": 1180,
+    "components": ["EventInvite"]
+  },
+  {
     "name": "ExportDialog",
     "group": "Overlays",
-    "width": 900,
-    "height": 620,
+    "width": 1100,
+    "height": 760,
     "components": ["ExportDialog"]
   },
   {
@@ -470,16 +564,12 @@
     "width": 1280,
     "height": 760,
     "components": [
-      "Chip",
       "CommandPalette",
-      "FileCard",
+      "FileBrowser",
       "Icon",
       "IconButton",
       "PageHeader",
-      "SearchField",
-      "Stagger",
       "SubNav",
-      "Tabs",
       "TopBar"
     ]
   },
@@ -519,6 +609,34 @@
     "components": ["AccountSwitcher", "InboxList", "MailThread"]
   },
   {
+    "name": "MailFolders",
+    "group": "Data",
+    "width": 420,
+    "height": 620,
+    "components": ["MailFolders"]
+  },
+  {
+    "name": "MailFilterBar",
+    "group": "Data",
+    "width": 960,
+    "height": 360,
+    "components": ["MailFilterBar"]
+  },
+  {
+    "name": "MailHtml",
+    "group": "Data",
+    "width": 800,
+    "height": 560,
+    "components": ["MailHtml"]
+  },
+  {
+    "name": "MailRouteList",
+    "group": "Data",
+    "width": 900,
+    "height": 420,
+    "components": ["MailRouteList", "RecipientInput"]
+  },
+  {
     "name": "InboxScreen",
     "group": "Pages",
     "width": 1280,
@@ -537,6 +655,27 @@
       "Stagger",
       "StatTile",
       "Tabs"
+    ]
+  },
+  {
+    "name": "MailScreen",
+    "group": "Pages",
+    "width": 1440,
+    "height": 1000,
+    "components": [
+      "AppShell",
+      "PageHeader",
+      "MailFolders",
+      "MailFilterBar",
+      "InboxList",
+      "BulkActionBar",
+      "MailThread",
+      "MailHtml",
+      "MailComposer",
+      "Drawer",
+      "IconButton",
+      "Button",
+      "Toaster"
     ]
   },
   {
@@ -568,11 +707,10 @@
       "Button",
       "Icon",
       "IconButton",
-      "InvoicePreview",
+      "InvoiceEditor",
       "PageHeader",
       "Select",
       "SubNav",
-      "TintIcon",
       "TopBar",
       "TransactionRow"
     ]
@@ -597,6 +735,41 @@
     "width": 1100,
     "height": 1000,
     "components": ["LedgerTable", "PnLStatement", "ReceiptSuggestion"]
+  },
+  {
+    "name": "InvoiceEditor",
+    "group": "Data",
+    "width": 1280,
+    "height": 920,
+    "components": ["InvoiceEditor", "InvoicePreview"]
+  },
+  {
+    "name": "ImportSuggestions",
+    "group": "Data",
+    "width": 1000,
+    "height": 640,
+    "components": ["ImportSuggestions", "Panel"]
+  },
+  {
+    "name": "PeriodLock",
+    "group": "Data",
+    "width": 800,
+    "height": 420,
+    "components": ["PeriodLock", "Panel"]
+  },
+  {
+    "name": "PaletteSwatches",
+    "group": "Media",
+    "width": 1100,
+    "height": 520,
+    "components": ["PaletteSwatches"]
+  },
+  {
+    "name": "AssetCard",
+    "group": "Media",
+    "width": 1100,
+    "height": 620,
+    "components": ["AssetCard"]
   },
   {
     "name": "LineChart",
@@ -1141,6 +1314,13 @@
     "components": ["ContextMenu", "InlineEdit", "KeyValue", "TreeView"]
   },
   {
+    "name": "FileBrowser",
+    "group": "Data",
+    "width": 1100,
+    "height": 720,
+    "components": ["FileBrowser", "BulkActionBar", "Breadcrumb"]
+  },
+  {
     "name": "TriggerList",
     "group": "AI",
     "width": 1000,
@@ -1179,8 +1359,15 @@
     "name": "VoiceMode",
     "group": "AI",
     "width": 760,
-    "height": 520,
-    "components": ["Segmented", "VoiceMode"]
+    "height": 640,
+    "components": ["VoiceMode", "Segmented"]
+  },
+  {
+    "name": "VoiceNote",
+    "group": "AI",
+    "width": 720,
+    "height": 560,
+    "components": ["VoiceNote", "VoiceLog"]
   },
   {
     "name": "WorkflowScreen",
@@ -2145,5 +2332,27 @@
     "width": 720,
     "height": 200,
     "components": ["SearchTrigger", "CommandPalette"]
+  },
+  {
+    "name": "MissionControlScreen",
+    "group": "Pages",
+    "width": 1440,
+    "height": 1240,
+    "components": [
+      "AppShell",
+      "AgentNetwork",
+      "CoordinationTicker",
+      "ChatThread",
+      "ChatMessage",
+      "Composer",
+      "PromptStarters",
+      "ApprovalCard",
+      "MoneyPreview",
+      "UsageMeter",
+      "Tabs",
+      "SearchTrigger",
+      "CommandPalette",
+      "AppearanceProvider"
+    ]
   }
 ]

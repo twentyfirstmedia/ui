@@ -968,6 +968,13 @@ export const SHARED_STRINGS: Pick<
 /** Strings of the components in `admin.tsx`. */
 export const ADMIN_STRINGS: Pick<
   UIStrings,
+  | "exportPrecheck"
+  | "exportBookings"
+  | "exportDraftsLeftOut"
+  | "exportMissing"
+  | "exportFix"
+  | "exportLockPeriod"
+  | "exportLockHint"
   | "minimum"
   | "maximum"
   | "min"
@@ -1099,6 +1106,14 @@ export const ADMIN_STRINGS: Pick<
   period: "Period",
   allTime: "All time",
   exportProgress: "Export progress",
+  exportPrecheck: "Pre-check",
+  exportBookings: (formatted, n) => `${formatted} ${n === 1 ? "booking" : "bookings"}`,
+  exportDraftsLeftOut: (formatted, n) =>
+    `${formatted} ${n === 1 ? "draft is" : "drafts are"} left out`,
+  exportMissing: "Missing settings",
+  exportFix: "Fix",
+  exportLockPeriod: "Lock the month with the export",
+  exportLockHint: "Bookings in it can no longer be changed.",
   preparingFile: "Preparing the file…",
   fileReady: "Your file is ready.",
   newExport: "New export",
@@ -1128,10 +1143,6 @@ export const AGENTS_STRINGS: Pick<
   | "searchChats"
   | "noChatsMatch"
   | "nothingFound"
-  | "thanksNoted"
-  | "good"
-  | "notGood"
-  | "whatShouldBeDifferent"
   | "needsYou"
   | "suggestions"
   | "budgetUsedUp"
@@ -1151,6 +1162,14 @@ export const AGENTS_STRINGS: Pick<
   | "unmute"
   | "mute"
   | "endConversation"
+  | "backToChats"
+  | "resizeDetails"
+  | "removeFilter"
+  | "unreadCount"
+  | "voiceWith"
+  | "interrupted"
+  | "interrupt"
+  | "connecting"
 > = {
   chatWith: (name) => `Chat with ${name}`,
   costToday: "Cost today",
@@ -1158,10 +1177,6 @@ export const AGENTS_STRINGS: Pick<
   searchChats: "Search chats",
   noChatsMatch: "No chats match",
   nothingFound: "Nothing found",
-  thanksNoted: "Thanks, noted",
-  good: "Good",
-  notGood: "Not good",
-  whatShouldBeDifferent: "What should be different?",
   needsYou: "Needs you",
   suggestions: "Suggestions",
   budgetUsedUp: "Budget used up · agents paused",
@@ -1181,6 +1196,14 @@ export const AGENTS_STRINGS: Pick<
   unmute: "Unmute",
   mute: "Mute",
   endConversation: "End conversation",
+  backToChats: "Back to chats",
+  resizeDetails: "Resize the details",
+  removeFilter: (token) => `Remove ${token}`,
+  unreadCount: (n, formatted) => `${formatted ?? n} unread`,
+  voiceWith: (name) => `Voice conversation with ${name}`,
+  interrupted: "Go ahead, I'm listening",
+  interrupt: "Interrupt",
+  connecting: "Connecting…",
 };
 
 /** Strings of the components in `app-chrome.tsx`. */
@@ -1328,6 +1351,38 @@ export const CHAT_STRINGS: Pick<
   | "timeline"
   | "stepRunning"
   | "context"
+  | "table"
+  | "taskDone"
+  | "taskOpen"
+  | "copyMessage"
+  | "editMessage"
+  | "dictated"
+  | "inVoice"
+  | "downloadFile"
+  | "openImage"
+  | "trace"
+  | "openTrace"
+  | "mentionSuggestions"
+  | "agentsGroup"
+  | "peopleGroup"
+  | "dictate"
+  | "stopDictating"
+  | "dictating"
+  | "dictateOrHold"
+  | "recordVoice"
+  | "recordingVoice"
+  | "slideToCancel"
+  | "releaseToCancel"
+  | "cancelRecording"
+  | "sendVoice"
+  | "micUnavailable"
+  | "takePhoto"
+  | "uploading"
+  | "uploadFailed"
+  | "good"
+  | "notGood"
+  | "thanksNoted"
+  | "whatShouldBeDifferent"
 > = {
   copyCode: "Copy code",
   working: "Working",
@@ -1359,6 +1414,38 @@ export const CHAT_STRINGS: Pick<
   timeline: (total) => `Timeline · ${total}`,
   stepRunning: "running…",
   context: "Context",
+  table: "Table",
+  taskDone: "Done",
+  taskOpen: "Not done",
+  copyMessage: "Copy message",
+  editMessage: "Edit message",
+  dictated: "Dictated",
+  inVoice: "In voice conversation",
+  downloadFile: (name) => `Download ${name}`,
+  openImage: (name) => `Open ${name}`,
+  trace: "Trace",
+  openTrace: (name) => `Open the trace of ${name}`,
+  mentionSuggestions: "Mention someone",
+  agentsGroup: "Agents",
+  peopleGroup: "People",
+  dictate: "Dictate",
+  stopDictating: "Stop dictating",
+  dictating: "Listening…",
+  dictateOrHold: "Tap to dictate, hold for a voice message",
+  recordVoice: "Hold to record a voice message",
+  recordingVoice: (elapsed) => `Recording ${elapsed}`,
+  slideToCancel: "Slide away to cancel",
+  releaseToCancel: "Release to cancel",
+  cancelRecording: "Cancel recording",
+  sendVoice: "Send voice message",
+  micUnavailable: "No microphone available",
+  takePhoto: "Take a photo",
+  uploading: (percent) => `Uploading ${percent}`,
+  uploadFailed: "Upload failed",
+  good: "Good",
+  notGood: "Not good",
+  thanksNoted: "Thanks, noted",
+  whatShouldBeDifferent: "What should be different?",
 };
 
 /** Strings of the components in `commerce.tsx`. */
@@ -1559,9 +1646,34 @@ export const FORMS_STRINGS: Pick<
 };
 
 /** Strings of the components in `mail.tsx`. */
+export interface UIStrings {
+  mailUnsubscribe: string;
+  mailUnsubscribed: string;
+  mailNewsletterFrom: (sender: string) => string;
+  mailNewsletter: string;
+  mailSelectMessage: (subject: string) => string;
+  mailStar: (subject: string) => string;
+  mailUnstar: (subject: string) => string;
+  mailHasAttachments: string;
+  mailMessageActions: string;
+}
 export const MAIL_STRINGS: Pick<
   UIStrings,
-  "allInboxes" | "addressCount" | "findAddress" | "company" | "phone" | "website"
+  | "allInboxes"
+  | "addressCount"
+  | "findAddress"
+  | "company"
+  | "phone"
+  | "website"
+  | "mailUnsubscribe"
+  | "mailUnsubscribed"
+  | "mailNewsletterFrom"
+  | "mailNewsletter"
+  | "mailSelectMessage"
+  | "mailStar"
+  | "mailUnstar"
+  | "mailHasAttachments"
+  | "mailMessageActions"
 > = {
   allInboxes: "All inboxes",
   addressCount: (n) => `${n} addresses`,
@@ -1569,6 +1681,15 @@ export const MAIL_STRINGS: Pick<
   company: "Company",
   phone: "Phone",
   website: "Website",
+  mailUnsubscribe: "Unsubscribe",
+  mailUnsubscribed: "Unsubscribed",
+  mailNewsletterFrom: (sender) => `Newsletter from ${sender}`,
+  mailNewsletter: "This is a newsletter",
+  mailSelectMessage: (subject) => `Select ${subject}`,
+  mailStar: (subject) => `Star ${subject}`,
+  mailUnstar: (subject) => `Remove star from ${subject}`,
+  mailHasAttachments: "Has attachments",
+  mailMessageActions: "Selected messages",
 };
 
 /** Strings of the components in `media.tsx`. */
@@ -2275,6 +2396,978 @@ export const INFRA_STRINGS: Pick<
   expired: "Expired",
 };
 
+/** Strings added to the chat components (chat.tsx, agents.tsx, chat-thread.tsx). */
+export interface UIStrings {
+  table: string;
+  taskDone: string;
+  taskOpen: string;
+  copyMessage: string;
+  editMessage: string;
+  dictated: string;
+  inVoice: string;
+  downloadFile: (name: string) => string;
+  openImage: (name: string) => string;
+  trace: string;
+  openTrace: (name: string) => string;
+  mentionSuggestions: string;
+  agentsGroup: string;
+  peopleGroup: string;
+  dictate: string;
+  stopDictating: string;
+  dictating: string;
+  dictateOrHold: string;
+  recordVoice: string;
+  recordingVoice: (elapsed: string) => string;
+  slideToCancel: string;
+  releaseToCancel: string;
+  cancelRecording: string;
+  sendVoice: string;
+  micUnavailable: string;
+  takePhoto: string;
+  uploading: (percent: string) => string;
+  uploadFailed: string;
+  backToChats: string;
+  resizeDetails: string;
+  removeFilter: (token: string) => string;
+  unreadCount: (n: number, formatted?: string) => string;
+  voiceWith: (name: string) => string;
+  interrupted: string;
+  interrupt: string;
+  connecting: string;
+  editHint: string;
+  previousVersion: string;
+  nextVersion: string;
+  versionOf: (index: string, count: string) => string;
+  versionLabel: (index: string, count: string) => string;
+  handedOverTo: string;
+  play: string;
+  voiceMessage: string;
+  showTranscript: string;
+  hideTranscript: string;
+  voiceConversation: string;
+  voiceTurns: (n: number, formatted?: string) => string;
+  typingOne: (name: string) => string;
+  typingTwo: (a: string, b: string) => string;
+  typingMany: (n: number, formatted?: string) => string;
+  readingAlong: string;
+  stepIn: string;
+  jumpToLatest: string;
+  conversation: string;
+}
+/** Strings of the components in `chat-thread.tsx`. */
+export const CHAT_THREAD_STRINGS: Pick<
+  UIStrings,
+  | "editHint"
+  | "previousVersion"
+  | "nextVersion"
+  | "versionOf"
+  | "versionLabel"
+  | "handedOverTo"
+  | "play"
+  | "pause"
+  | "voiceMessage"
+  | "showTranscript"
+  | "hideTranscript"
+  | "voiceConversation"
+  | "voiceTurns"
+  | "typingOne"
+  | "typingTwo"
+  | "typingMany"
+  | "readingAlong"
+  | "stepIn"
+  | "jumpToLatest"
+  | "conversation"
+  | "you"
+> = {
+  editHint: "The conversation runs again from here",
+  previousVersion: "Previous version",
+  nextVersion: "Next version",
+  versionOf: (index, count) => `${index}/${count}`,
+  versionLabel: (index, count) => `Version ${index} of ${count}`,
+  handedOverTo: "handed over to",
+  play: "Play",
+  pause: "Pause",
+  voiceMessage: "Voice message",
+  showTranscript: "Show transcript",
+  hideTranscript: "Hide transcript",
+  voiceConversation: "Voice conversation",
+  voiceTurns: (n, formatted) => `${formatted ?? n} ${n === 1 ? "turn" : "turns"}`,
+  typingOne: (name) => `${name} is typing…`,
+  typingTwo: (a, b) => `${a} and ${b} are typing…`,
+  typingMany: (n, formatted) => `${formatted ?? n} people are typing…`,
+  readingAlong: "You are reading along",
+  stepIn: "Step in",
+  jumpToLatest: "Jump to the latest message",
+  conversation: "Conversation",
+  you: "You",
+};
+
+/** Strings of the components in `calendar.tsx`. */
+export interface UIStrings {
+  calToday: string;
+  calPrevious: string;
+  calNext: string;
+  calViews: string;
+  calDay: string;
+  calWeek: string;
+  calMonth: string;
+  calAgenda: string;
+  calAllDay: string;
+  calCalendars: string;
+  calReadOnly: string;
+  calNewEventAt: (when: string) => string;
+  calMore: (n: number) => string;
+  calNothingPlanned: string;
+  calGuestSummary: (guests: number, accepted: number) => string;
+  calGuestCount: (n: number) => string;
+  calOrganizer: string;
+  calAccepted: string;
+  calDeclined: string;
+  calTentative: string;
+  calAwaiting: string;
+  calGoing: string;
+  calYes: string;
+  calMaybe: string;
+  calNo: string;
+  calCancelled: string;
+  calInvitation: (title: string) => string;
+  calInvitationLabel: string;
+  calAccept: string;
+  calDecline: string;
+  calAddToCalendar: string;
+  calInYourCalendar: string;
+  calRemoveFromCalendar: string;
+  calUpdated: string;
+  calUpdatedNote: string;
+  calCancelledNote: string;
+  calAlsoThen: string;
+  calFreeThen: string;
+  calYouReplied: (answer: string) => string;
+}
+export const CALENDAR_STRINGS: Pick<
+  UIStrings,
+  | "close"
+  | "calToday"
+  | "calPrevious"
+  | "calNext"
+  | "calViews"
+  | "calDay"
+  | "calWeek"
+  | "calMonth"
+  | "calAgenda"
+  | "calAllDay"
+  | "calCalendars"
+  | "calReadOnly"
+  | "calNewEventAt"
+  | "calMore"
+  | "calNothingPlanned"
+  | "calGuestSummary"
+  | "calGuestCount"
+  | "calOrganizer"
+  | "calAccepted"
+  | "calDeclined"
+  | "calTentative"
+  | "calAwaiting"
+  | "calGoing"
+  | "calYes"
+  | "calMaybe"
+  | "calNo"
+  | "calCancelled"
+  | "calInvitation"
+  | "calInvitationLabel"
+  | "calAccept"
+  | "calDecline"
+  | "calAddToCalendar"
+  | "calInYourCalendar"
+  | "calRemoveFromCalendar"
+  | "calUpdated"
+  | "calUpdatedNote"
+  | "calCancelledNote"
+  | "calAlsoThen"
+  | "calFreeThen"
+  | "calYouReplied"
+> = {
+  close: "Close",
+  calToday: "Today",
+  calPrevious: "Previous",
+  calNext: "Next",
+  calViews: "View",
+  calDay: "Day",
+  calWeek: "Week",
+  calMonth: "Month",
+  calAgenda: "Agenda",
+  calAllDay: "All day",
+  calCalendars: "Calendars",
+  calReadOnly: "Read only",
+  calNewEventAt: (when) => `New event, ${when}`,
+  calMore: (n) => `+${n} more`,
+  calNothingPlanned: "Nothing planned",
+  calGuestSummary: (guests, accepted) =>
+    `${guests} ${guests === 1 ? "guest" : "guests"} · ${accepted} accepted`,
+  calGuestCount: (n) => `${n} ${n === 1 ? "guest" : "guests"}`,
+  calOrganizer: "Organizer",
+  calAccepted: "Accepted",
+  calDeclined: "Declined",
+  calTentative: "Maybe",
+  calAwaiting: "Awaiting reply",
+  calGoing: "Going?",
+  calYes: "Yes",
+  calMaybe: "Maybe",
+  calNo: "No",
+  calCancelled: "Cancelled",
+  calInvitation: (title) => `Invitation: ${title}`,
+  calInvitationLabel: "Invitation",
+  calAccept: "Accept",
+  calDecline: "Decline",
+  calAddToCalendar: "Add to calendar",
+  calInYourCalendar: "In your calendar",
+  calRemoveFromCalendar: "Remove from calendar",
+  calUpdated: "Updated",
+  calUpdatedNote: "The organizer changed this event.",
+  calCancelledNote: "The organizer cancelled this event.",
+  calAlsoThen: "Also in your calendar then",
+  calFreeThen: "Nothing else in your calendar then",
+  calYouReplied: (answer) => `Your reply: ${answer}`,
+};
+
+/** Strings of the components in `webmail.tsx`. */
+export interface UIStrings {
+  mailAccount: string;
+  mailActArchive: string;
+  mailActDelete: string;
+  mailActForward: string;
+  mailActHandoff: string;
+  mailActMarkRead: string;
+  mailActMove: string;
+  mailActStar: string;
+  mailActTarget: string;
+  mailActType: string;
+  mailAddAction: string;
+  mailAddCondition: string;
+  mailAddRoute: string;
+  mailAddress: string;
+  mailAgent: string;
+  mailAlias: string;
+  mailAllAccounts: string;
+  mailAllDomains: string;
+  mailAnyAgent: string;
+  mailAttach: string;
+  mailAttachments: string;
+  mailAutoReply: string;
+  mailAutoReplyHint: string;
+  mailAutoReplyMessage: string;
+  mailAutoReplyOff: string;
+  mailAutoReplyOn: string;
+  mailAutoReplySubject: string;
+  mailAutoReplyUntil: (date: string) => string;
+  mailBcc: string;
+  mailBody: string;
+  mailCc: string;
+  mailChooseAgent: string;
+  mailChooseFolder: string;
+  mailClearFilters: (n: number) => string;
+  mailCollapse: (folder: string) => string;
+  mailCondField: string;
+  mailCondOp: string;
+  mailCondValue: string;
+  mailContactsOnly: string;
+  mailDate: string;
+  mailDelete: string;
+  mailDeleteFolder: string;
+  mailDeleteRoute: (address: string) => string;
+  mailDeleteRouteText: string;
+  mailDeleteRule: (rule: string) => string;
+  mailDeleteText: string;
+  mailDeleteTitle: (folder: string) => string;
+  mailDeliverTo: string;
+  mailDiscard: string;
+  mailDomain: string;
+  mailEmptyFolder: string;
+  mailEmptyText: string;
+  mailEmptyTitle: (folder: string) => string;
+  mailExpand: (folder: string) => string;
+  mailFieldBody: string;
+  mailFieldFrom: string;
+  mailFieldSubject: string;
+  mailFieldTo: string;
+  mailFilters: string;
+  mailFolderActions: (folder: string) => string;
+  mailFolders: string;
+  mailForward: string;
+  mailForwardTo: string;
+  mailFrom: string;
+  mailFromDate: string;
+  mailFromDevice: string;
+  mailIf: string;
+  mailImagesBlocked: (n: number) => string;
+  mailInactive: string;
+  mailInvalidRecipients: (n: number) => string;
+  mailLoadImages: string;
+  mailMatch: string;
+  mailMatchAll: string;
+  mailMatchAny: string;
+  mailMessage: string;
+  mailNewFolder: string;
+  mailNewMessage: string;
+  mailNewRule: string;
+  mailNewSubfolder: string;
+  mailNoRoutes: string;
+  mailNoRules: string;
+  mailNotAnAddress: string;
+  mailOpContains: string;
+  mailOpEndsWith: string;
+  mailOpIs: string;
+  mailOpNotContains: string;
+  mailOpStartsWith: string;
+  mailRemoveAction: string;
+  mailRemoveCondition: string;
+  mailRename: string;
+  mailResultCount: (n: number) => string;
+  mailRouteKind: string;
+  mailRoutes: string;
+  mailRuleN: (n: number) => string;
+  mailRuleName: string;
+  mailRuleOn: (rule: string) => string;
+  mailSave: string;
+  mailSaveFailed: string;
+  mailSaveRules: string;
+  mailSaved: string;
+  mailSavedAt: (time: string) => string;
+  mailSaving: string;
+  mailSchedule: string;
+  mailSendLater: string;
+  mailSending: string;
+  mailSent: string;
+  mailSignature: string;
+  mailStarred: string;
+  mailSubject: string;
+  mailThen: string;
+  mailTime: string;
+  mailTo: string;
+  mailUnread: string;
+  mailUnreadCount: (n: number) => string;
+  mailUntilDate: string;
+  mailUploading: (file: string) => string;
+  mailWithAttachments: string;
+}
+export const WEBMAIL_STRINGS: Pick<
+  UIStrings,
+  | "cancel"
+  | "send"
+  | "removeItem"
+  | "mailAccount"
+  | "mailActArchive"
+  | "mailActDelete"
+  | "mailActForward"
+  | "mailActHandoff"
+  | "mailActMarkRead"
+  | "mailActMove"
+  | "mailActStar"
+  | "mailActTarget"
+  | "mailActType"
+  | "mailAddAction"
+  | "mailAddCondition"
+  | "mailAddRoute"
+  | "mailAddress"
+  | "mailAgent"
+  | "mailAlias"
+  | "mailAllAccounts"
+  | "mailAllDomains"
+  | "mailAnyAgent"
+  | "mailAttach"
+  | "mailAttachments"
+  | "mailAutoReply"
+  | "mailAutoReplyHint"
+  | "mailAutoReplyMessage"
+  | "mailAutoReplyOff"
+  | "mailAutoReplyOn"
+  | "mailAutoReplySubject"
+  | "mailAutoReplyUntil"
+  | "mailBcc"
+  | "mailBody"
+  | "mailCc"
+  | "mailChooseAgent"
+  | "mailChooseFolder"
+  | "mailClearFilters"
+  | "mailCollapse"
+  | "mailCondField"
+  | "mailCondOp"
+  | "mailCondValue"
+  | "mailContactsOnly"
+  | "mailDate"
+  | "mailDelete"
+  | "mailDeleteFolder"
+  | "mailDeleteRoute"
+  | "mailDeleteRouteText"
+  | "mailDeleteRule"
+  | "mailDeleteText"
+  | "mailDeleteTitle"
+  | "mailDeliverTo"
+  | "mailDiscard"
+  | "mailDomain"
+  | "mailEmptyFolder"
+  | "mailEmptyText"
+  | "mailEmptyTitle"
+  | "mailExpand"
+  | "mailFieldBody"
+  | "mailFieldFrom"
+  | "mailFieldSubject"
+  | "mailFieldTo"
+  | "mailFilters"
+  | "mailFolderActions"
+  | "mailFolders"
+  | "mailForward"
+  | "mailForwardTo"
+  | "mailFrom"
+  | "mailFromDate"
+  | "mailFromDevice"
+  | "mailIf"
+  | "mailImagesBlocked"
+  | "mailInactive"
+  | "mailInvalidRecipients"
+  | "mailLoadImages"
+  | "mailMatch"
+  | "mailMatchAll"
+  | "mailMatchAny"
+  | "mailMessage"
+  | "mailNewFolder"
+  | "mailNewMessage"
+  | "mailNewRule"
+  | "mailNewSubfolder"
+  | "mailNoRoutes"
+  | "mailNoRules"
+  | "mailNotAnAddress"
+  | "mailOpContains"
+  | "mailOpEndsWith"
+  | "mailOpIs"
+  | "mailOpNotContains"
+  | "mailOpStartsWith"
+  | "mailRemoveAction"
+  | "mailRemoveCondition"
+  | "mailRename"
+  | "mailResultCount"
+  | "mailRouteKind"
+  | "mailRoutes"
+  | "mailRuleN"
+  | "mailRuleName"
+  | "mailRuleOn"
+  | "mailSave"
+  | "mailSaveFailed"
+  | "mailSaveRules"
+  | "mailSaved"
+  | "mailSavedAt"
+  | "mailSaving"
+  | "mailSchedule"
+  | "mailSendLater"
+  | "mailSending"
+  | "mailSent"
+  | "mailSignature"
+  | "mailStarred"
+  | "mailSubject"
+  | "mailThen"
+  | "mailTime"
+  | "mailTo"
+  | "mailUnread"
+  | "mailUnreadCount"
+  | "mailUntilDate"
+  | "mailUploading"
+  | "mailWithAttachments"
+> = {
+  cancel: "Cancel",
+  send: "Send",
+  removeItem: (name) => `Remove ${name}`,
+  mailAccount: "Account",
+  mailActArchive: "Archive",
+  mailActDelete: "Delete",
+  mailActForward: "Forward to",
+  mailActHandoff: "Hand to agent",
+  mailActMarkRead: "Mark as read",
+  mailActMove: "Move to",
+  mailActStar: "Star",
+  mailActTarget: "Target",
+  mailActType: "Action",
+  mailAddAction: "Add action",
+  mailAddCondition: "Add condition",
+  mailAddRoute: "Add address",
+  mailAddress: "Address",
+  mailAgent: "Agent",
+  mailAlias: "Alias",
+  mailAllAccounts: "All",
+  mailAllDomains: "All",
+  mailAnyAgent: "Any",
+  mailAttach: "Attach files",
+  mailAttachments: "Attachments",
+  mailAutoReply: "Automatic replies",
+  mailAutoReplyHint: "Each sender gets the reply once per period.",
+  mailAutoReplyMessage: "Message",
+  mailAutoReplyOff: "Off",
+  mailAutoReplyOn: "On",
+  mailAutoReplySubject: "Out of office",
+  mailAutoReplyUntil: (date) => `On until ${date}`,
+  mailBcc: "Bcc",
+  mailBody: "Message",
+  mailCc: "Cc",
+  mailChooseAgent: "Choose an agent",
+  mailChooseFolder: "Choose a folder",
+  mailClearFilters: (n) => `Clear ${n === 1 ? "filter" : "filters"}`,
+  mailCollapse: (folder) => `Collapse ${folder}`,
+  mailCondField: "Field",
+  mailCondOp: "Condition",
+  mailCondValue: "Value",
+  mailContactsOnly: "Only reply to my contacts",
+  mailDate: "Date",
+  mailDelete: "Delete",
+  mailDeleteFolder: "Delete folder",
+  mailDeleteRoute: (address) => `Delete ${address}`,
+  mailDeleteRouteText: "Mail to this address will no longer be delivered.",
+  mailDeleteRule: (rule) => `Delete ${rule}`,
+  mailDeleteText: "The folder and the messages in it are deleted.",
+  mailDeleteTitle: (folder) => `Delete ${folder}?`,
+  mailDeliverTo: "Deliver to",
+  mailDiscard: "Discard draft",
+  mailDomain: "Domain",
+  mailEmptyFolder: "Empty folder",
+  mailEmptyText: "Every message in it is deleted for good.",
+  mailEmptyTitle: (folder) => `Empty ${folder}?`,
+  mailExpand: (folder) => `Expand ${folder}`,
+  mailFieldBody: "Text",
+  mailFieldFrom: "From",
+  mailFieldSubject: "Subject",
+  mailFieldTo: "To",
+  mailFilters: "Filters",
+  mailFolderActions: (folder) => `Actions for ${folder}`,
+  mailFolders: "Folders",
+  mailForward: "Forward",
+  mailForwardTo: "name@example.com",
+  mailFrom: "From",
+  mailFromDate: "From",
+  mailFromDevice: "From this device",
+  mailIf: "If",
+  mailImagesBlocked: (n) =>
+    `${n} remote ${n === 1 ? "image is" : "images are"} blocked to protect your privacy.`,
+  mailInactive: "Inactive",
+  mailInvalidRecipients: (n) =>
+    n === 1 ? "One address is not valid." : `${n} addresses are not valid.`,
+  mailLoadImages: "Load images",
+  mailMatch: "Match",
+  mailMatchAll: "all of these match",
+  mailMatchAny: "any of these match",
+  mailMessage: "Message",
+  mailNewFolder: "New folder",
+  mailNewMessage: "New message",
+  mailNewRule: "New rule",
+  mailNewSubfolder: "New folder inside",
+  mailNoRoutes: "No aliases or forwards yet.",
+  mailNoRules: "No rules yet.",
+  mailNotAnAddress: "Not a valid address",
+  mailOpContains: "contains",
+  mailOpEndsWith: "ends with",
+  mailOpIs: "is",
+  mailOpNotContains: "doesn't contain",
+  mailOpStartsWith: "starts with",
+  mailRemoveAction: "Remove action",
+  mailRemoveCondition: "Remove condition",
+  mailRename: "Rename",
+  mailResultCount: (n) => `${n} ${n === 1 ? "message" : "messages"}`,
+  mailRouteKind: "Kind",
+  mailRoutes: "Aliases and forwards",
+  mailRuleN: (n) => `Rule ${n}`,
+  mailRuleName: "Rule name",
+  mailRuleOn: (rule) => `${rule} on`,
+  mailSave: "Save",
+  mailSaveFailed: "Draft not saved",
+  mailSaveRules: "Save rules",
+  mailSaved: "Draft saved",
+  mailSavedAt: (time) => `Draft saved ${time}`,
+  mailSaving: "Saving…",
+  mailSchedule: "Schedule",
+  mailSendLater: "Send later",
+  mailSending: "Sending…",
+  mailSent: "Message sent",
+  mailSignature: "Signature",
+  mailStarred: "Starred",
+  mailSubject: "Subject",
+  mailThen: "Then",
+  mailTime: "Time",
+  mailTo: "To",
+  mailUnread: "Unread",
+  mailUnreadCount: (n) => `${n} unread`,
+  mailUntilDate: "Until",
+  mailUploading: (file) => `Uploading ${file}`,
+  mailWithAttachments: "With attachments",
+};
+
+/** Strings of ExportDialog's accounting pre-check (admin.tsx). */
+export interface UIStrings {
+  exportPrecheck: string;
+  exportBookings: (formatted: string, n: number) => string;
+  exportDraftsLeftOut: (formatted: string, n: number) => string;
+  exportMissing: string;
+  exportFix: string;
+  exportLockPeriod: string;
+  exportLockHint: string;
+}
+
+/** Strings of the components in `finance.tsx`. */
+export interface UIStrings {
+  invoiceCustomer: string;
+  invoicePickCustomer: string;
+  invoiceLines: string;
+  invoiceDescription: string;
+  invoiceDescriptionPlaceholder: string;
+  invoiceQuantity: string;
+  invoiceUnit: string;
+  invoicePrice: string;
+  invoiceLineDiscount: string;
+  invoiceAmount: string;
+  invoiceRemoveLine: (n: number) => string;
+  invoiceNoLines: string;
+  invoiceAddLine: string;
+  invoiceNote: string;
+  invoiceTotals: string;
+  invoiceDiscountPct: string;
+  invoiceVatOn: (rate: string, base: string) => string;
+  invoiceEdit: string;
+  invoiceViews: string;
+  importTitle: string;
+  importLinesN: (n: number) => string;
+  importSelectLine: (text: string) => string;
+  importDuplicate: string;
+  importBooked: string;
+  importCategoryFor: (text: string) => string;
+  importConfidence: (pct: string) => string;
+  importNoSuggestion: string;
+  importEdit: (text: string) => string;
+  importConfirmN: (n: number) => string;
+  importConfirming: string;
+  importFailed: string;
+  periodOpen: string;
+  periodLocked: string;
+  periodOpenNote: string;
+  periodLockedNote: string;
+  periodLockedBy: (who: string) => string;
+  periodLock: string;
+  periodUnlock: string;
+  periodWorking: string;
+  periodLockTitle: (period: string) => string;
+  periodUnlockTitle: (period: string) => string;
+  periodLockText: string;
+  periodUnlockText: string;
+  periodConfirmPasskey: string;
+  periodFailed: string;
+}
+export const FINANCE_STRINGS: Pick<
+  UIStrings,
+  | "invoiceCustomer"
+  | "invoicePickCustomer"
+  | "invoiceLines"
+  | "invoiceDescription"
+  | "invoiceDescriptionPlaceholder"
+  | "invoiceQuantity"
+  | "invoiceUnit"
+  | "invoicePrice"
+  | "invoiceLineDiscount"
+  | "invoiceAmount"
+  | "invoiceRemoveLine"
+  | "invoiceNoLines"
+  | "invoiceAddLine"
+  | "invoiceNote"
+  | "invoiceTotals"
+  | "invoiceDiscountPct"
+  | "invoiceVatOn"
+  | "invoiceEdit"
+  | "invoiceViews"
+  | "importTitle"
+  | "importLinesN"
+  | "importSelectLine"
+  | "importDuplicate"
+  | "importBooked"
+  | "importCategoryFor"
+  | "importConfidence"
+  | "importNoSuggestion"
+  | "importEdit"
+  | "importConfirmN"
+  | "importConfirming"
+  | "importFailed"
+  | "periodOpen"
+  | "periodLocked"
+  | "periodOpenNote"
+  | "periodLockedNote"
+  | "periodLockedBy"
+  | "periodLock"
+  | "periodUnlock"
+  | "periodWorking"
+  | "periodLockTitle"
+  | "periodUnlockTitle"
+  | "periodLockText"
+  | "periodUnlockText"
+  | "periodConfirmPasskey"
+  | "periodFailed"
+  | "vat"
+  | "subtotal"
+  | "total"
+  | "preview"
+  | "selectAll"
+> = {
+  invoiceCustomer: "Customer",
+  invoicePickCustomer: "Pick a customer",
+  invoiceLines: "Line items",
+  invoiceDescription: "Description",
+  invoiceDescriptionPlaceholder: "What you delivered",
+  invoiceQuantity: "Qty",
+  invoiceUnit: "Unit",
+  invoicePrice: "Unit price",
+  invoiceLineDiscount: "Disc. %",
+  invoiceAmount: "Amount",
+  invoiceRemoveLine: (n) => `Remove line ${n}`,
+  invoiceNoLines: "No line items yet.",
+  invoiceAddLine: "Add line",
+  invoiceNote: "Note on the invoice",
+  invoiceTotals: "Totals",
+  invoiceDiscountPct: "Discount %",
+  invoiceVatOn: (rate, base) => `VAT ${rate} on ${base}`,
+  invoiceEdit: "Edit",
+  invoiceViews: "Invoice",
+  importTitle: "Bank statement",
+  importLinesN: (n) => `${n} ${n === 1 ? "line" : "lines"}`,
+  importSelectLine: (text) => `Select ${text}`,
+  importDuplicate: "Duplicate",
+  importBooked: "Booked",
+  importCategoryFor: (text) => `Category for ${text}`,
+  importConfidence: (pct) => `${pct} sure`,
+  importNoSuggestion: "No suggestion",
+  importEdit: (text) => `Edit booking for ${text}`,
+  importConfirmN: (n) => (n === 1 ? "Book 1 line" : `Book ${n} lines`),
+  importConfirming: "Booking…",
+  importFailed: "Booking failed. Try again.",
+  periodOpen: "Open",
+  periodLocked: "Locked",
+  periodOpenNote: "Bookings can still be added and changed.",
+  periodLockedNote: "Bookings can no longer be changed.",
+  periodLockedBy: (who) => `Locked ${who}`,
+  periodLock: "Lock",
+  periodUnlock: "Unlock",
+  periodWorking: "Working…",
+  periodLockTitle: (period) => `Lock ${period}?`,
+  periodUnlockTitle: (period) => `Unlock ${period}?`,
+  periodLockText: "Bookings in this period can no longer be added, changed or deleted.",
+  periodUnlockText:
+    "Bookings in this period can be changed again. Exports already sent stay as they are.",
+  periodConfirmPasskey: "Confirm with passkey",
+  periodFailed: "That did not work. Try again.",
+  vat: "VAT",
+  subtotal: "Subtotal",
+  total: "Total",
+  preview: "Preview",
+  selectAll: "Select all",
+};
+
+/** Strings of the components in `files.tsx`. */
+export interface UIStrings {
+  files: string;
+  searchFiles: string;
+  gridView: string;
+  listView: string;
+  newFolder: string;
+  upload: string;
+  uploads: string;
+  uploadPart: (part: number, parts: number) => string;
+  uploadPercent: (pct: number) => string;
+  fileUploaded: string;
+  uploadingFile: (name: string) => string;
+  cancelUploadOf: (name: string) => string;
+  itemsN: (n: number) => string;
+  modified: string;
+  size: string;
+  loadingFiles: string;
+  noFilesMatch: (query: string) => string;
+  emptyFolder: string;
+  filesDropHint: string;
+  dropToUpload: string;
+  selectItem: (name: string) => string;
+  renameItem: (name: string) => string;
+  actionsFor: (name: string) => string;
+  rename: string;
+  move: string;
+  moveToTrash: string;
+  previewOf: (name: string) => string;
+  noPreview: string;
+  create: string;
+  folderName: string;
+  moveItems: (n: number) => string;
+  moveHere: string;
+  chooseFolder: string;
+  trashTitle: (n: number) => string;
+  trashText: string;
+}
+export const FILES_STRINGS: Pick<
+  UIStrings,
+  | "files"
+  | "searchFiles"
+  | "gridView"
+  | "listView"
+  | "newFolder"
+  | "upload"
+  | "uploads"
+  | "uploadPart"
+  | "uploadPercent"
+  | "fileUploaded"
+  | "uploadingFile"
+  | "cancelUploadOf"
+  | "itemsN"
+  | "modified"
+  | "size"
+  | "loadingFiles"
+  | "noFilesMatch"
+  | "emptyFolder"
+  | "filesDropHint"
+  | "dropToUpload"
+  | "selectItem"
+  | "renameItem"
+  | "actionsFor"
+  | "rename"
+  | "move"
+  | "moveToTrash"
+  | "previewOf"
+  | "noPreview"
+  | "create"
+  | "folderName"
+  | "moveItems"
+  | "moveHere"
+  | "chooseFolder"
+  | "trashTitle"
+  | "trashText"
+  | "open"
+  | "download"
+  | "moveTo"
+  | "shared"
+  | "view"
+  | "selectAll"
+> = {
+  files: "Files",
+  searchFiles: "Search files",
+  gridView: "Grid",
+  listView: "List",
+  newFolder: "New folder",
+  upload: "Upload",
+  uploads: "Uploads",
+  uploadPart: (part, parts) => `Part ${part} of ${parts}`,
+  uploadPercent: (pct) => `${pct}%`,
+  fileUploaded: "Uploaded",
+  uploadingFile: (name) => `Uploading ${name}`,
+  cancelUploadOf: (name) => `Cancel upload of ${name}`,
+  itemsN: (n) => `${n} ${n === 1 ? "item" : "items"}`,
+  modified: "Modified",
+  size: "Size",
+  loadingFiles: "Loading files",
+  noFilesMatch: (query) => `Nothing matches “${query}”`,
+  emptyFolder: "This folder is empty",
+  filesDropHint: "Drop files here or use Upload.",
+  dropToUpload: "Drop to upload",
+  selectItem: (name) => `Select ${name}`,
+  renameItem: (name) => `New name for ${name}`,
+  actionsFor: (name) => `Actions for ${name}`,
+  rename: "Rename",
+  move: "Move",
+  moveToTrash: "Move to trash",
+  previewOf: (name) => `Preview of ${name}`,
+  noPreview: "No preview for this file",
+  create: "Create",
+  folderName: "Folder name",
+  moveItems: (n) => (n === 1 ? "Move 1 item" : `Move ${n} items`),
+  moveHere: "Move here",
+  chooseFolder: "Choose a folder",
+  trashTitle: (n) => (n === 1 ? "Move 1 item to the trash?" : `Move ${n} items to the trash?`),
+  trashText: "You can restore them from the trash.",
+  open: "Open",
+  download: "Download",
+  moveTo: "Move to",
+  shared: "Shared",
+  view: "View",
+  selectAll: "Select all",
+};
+
+/** Strings of the components in `brand-studio.tsx`. */
+export interface UIStrings {
+  palette: string;
+  hex: string;
+  oklch: string;
+  copyValue: (label: string, value: string) => string;
+  onLight: string;
+  onDark: string;
+  contrastRatio: (ratio: string) => string;
+  contrastFail: string;
+  contrastLarge: string;
+  assetQueued: string;
+  assetGenerating: string;
+  assetDone: string;
+  assetFailed: string;
+  watermark: string;
+  versions: string;
+  previousVersion: string;
+  nextVersion: string;
+  assetVersionOf: (n: number, total: number) => string;
+  currentVersion: string;
+  makeCurrent: string;
+  prompt: string;
+  generate: string;
+  downloadVersion: (n: number) => string;
+}
+export const BRAND_STUDIO_STRINGS: Pick<
+  UIStrings,
+  | "palette"
+  | "hex"
+  | "oklch"
+  | "copyValue"
+  | "onLight"
+  | "onDark"
+  | "contrastRatio"
+  | "contrastFail"
+  | "contrastLarge"
+  | "assetQueued"
+  | "assetGenerating"
+  | "assetDone"
+  | "assetFailed"
+  | "watermark"
+  | "versions"
+  | "previousVersion"
+  | "nextVersion"
+  | "assetVersionOf"
+  | "currentVersion"
+  | "makeCurrent"
+  | "prompt"
+  | "generate"
+  | "downloadVersion"
+  | "regenerate"
+  | "copied"
+> = {
+  palette: "Palette",
+  hex: "HEX",
+  oklch: "OKLCH",
+  copyValue: (label, value) => `Copy ${label} ${value}`,
+  onLight: "On light",
+  onDark: "On dark",
+  contrastRatio: (ratio) => `${ratio} : 1`,
+  contrastFail: "Fails",
+  contrastLarge: "AA large",
+  assetQueued: "Queued",
+  assetGenerating: "Generating",
+  assetDone: "Ready",
+  assetFailed: "Failed",
+  watermark: "Watermark",
+  versions: "Versions",
+  previousVersion: "Previous version",
+  nextVersion: "Next version",
+  assetVersionOf: (n, total) => `Version ${n} of ${total}`,
+  currentVersion: "Current",
+  makeCurrent: "Make current",
+  prompt: "Prompt",
+  generate: "Generate",
+  downloadVersion: (n) => `Download version ${n}`,
+  regenerate: "Regenerate",
+  copied: "Copied",
+};
+
 /** Strings of the components in `site.tsx`. */
 export const SITE_STRINGS: Pick<
   UIStrings,
@@ -2304,6 +3397,8 @@ export const SITE_STRINGS: Pick<
 /** Strings of the components in `workspace.tsx`. */
 export const WORKSPACE_STRINGS: Pick<
   UIStrings,
+  | "subtotal"
+  | "discount"
   | "sectionPages"
   | "commandPalette"
   | "paletteSearchPlaceholder"
@@ -2339,6 +3434,8 @@ export const WORKSPACE_STRINGS: Pick<
   | "noSuggestion"
   | "accept"
 > = {
+  subtotal: "Subtotal",
+  discount: "Discount",
   sectionPages: (section) => `${section || "Section"} pages`,
   commandPalette: "Command palette",
   paletteSearchPlaceholder: "Search pages, actions and records…",
@@ -3066,6 +4163,12 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   FRAME_STRINGS,
   APPROVAL_PREVIEWS_STRINGS,
   INFRA_STRINGS,
+  CHAT_THREAD_STRINGS,
+  CALENDAR_STRINGS,
+  WEBMAIL_STRINGS,
+  FINANCE_STRINGS,
+  FILES_STRINGS,
+  BRAND_STUDIO_STRINGS,
   SITE_STRINGS,
   WORKSPACE_STRINGS,
 );

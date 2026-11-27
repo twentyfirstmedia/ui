@@ -1,29 +1,29 @@
 import * as React from "react";
 import {
   Button,
-  InvoicePreview,
+  InvoiceEditor,
   PageHeader,
   Select,
-  TintIcon,
   TransactionRow,
 } from "@twentyfirstmedia/ui-core";
+import type { InvoiceDraft } from "@twentyfirstmedia/ui-core";
 import { Shell } from "./_workspace";
 
 function App() {
-  const lines = [
-    {
-      d: "Halo Team plan · 40 seats · May 2026",
-      q: 40,
-      u: 24,
-      v: 19,
-    },
-    {
-      d: "Onboarding workshop (half day)",
-      q: 1,
-      u: 650,
-      v: 19,
-    },
-  ];
+  const [draft, setDraft] = React.useState<InvoiceDraft>({
+    customer: "northwind",
+    lines: [
+      {
+        id: "1",
+        description: "Halo Team plan · 40 seats · May 2026",
+        quantity: 40,
+        price: 24,
+        vat: 19,
+      },
+      { id: "2", description: "Onboarding workshop (half day)", quantity: 1, price: 650, vat: 19 },
+    ],
+    note: "Thank you for your business. Please pay within 14 days.",
+  });
   return (
     <Shell
       area="Finance"
@@ -84,72 +84,29 @@ function App() {
         />
       </div>
       <div
-        className="tf-grid"
+        className="tf-in"
         style={
           {
-            "--cols": "minmax(0, 1.1fr) minmax(0, 1fr)",
-            gap: 16,
-            alignItems: "start",
+            "--d": "80ms",
           } as React.CSSProperties
         }
       >
-        <div
-          className="tf-panel tf-in"
-          style={
-            {
-              "--d": "80ms",
-            } as React.CSSProperties
-          }
-        >
-          <div
-            className="tf-grid"
-            style={
-              {
-                "--cols": "1fr 1fr",
-              } as React.CSSProperties
-            }
-          >
-            <Select label="Customer" options={["Northwind", "Kestrel Bank"]} />
-            <Select label="Payment terms" options={["14 days", "30 days"]} />
-          </div>
-          {lines.map((l, i) => (
-            <div key={i} className="tf-file">
-              <TintIcon icon="card" tint="butter" />
-              <div
-                style={{
-                  flex: 1,
-                  minWidth: 0,
-                }}
-              >
-                <div className="tf-file-name">{l.d}</div>
-                <div className="tf-file-meta">{l.q + " × €" + l.u + " · VAT " + l.v + "%"}</div>
-              </div>
-              <b>{"€" + (l.q * l.u).toLocaleString("en-US") + ".00"}</b>
-            </div>
-          ))}
-          <Button variant="soft" icon="plus">
-            Add line
-          </Button>
-        </div>
-        <div
-          className="tf-in"
-          style={
-            {
-              "--d": "160ms",
-            } as React.CSSProperties
-          }
-        >
-          <InvoicePreview
-            brand="Halo"
-            number={2097}
-            from="Halo Workspace GmbH · Example Street 1 · 20457 Hamburg"
-            to="Northwind"
-            issued="Apr 16, 2026"
-            due="Apr 30, 2026"
-            lines={lines}
-            note="Thank you for your business. Please pay within 14 days."
-          />
-        </div>
+        <InvoiceEditor
+          value={draft}
+          onChange={setDraft}
+          customers={[
+            { id: "northwind", name: "Northwind" },
+            { id: "kestrel", name: "Kestrel Bank" },
+          ]}
+          head={<Select label="Payment terms" options={["14 days", "30 days"]} />}
+          preview={{
+            brand: "Halo",
+            number: 2097,
+            from: "Halo Workspace GmbH · Example Street 1 · 20457 Hamburg",
+            issued: "Apr 16, 2026",
+            due: "Apr 30, 2026",
+          }}
+        />
       </div>
       <div
         className="tf-col tf-in"

@@ -2,103 +2,19 @@ import * as React from "react";
 import {
   AppShell,
   Button,
+  CalendarView,
   EventCard,
-  IconButton,
+  EventInvite,
   PageHeader,
   Panel,
   Stagger,
-  Tabs,
 } from "@twentyfirstmedia/ui-core";
+import type { CalendarEvent, CalendarRsvp } from "@twentyfirstmedia/ui-core";
+import { CALENDARS, EVENTS, NOW } from "./_calendar";
 
-const DAYS = ["Mon 13", "Tue 14", "Wed 15", "Thu 16", "Fri 17"];
-const EV = [
-  {
-    d: 0,
-    s: 9,
-    e: 10,
-    t: "Standup",
-    tint: "sky",
-    who: "Team",
-  },
-  {
-    d: 0,
-    s: 13,
-    e: 14.5,
-    t: "Hiring panel",
-    tint: "lilac",
-    who: "Design",
-  },
-  {
-    d: 1,
-    s: 10.5,
-    e: 12,
-    t: "Team sync",
-    tint: "sky",
-    who: "Growth + Design",
-  },
-  {
-    d: 1,
-    s: 15,
-    e: 16,
-    t: "Partner call",
-    tint: "mint",
-    who: "Northwind",
-  },
-  {
-    d: 2,
-    s: 9,
-    e: 10,
-    t: "Standup",
-    tint: "sky",
-    who: "Team",
-  },
-  {
-    d: 2,
-    s: 14,
-    e: 15.5,
-    t: "Design review",
-    tint: "lilac",
-    who: "Billing flow",
-  },
-  {
-    d: 3,
-    s: 11,
-    e: 12.5,
-    t: "Pricing review",
-    tint: "butter",
-    who: "Moved from Wed",
-  },
-  {
-    d: 3,
-    s: 16,
-    e: 17,
-    t: "Incident retro",
-    tint: "blush",
-    who: "Webhooks #88",
-  },
-  {
-    d: 4,
-    s: 9,
-    e: 10,
-    t: "Standup",
-    tint: "sky",
-    who: "Team",
-  },
-  {
-    d: 4,
-    s: 15.5,
-    e: 17,
-    t: "Q2 invoices due",
-    tint: "butter",
-    who: "Finance",
-  },
-];
-const START = 8,
-  END = 18,
-  ROW = 48;
 function App() {
-  const hours = [];
-  for (let i = START; i <= END; i++) hours.push(i);
+  const [events, setEvents] = React.useState<CalendarEvent[]>(EVENTS);
+  const [reply, setReply] = React.useState<CalendarRsvp | null>(null);
   return (
     <AppShell
       brand="Halo"
@@ -108,86 +24,25 @@ function App() {
       dock={false}
       side={
         <Panel side title="Up next" subtitle="Thursday, April 16">
-          <div
-            className="tf-card tf-in"
-            style={
+          <EventInvite
+            className="tf-in"
+            title="Quarterly planning"
+            start={new Date(2026, 3, 20, 10)}
+            end={new Date(2026, 3, 20, 11, 30)}
+            location="Room 4"
+            organizer={{ name: "Lena Hart", email: "lena@example.com" }}
+            others={[
               {
-                minHeight: 0,
-                gap: 12,
-                padding: 16,
-                "--d": "200ms",
-              } as React.CSSProperties
-            }
-          >
-            <div
-              className="tf-row"
-              style={{
-                justifyContent: "space-between",
-              }}
-            >
-              <span
-                style={{
-                  fontWeight: "var(--type-title-weight)",
-                }}
-              >
-                April 2026
-              </span>
-              <span
-                className="tf-row"
-                style={{
-                  gap: 4,
-                }}
-              >
-                <IconButton icon="chevronLeft" label="Previous month" size="sm" />
-                <IconButton icon="chevronRight" label="Next month" size="sm" />
-              </span>
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(7, 1fr)",
-                gap: 4,
-                textAlign: "center",
-                font: "var(--type-label-weight) 11px/28px var(--font-sans)",
-              }}
-            >
-              {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
-                <span
-                  key={"h" + i}
-                  style={{
-                    color: "var(--ink-muted)",
-                  }}
-                >
-                  {d}
-                </span>
-              ))}
-              {([null, null] as (number | null)[])
-                .concat(
-                  Array.from(
-                    {
-                      length: 30,
-                    },
-                    (_, i) => i + 1,
-                  ),
-                )
-                .map((n, i) => {
-                  const on = n != null && n >= 13 && n <= 17,
-                    today = n === 16;
-                  return (
-                    <span
-                      key={i}
-                      style={{
-                        borderRadius: "var(--radius-pill)",
-                        background: today ? "var(--primary)" : on ? "var(--sky)" : "transparent",
-                        color: today ? "var(--primary-foreground)" : "var(--ink)",
-                      }}
-                    >
-                      {n || ""}
-                    </span>
-                  );
-                })}
-            </div>
-          </div>
+                title: "Standup",
+                start: new Date(2026, 3, 20, 10),
+                end: new Date(2026, 3, 20, 10, 15),
+                tint: "mint",
+              },
+            ]}
+            response={reply}
+            onRespond={setReply}
+            onAddToCalendar={() => {}}
+          />
           <Stagger className="tf-col" delay={320}>
             <EventCard
               kind="review"
@@ -207,132 +62,36 @@ function App() {
       }
     >
       <div className="tf-in">
-        <PageHeader
-          title="Calendar"
-          subtitle="Week 16 · 10 events"
-          actions={[
-            <Tabs key="t" items={["Day", "Week", "Month"]} defaultValue="Week" />,
-            <Button key="n" icon="plus">
-              New event
-            </Button>,
-          ]}
-        />
+        <PageHeader title="Calendar" subtitle="Week 16 · 14 events" />
       </div>
-      <div
-        className="tf-panel tf-in"
-        style={
-          {
-            "--d": "120ms",
-            padding: 16,
-            gap: 0,
-            overflowX: "auto",
-          } as React.CSSProperties
-        }
-        tabIndex={0}
-        role="region"
-        aria-label="Week view"
-      >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "48px repeat(5, 1fr)",
-            minWidth: 560,
-            gap: 8,
-            paddingBottom: 12,
-          }}
-        >
-          <span />
-          {DAYS.map((d, i) => (
-            <div
-              key={d}
-              style={{
-                textAlign: "center",
-                font: "var(--type-title-weight) 13px/18px var(--font-sans)",
-                padding: "8px 0",
-                borderRadius: "var(--radius-pill)",
-                background: i === 3 ? "var(--primary)" : "transparent",
-                color: i === 3 ? "var(--primary-foreground)" : "var(--ink)",
-              }}
-            >
-              {d}
-            </div>
-          ))}
-        </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "48px repeat(5, 1fr)",
-            minWidth: 560,
-            gap: 8,
-            position: "relative",
-          }}
-        >
-          <div>
-            {hours.slice(0, -1).map((hr) => (
-              <div
-                key={hr}
-                style={{
-                  height: ROW,
-                  font: "var(--type-label-weight) 11px/1 var(--font-sans)",
-                  color: "var(--ink-muted)",
-                }}
-              >
-                {(hr < 10 ? "0" : "") + hr + ":00"}
-              </div>
-            ))}
-          </div>
-          {DAYS.map((d, di) => (
-            <div
-              key={d}
-              style={{
-                position: "relative",
-                height: ROW * (END - START),
-                backgroundImage:
-                  "repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px " +
-                  ROW +
-                  "px)",
-                borderRadius: "var(--radius-sm)",
-              }}
-            >
-              {EV.filter((e) => e.d === di).map((e, i) => (
-                <div
-                  key={i}
-                  className={"tf-in tf-bg-" + e.tint}
-                  style={
-                    {
-                      "--d": 200 + di * 70 + i * 60 + "ms",
-                      position: "absolute",
-                      left: 4,
-                      right: 4,
-                      top: (e.s - START) * ROW + 2,
-                      height: (e.e - e.s) * ROW - 4,
-                      borderRadius: "var(--radius-sm)",
-                      padding: "8px 12px",
-                      boxSizing: "border-box",
-                      overflow: "hidden",
-                    } as React.CSSProperties
-                  }
-                >
-                  <div
-                    style={{
-                      font: "var(--type-title-weight) 12px/16px var(--font-sans)",
-                    }}
-                  >
-                    {e.t}
-                  </div>
-                  <div
-                    style={{
-                      font: "var(--type-body-weight) 11px/15px var(--font-sans)",
-                      opacity: 0.78,
-                    }}
-                  >
-                    {e.who}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
+      <div className="tf-panel tf-in" style={{ "--d": "120ms" } as React.CSSProperties}>
+        <CalendarView
+          events={events}
+          calendars={CALENDARS}
+          now={NOW}
+          defaultDate={NOW}
+          onCreate={(slot) =>
+            setEvents((list) =>
+              list.concat([
+                {
+                  id: "n" + list.length,
+                  title: "New event",
+                  start: slot.start,
+                  end: slot.end,
+                  calendar: "work",
+                },
+              ]),
+            )
+          }
+          onRsvp={(ev, rsvp) =>
+            setEvents((list) => list.map((e) => (e.id === ev.id ? { ...e, rsvp } : e)))
+          }
+          toolbar={
+            <Button size="sm" icon="plus">
+              New event
+            </Button>
+          }
+        />
       </div>
     </AppShell>
   );
