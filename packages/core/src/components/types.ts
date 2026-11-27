@@ -1997,20 +1997,42 @@ export interface AccountSwitcherProps extends BaseProps {
   unread?: number;
   allLabel?: string;
 }
+export interface InboxListItem {
+  id: string | number;
+  from: string;
+  time?: string;
+  subject: string;
+  snippet?: string;
+  unread?: boolean;
+  to?: string;
+  agent?: { label: string; tone?: Tone };
+  tags?: string[];
+  starred?: boolean;
+  /** Shows a paperclip. */
+  attachments?: boolean;
+  /** Opens the message by link (with `linkAs`). */
+  href?: string;
+}
 export interface InboxListProps extends BaseProps {
-  items: {
-    id: string | number;
-    from: string;
-    time?: string;
-    subject: string;
-    snippet?: string;
-    unread?: boolean;
-    to?: string;
-    agent?: { label: string; tone?: Tone };
-    tags?: string[];
-  }[];
+  items: InboxListItem[];
+  /** The open message. */
   selected?: string | number;
-  onOpen?: (m: NonNullable<InboxListProps["items"]>[number]) => void;
+  onOpen?: (m: InboxListItem) => void;
+  /** A checkbox per row; the checked ids (controlled) / initially / on change. */
+  selectable?: boolean;
+  checked?: (string | number)[];
+  defaultChecked?: (string | number)[];
+  onCheckedChange?: (ids: (string | number)[]) => void;
+  /** Actions for the checked messages, in a `BulkActionBar` above the list. */
+  bulkActions?: {
+    label: string;
+    icon?: IconName;
+    danger?: boolean;
+    onClick: (ids: (string | number)[]) => void;
+  }[];
+  /** A star per row. */
+  onStar?: (m: InboxListItem, starred: boolean) => void;
+  linkAs?: ElementType;
 }
 export interface MailThreadProps extends BaseProps {
   subject: string;
@@ -2027,6 +2049,10 @@ export interface MailThreadProps extends BaseProps {
     attachments?: { name: string; size?: string }[];
   }[];
   reply?: ReactNode;
+  /** A newsletter: one-click unsubscribe under the subject (RFC 8058 List-Unsubscribe-Post). */
+  unsubscribe?: { sender?: string; onUnsubscribe: () => void; done?: boolean; busy?: boolean };
+  /** Buttons next to the subject (reply, archive …). */
+  actions?: ReactNode;
 }
 export interface SignatureEditorProps extends BaseProps {
   value?: Record<string, string>;
@@ -2214,6 +2240,8 @@ export interface LiveFeedProps extends BaseProps {
 }
 export interface RichTextEditorProps extends BaseProps {
   label?: ReactNode;
+  /** Hide the label visually; it stays the editor's accessible name. */
+  hideLabel?: boolean;
   defaultValue?: string;
   value?: string;
   onChange?: (html: string) => void;
@@ -4123,4 +4151,343 @@ export interface HighlightProps extends BaseProps {
   terms?: string[];
   /** Marks `query` as one phrase instead of word by word. */
   exact?: boolean;
+}
+
+/* ── Calendar (calendar.tsx) ── */
+export type CalendarViewMode = "day" | "week" | "month" | "agenda";
+/** A guest's answer, or your own: accepted, tentative ("maybe"), declined or still open. */
+export type CalendarRsvp = "accepted" | "tentative" | "declined" | "open";
+export interface CalendarDef {
+  id: string;
+  label: string;
+  /** The calendar's colour (events take it unless they set their own). */
+  tint?: Tint;
+  /** Shown but not editable, e.g. public holidays: no reply, no actions. */
+  readOnly?: boolean;
+}
+export interface CalendarGuest {
+  name: string;
+  email?: string;
+  status?: CalendarRsvp;
+  organizer?: boolean;
+}
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  start: Date | string | number;
+  end: Date | string | number;
+  /** All day (events of 24 hours or more show in the all-day row too). */
+  allDay?: boolean;
+  /** The `CalendarDef` id it belongs to. */
+  calendar?: string;
+  tint?: Tint;
+  location?: string;
+  description?: ReactNode;
+  guests?: CalendarGuest[];
+  /** Your own answer: shows "Going?" with Yes, Maybe, No in the details (with `onRsvp`). */
+  rsvp?: CalendarRsvp;
+  /** Cancelled: struck through. */
+  cancelled?: boolean;
+  readOnly?: boolean;
+}
+export interface CalendarViewProps extends BaseProps {
+  events: CalendarEvent[];
+  /** Calendars with colour and a visibility toggle each. */
+  calendars?: CalendarDef[];
+  /** Ids of hidden calendars (controlled) / initially hidden / on toggle. */
+  hidden?: string[];
+  defaultHidden?: string[];
+  onHiddenChange?: (ids: string[]) => void;
+  /** Day, week, month or agenda (default week). On phones a week or month shows as a list. */
+  view?: CalendarViewMode;
+  defaultView?: CalendarViewMode;
+  onViewChange?: (view: CalendarViewMode) => void;
+  /** The day the view shows (controlled) / initially (default today). */
+  date?: Date;
+  defaultDate?: Date;
+  onDateChange?: (date: Date) => void;
+  /** The visible range changed (also on mount): load its events. `end` is exclusive. */
+  onRangeChange?: (range: { start: Date; end: Date; view: CalendarViewMode }) => void;
+  /** The views offered in the switcher (default all four). */
+  views?: CalendarViewMode[];
+  /** Click or drag on an empty slot (or Enter on a focused slot): the new event's time. */
+  onCreate?: (slot: { start: Date; end: Date; allDay: boolean }) => void;
+  /** The event whose details are open (controlled) / initially / on open and close. */
+  selected?: string | null;
+  defaultSelected?: string | null;
+  onSelectedChange?: (id: string | null) => void;
+  /** Called when an event's details open. */
+  onOpenEvent?: (event: CalendarEvent) => void;
+  /** Your answer from the details (Yes, Maybe, No) for events with `rsvp`. */
+  onRsvp?: (event: CalendarEvent, rsvp: CalendarRsvp) => void;
+  /** Buttons at the bottom of the details (Edit, Delete, Open). */
+  eventActions?: (event: CalendarEvent) => ReactNode;
+  /** First and last hour of the day and week grid (default 7 to 21; widened to fit events). */
+  hours?: [number, number];
+  /** 1 = Monday (default), 0 = Sunday. */
+  weekStartsOn?: 0 | 1;
+  /** Most events per day in the month (default 3, then "+2 more"). */
+  maxPerDay?: number;
+  /** Heading instead of the date range. */
+  title?: string;
+  /** More controls at the end of the toolbar (a "New event" button). */
+  toolbar?: ReactNode;
+  /** What counts as now (default the clock), for stable tests and server rendering. */
+  now?: Date | string | number;
+}
+export interface EventInviteProps extends BaseProps {
+  title: string;
+  start: Date | string | number;
+  end: Date | string | number;
+  allDay?: boolean;
+  location?: string;
+  organizer?: { name: string; email?: string };
+  /** Number of guests. */
+  guests?: number;
+  /** What else is in the calendar at that time; `[]` says the time is free. */
+  others?: {
+    title: string;
+    start: Date | string | number;
+    end: Date | string | number;
+    allDay?: boolean;
+    tint?: Tint;
+  }[];
+  /** "updated" (the organizer changed it) or "cancelled". */
+  status?: "new" | "updated" | "cancelled";
+  /** What changed, for an update ("New time: 15:00"). */
+  changes?: ReactNode;
+  /** Your answer (controlled) / initially / when a button is pressed. */
+  response?: CalendarRsvp | null;
+  defaultResponse?: CalendarRsvp | null;
+  onRespond?: (response: CalendarRsvp) => void;
+  /** Shows "Add to calendar"; with `added` it says "In your calendar". */
+  onAddToCalendar?: () => void;
+  added?: boolean;
+  /** For a cancelled event that is in the calendar: "Remove from calendar". */
+  onRemove?: () => void;
+  /** A reply is being sent: buttons wait. */
+  busy?: boolean;
+}
+
+/* ── Webmail (webmail.tsx) ── */
+export interface MailHtmlProps extends BaseProps {
+  /** The mail's HTML. Sanitise it on the server; the frame still runs nothing and loads nothing. */
+  html: string;
+  /** The frame's accessible name (default "Message"). */
+  title?: string;
+  /** Remote images loaded (controlled) / initially / when the reader loads them. */
+  images?: boolean;
+  defaultImages?: boolean;
+  onImagesChange?: (images: boolean) => void;
+  /** "Load images" was pressed (e.g. to remember the sender). */
+  onLoadImages?: () => void;
+  /** How many remote images are blocked (default: counted in `html`). */
+  blockedImages?: number;
+  /**
+   * `"paper"` (default): the mail keeps its own light paper in every theme, as senders design it.
+   * `"theme"`: the page's surface and text colours, dark in the dark theme (for plain mails).
+   */
+  appearance?: "paper" | "theme";
+  /** Smallest height in px while it loads (default 120). */
+  minHeight?: number;
+}
+export interface MailRecipient {
+  address: string;
+  name?: string;
+}
+export interface RecipientInputProps extends BaseProps {
+  label: string;
+  hideLabel?: boolean;
+  id?: string;
+  /** The addresses (controlled) / initially / on change. */
+  value?: MailRecipient[];
+  defaultValue?: MailRecipient[];
+  onChange?: (value: MailRecipient[]) => void;
+  /** Known addresses, filtered while typing. */
+  suggestions?: MailRecipient[];
+  /** Or ask your server while typing (debounced). */
+  suggest?: (typed: string) => MailRecipient[] | Promise<MailRecipient[]>;
+  /** Your own address check (default: a plain e-mail pattern). */
+  validate?: (address: string) => boolean;
+  placeholder?: string;
+  hint?: string;
+  error?: string;
+  disabled?: boolean;
+  autoFocus?: boolean;
+}
+export interface MailComposerAttachment {
+  id: string;
+  name: string;
+  size?: string;
+  /** 0–1 while uploading. */
+  progress?: number;
+  error?: string;
+}
+export interface MailDraft {
+  from?: string;
+  to: MailRecipient[];
+  cc: MailRecipient[];
+  bcc: MailRecipient[];
+  subject: string;
+  /** The body as HTML (from the kit's RichTextEditor). */
+  html: string;
+  /** Include the signature (default true). */
+  signature?: boolean;
+  attachments?: MailComposerAttachment[];
+}
+export interface MailComposerProps extends BaseProps {
+  /** Addresses you may send from; a select when there are several. */
+  senders?: { address: string; name?: string }[];
+  /** The draft (controlled) / initially / on every change (save it as a draft). */
+  value?: MailDraft;
+  defaultValue?: Partial<MailDraft>;
+  onChange?: (draft: MailDraft) => void;
+  suggestions?: MailRecipient[];
+  suggest?: (typed: string) => MailRecipient[] | Promise<MailRecipient[]>;
+  /** The signature shown under the text, with a switch to leave it out. */
+  signature?: ReactNode;
+  /** Send (also ⌘/Ctrl+Enter); on only with valid recipients and no upload running. */
+  onSend?: (draft: MailDraft) => void;
+  /**
+   * Shows "Message sent" with Undo in a toast (needs a `<Toaster/>`). Hold the mail for
+   * `undoSeconds` and drop it when this is called.
+   */
+  onUndoSend?: (draft: MailDraft) => void;
+  /** How long Undo stays (default 10 s). */
+  undoSeconds?: number;
+  /** "Send later" with a date and time. */
+  onSchedule?: (draft: MailDraft, at: Date) => void;
+  /** Files picked on this device (add them to `attachments` and upload). */
+  onFiles?: (files: File[]) => void;
+  /** More places to attach from, e.g. "From Drive" (opens your picker). */
+  attachSources?: { label: string; icon?: IconName; onClick: () => void }[];
+  onRemoveAttachment?: (id: string) => void;
+  /** Draft state: saving, saved (at `savedAt`) or failed. */
+  saved?: "saving" | "saved" | "error" | null;
+  savedAt?: Date;
+  onDiscard?: () => void;
+  sending?: boolean;
+  /** Heading (default "New message"). */
+  title?: string;
+  placeholder?: string;
+  minHeight?: number;
+  autoFocus?: boolean;
+  /** More controls in the footer. */
+  footer?: ReactNode;
+}
+export interface MailFolder {
+  id: string;
+  label: string;
+  /** Standard folders get their icon and their menu (empty for trash and junk); own folders can be renamed and deleted. */
+  role?:
+    "inbox" | "drafts" | "sent" | "scheduled" | "starred" | "archive" | "junk" | "trash" | "outbox";
+  unread?: number;
+  icon?: IconName;
+  href?: string;
+  children?: MailFolder[];
+}
+export interface MailFoldersProps extends BaseProps {
+  folders: MailFolder[];
+  /** The open folder (controlled) / initially / on pick. */
+  selected?: string | null;
+  defaultSelected?: string | null;
+  onSelect?: (id: string | null) => void;
+  /** Folders with children open at first. */
+  defaultOpen?: string[];
+  /** New folder (at the top level or inside `parent`). */
+  onCreate?: (name: string, parent: string | null) => void;
+  onRename?: (id: string, name: string) => void;
+  /** Delete an own folder (after a confirmation). */
+  onDelete?: (id: string) => void;
+  /** Empty trash or junk (after a confirmation). */
+  onEmpty?: (id: string) => void;
+  linkAs?: ElementType;
+  /** Accessible name of the navigation (default "Folders"). */
+  label?: string;
+}
+export interface MailFilters {
+  account?: string | null;
+  domain?: string | null;
+  agent?: string | null;
+  unread?: boolean;
+  starred?: boolean;
+  attachments?: boolean;
+}
+export interface MailFilterBarProps extends BaseProps {
+  value?: MailFilters;
+  defaultValue?: MailFilters;
+  onChange?: (filters: MailFilters) => void;
+  accounts?: Option[];
+  domains?: Option[];
+  /** Agents mail can be filtered by (mail an agent handled or drafted). */
+  agents?: Option[];
+  /** Messages matching, shown at the end. */
+  count?: number;
+  label?: string;
+}
+export interface MailRuleCondition {
+  field: "from" | "to" | "subject" | "body";
+  op: "contains" | "notContains" | "is" | "startsWith" | "endsWith";
+  value: string;
+}
+export interface MailRuleAction {
+  type: "move" | "archive" | "markRead" | "star" | "forward" | "handoff" | "delete";
+  /** Folder for move, address for forward, agent for handoff. */
+  value?: string;
+}
+export interface MailRule {
+  id: string;
+  name?: string;
+  enabled?: boolean;
+  /** All conditions must match (default) or any. */
+  match?: "all" | "any";
+  conditions: MailRuleCondition[];
+  actions: MailRuleAction[];
+}
+export interface MailRulesEditorProps extends BaseProps {
+  value?: MailRule[];
+  defaultValue?: MailRule[];
+  onChange?: (rules: MailRule[]) => void;
+  /** Folders for "Move to". */
+  folders?: Option[];
+  /** Agents for "Hand to agent" (the action shows only with agents). */
+  agents?: Option[];
+  /** Shows "Save rules". */
+  onSave?: (rules: MailRule[]) => void;
+  saving?: boolean;
+}
+export interface AutoReplyValue {
+  enabled: boolean;
+  start?: Date | string | null;
+  end?: Date | string | null;
+  subject?: string;
+  message: string;
+  contactsOnly?: boolean;
+}
+export interface AutoReplyEditorProps extends BaseProps {
+  value?: AutoReplyValue;
+  defaultValue?: AutoReplyValue;
+  onChange?: (value: AutoReplyValue) => void;
+  onSave?: (value: AutoReplyValue) => void;
+  saving?: boolean;
+}
+export interface MailRoute {
+  address: string;
+  targets: string[];
+  kind?: "alias" | "forward";
+  active?: boolean;
+  note?: ReactNode;
+}
+export interface MailRouteListProps extends BaseProps {
+  routes: MailRoute[];
+  /** The domain new addresses belong to ("example.com"). */
+  domain?: string;
+  /** Shows "Add address" with a small form. */
+  onAdd?: (route: { address: string; targets: string[]; kind: "alias" | "forward" }) => void;
+  /** Delete (after a confirmation). */
+  onDelete?: (address: string) => void;
+  /** Mailboxes suggested as targets. */
+  suggestions?: MailRecipient[];
+  busy?: boolean;
+  label?: string;
 }

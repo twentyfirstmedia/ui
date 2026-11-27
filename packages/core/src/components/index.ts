@@ -294,4 +294,19 @@ export {
   TransactionRow,
 } from "./workspace.js";
 export { BulkActionBar, DaySeparator, Highlight, highlightParts } from "./common.js";
+export { CalendarView, EventInvite, calendarRange } from "./calendar.js";
+export {
+  MailHtml,
+  RecipientInput,
+  MailComposer,
+  MailFolders,
+  MailFilterBar,
+  MailRulesEditor,
+  AutoReplyEditor,
+  MailRouteList,
+  mailDocument,
+  countRemoteImages,
+  parseRecipients,
+  isEmailAddress,
+} from "./webmail.js";
 export type * from "./types.js";

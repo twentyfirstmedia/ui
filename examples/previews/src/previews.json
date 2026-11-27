@@ -174,16 +174,16 @@
     "name": "CalendarScreen",
     "group": "Pages",
     "width": 1280,
-    "height": 880,
+    "height": 1100,
     "components": [
       "AppShell",
       "Button",
+      "CalendarView",
       "EventCard",
-      "IconButton",
+      "EventInvite",
       "PageHeader",
       "Panel",
-      "Stagger",
-      "Tabs"
+      "Stagger"
     ]
   },
   {
@@ -234,6 +234,34 @@
     "width": 760,
     "height": 420,
     "components": ["Combobox", "TagInput"]
+  },
+  {
+    "name": "RecipientInput",
+    "group": "Forms",
+    "width": 720,
+    "height": 360,
+    "components": ["RecipientInput"]
+  },
+  {
+    "name": "MailComposer",
+    "group": "Forms",
+    "width": 900,
+    "height": 720,
+    "components": ["MailComposer", "RecipientInput", "RichTextEditor"]
+  },
+  {
+    "name": "MailRulesEditor",
+    "group": "Forms",
+    "width": 960,
+    "height": 820,
+    "components": ["MailRulesEditor"]
+  },
+  {
+    "name": "AutoReplyEditor",
+    "group": "Forms",
+    "width": 720,
+    "height": 620,
+    "components": ["AutoReplyEditor"]
   },
   {
     "name": "CommandPalette",
@@ -373,6 +401,20 @@
     "components": ["EventCard"]
   },
   {
+    "name": "CalendarView",
+    "group": "Data",
+    "width": 1200,
+    "height": 980,
+    "components": ["CalendarView"]
+  },
+  {
+    "name": "EventInvite",
+    "group": "Data",
+    "width": 720,
+    "height": 1180,
+    "components": ["EventInvite"]
+  },
+  {
     "name": "ExportDialog",
     "group": "Overlays",
     "width": 900,
@@ -441,6 +483,34 @@
     "components": ["AccountSwitcher", "InboxList", "MailThread"]
   },
   {
+    "name": "MailFolders",
+    "group": "Data",
+    "width": 420,
+    "height": 620,
+    "components": ["MailFolders"]
+  },
+  {
+    "name": "MailFilterBar",
+    "group": "Data",
+    "width": 960,
+    "height": 360,
+    "components": ["MailFilterBar"]
+  },
+  {
+    "name": "MailHtml",
+    "group": "Data",
+    "width": 800,
+    "height": 560,
+    "components": ["MailHtml"]
+  },
+  {
+    "name": "MailRouteList",
+    "group": "Data",
+    "width": 900,
+    "height": 420,
+    "components": ["MailRouteList", "RecipientInput"]
+  },
+  {
     "name": "InboxScreen",
     "group": "Pages",
     "width": 1280,
@@ -459,6 +529,27 @@
       "Stagger",
       "StatTile",
       "Tabs"
+    ]
+  },
+  {
+    "name": "MailScreen",
+    "group": "Pages",
+    "width": 1440,
+    "height": 1000,
+    "components": [
+      "AppShell",
+      "PageHeader",
+      "MailFolders",
+      "MailFilterBar",
+      "InboxList",
+      "BulkActionBar",
+      "MailThread",
+      "MailHtml",
+      "MailComposer",
+      "Drawer",
+      "IconButton",
+      "Button",
+      "Toaster"
     ]
   },
   {

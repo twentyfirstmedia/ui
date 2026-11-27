@@ -788,3 +788,32 @@ select.tf-input {
 .tf-togglegroup.sm .tf-toggle.icon {
   width: 20px;
 }
+
+/* Calendar and invitations (21-calendar-mail.css): the fills stay monochrome, but calendars stay
+   apart by a dot and an edge in their ink colour */
+:is(.tf-calv, .tf-invite) .tf-bg-sky {
+  --tint: var(--sky-ink);
+}
+:is(.tf-calv, .tf-invite) .tf-bg-mint {
+  --tint: var(--mint-ink);
+}
+:is(.tf-calv, .tf-invite) .tf-bg-lilac {
+  --tint: var(--lilac-ink);
+}
+:is(.tf-calv, .tf-invite) .tf-bg-butter {
+  --tint: var(--butter-ink);
+}
+:is(.tf-calv, .tf-invite) .tf-bg-blush {
+  --tint: var(--blush-ink);
+}
+.tf-calv-dot {
+  background: var(--tint);
+}
+.tf-calv-ev:not(.dot) {
+  box-shadow: inset 2px 0 0 var(--tint);
+}
+.tf-calv-ev.on:not(.dot) {
+  box-shadow:
+    inset 2px 0 0 var(--tint),
+    0 0 0 1px var(--fg-100);
+}

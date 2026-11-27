@@ -1,0 +1,1388 @@
+/* Calendar (CalendarView, EventInvite) and webmail (MailHtml, RecipientInput, MailComposer,
+   MailFolders, MailFilterBar, MailRulesEditor, AutoReplyEditor, MailRouteList, InboxList
+   selection, unsubscribe). */
+
+/* ── CalendarView ── */
+.tf-calv {
+  --calv-hour: 48px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  container: tf-calv / inline-size;
+}
+.tf-calv-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.tf-calv-nav,
+.tf-calv-tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.tf-calv-tools {
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tf-calv-title {
+  flex: 1 1 auto;
+  margin: 0 0 0 8px;
+  font: 700 18px/24px var(--font-sans);
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.tf-calv-cals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+.tf-calv-cal {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 12px 0 8px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink);
+  font: 600 13px/18px var(--font-sans);
+  cursor: pointer;
+}
+.tf-calv-cal:hover {
+  background: var(--accent);
+}
+.tf-calv-cal[aria-pressed="false"] {
+  color: var(--ink-muted);
+  text-decoration: line-through;
+}
+.tf-calv-cal[aria-pressed="false"] .tf-calv-dot {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--line-strong);
+}
+.tf-calv-cal:focus-visible,
+.tf-calv-dayhead:focus-visible,
+.tf-calv-mnum:focus-visible,
+.tf-calv-more:focus-visible,
+.tf-calv-ev:focus-visible,
+.tf-calv-slot:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+.tf-calv-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+}
+.tf-calv-label {
+  font: 600 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-calv-muted {
+  color: var(--ink-muted);
+}
+
+/* day and week grid */
+.tf-calv-grid {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 0 0 1px var(--line);
+  overflow: hidden;
+}
+.tf-calv-head,
+.tf-calv-allday,
+.tf-calv-body {
+  display: grid;
+  grid-template-columns: 56px repeat(var(--days), minmax(0, 1fr));
+}
+.tf-calv-head {
+  border-bottom: 1px solid var(--line);
+}
+.tf-calv-dayhead {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px;
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.tf-calv-dayhead small {
+  font: 600 11px/14px var(--font-sans);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+.tf-calv-dayhead b {
+  display: grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  font: 700 15px/20px var(--font-sans);
+}
+.tf-calv-dayhead:hover b {
+  background: var(--accent);
+}
+.tf-calv-dayhead.today b {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.tf-calv-allday {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-sunken);
+}
+.tf-calv-allday > .tf-calv-label {
+  padding: 8px 8px 8px 0;
+  text-align: right;
+  font-size: 11px;
+}
+.tf-calv-allday-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  min-height: 32px;
+  padding: 4px;
+  border-left: 1px solid var(--line);
+}
+.tf-calv-times {
+  position: relative;
+  height: calc(var(--hours) * var(--calv-hour));
+}
+.tf-calv-times span {
+  display: block;
+  height: var(--calv-hour);
+  padding-right: 8px;
+  font: 500 11px/1 var(--font-sans);
+  color: var(--ink-muted);
+  text-align: right;
+  transform: translateY(-6px);
+  font-variant-numeric: tabular-nums;
+}
+.tf-calv-times span:first-child {
+  transform: none;
+}
+.tf-calv-col {
+  position: relative;
+  min-width: 0;
+  height: calc(var(--hours) * var(--calv-hour));
+  border-left: 1px solid var(--line);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--line) 0 1px,
+    transparent 1px var(--calv-hour)
+  );
+  touch-action: pan-y;
+}
+.tf-calv-col.today {
+  background-color: var(--surface-sunken);
+}
+.tf-calv-col.can-create {
+  cursor: cell;
+}
+.tf-calv-slot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--y) * var(--calv-hour) / 60);
+  height: var(--calv-hour);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: cell;
+}
+.tf-calv-slot:hover {
+  background: var(--accent);
+}
+.tf-calv-now {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--y) * var(--calv-hour) / 60);
+  height: 0;
+  border-top: 2px solid var(--danger);
+  pointer-events: none;
+  z-index: 2;
+}
+.tf-calv-now::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: -6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--danger);
+}
+.tf-calv-draft {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: calc(var(--y) * var(--calv-hour) / 60);
+  height: calc(var(--len) * var(--calv-hour) / 60);
+  box-sizing: border-box;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  box-shadow: inset 0 0 0 2px var(--primary);
+  font: 600 12px/16px var(--font-sans);
+  color: var(--ink);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* events */
+.tf-calv-ev {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  font: 500 11px/15px var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+}
+.tf-calv-ev b {
+  font: 600 12px/16px var(--font-sans);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tf-calv-ev span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tf-calv-ev.tf-bg-sky {
+  color: var(--sky-ink);
+}
+.tf-calv-ev.tf-bg-mint {
+  color: var(--mint-ink);
+}
+.tf-calv-ev.tf-bg-lilac {
+  color: var(--lilac-ink);
+}
+.tf-calv-ev.tf-bg-butter {
+  color: var(--butter-ink);
+}
+.tf-calv-ev.tf-bg-blush {
+  color: var(--blush-ink);
+}
+.tf-calv-ev:hover {
+  filter: brightness(0.97);
+}
+.tf-calv-ev.on {
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.tf-calv-ev.faded b {
+  text-decoration: line-through;
+}
+.tf-calv-ev.faded {
+  opacity: 0.6;
+}
+.tf-calv-ev.tentative {
+  background-image: repeating-linear-gradient(135deg, transparent 0 6px, var(--surface) 6px 8px);
+}
+.tf-calv-ev.timed {
+  position: absolute;
+  top: calc(var(--y) * var(--calv-hour) / 60 + 1px);
+  height: calc(var(--len) * var(--calv-hour) / 60 - 2px);
+  left: calc(var(--lane) * 100% / var(--lanes) + 2px);
+  width: calc(100% / var(--lanes) - 4px);
+  z-index: 1;
+}
+.tf-calv-ev.timed.on {
+  z-index: 2;
+}
+/* timed events in the month: a dot instead of a fill */
+.tf-calv-ev.dot {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 4px;
+  background: transparent;
+  color: var(--ink);
+}
+.tf-calv-ev.dot::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--tint);
+}
+.tf-calv-ev.dot b {
+  order: 2;
+  font-weight: 500;
+}
+.tf-calv-ev.dot span {
+  order: 1;
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+.tf-calv-ev.dot:hover {
+  background: var(--accent);
+  filter: none;
+}
+
+/* month */
+.tf-calv-month {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 0 0 1px var(--line);
+  overflow: hidden;
+}
+.tf-calv-wd {
+  padding: 8px 4px;
+  font: 600 11px/14px var(--font-sans);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+}
+.tf-calv-mday {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  min-height: 104px;
+  padding: 4px;
+  border-left: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.tf-calv-mday:nth-child(7n + 8) {
+  border-left: 0;
+}
+.tf-calv-mday:nth-last-child(-n + 7) {
+  border-bottom: 0;
+}
+.tf-calv-mday.out {
+  background: var(--surface-sunken);
+}
+.tf-calv-mday.out .tf-calv-mnum {
+  color: var(--ink-subtle);
+}
+.tf-calv-mnum {
+  align-self: flex-start;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink);
+  font: 600 13px/18px var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.tf-calv-mnum:hover {
+  background: var(--accent);
+}
+.tf-calv-mday.today .tf-calv-mnum {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.tf-calv-more {
+  align-self: flex-start;
+  padding: 2px 4px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-muted);
+  font: 600 11px/15px var(--font-sans);
+  cursor: pointer;
+}
+.tf-calv-more:hover {
+  color: var(--ink);
+  background: var(--accent);
+}
+
+/* agenda */
+.tf-calv-agenda {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.tf-calv-empty {
+  margin: 0;
+  padding: 24px 0;
+  text-align: center;
+  font: 500 14px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-calv-aday {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tf-calv-aday h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  font: 600 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-calv-aday.today h3 {
+  color: var(--ink);
+}
+.tf-calv-aday h3 b {
+  padding: 0 8px;
+  border-radius: var(--radius-pill);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font: 600 12px/20px var(--font-sans);
+}
+.tf-calv-arow {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+}
+.tf-calv-atime {
+  padding-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 4px;
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.tf-calv-arow .tf-calv-ev {
+  padding: 6px 12px;
+}
+
+/* details */
+.tf-calv-pop {
+  position: absolute;
+  top: calc(var(--y) * 1px);
+  left: calc(var(--x) * 1px);
+  width: 320px;
+  max-width: calc(100% - 16px);
+  z-index: 70;
+  transform-origin: top left;
+}
+.tf-calv-pop.left {
+  transform-origin: top right;
+}
+.tf-calv-pop-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -4px -4px 12px 0;
+}
+.tf-calv-pop-head b {
+  flex: 1;
+  min-width: 0;
+  font: 700 16px/22px var(--font-sans);
+  overflow-wrap: anywhere;
+}
+.tf-struck {
+  text-decoration: line-through;
+}
+.tf-calv-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.tf-drawer .tf-calv-details {
+  padding: 0 24px 24px;
+}
+.tf-calv-fact {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font: 500 14px/20px var(--font-sans);
+  color: var(--ink);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.tf-calv-fact > svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--ink-muted);
+}
+.tf-calv-fact > .tf-calv-dot {
+  margin: 5px 3px 0;
+}
+.tf-calv-desc {
+  font: 500 14px/20px var(--font-sans);
+  color: var(--ink-muted);
+  overflow-wrap: anywhere;
+}
+.tf-calv-guests {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tf-calv-guests ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tf-calv-guests li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.tf-calv-guests .tf-option-text {
+  padding: 0;
+  font: 500 13px/18px var(--font-sans);
+}
+.tf-calv-guests .tf-option-text b,
+.tf-calv-guests .tf-option-text small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tf-calv-rsvp {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.tf-calv-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* phones: the agenda */
+.tf-calv.compact .tf-calv-title {
+  margin-left: 4px;
+  font-size: 16px;
+}
+.tf-calv.compact .tf-calv-bar {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+.tf-calv.compact .tf-calv-tools .tf-seg {
+  flex: 1;
+}
+.tf-calv.compact .tf-calv-arow {
+  grid-template-columns: 84px minmax(0, 1fr);
+}
+.tf-calv.compact .tf-calv-head,
+.tf-calv.compact .tf-calv-allday,
+.tf-calv.compact .tf-calv-body {
+  grid-template-columns: 44px repeat(var(--days), minmax(0, 1fr));
+}
+
+/* ── EventInvite ── */
+.tf-invite {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+  min-width: 0;
+}
+.tf-invite-date {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 72px;
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  color: var(--ink);
+}
+.tf-invite-date small {
+  font: 600 11px/14px var(--font-sans);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+.tf-invite-date b {
+  font: 700 24px/30px var(--font-sans);
+}
+.tf-invite-main {
+  flex: 1 1 240px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tf-invite-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tf-invite-title {
+  margin: 0;
+  font: 700 17px/24px var(--font-sans);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.tf-invite-note {
+  margin: 0;
+  font: 500 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-invite-others {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+}
+.tf-invite-other {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font: 500 13px/18px var(--font-sans);
+}
+.tf-invite-other .tf-calv-atime {
+  padding: 0;
+  flex: none;
+}
+.tf-invite-other-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tf-invite-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tf-invite-added {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 600 13px/18px var(--font-sans);
+  color: var(--ok);
+}
+/* ── MailHtml ── */
+.tf-mailhtml {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.tf-mailhtml iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.tf-mailhtml.themed iframe {
+  background: var(--surface);
+}
+.tf-mailhtml-blocked {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 8px 8px 8px 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  font: 500 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-mailhtml-blocked > span {
+  flex: 1 1 200px;
+}
+
+/* ── RecipientInput ── */
+.tf-rcpt .tf-combo {
+  position: relative;
+}
+.tf-rcpt .tf-combo-input {
+  min-width: 120px;
+}
+.tf-rcpt-chip {
+  min-width: 0;
+}
+.tf-rcpt-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tf-rcpt-chip.invalid {
+  background: var(--danger-bg);
+  color: var(--danger);
+  padding-left: 8px;
+}
+.tf-rcpt .tf-combo-pop {
+  top: calc(100% + 4px);
+}
+
+/* ── MailComposer ── */
+.tf-mcomp {
+  container: tf-mcomp / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.tf-mcomp-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tf-mcomp-head > b {
+  flex: 1;
+  font: 700 16px/22px var(--font-sans);
+}
+.tf-mcomp-saved {
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-mcomp-saved.error {
+  color: var(--danger);
+}
+.tf-mcomp-fields {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+.tf-mcomp-row {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--line);
+}
+.tf-mcomp-row > label,
+.tf-mcomp-label {
+  font: 600 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-mcomp-row > .tf-input,
+.tf-mcomp-row > .tf-mcomp-static {
+  grid-column: 2 / 4;
+}
+.tf-mcomp-row .tf-input,
+.tf-mcomp-row .tf-combo-box {
+  box-shadow: none;
+  border-color: transparent;
+  background-color: transparent;
+  padding-left: 0;
+}
+.tf-mcomp-row .tf-input:focus-visible,
+.tf-mcomp-row .tf-combo-box:focus-within {
+  box-shadow: none;
+  outline: 2px solid var(--focus);
+  outline-offset: 0;
+}
+.tf-mcomp-row .tf-field {
+  min-width: 0;
+}
+.tf-mcomp-static {
+  font: 500 14px/20px var(--font-sans);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tf-mcomp-ccbtns {
+  display: flex;
+  gap: 4px;
+}
+.tf-mcomp-sig {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tf-mcomp-sig-text {
+  padding-left: 12px;
+  border-left: 2px solid var(--line);
+  font: 500 13px/20px var(--font-sans);
+  color: var(--ink-muted);
+  white-space: pre-wrap;
+}
+.tf-mcomp-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tf-mcomp-files li {
+  max-width: 100%;
+}
+.tf-mcomp-files li.error {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.tf-mcomp-file-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tf-mcomp-files progress {
+  width: 64px;
+  height: 4px;
+  accent-color: var(--primary);
+}
+.tf-mcomp-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.tf-mcomp-send {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-right: auto;
+}
+.tf-mcomp-later {
+  gap: 12px;
+}
+.tf-mcomp-later-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font: 600 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+@container tf-mcomp (max-width: 480px) {
+  .tf-mcomp-row {
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+  }
+}
+
+/* ── MailFolders ── */
+.tf-mfolders {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.tf-mfolders ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tf-mfolder-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-left: calc(var(--depth) * 16px);
+  border-radius: var(--radius-sm);
+}
+.tf-mfolder-toggle {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+.tf-mfolder-toggle svg {
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.tf-mfolder-toggle[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+.tf-mfolder-link {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink);
+  font: 500 14px/20px var(--font-sans);
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+}
+.tf-mfolder-link > svg {
+  flex: none;
+  color: var(--ink-muted);
+}
+.tf-mfolder-link:hover {
+  background: var(--accent);
+}
+.tf-mfolder-link.on {
+  background: var(--surface-sunken);
+  font-weight: 600;
+}
+.tf-mfolder.unread > .tf-mfolder-row .tf-mfolder-label {
+  font-weight: 700;
+}
+.tf-mfolder-link:focus-visible,
+.tf-mfolder-toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+.tf-mfolder-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tf-mfolder-more {
+  position: absolute;
+  right: 2px;
+  opacity: 0;
+}
+.tf-mfolder-more.tf-iconbtn {
+  background: var(--surface);
+}
+.tf-mfolder-row:hover .tf-mfolder-more,
+.tf-mfolder-row:focus-within .tf-mfolder-more,
+.tf-mfolder-more[aria-expanded="true"] {
+  opacity: 1;
+}
+@media (hover: none) {
+  .tf-mfolder-more {
+    position: static;
+    flex: none;
+    opacity: 1;
+  }
+}
+.tf-mfolder-edit {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+}
+.tf-mfolders-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin-left: 22px;
+}
+
+/* ── MailFilterBar ── */
+.tf-mfilters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.tf-mfilters .tf-chip {
+  height: 32px;
+  padding: 0 12px;
+  max-width: 100%;
+}
+.tf-mfilter-pick {
+  min-width: 0;
+}
+.tf-mfilter-key {
+  font-weight: 500;
+}
+.tf-mfilter-val {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tf-mfilter-count {
+  margin-left: auto;
+  font: 500 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+
+/* ── MailRulesEditor ── */
+.tf-mrules {
+  container: tf-mrules / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.tf-mrules-empty {
+  margin: 0;
+  font: 500 14px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-mrule {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tf-mrule.off .tf-mrule-name {
+  color: var(--ink-muted);
+}
+.tf-mrule-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tf-mrule-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+}
+.tf-mrule-part {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.tf-mrule-part select {
+  width: auto;
+  max-width: 100%;
+}
+.tf-mrule-lead {
+  font: 700 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tf-mrule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tf-mrule-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+.tf-mrule-line > .tf-mrule-x {
+  grid-column: 4;
+  grid-row: 1;
+}
+.tf-mrule-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+}
+.tf-mrules-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+}
+@container tf-mrules (max-width: 560px) {
+  .tf-mrule-line {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .tf-mrule-line > * {
+    grid-column: 1;
+  }
+  .tf-mrule-line > .tf-mrule-x {
+    grid-column: 2;
+  }
+}
+
+/* ── AutoReplyEditor ── */
+.tf-autoreply {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.tf-autoreply-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.tf-autoreply-head .tf-switch-row {
+  flex: 1;
+}
+.tf-autoreply-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.tf-autoreply-body:disabled {
+  opacity: 0.6;
+}
+.tf-autoreply-period {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+.tf-autoreply-period label,
+.tf-autoreply-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font: 600 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-autoreply-hint {
+  margin: 0;
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-autoreply-foot {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ── MailRouteList ── */
+.tf-mroutes {
+  container: tf-mroutes / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  min-width: 0;
+}
+.tf-mroutes-empty {
+  margin: 0;
+  font: 500 14px/20px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-mroutes-list {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tf-mroute {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  font: 500 13px/18px var(--font-sans);
+}
+.tf-mroute-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 8px;
+  min-width: 0;
+}
+.tf-mroute.off .tf-mroute-from,
+.tf-mroute.off .tf-mroute-to {
+  color: var(--ink-muted);
+}
+.tf-mroute-from,
+.tf-mroute-to {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.tf-mroute-arrow {
+  flex: none;
+  color: var(--ink-muted);
+}
+.tf-mroute-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  color: var(--ink-muted);
+}
+.tf-mroute-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: stretch;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+}
+.tf-mroute-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font: 600 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-mroute-addr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.tf-mroute-addr .tf-input {
+  flex: 1;
+  min-width: 0;
+}
+.tf-mroute-actions {
+  display: flex;
+  gap: 8px;
+}
+@container tf-mroutes (max-width: 520px) {
+  .tf-mroute {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .tf-mroute-meta {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .tf-mroute > .tf-iconbtn {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+/* ── InboxList with selection, stars and links ── */
+.tf-inboxlist.rich {
+  gap: 8px;
+}
+.tf-inboxlist-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+li.tf-mailrow {
+  align-items: flex-start;
+  cursor: default;
+  padding: 0 8px 0 8px;
+}
+li.tf-mailrow.checked {
+  background: var(--surface-sunken);
+}
+.tf-mailrow-check {
+  flex: none;
+  padding-top: 12px;
+}
+.tf-mailrow-open {
+  padding: 12px 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+.tf-mailrow-open:focus-visible,
+.tf-mailrow-star:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+li.tf-mailrow .tf-mailrow-top > svg {
+  flex: none;
+  margin-left: auto;
+  color: var(--ink-muted);
+}
+li.tf-mailrow > .tf-mailrow-dot {
+  margin-top: 18px;
+}
+.tf-mailrow-star {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink-subtle);
+  cursor: pointer;
+}
+.tf-mailrow-star:hover {
+  background: var(--accent);
+  color: var(--ink);
+}
+.tf-mailrow-star.on {
+  color: var(--warn);
+}
+.tf-mailrow-star.on svg {
+  fill: currentColor;
+}
+
+/* ── MailThread: subject actions and unsubscribe ── */
+.tf-thread-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.tf-thread-head .tf-thread-subject {
+  flex: 1 1 240px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.tf-thread-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.tf-unsub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 8px 8px 8px 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  font: 500 13px/18px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-unsub > span:first-of-type {
+  flex: 1 1 160px;
+}
+.tf-unsub-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--ok);
+}
+
+.tf-calv-atime > span {
+  white-space: nowrap;
+}

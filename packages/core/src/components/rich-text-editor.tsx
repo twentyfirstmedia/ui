@@ -491,6 +491,7 @@ export function RichTextEditor(p: RichTextEditorProps) {
       style={p.style}
       className={p.className}
       label={p.label}
+      hideLabel={p.hideLabel}
       hint={p.hint}
       error={p.error}
     >

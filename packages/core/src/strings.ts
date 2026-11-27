@@ -1510,9 +1510,34 @@ export const FORMS_STRINGS: Pick<
 };
 
 /** Strings of the components in `mail.tsx`. */
+export interface UIStrings {
+  mailUnsubscribe: string;
+  mailUnsubscribed: string;
+  mailNewsletterFrom: (sender: string) => string;
+  mailNewsletter: string;
+  mailSelectMessage: (subject: string) => string;
+  mailStar: (subject: string) => string;
+  mailUnstar: (subject: string) => string;
+  mailHasAttachments: string;
+  mailMessageActions: string;
+}
 export const MAIL_STRINGS: Pick<
   UIStrings,
-  "allInboxes" | "addressCount" | "findAddress" | "company" | "phone" | "website"
+  | "allInboxes"
+  | "addressCount"
+  | "findAddress"
+  | "company"
+  | "phone"
+  | "website"
+  | "mailUnsubscribe"
+  | "mailUnsubscribed"
+  | "mailNewsletterFrom"
+  | "mailNewsletter"
+  | "mailSelectMessage"
+  | "mailStar"
+  | "mailUnstar"
+  | "mailHasAttachments"
+  | "mailMessageActions"
 > = {
   allInboxes: "All inboxes",
   addressCount: (n) => `${n} addresses`,
@@ -1520,6 +1545,15 @@ export const MAIL_STRINGS: Pick<
   company: "Company",
   phone: "Phone",
   website: "Website",
+  mailUnsubscribe: "Unsubscribe",
+  mailUnsubscribed: "Unsubscribed",
+  mailNewsletterFrom: (sender) => `Newsletter from ${sender}`,
+  mailNewsletter: "This is a newsletter",
+  mailSelectMessage: (subject) => `Select ${subject}`,
+  mailStar: (subject) => `Star ${subject}`,
+  mailUnstar: (subject) => `Remove star from ${subject}`,
+  mailHasAttachments: "Has attachments",
+  mailMessageActions: "Selected messages",
 };
 
 /** Strings of the components in `media.tsx`. */
@@ -1836,6 +1870,501 @@ export const COMMON_STRINGS: Pick<UIStrings, "bulkActions" | "clear" | "today" |
   clear: "Clear",
   today: "Today",
   yesterday: "Yesterday",
+};
+
+/** Strings of the components in `calendar.tsx`. */
+export interface UIStrings {
+  calToday: string;
+  calPrevious: string;
+  calNext: string;
+  calViews: string;
+  calDay: string;
+  calWeek: string;
+  calMonth: string;
+  calAgenda: string;
+  calAllDay: string;
+  calCalendars: string;
+  calReadOnly: string;
+  calNewEventAt: (when: string) => string;
+  calMore: (n: number) => string;
+  calNothingPlanned: string;
+  calGuestSummary: (guests: number, accepted: number) => string;
+  calGuestCount: (n: number) => string;
+  calOrganizer: string;
+  calAccepted: string;
+  calDeclined: string;
+  calTentative: string;
+  calAwaiting: string;
+  calGoing: string;
+  calYes: string;
+  calMaybe: string;
+  calNo: string;
+  calCancelled: string;
+  calInvitation: (title: string) => string;
+  calInvitationLabel: string;
+  calAccept: string;
+  calDecline: string;
+  calAddToCalendar: string;
+  calInYourCalendar: string;
+  calRemoveFromCalendar: string;
+  calUpdated: string;
+  calUpdatedNote: string;
+  calCancelledNote: string;
+  calAlsoThen: string;
+  calFreeThen: string;
+  calYouReplied: (answer: string) => string;
+}
+export const CALENDAR_STRINGS: Pick<
+  UIStrings,
+  | "close"
+  | "calToday"
+  | "calPrevious"
+  | "calNext"
+  | "calViews"
+  | "calDay"
+  | "calWeek"
+  | "calMonth"
+  | "calAgenda"
+  | "calAllDay"
+  | "calCalendars"
+  | "calReadOnly"
+  | "calNewEventAt"
+  | "calMore"
+  | "calNothingPlanned"
+  | "calGuestSummary"
+  | "calGuestCount"
+  | "calOrganizer"
+  | "calAccepted"
+  | "calDeclined"
+  | "calTentative"
+  | "calAwaiting"
+  | "calGoing"
+  | "calYes"
+  | "calMaybe"
+  | "calNo"
+  | "calCancelled"
+  | "calInvitation"
+  | "calInvitationLabel"
+  | "calAccept"
+  | "calDecline"
+  | "calAddToCalendar"
+  | "calInYourCalendar"
+  | "calRemoveFromCalendar"
+  | "calUpdated"
+  | "calUpdatedNote"
+  | "calCancelledNote"
+  | "calAlsoThen"
+  | "calFreeThen"
+  | "calYouReplied"
+> = {
+  close: "Close",
+  calToday: "Today",
+  calPrevious: "Previous",
+  calNext: "Next",
+  calViews: "View",
+  calDay: "Day",
+  calWeek: "Week",
+  calMonth: "Month",
+  calAgenda: "Agenda",
+  calAllDay: "All day",
+  calCalendars: "Calendars",
+  calReadOnly: "Read only",
+  calNewEventAt: (when) => `New event, ${when}`,
+  calMore: (n) => `+${n} more`,
+  calNothingPlanned: "Nothing planned",
+  calGuestSummary: (guests, accepted) =>
+    `${guests} ${guests === 1 ? "guest" : "guests"} · ${accepted} accepted`,
+  calGuestCount: (n) => `${n} ${n === 1 ? "guest" : "guests"}`,
+  calOrganizer: "Organizer",
+  calAccepted: "Accepted",
+  calDeclined: "Declined",
+  calTentative: "Maybe",
+  calAwaiting: "Awaiting reply",
+  calGoing: "Going?",
+  calYes: "Yes",
+  calMaybe: "Maybe",
+  calNo: "No",
+  calCancelled: "Cancelled",
+  calInvitation: (title) => `Invitation: ${title}`,
+  calInvitationLabel: "Invitation",
+  calAccept: "Accept",
+  calDecline: "Decline",
+  calAddToCalendar: "Add to calendar",
+  calInYourCalendar: "In your calendar",
+  calRemoveFromCalendar: "Remove from calendar",
+  calUpdated: "Updated",
+  calUpdatedNote: "The organizer changed this event.",
+  calCancelledNote: "The organizer cancelled this event.",
+  calAlsoThen: "Also in your calendar then",
+  calFreeThen: "Nothing else in your calendar then",
+  calYouReplied: (answer) => `Your reply: ${answer}`,
+};
+
+/** Strings of the components in `webmail.tsx`. */
+export interface UIStrings {
+  mailAccount: string;
+  mailActArchive: string;
+  mailActDelete: string;
+  mailActForward: string;
+  mailActHandoff: string;
+  mailActMarkRead: string;
+  mailActMove: string;
+  mailActStar: string;
+  mailActTarget: string;
+  mailActType: string;
+  mailAddAction: string;
+  mailAddCondition: string;
+  mailAddRoute: string;
+  mailAddress: string;
+  mailAgent: string;
+  mailAlias: string;
+  mailAllAccounts: string;
+  mailAllDomains: string;
+  mailAnyAgent: string;
+  mailAttach: string;
+  mailAttachments: string;
+  mailAutoReply: string;
+  mailAutoReplyHint: string;
+  mailAutoReplyMessage: string;
+  mailAutoReplyOff: string;
+  mailAutoReplyOn: string;
+  mailAutoReplySubject: string;
+  mailAutoReplyUntil: (date: string) => string;
+  mailBcc: string;
+  mailBody: string;
+  mailCc: string;
+  mailChooseAgent: string;
+  mailChooseFolder: string;
+  mailClearFilters: (n: number) => string;
+  mailCollapse: (folder: string) => string;
+  mailCondField: string;
+  mailCondOp: string;
+  mailCondValue: string;
+  mailContactsOnly: string;
+  mailDate: string;
+  mailDelete: string;
+  mailDeleteFolder: string;
+  mailDeleteRoute: (address: string) => string;
+  mailDeleteRouteText: string;
+  mailDeleteRule: (rule: string) => string;
+  mailDeleteText: string;
+  mailDeleteTitle: (folder: string) => string;
+  mailDeliverTo: string;
+  mailDiscard: string;
+  mailDomain: string;
+  mailEmptyFolder: string;
+  mailEmptyText: string;
+  mailEmptyTitle: (folder: string) => string;
+  mailExpand: (folder: string) => string;
+  mailFieldBody: string;
+  mailFieldFrom: string;
+  mailFieldSubject: string;
+  mailFieldTo: string;
+  mailFilters: string;
+  mailFolderActions: (folder: string) => string;
+  mailFolders: string;
+  mailForward: string;
+  mailForwardTo: string;
+  mailFrom: string;
+  mailFromDate: string;
+  mailFromDevice: string;
+  mailIf: string;
+  mailImagesBlocked: (n: number) => string;
+  mailInactive: string;
+  mailInvalidRecipients: (n: number) => string;
+  mailLoadImages: string;
+  mailMatch: string;
+  mailMatchAll: string;
+  mailMatchAny: string;
+  mailMessage: string;
+  mailNewFolder: string;
+  mailNewMessage: string;
+  mailNewRule: string;
+  mailNewSubfolder: string;
+  mailNoRoutes: string;
+  mailNoRules: string;
+  mailNotAnAddress: string;
+  mailOpContains: string;
+  mailOpEndsWith: string;
+  mailOpIs: string;
+  mailOpNotContains: string;
+  mailOpStartsWith: string;
+  mailRemoveAction: string;
+  mailRemoveCondition: string;
+  mailRename: string;
+  mailResultCount: (n: number) => string;
+  mailRouteKind: string;
+  mailRoutes: string;
+  mailRuleN: (n: number) => string;
+  mailRuleName: string;
+  mailRuleOn: (rule: string) => string;
+  mailSave: string;
+  mailSaveFailed: string;
+  mailSaveRules: string;
+  mailSaved: string;
+  mailSavedAt: (time: string) => string;
+  mailSaving: string;
+  mailSchedule: string;
+  mailSendLater: string;
+  mailSending: string;
+  mailSent: string;
+  mailSignature: string;
+  mailStarred: string;
+  mailSubject: string;
+  mailThen: string;
+  mailTime: string;
+  mailTo: string;
+  mailUnread: string;
+  mailUnreadCount: (n: number) => string;
+  mailUntilDate: string;
+  mailUploading: (file: string) => string;
+  mailWithAttachments: string;
+}
+export const WEBMAIL_STRINGS: Pick<
+  UIStrings,
+  | "cancel"
+  | "send"
+  | "removeItem"
+  | "mailAccount"
+  | "mailActArchive"
+  | "mailActDelete"
+  | "mailActForward"
+  | "mailActHandoff"
+  | "mailActMarkRead"
+  | "mailActMove"
+  | "mailActStar"
+  | "mailActTarget"
+  | "mailActType"
+  | "mailAddAction"
+  | "mailAddCondition"
+  | "mailAddRoute"
+  | "mailAddress"
+  | "mailAgent"
+  | "mailAlias"
+  | "mailAllAccounts"
+  | "mailAllDomains"
+  | "mailAnyAgent"
+  | "mailAttach"
+  | "mailAttachments"
+  | "mailAutoReply"
+  | "mailAutoReplyHint"
+  | "mailAutoReplyMessage"
+  | "mailAutoReplyOff"
+  | "mailAutoReplyOn"
+  | "mailAutoReplySubject"
+  | "mailAutoReplyUntil"
+  | "mailBcc"
+  | "mailBody"
+  | "mailCc"
+  | "mailChooseAgent"
+  | "mailChooseFolder"
+  | "mailClearFilters"
+  | "mailCollapse"
+  | "mailCondField"
+  | "mailCondOp"
+  | "mailCondValue"
+  | "mailContactsOnly"
+  | "mailDate"
+  | "mailDelete"
+  | "mailDeleteFolder"
+  | "mailDeleteRoute"
+  | "mailDeleteRouteText"
+  | "mailDeleteRule"
+  | "mailDeleteText"
+  | "mailDeleteTitle"
+  | "mailDeliverTo"
+  | "mailDiscard"
+  | "mailDomain"
+  | "mailEmptyFolder"
+  | "mailEmptyText"
+  | "mailEmptyTitle"
+  | "mailExpand"
+  | "mailFieldBody"
+  | "mailFieldFrom"
+  | "mailFieldSubject"
+  | "mailFieldTo"
+  | "mailFilters"
+  | "mailFolderActions"
+  | "mailFolders"
+  | "mailForward"
+  | "mailForwardTo"
+  | "mailFrom"
+  | "mailFromDate"
+  | "mailFromDevice"
+  | "mailIf"
+  | "mailImagesBlocked"
+  | "mailInactive"
+  | "mailInvalidRecipients"
+  | "mailLoadImages"
+  | "mailMatch"
+  | "mailMatchAll"
+  | "mailMatchAny"
+  | "mailMessage"
+  | "mailNewFolder"
+  | "mailNewMessage"
+  | "mailNewRule"
+  | "mailNewSubfolder"
+  | "mailNoRoutes"
+  | "mailNoRules"
+  | "mailNotAnAddress"
+  | "mailOpContains"
+  | "mailOpEndsWith"
+  | "mailOpIs"
+  | "mailOpNotContains"
+  | "mailOpStartsWith"
+  | "mailRemoveAction"
+  | "mailRemoveCondition"
+  | "mailRename"
+  | "mailResultCount"
+  | "mailRouteKind"
+  | "mailRoutes"
+  | "mailRuleN"
+  | "mailRuleName"
+  | "mailRuleOn"
+  | "mailSave"
+  | "mailSaveFailed"
+  | "mailSaveRules"
+  | "mailSaved"
+  | "mailSavedAt"
+  | "mailSaving"
+  | "mailSchedule"
+  | "mailSendLater"
+  | "mailSending"
+  | "mailSent"
+  | "mailSignature"
+  | "mailStarred"
+  | "mailSubject"
+  | "mailThen"
+  | "mailTime"
+  | "mailTo"
+  | "mailUnread"
+  | "mailUnreadCount"
+  | "mailUntilDate"
+  | "mailUploading"
+  | "mailWithAttachments"
+> = {
+  cancel: "Cancel",
+  send: "Send",
+  removeItem: (name) => `Remove ${name}`,
+  mailAccount: "Account",
+  mailActArchive: "Archive",
+  mailActDelete: "Delete",
+  mailActForward: "Forward to",
+  mailActHandoff: "Hand to agent",
+  mailActMarkRead: "Mark as read",
+  mailActMove: "Move to",
+  mailActStar: "Star",
+  mailActTarget: "Target",
+  mailActType: "Action",
+  mailAddAction: "Add action",
+  mailAddCondition: "Add condition",
+  mailAddRoute: "Add address",
+  mailAddress: "Address",
+  mailAgent: "Agent",
+  mailAlias: "Alias",
+  mailAllAccounts: "All",
+  mailAllDomains: "All",
+  mailAnyAgent: "Any",
+  mailAttach: "Attach files",
+  mailAttachments: "Attachments",
+  mailAutoReply: "Automatic replies",
+  mailAutoReplyHint: "Each sender gets the reply once per period.",
+  mailAutoReplyMessage: "Message",
+  mailAutoReplyOff: "Off",
+  mailAutoReplyOn: "On",
+  mailAutoReplySubject: "Out of office",
+  mailAutoReplyUntil: (date) => `On until ${date}`,
+  mailBcc: "Bcc",
+  mailBody: "Message",
+  mailCc: "Cc",
+  mailChooseAgent: "Choose an agent",
+  mailChooseFolder: "Choose a folder",
+  mailClearFilters: (n) => `Clear ${n === 1 ? "filter" : "filters"}`,
+  mailCollapse: (folder) => `Collapse ${folder}`,
+  mailCondField: "Field",
+  mailCondOp: "Condition",
+  mailCondValue: "Value",
+  mailContactsOnly: "Only reply to my contacts",
+  mailDate: "Date",
+  mailDelete: "Delete",
+  mailDeleteFolder: "Delete folder",
+  mailDeleteRoute: (address) => `Delete ${address}`,
+  mailDeleteRouteText: "Mail to this address will no longer be delivered.",
+  mailDeleteRule: (rule) => `Delete ${rule}`,
+  mailDeleteText: "The folder and the messages in it are deleted.",
+  mailDeleteTitle: (folder) => `Delete ${folder}?`,
+  mailDeliverTo: "Deliver to",
+  mailDiscard: "Discard draft",
+  mailDomain: "Domain",
+  mailEmptyFolder: "Empty folder",
+  mailEmptyText: "Every message in it is deleted for good.",
+  mailEmptyTitle: (folder) => `Empty ${folder}?`,
+  mailExpand: (folder) => `Expand ${folder}`,
+  mailFieldBody: "Text",
+  mailFieldFrom: "From",
+  mailFieldSubject: "Subject",
+  mailFieldTo: "To",
+  mailFilters: "Filters",
+  mailFolderActions: (folder) => `Actions for ${folder}`,
+  mailFolders: "Folders",
+  mailForward: "Forward",
+  mailForwardTo: "name@example.com",
+  mailFrom: "From",
+  mailFromDate: "From",
+  mailFromDevice: "From this device",
+  mailIf: "If",
+  mailImagesBlocked: (n) =>
+    `${n} remote ${n === 1 ? "image is" : "images are"} blocked to protect your privacy.`,
+  mailInactive: "Inactive",
+  mailInvalidRecipients: (n) =>
+    n === 1 ? "One address is not valid." : `${n} addresses are not valid.`,
+  mailLoadImages: "Load images",
+  mailMatch: "Match",
+  mailMatchAll: "all of these match",
+  mailMatchAny: "any of these match",
+  mailMessage: "Message",
+  mailNewFolder: "New folder",
+  mailNewMessage: "New message",
+  mailNewRule: "New rule",
+  mailNewSubfolder: "New folder inside",
+  mailNoRoutes: "No aliases or forwards yet.",
+  mailNoRules: "No rules yet.",
+  mailNotAnAddress: "Not a valid address",
+  mailOpContains: "contains",
+  mailOpEndsWith: "ends with",
+  mailOpIs: "is",
+  mailOpNotContains: "doesn't contain",
+  mailOpStartsWith: "starts with",
+  mailRemoveAction: "Remove action",
+  mailRemoveCondition: "Remove condition",
+  mailRename: "Rename",
+  mailResultCount: (n) => `${n} ${n === 1 ? "message" : "messages"}`,
+  mailRouteKind: "Kind",
+  mailRoutes: "Aliases and forwards",
+  mailRuleN: (n) => `Rule ${n}`,
+  mailRuleName: "Rule name",
+  mailRuleOn: (rule) => `${rule} on`,
+  mailSave: "Save",
+  mailSaveFailed: "Draft not saved",
+  mailSaveRules: "Save rules",
+  mailSaved: "Draft saved",
+  mailSavedAt: (time) => `Draft saved ${time}`,
+  mailSaving: "Saving…",
+  mailSchedule: "Schedule",
+  mailSendLater: "Send later",
+  mailSending: "Sending…",
+  mailSent: "Message sent",
+  mailSignature: "Signature",
+  mailStarred: "Starred",
+  mailSubject: "Subject",
+  mailThen: "Then",
+  mailTime: "Time",
+  mailTo: "To",
+  mailUnread: "Unread",
+  mailUnreadCount: (n) => `${n} unread`,
+  mailUntilDate: "Until",
+  mailUploading: (file) => `Uploading ${file}`,
+  mailWithAttachments: "With attachments",
 };
 
 /** Strings of the components in `site.tsx`. */
@@ -2625,6 +3154,8 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   SHELL_STRINGS,
   APPEARANCE_STRINGS,
   COMMON_STRINGS,
+  CALENDAR_STRINGS,
+  WEBMAIL_STRINGS,
   SITE_STRINGS,
   WORKSPACE_STRINGS,
 );
