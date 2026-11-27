@@ -224,6 +224,7 @@ export {
   DeployPipeline,
   DnsRecordTable,
   DomainList,
+  expiryStatus,
   MailAuthStatus,
   LedgerTable,
   PnLStatement,
@@ -302,4 +303,18 @@ export {
   handoffPath,
 } from "./coordination.js";
 export { NotificationCenter, Stepper, InputGroup, matchPath } from "./frame.js";
+export {
+  ChangePreview,
+  CommandPreview,
+  MessagePreview,
+  CampaignPreview,
+  DocumentPreview,
+  EventPreview,
+  MoneyPreview,
+  LineDiff,
+  diffLines,
+  foldDiff,
+  maskRecipient,
+} from "./approval-previews.js";
+export { CommandWhitelist, DomainHeader } from "./infra.js";
 export type * from "./types.js";

@@ -19,6 +19,21 @@
     ]
   },
   {
+    "name": "ApprovalsScreen",
+    "group": "Pages",
+    "width": 1280,
+    "height": 900,
+    "components": [
+      "ApprovalInbox",
+      "ApprovalCard",
+      "MessagePreview",
+      "MoneyPreview",
+      "ChangePreview",
+      "CommandPreview",
+      "PageHeader"
+    ]
+  },
+  {
     "name": "ActivityFeed",
     "group": "AI",
     "width": 1000,
@@ -85,15 +100,64 @@
     "name": "ApprovalCard",
     "group": "AI",
     "width": 820,
-    "height": 820,
-    "components": ["ApprovalCard"]
+    "height": 1720,
+    "components": ["ApprovalCard", "ChangePreview", "MessagePreview"]
   },
   {
     "name": "ApprovalInbox",
     "group": "AI",
     "width": 900,
-    "height": 420,
+    "height": 620,
     "components": ["ApprovalInbox"]
+  },
+  {
+    "name": "ChangePreview",
+    "group": "AI",
+    "width": 900,
+    "height": 900,
+    "components": ["ChangePreview", "ApprovalCard", "LineDiff"]
+  },
+  {
+    "name": "CommandPreview",
+    "group": "AI",
+    "width": 820,
+    "height": 920,
+    "components": ["CommandPreview", "ApprovalCard"]
+  },
+  {
+    "name": "MessagePreview",
+    "group": "AI",
+    "width": 820,
+    "height": 1500,
+    "components": ["MessagePreview", "ApprovalCard"]
+  },
+  {
+    "name": "CampaignPreview",
+    "group": "AI",
+    "width": 820,
+    "height": 980,
+    "components": ["CampaignPreview", "ApprovalCard"]
+  },
+  {
+    "name": "DocumentPreview",
+    "group": "AI",
+    "width": 820,
+    "height": 1100,
+    "components": ["DocumentPreview", "ApprovalCard"]
+  },
+  {
+    "name": "EventPreview",
+    "group": "AI",
+    "width": 820,
+    "height": 880,
+    "components": ["EventPreview", "ApprovalCard"]
+  },
+  {
+    "name": "MoneyPreview",
+    "group": "AI",
+    "width": 820,
+    "height": 1120,
+    "components": ["MoneyPreview", "ApprovalCard"]
   },
   {
     "name": "AreaChart",
@@ -350,6 +414,20 @@
     "width": 1000,
     "height": 760,
     "components": ["DnsRecordTable", "DomainList", "MailAuthStatus"]
+  },
+  {
+    "name": "DomainHeader",
+    "group": "Data",
+    "width": 1000,
+    "height": 560,
+    "components": ["DomainHeader", "DnsRecordTable"]
+  },
+  {
+    "name": "CommandWhitelist",
+    "group": "Data",
+    "width": 900,
+    "height": 760,
+    "components": ["CommandWhitelist"]
   },
   {
     "name": "Drawer",
