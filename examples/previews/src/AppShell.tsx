@@ -1,7 +1,6 @@
 import * as React from "react";
 import {
   AppShell,
-  AppearanceMenu,
   AppearanceProvider,
   Button,
   CommandPalette,
@@ -11,35 +10,118 @@ import {
   SearchTrigger,
   useUI,
 } from "@twentyfirstmedia/ui-core";
-import type { SidebarGroup } from "@twentyfirstmedia/ui-core";
+import type { NotificationItem, SidebarGroup } from "@twentyfirstmedia/ui-core";
 
 const GROUPS: SidebarGroup[] = [
   {
     items: [
-      { id: "home", label: "Home", icon: "home" },
-      { id: "orders", label: "Orders", icon: "cart", badge: "12" },
-      { id: "customers", label: "Customers", icon: "users" },
+      { id: "home", label: "Home", icon: "home", href: "/" },
+      { id: "orders", label: "Orders", icon: "cart", href: "/orders", count: 12 },
+      {
+        id: "refunds",
+        label: "Refunds",
+        icon: "receipt",
+        href: "/refunds",
+        count: 2,
+        countTone: "signal",
+      },
+      { id: "customers", label: "Customers", icon: "users", href: "/customers" },
     ],
   },
   {
     label: "Settings",
     items: [
-      { id: "team", label: "Team", icon: "user" },
-      { id: "billing", label: "Billing", icon: "card" },
+      { id: "team", label: "Team", icon: "user", href: "/settings/team" },
+      { id: "billing", label: "Billing", icon: "card", href: "/settings/billing" },
     ],
   },
 ];
 
-/** The standard app frame: brand, search and the look menu in the top bar, the sidebar below. */
+const PAGES = GROUPS.flatMap((g) => g.items || []);
+
+const day = (offset: number, h: number, m: number) => {
+  const d = new Date();
+  d.setDate(d.getDate() - offset);
+  d.setHours(h, m, 0, 0);
+  return d;
+};
+const NOTES: NotificationItem[] = [
+  {
+    id: 1,
+    icon: "receipt",
+    tint: "blush",
+    title: "Refund waiting for you",
+    text: "Order #4182 · €86.00",
+    time: "09:12",
+    date: day(0, 9, 12),
+    unread: true,
+    href: "/refunds",
+  },
+  {
+    id: 2,
+    icon: "cart",
+    tint: "sky",
+    title: "12 orders to ship",
+    text: "The courier comes at 15:00",
+    time: "08:30",
+    date: day(0, 8, 30),
+    unread: true,
+    href: "/orders",
+  },
+  {
+    id: 3,
+    icon: "users",
+    tint: "mint",
+    title: "Ava Brandt joined the team",
+    time: "17:40",
+    date: day(1, 17, 40),
+    href: "/settings/team",
+  },
+];
+
+/**
+ * A stand-in for your router's link (Next.js `Link`): here it only changes the path the shell
+ * shows, so the preview can move between pages.
+ */
+function useDemoRouter(start: string) {
+  const [path, setPath] = React.useState(start);
+  const Link = React.useMemo(
+    () =>
+      React.forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTMLAnchorElement>>(
+        function DemoLink({ href = "/", onClick, ...rest }, ref) {
+          return (
+            <a
+              ref={ref}
+              href={href}
+              {...rest}
+              onClick={(e) => {
+                onClick?.(e);
+                e.preventDefault();
+                setPath(href);
+              }}
+            />
+          );
+        },
+      ),
+    [],
+  );
+  return { path, setPath, Link };
+}
+
+/** The standard app frame: brand, search, the bell and the look menu in the top bar, the sidebar below. */
 function App() {
-  const [page, setPage] = React.useState("orders");
+  const { path, setPath, Link } = useDemoRouter("/orders");
   const [search, setSearch] = React.useState(false);
+  const [notes, setNotes] = React.useState(NOTES);
+  const page = PAGES.find((p) => p.href === path) ?? PAGES[1]!;
   return (
     <>
       <AppShell
         navigation="sidebar"
         topbar
         brand="Admin"
+        pathname={path}
+        linkAs={Link}
         topStart={
           <SearchTrigger
             placeholder="Search orders, customers…"
@@ -57,21 +139,27 @@ function App() {
           />
         }
         topEnd={
-          <>
-            <Button size="sm" variant="secondary">
-              New order
-            </Button>
-            <AppearanceMenu />
-          </>
+          <Button size="sm" variant="secondary">
+            New order
+          </Button>
         }
+        notifications={{
+          items: notes,
+          onReadAll: () => setNotes((n) => n.map((x) => ({ ...x, unread: false }))),
+        }}
+        appearance
         sidebarGroups={GROUPS}
-        active={page}
-        onNavigate={setPage}
         user={{ name: "Mara Ellis", email: "mara@example.com" }}
+        tabBar
         dock={false}
+        // room for the open look menu in the docs
+        style={{ minHeight: 640 }}
       >
         <div className="tf-in">
-          <PageHeader title="Orders" subtitle="12 waiting to ship" />
+          <PageHeader
+            title={page.label}
+            subtitle={page.count ? `${page.count} waiting` : undefined}
+          />
         </div>
         <Panel title="Today">
           <p style={{ margin: 0, color: "var(--ink-muted)" }}>
@@ -83,14 +171,12 @@ function App() {
         open={search}
         onClose={() => setSearch(false)}
         placeholder="Search orders, customers…"
-        items={GROUPS.flatMap((g) =>
-          (g.items || []).map((it) => ({
-            group: "Pages",
-            label: it.label,
-            icon: it.icon,
-            run: () => setPage(it.id || it.label),
-          })),
-        )}
+        items={PAGES.map((it) => ({
+          group: "Pages",
+          label: it.label,
+          icon: it.icon,
+          run: () => setPath(it.href || "/"),
+        }))}
       />
     </>
   );

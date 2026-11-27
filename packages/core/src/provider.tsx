@@ -1,5 +1,13 @@
 "use client";
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ElementType,
+  type ReactNode,
+} from "react";
 import { UIContext, useUI, type UIContextValue } from "./context.js";
 import { mergeMessages, type UIMessages } from "./strings.js";
 import { themeStyle, type ThemeInput, type ThemeValues } from "./theme.js";
@@ -8,6 +16,7 @@ export {
   useUI,
   useUIStrings,
   useStrings,
+  useLinkAs,
   useFormat,
   formattersFor,
   type UIContextValue,
@@ -77,6 +86,12 @@ export interface UIProviderProps {
    * component still win. See `DEFAULT_STRINGS` for every key.
    */
   messages?: UIMessages;
+  /**
+   * The router link every navigating component renders (sidebar, top nav, tab bar, breadcrumbs,
+   * rows and cards with `href` …), e.g. Next.js `Link`. A component's own `linkAs` wins; without
+   * either, links are plain `<a>` elements.
+   */
+  linkAs?: ElementType;
   className?: string;
   style?: CSSProperties;
   children?: ReactNode;
@@ -116,6 +131,7 @@ export function UIProvider(p: UIProviderProps) {
   const surface = p.surface ?? parent.surface;
   const motion = p.motion ?? parent.motion;
   const locale = p.locale || parent.locale;
+  const linkAs = p.linkAs ?? parent.linkAs;
   const messages = useMemo(
     () => (p.messages ? mergeMessages(parent.messages, p.messages) : parent.messages),
     [parent.messages, p.messages],
@@ -161,8 +177,8 @@ export function UIProvider(p: UIProviderProps) {
 
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
   const ctx = useMemo<UIContextValue>(
-    () => ({ kit, theme, density, surface, motion, locale, messages, portalRoot }),
-    [kit, theme, density, surface, motion, locale, messages, portalRoot],
+    () => ({ kit, theme, density, surface, motion, locale, messages, portalRoot, linkAs }),
+    [kit, theme, density, surface, motion, locale, messages, portalRoot, linkAs],
   );
   // Derived colours (glass, hover shades, Pro's scale) are worked out where data-theme sits. A
   // subtree with its own tokens needs data-theme too, or they would keep the outer values.

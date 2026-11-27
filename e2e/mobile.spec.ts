@@ -6,7 +6,10 @@ import { KITS, guidePages, previewPages } from "./pages";
  * sticks out of it. Wide content may scroll inside its own box (tables, code, kanban), and
  * fixed overlays may use the preview's padding, but nothing may push the layout wider.
  */
-test.use({ baseURL: "http://localhost:4174", reducedMotion: "reduce" });
+test.use({
+  baseURL: `http://localhost:${process.env.E2E_DOCS_PORT ?? 4174}`,
+  reducedMotion: "reduce",
+});
 
 for (const width of [320, 390])
   for (const kit of KITS)

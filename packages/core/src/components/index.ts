@@ -224,6 +224,7 @@ export {
   DeployPipeline,
   DnsRecordTable,
   DomainList,
+  expiryStatus,
   MailAuthStatus,
   LedgerTable,
   PnLStatement,
@@ -273,6 +274,7 @@ export {
   appearanceProps,
   appearanceScript,
   parseAppearance,
+  appearanceBrandTheme,
   DEFAULT_APPEARANCE,
   type AppearanceProviderProps,
   type UseAppearanceOptions,
@@ -293,4 +295,26 @@ export {
   InvoicePreview,
   TransactionRow,
 } from "./workspace.js";
+export { BulkActionBar, DaySeparator, Highlight, highlightParts } from "./common.js";
+export {
+  AgentNetwork,
+  CoordinationTicker,
+  layoutAgentNetwork,
+  handoffPath,
+} from "./coordination.js";
+export { NotificationCenter, Stepper, InputGroup, matchPath } from "./frame.js";
+export {
+  ChangePreview,
+  CommandPreview,
+  MessagePreview,
+  CampaignPreview,
+  DocumentPreview,
+  EventPreview,
+  MoneyPreview,
+  LineDiff,
+  diffLines,
+  foldDiff,
+  maskRecipient,
+} from "./approval-previews.js";
+export { CommandWhitelist, DomainHeader } from "./infra.js";
 export type * from "./types.js";

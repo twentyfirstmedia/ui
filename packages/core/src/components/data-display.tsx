@@ -3,7 +3,7 @@
 import * as React from "react";
 import { cx, durationToken, enterDelay, reduced } from "../cx.js";
 import { formatLike, parseFormatted, type FormattedNumber } from "../format.js";
-import { useFormat, useStrings } from "../context.js";
+import { useFormat, useLinkAs, useStrings } from "../context.js";
 import { DATA_DISPLAY_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { useMounted, useScrollFocus } from "../hooks.js";
@@ -317,7 +317,7 @@ export function Table(p: TableProps) {
 }
 export function ListRow(p: ListRowProps) {
   const t = useStrings(DATA_DISPLAY_STRINGS);
-  const Link = (p.linkAs || "a") as React.ElementType;
+  const Link = useLinkAs(p.linkAs);
   const interactive = !!(p.onClick || p.href);
   const lines = (n: number | undefined) =>
     n ? ({ "--lines": n } as React.CSSProperties) : undefined;

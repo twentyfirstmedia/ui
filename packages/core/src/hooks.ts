@@ -267,3 +267,25 @@ export function moveFocus(
   items[to]?.focus();
   return true;
 }
+
+/** Phone width: up to 760px, where the sidebar becomes a drawer and popovers become sheets. */
+export const PHONE_QUERY = "(max-width: 760px)";
+
+/** True while `query` matches (false on the server and in the first client render). */
+export function useMediaQuery(query: string): boolean {
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia(query);
+    const sync = () => setOn(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, [query]);
+  return on;
+}
+
+/** Whether the screen is phone-sized (see `PHONE_QUERY`). */
+export function usePhone(): boolean {
+  return useMediaQuery(PHONE_QUERY);
+}

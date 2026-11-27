@@ -6,7 +6,10 @@ import { KITS, THEMES } from "./pages";
  * The custom elements (@twentyfirstmedia/elements) in a plain HTML page without a build step:
  * examples/html, served with the bundle and both kits' CSS.
  */
-test.use({ baseURL: "http://localhost:4175", reducedMotion: "reduce" });
+test.use({
+  baseURL: `http://localhost:${process.env.E2E_HTML_PORT ?? 4175}`,
+  reducedMotion: "reduce",
+});
 
 function collectErrors(page: Page): string[] {
   const errors: string[] = [];

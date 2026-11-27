@@ -256,9 +256,15 @@ export interface PageHeaderProps extends BaseProps {
   actions?: ReactNode[];
 }
 export interface NavItem {
+  /** Stable id (default the label); `active` and `onNavigate` use it. */
+  id?: string;
   label: string;
   icon: IconName;
   count?: number;
+  /** `"signal"` draws the count in the signal colour (e.g. open approvals). */
+  countTone?: "neutral" | "signal";
+  /** Renders the item as a link (with `linkAs`, or `UIProvider linkAs`, for a router's link). */
+  href?: string;
 }
 export interface TopBarProps extends BaseProps {
   /** The product name, or a node (a logo mark with the name). */
@@ -267,12 +273,16 @@ export interface TopBarProps extends BaseProps {
   brandDot?: boolean;
   tag?: string;
   items: NavItem[];
+  /** Id (or label) of the current page. */
   active?: string;
   user?: { name: string; email?: string };
-  onNavigate?: (label: string) => void;
+  /** Called with the item's id (or label). */
+  onNavigate?: (id: string) => void;
   extra?: ReactNode;
   userOpen?: boolean;
   onUser?: () => void;
+  /** The element items with an `href` render as (default `UIProvider linkAs`, else `a`). */
+  linkAs?: ElementType;
 }
 export interface RailItem {
   label: string;
@@ -280,6 +290,8 @@ export interface RailItem {
   active?: boolean;
   count?: number;
   onClick?: () => void;
+  /** Renders the button as a link (with the rail's `linkAs`). */
+  href?: string;
 }
 export interface SideRailProps extends BaseProps {
   top?: RailItem[];
@@ -292,6 +304,8 @@ export interface SideRailProps extends BaseProps {
   toggle?: boolean;
   /** Accessible name of the rail (default "Tools"). */
   label?: string;
+  /** The element items with an `href` render as (default `UIProvider linkAs`, else `a`). */
+  linkAs?: ElementType;
 }
 export interface FloatingLayoutProps extends BaseProps {
   /** What the UI floats over, filling the layout: a map, a 3D canvas, a video, a photo. */
@@ -347,10 +361,14 @@ export interface DockItem {
   icon: IconName;
   tint?: Tint | "plain";
   onClick?: () => void;
+  /** Renders the button as a link (with the dock's `linkAs`). */
+  href?: string;
 }
 export interface DockProps extends BaseProps {
   items: DockItem[];
   label?: string;
+  /** The element items with an `href` render as (default `UIProvider linkAs`, else `a`). */
+  linkAs?: ElementType;
   /** `"glass"`: translucent glass over what is behind (maps, 3D, video, photos); `"solid"` opts out inside a glass `UIProvider`. */
   surface?: Surface;
 }
@@ -428,7 +446,31 @@ export interface PaginationProps extends BaseProps {
   label?: string;
 }
 export interface AppShellProps extends BaseProps {
+  /** Id (or label) of the current page; or let `pathname` find it. */
   active?: string;
+  /**
+   * The current path (`usePathname()` in Next.js): the page whose `href` matches it marks itself,
+   * the longest match winning, so `/settings/billing` marks "Billing" before "Settings".
+   */
+  pathname?: string;
+  /**
+   * The element nav items with an `href` render as everywhere in the shell (top nav, sidebar, tab
+   * bar, rail, dock), e.g. Next.js `Link`; default `UIProvider linkAs`, else `a`.
+   */
+  linkAs?: ElementType;
+  /** The bell in the top bar: unread count, a popover (a sheet on phones) with the list. */
+  notifications?: NotificationCenterProps;
+  /** The look menu (`AppearanceMenu`) in the top bar; `true` for the default one. */
+  appearance?: boolean | AppearanceMenuProps;
+  /**
+   * On phones (up to 760px wide): a tab bar at the bottom with the first pages (default 4) and
+   * "More" for the rest. `true` or the number of tabs.
+   */
+  tabBar?: boolean | number;
+  /** A "Skip to content" link before the navigation (default true). */
+  skipLink?: boolean;
+  /** Id of the `<main>` element the skip link jumps to (default generated). */
+  mainId?: string;
   /** The product name, or a node (a logo mark with the name; collapsed sidebars show it whole). */
   brand?: ReactNode;
   /** The status dot after the brand (default `true`); turn it off next to a logo of your own. */
@@ -700,11 +742,21 @@ export interface NotificationItem {
   text?: string;
   time?: string;
   unread?: boolean;
+  /** When it happened: the list groups items by day ("Today", "Yesterday", a date). */
+  date?: Date | string | number;
+  /** A deep link to what it is about (with `linkAs` for a router's link). */
+  href?: string;
 }
 export interface NotificationListProps extends BaseProps {
   items: NotificationItem[];
   onOpen?: (n: NotificationItem) => void;
   onReadAll?: () => void;
+  /** The element items with an `href` render as (default `UIProvider linkAs`, else `a`). */
+  linkAs?: ElementType;
+  /** What counts as today for the day groups (default now). */
+  now?: Date | string | number;
+  /** Hide the "All / Unread" tabs. */
+  hideFilter?: boolean;
 }
 export interface FlowStep {
   kind: "trigger" | "condition" | "agent" | "approval" | "action";
@@ -852,6 +904,8 @@ export interface SegmentedProps extends BaseProps {
   size?: "sm";
   block?: boolean;
   label?: string;
+  /** While an option is hovered, before it is picked (`null` when the pointer leaves). */
+  onPreview?: (value: string | null) => void;
 }
 export interface ComboboxProps extends BaseProps {
   label?: string;
@@ -1523,9 +1577,38 @@ export interface ApprovalCardProps extends BaseProps {
   heading?: string;
   options?: ApprovalOption[];
   approveLabel?: string;
-  onDecide?: (key: ApprovalKey, text?: string) => void;
+  /**
+   * Called with the answer (and the text of B or D). Return a Promise to keep the card busy until
+   * it settles: the answer's button spins and every answer is disabled; a rejection shows an error
+   * (a rejected string is shown as is) and keeps the card open. Once it resolves, a card without a
+   * `decision` prop collapses to its one-line record; with a plain callback, set `decision` yourself.
+   */
+  onDecide?: (key: ApprovalKey, text?: string) => void | Promise<unknown>;
+  /** The decision record: shown as one line instead of the card; `null` keeps the card open. */
   decision?: ApprovalDecision | null;
+  /**
+   * Side panels: tighter, the answers in a row, the payload folded behind "Show what runs" (one
+   * click, never a summary).
+   */
   compact?: boolean;
+  /**
+   * Money, legal and infrastructure decisions: A and B (the answers that run something) need a
+   * fresh passkey. They show "Needs your passkey"; while `onDecide` is pending the pressed answer
+   * says "Confirm with passkey". Do the WebAuthn step-up in `onDecide` and reject if it fails.
+   */
+  stepUp?: boolean;
+  /** The answer being sent, when you track it yourself (controlled busy state). */
+  busy?: ApprovalKey | null;
+  /** An error to show above the answers (controlled); a rejected `onDecide` shows one by itself. */
+  error?: ReactNode;
+  /**
+   * Fills its container, e.g. a deep link on a phone: the content scrolls and A–D stay at the
+   * bottom, full width, in thumb reach (with the safe area).
+   */
+  screen?: boolean;
+  /** Makes the title a link to the full approval (with `linkAs` for a router's link). */
+  href?: string;
+  linkAs?: ElementType;
   /** @deprecated */ onApprove?: () => void;
   /** @deprecated */ onDeny?: () => void;
   /** @deprecated */ onEdit?: (text: string) => void;
@@ -1540,12 +1623,42 @@ export interface ApprovalInboxItem {
   familyLabel?: string;
   age?: string;
   ageMin?: number;
+  /** Close to its escalation: the age turns into a warning and the inbox warns above the list. */
   urgent?: boolean;
+  /** Decided: the row moves to the "Done" view and shows the answer, who and when. */
+  decision?: ApprovalDecision;
+  /** Opens the approval at this address (with the inbox's `linkAs`) instead of `onSelect`. */
+  href?: string;
+}
+/** Which approvals the inbox shows; empty fields show all. */
+export interface ApprovalFilter {
+  project?: string;
+  family?: RiskFamily;
+  agent?: string;
 }
 export interface ApprovalInboxProps extends BaseProps {
   items: ApprovalInboxItem[];
   selected?: ApprovalInboxItem["id"];
+  defaultSelected?: ApprovalInboxItem["id"];
   onSelect?: (id: ApprovalInboxItem["id"]) => void;
+  /**
+   * A–D while the list has focus answer the selected approval. A and C usually decide at once;
+   * B and D open the text field of the card next to the list.
+   */
+  onDecide?: (id: ApprovalInboxItem["id"], key: ApprovalKey) => void;
+  /** Filter selects above the list: `true` for project, family and agent, or the ones you want. */
+  filters?: boolean | ("project" | "family" | "agent")[];
+  filter?: ApprovalFilter;
+  defaultFilter?: ApprovalFilter;
+  onFilterChange?: (filter: ApprovalFilter) => void;
+  /** "open" (default) or "done": the decided approvals. The switch shows when any item is decided or `showDone`. */
+  view?: "open" | "done";
+  defaultView?: "open" | "done";
+  onViewChange?: (view: "open" | "done") => void;
+  showDone?: boolean;
+  /** Warns above the list when approvals are close to escalating (default true). */
+  escalationWarning?: boolean;
+  linkAs?: ElementType;
   emptyTitle?: string;
   emptyText?: string;
   label?: string;
@@ -1813,6 +1926,8 @@ export interface OverrideDiffProps extends BaseProps {
   onPromote?: () => void;
   discardLabel?: string;
   promoteLabel?: string;
+  /** Unchanged lines kept around each change; longer unchanged runs fold into "…" (default: all lines). */
+  context?: number;
 }
 export interface TriggerListProps extends BaseProps {
   items: {
@@ -1930,8 +2045,11 @@ export interface DomainListProps extends BaseProps {
     days?: number;
     ssl?: Status;
     sslLabel?: string;
+    /** Opens the domain's page (with `linkAs` for a router's link) instead of `onOpen`. */
+    href?: string;
   }[];
   onOpen?: (d: NonNullable<DomainListProps["items"]>[number]) => void;
+  linkAs?: ElementType;
 }
 export interface MailAuthStatusProps extends BaseProps {
   rows: {
@@ -2048,11 +2166,30 @@ export interface AttachmentPreviewProps extends BaseProps {
   width?: number | string;
   inline?: boolean;
 }
+export interface MobileTabBarItem {
+  id: string;
+  label: string;
+  icon: IconName;
+  count?: number;
+  /** `"signal"` draws the count in the signal colour. */
+  countTone?: "neutral" | "signal";
+  /** Renders the tab as a link (with `linkAs`). */
+  href?: string;
+}
 export interface MobileTabBarProps extends BaseProps {
-  items: { id: string; label: string; icon: IconName; count?: number }[];
+  items: MobileTabBarItem[];
   active?: string;
   onPick?: (id: string) => void;
   label?: string;
+  /** The element tabs with an `href` render as (default `UIProvider linkAs`, else `a`). */
+  linkAs?: ElementType;
+  /**
+   * Pages that do not fit: a "More" tab at the end opens a sheet listing them (grouped when they
+   * carry `group`). It shows as current while one of them is.
+   */
+  more?: (MobileTabBarItem & { group?: string })[];
+  /** Icon of the "More" tab (default `menu`). */
+  moreIcon?: IconName;
 }
 export interface PushNotificationProps extends BaseProps {
   app?: string;
@@ -2850,6 +2987,8 @@ export interface SidebarItem {
   /** Required for pages; options in a filter group usually go without. */
   icon?: IconName;
   count?: number;
+  /** `"signal"` draws the count in the signal colour (e.g. open approvals). */
+  countTone?: "neutral" | "signal";
   /** A small marker instead of a number: `"dot"` for new activity, or a short word such as "New". */
   badge?: string;
   /** Renders the item as a link to this address (with `linkAs` for a router's link, e.g. Next.js `Link`). */
@@ -4043,16 +4182,31 @@ export interface Appearance {
   density: Density | "auto";
   surface: Surface;
   motion: Motion;
+  /**
+   * Brand colour: a key of `THEME_PRESETS` (`"blue"`, `"violet"` …) or a hex colour (`"#0f766e"`)
+   * that goes through `brandTheme`. Unset: the kit's own primary.
+   */
+  brand?: string;
 }
-export type AppearanceRow = "kit" | "theme" | "density" | "motion" | "surface";
+export type AppearanceRow = "kit" | "theme" | "brand" | "density" | "motion" | "surface";
 export interface AppearanceMenuProps extends BaseProps {
   /** The current look; without it the menu reads and writes the nearest `AppearanceProvider`. */
   value?: Appearance;
   onChange?: (patch: Partial<Appearance>) => void;
   /** Kits to choose from; with two or more the menu shows the Style row. */
   kits?: Kit[];
-  /** The rows to show (default: style when there are kits, theme, density, motion and glass). */
+  /**
+   * The rows to show (default: style when there are kits, theme, colour, density, motion and
+   * glass). Leave `"brand"` out for an app with a fixed brand colour.
+   */
   rows?: AppearanceRow[];
+  /**
+   * While the reader hovers a choice (or drags the custom colour), before it is picked; `null` when
+   * the pointer leaves. Without it the menu previews through the nearest `AppearanceProvider`.
+   */
+  onPreview?: (patch: Partial<Appearance> | null) => void;
+  /** On phones the menu opens as a bottom sheet (default true). */
+  sheet?: boolean;
   /** Under the title, e.g. "Saved for your account" (default "Saved on this device"). */
   hint?: ReactNode;
   /** Which edge of the trigger the menu lines up with (default `end`, for the top bar's end). */
@@ -4074,4 +4228,422 @@ export interface SearchTriggerProps extends BaseProps {
   bindShortcut?: boolean;
   /** Opens your search, e.g. a `CommandPalette`. */
   onClick?: () => void;
+}
+
+/* ── Shared pieces (common.tsx) ── */
+export interface BulkActionBarAction {
+  /** Stable key (default the label). */
+  id?: string;
+  label: string;
+  icon?: IconName;
+  /** Draws the action in the danger colour (delete, cancel …). */
+  danger?: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+}
+export interface BulkActionBarProps extends BaseProps {
+  /** How many items are selected; the bar hides at 0 (unless `keepOpen`). */
+  count: number;
+  actions?: BulkActionBarAction[];
+  /** Shows "Clear" and is called by it. */
+  onClear?: () => void;
+  /** Accessible name of the toolbar (default "Bulk actions"). */
+  label?: string;
+  /** Stays visible with 0 selected (e.g. while an exit animation runs in your list). */
+  keepOpen?: boolean;
+  /**
+   * Default: the bar floats, sticky at the bottom of its scroll area (as in DataTable). `false`
+   * keeps it in the flow, e.g. at the top of a mail list.
+   */
+  floating?: boolean;
+  /** More controls after the actions (a menu, a select). */
+  children?: ReactNode;
+}
+export interface DaySeparatorProps extends BaseProps {
+  /** The day: shows "Today", "Yesterday" or the weekday and date in the provider's locale. */
+  date?: Date | string | number;
+  /** Text instead of the date (e.g. "New messages"). */
+  label?: string;
+  /** "accent" for the "new messages" line (the signal colour). */
+  tone?: "neutral" | "accent";
+  /** What counts as today (default now), for stable tests and server rendering. */
+  now?: Date | string | number;
+}
+export interface HighlightProps extends BaseProps {
+  text: string;
+  /** Search input: each word is marked (or the whole input with `exact`). */
+  query?: string;
+  /** The terms to mark, instead of `query`. */
+  terms?: string[];
+  /** Marks `query` as one phrase instead of word by word. */
+  exact?: boolean;
+}
+
+/* ── Coordination (coordination.tsx) ── */
+export interface AgentNetworkNode {
+  id: string;
+  name: string;
+  /** Project or team, shown under the name. */
+  project?: string;
+  role?: string;
+  /** State in the kit's vocabulary: idle, running (working), signal (waiting for approval), warn, danger (error), ok. */
+  status?: Status;
+  /** Word for the status instead of the built-in one. */
+  statusLabel?: string;
+  /** Open approvals: a beacon with the count on the node. */
+  approvals?: number;
+  tint?: Tint;
+  icon?: IconName;
+  /** A person instead of an agent mark: the photo URL, or "" for initials. */
+  avatar?: string;
+  /** Short text in the details card (current task, last run …). */
+  detail?: ReactNode;
+  /** The agent's page, linked from the details card. */
+  href?: string;
+  children?: AgentNetworkNode[];
+}
+export interface AgentNetworkHandoff {
+  /** Unique per handoff: each new id sends one packet. */
+  id: string;
+  from: string;
+  to: string;
+  /** What is handed over, shown on the packet. */
+  label?: string;
+}
+export interface AgentNetworkProps extends BaseProps {
+  /** The orchestrator, with its leads and their agents as children. */
+  root: AgentNetworkNode;
+  /** Handoffs from your event stream; each new id animates a packet from `from` to `to`. */
+  handoffs?: AgentNetworkHandoff[];
+  /** Also animates the handoffs present at mount (default: only later ones). */
+  animateInitial?: boolean;
+  /** "auto" (default): the graph, or a list when narrower than 560px. */
+  layout?: "auto" | "graph" | "list";
+  /** Height of the graph viewport (default 440). */
+  height?: number;
+  /** Selected node id (controlled); `null` for none. */
+  selected?: string | null;
+  defaultSelected?: string | null;
+  onSelect?: (node: AgentNetworkNode | null) => void;
+  /** More content for the details card of the selected node. */
+  renderDetails?: (node: AgentNetworkNode) => ReactNode;
+  /** Text of the details card's link (default "Open"). */
+  openLabel?: string;
+  /** Accessible name of the graph (default "Agent network"). */
+  label?: string;
+  linkAs?: ElementType;
+}
+export interface CoordinationEvent {
+  id: string;
+  kind: "handoff" | "run" | "approval" | "message" | "error" | "done";
+  /** Who passed it on or started it. */
+  from?: string;
+  /** Who received it. */
+  to?: string;
+  text?: ReactNode;
+  time: Date | string | number;
+  icon?: IconName;
+  href?: string;
+}
+export interface CoordinationTickerProps extends BaseProps {
+  /** Newest first. */
+  items: CoordinationEvent[];
+  /** Shows at most this many. */
+  max?: number;
+  /** Announces new lines to screen readers (default true). */
+  live?: boolean;
+  /** Reference time for "2 min ago" (default now). */
+  now?: Date | string | number;
+  emptyText?: string;
+  label?: string;
+  linkAs?: ElementType;
+}
+
+/* ── App frame (frame.tsx) ── */
+export interface NotificationCenterProps
+  extends Omit<NotificationListProps, "style" | "className">, BaseProps {
+  /** Unread count on the bell (default: the unread items). */
+  unread?: number;
+  /** Whether the list is open (controlled). */
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** Which edge of the bell the panel lines up with (default `end`). */
+  align?: "start" | "end";
+  /** Opens below the bell (default) or above it. */
+  side?: "top" | "bottom";
+  /** On phones the list opens as a bottom sheet (default true). */
+  sheet?: boolean;
+}
+export type StepState = "done" | "current" | "upcoming" | "error";
+export interface StepperStep {
+  id?: string;
+  label: string;
+  /** A second line under the label (desktop). */
+  description?: string;
+  /** Overrides the state `current` gives the step (e.g. `"error"`). */
+  state?: StepState;
+}
+export interface StepperProps extends BaseProps {
+  steps: StepperStep[];
+  /** Index of the current step: earlier steps are done, later ones upcoming. */
+  current?: number;
+  /** Makes done steps (and error steps) buttons that go back to them. */
+  onStepClick?: (index: number) => void;
+  /** Accessible name of the steps (default "Steps"). */
+  label?: string;
+  /**
+   * `auto` (default): the row of steps on wide screens, "Step 2 of 5" with a progress bar on
+   * phones. `compact` always shows the short form.
+   */
+  variant?: "auto" | "compact";
+}
+export interface InputGroupProps extends Omit<TextFieldProps, "suffix" | "icon" | "action"> {
+  /**
+   * Before the input: text ("https://", "€") is read with the field; an `Icon`, a `Select` or a
+   * `Button` sits in the group as it is.
+   */
+  start?: ReactNode;
+  /** After the input: text ("@acme.com", "kg"), an icon or a control (copy, unit select …). */
+  end?: ReactNode;
+  /** Your own control instead of the built-in input (it should carry `className="tf-input"`). */
+  children?: ReactNode;
+}
+
+/* ── Approval previews (approval-previews.tsx) ── */
+/** One line of a line diff: `+` added, `-` removed, ` ` unchanged. */
+export interface DiffLine {
+  op: "+" | "-" | " ";
+  text: string;
+}
+export interface LineDiffProps extends BaseProps {
+  /** Compare two texts … */
+  before?: string;
+  after?: string;
+  /** … or pass the lines yourself. */
+  lines?: DiffLine[];
+  /** Unchanged lines kept around each change; longer runs fold into "…" (default 3; `Infinity` keeps all). */
+  context?: number;
+  /** Accessible name (default "Line changes"). */
+  label?: string;
+}
+export interface ChangeField {
+  label: ReactNode;
+  /** `null` or omitted: the field is empty before (created) or after (deleted). */
+  before?: string | null;
+  after?: string | null;
+  /** Monospace values (records, ids, commands). */
+  mono?: boolean;
+}
+export interface ChangePreviewProps extends BaseProps {
+  /** What changes, in one line ("Update TXT record ops-test · example.com"). */
+  title?: ReactNode;
+  /** Context above the table: provider, account, region, target. */
+  facts?: KeyValueItem[];
+  fields: ChangeField[];
+  /** Heading of the first column (default "Field"). */
+  fieldHeading?: string;
+  /** Only the changed rows. */
+  onlyChanged?: boolean;
+  /** A line diff below the table (config files, long texts), folded around the changes. */
+  diff?: { before: string; after: string; context?: number };
+  /** Worded by you; shown as warnings under the change. */
+  warnings?: ReactNode[];
+}
+export type CommandRisk = "read" | "change" | "critical";
+export interface CommandPreviewProps extends BaseProps {
+  /** The command exactly as it runs. */
+  command: string;
+  /** The same command word by word, when it runs without a shell (argv). */
+  argv?: string[];
+  server: ReactNode;
+  /** Host, user and port ("deploy@203.0.113.7:22"). */
+  host?: string;
+  risk?: CommandRisk;
+  /** Seconds until it is stopped. */
+  timeout?: number;
+  /** What was read before asking (status, a log excerpt), verbatim. */
+  stateBefore?: string;
+  /** When `stateBefore` was read ("09:41"). */
+  stateAt?: ReactNode;
+  /** More facts: host key, whitelist entry, parameters. */
+  facts?: KeyValueItem[];
+  warnings?: ReactNode[];
+}
+export interface MessagePreviewContext {
+  /** `in`: from the customer, `out`: from you. */
+  from: "in" | "out";
+  /** Who wrote it (default "Customer" / "You"). */
+  author?: string;
+  at?: Date | string | number;
+  text: string;
+}
+export interface MessagePreviewProps extends BaseProps {
+  /** One line: "Reply to Erika M. on WhatsApp". */
+  title?: ReactNode;
+  /** The channel's name ("WhatsApp", "Instagram", "SMS"). */
+  channel: string;
+  /** The channel's icon (default `send`); register brand icons to show the logo. */
+  channelIcon?: IconName;
+  /** Already masked, or pass it through `maskRecipient`. */
+  recipient?: string;
+  /** The account it is sent from. */
+  sender?: string;
+  /** Messaging windows (e.g. 24 hours after the customer's last message). */
+  window?: { state: "open" | "closing" | "closed"; until?: Date | string | number };
+  /** The last messages, oldest first. */
+  context?: MessagePreviewContext[];
+  /** Exactly what goes out. */
+  text?: string;
+  /** A pre-approved template instead of free text. */
+  template?: { name: string; category?: string; language?: string; params?: string[] };
+  /** The image or video of a post. */
+  media?: { kind: "image" | "video"; src: string; alt?: string; poster?: string };
+  warnings?: ReactNode[];
+  facts?: KeyValueItem[];
+}
+export interface CampaignContact {
+  name: string;
+  /** Already masked ("…5678"). */
+  phone?: string;
+  source?: string;
+}
+export interface CampaignPreviewProps extends BaseProps {
+  title?: ReactNode;
+  contacts: CampaignContact[];
+  /** All contacts when `contacts` shows only the first ones. */
+  total?: number;
+  /** The first sentence the caller says. */
+  opening: string;
+  /** The whole script (folded). */
+  script?: string;
+  /** Worded by you ("Mon–Fri, 9:00–17:00"). */
+  hours?: ReactNode;
+  budget?: { minutes?: number; amount?: number; currency?: string };
+  /** The calendar appointments are booked into. */
+  calendar?: ReactNode;
+  facts?: KeyValueItem[];
+  warnings?: ReactNode[];
+}
+export interface DocumentPreviewProps extends BaseProps {
+  /** The document's name. */
+  title: ReactNode;
+  /** Text documents: a line diff of `before` and `after`. */
+  before?: string;
+  after?: string;
+  /** Spreadsheets: the cells that change. */
+  cells?: { cell: string; before?: string | null; after?: string | null }[];
+  /** The sheet range ("Budget!B4:D9"). */
+  range?: string;
+  /** Opens the document (new tab, or `linkAs`). */
+  href?: string;
+  linkAs?: ElementType;
+  context?: number;
+  warnings?: ReactNode[];
+}
+export interface EventPreviewGuest {
+  name?: string;
+  email: string;
+  status?: "accepted" | "declined" | "tentative" | "open";
+}
+export interface EventPreviewProps extends BaseProps {
+  title: ReactNode;
+  start: Date | string | number;
+  end?: Date | string | number;
+  allDay?: boolean;
+  /** IANA time zone for the times (default the browser's). */
+  timeZone?: string;
+  location?: ReactNode;
+  calendar?: ReactNode;
+  guests?: EventPreviewGuest[];
+  /** Events at the same time. */
+  conflicts?: { title: string; start: Date | string | number; end?: Date | string | number }[];
+  /** The invitation or description text. */
+  text?: string;
+  warnings?: ReactNode[];
+}
+export interface MoneyBooking {
+  id: string | number;
+  date?: ReactNode;
+  text: ReactNode;
+  account?: ReactNode;
+  amount: number;
+}
+export interface MoneyPreviewProps extends BaseProps {
+  title?: ReactNode;
+  /** In the currency's units (12.5 = €12.50); negative for money going out of a booking. */
+  amount: number;
+  /** ISO code (default EUR). */
+  currency?: string;
+  /** Already masked ("DE89 …3000", "…4242"). */
+  recipient?: string;
+  reference?: ReactNode;
+  account?: ReactNode;
+  /** The bookings this writes, with their sum below. */
+  bookings?: MoneyBooking[];
+  /** A refund: the payment it goes back to. */
+  refund?: { payment: ReactNode; paidAt?: ReactNode; original?: number };
+  /** Shows "Needs a fresh passkey" (default true). */
+  stepUp?: boolean;
+  facts?: KeyValueItem[];
+  warnings?: ReactNode[];
+}
+
+/* ── Infrastructure (infra.tsx) ── */
+export interface WhitelistParam {
+  name: string;
+  /** What values pass: a pattern or a short description ("[a-z0-9-]+"). */
+  pattern?: string;
+  /** Or the fixed values that pass. */
+  values?: string[];
+}
+export interface WhitelistCommand {
+  id: string;
+  /** The command with its parameters in braces: "systemctl restart {service}". */
+  template: string;
+  description?: ReactNode;
+  params?: WhitelistParam[];
+  risk: CommandRisk;
+  /** Needs an approval before it runs (default: unless the risk is `read`). */
+  approval?: boolean;
+}
+export interface WhitelistServer {
+  id: string;
+  name: ReactNode;
+  host?: string;
+  commands: WhitelistCommand[];
+}
+export interface CommandWhitelistProps extends BaseProps {
+  servers: WhitelistServer[];
+  /** Patterns refused on every server, whatever the list says. */
+  blocked?: string[];
+  /** Row actions (edit, remove), e.g. IconButtons or a Menu. */
+  actions?: (command: WhitelistCommand, server: WhitelistServer) => ReactNode;
+}
+export interface DomainHeaderCheck {
+  status: Status;
+  label?: string;
+}
+export interface DomainHeaderProps extends BaseProps {
+  name: string;
+  registrar?: ReactNode;
+  dns?: ReactNode;
+  /** Expiry date (formatted in the provider's locale). */
+  expires?: Date | string | number;
+  /** Days until expiry; worked out from `expires` when omitted. Under 30 warns, under 7 is danger. */
+  days?: number;
+  autoRenew?: boolean;
+  ssl?: DomainHeaderCheck & { expires?: Date | string | number; issuer?: ReactNode };
+  /** The mail lights. */
+  mail?: {
+    mx?: DomainHeaderCheck;
+    spf?: DomainHeaderCheck;
+    dkim?: DomainHeaderCheck;
+    dmarc?: DomainHeaderCheck;
+  };
+  onOpenCheck?: (check: "mx" | "spf" | "dkim" | "dmarc" | "ssl" | "expiry") => void;
+  /** Buttons on the right (renew, add record). */
+  actions?: ReactNode;
+  /** What counts as today for `days` (default now). */
+  now?: Date | string | number;
 }

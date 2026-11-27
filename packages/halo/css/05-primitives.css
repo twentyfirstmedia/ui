@@ -1534,3 +1534,32 @@ a.tf-iconbtn {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
+
+/* BulkActionBar in the flow, DaySeparator, Highlight */
+.tf-bulkbar.inline {
+  position: static;
+  align-self: stretch;
+  max-width: none;
+  margin: 0;
+  animation: none;
+}
+.tf-bulk-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.tf-daysep {
+  margin: 8px 0;
+}
+.tf-daysep.accent {
+  color: var(--signal);
+}
+.tf-daysep.accent::before,
+.tf-daysep.accent::after {
+  background: var(--signal);
+}
+.tf-highlight mark {
+  background: var(--butter);
+  color: var(--ink);
+  border-radius: 3px;
+  padding: 0 2px;
+}

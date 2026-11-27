@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
-import { useFormat, useStrings } from "../context.js";
+import { useFormat, useLinkAs, useStrings } from "../context.js";
+import { BulkActionBar } from "./common.js";
 import { DATA_TABLE_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { cx } from "../cx.js";
@@ -320,7 +321,7 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
   const span = vis.length + (p.selectable ? 1 : 0) + (p.renderExpanded ? 1 : 0);
   const selRows = all.filter((r) => selected.indexOf(r[rk] as Key) >= 0);
   const clickable = !!(p.rowHref || p.onRowClick);
-  const Link = (p.linkAs || "a") as React.ElementType;
+  const Link = useLinkAs(p.linkAs);
   const label = (c: DataColumn<R>) => (typeof c.label === "string" ? c.label : c.key);
 
   /** Opens a row from a click anywhere on it; its own controls (and the row link) act alone. */
@@ -582,36 +583,17 @@ export function DataTable<R extends Record<string, any> = Record<string, any>>(
           {pages > 1 && <Pagination total={pages} page={page} onChange={setPage} />}
         </div>
       )}
-      {p.selectable && selected.length > 0 && (
-        <div className="tf-bulkbar" role="toolbar" aria-label={t.bulkActions}>
-          <b>{t.selectedCount(selected.length)}</b>
-          <button
-            type="button"
-            className="tf-linkbtn on-frame"
-            onClick={() => {
-              setSelected([]);
-            }}
-          >
-            {t.clear}
-          </button>
-          <div className="tf-bulkbar-actions">
-            {(p.bulkActions || []).map((a) => (
-              <button
-                key={a.label}
-                type="button"
-                className={cx("tf-bulk-btn", a.danger && "danger")}
-                onClick={() => {
-                  a.onClick(selRows, () => {
-                    setSelected([]);
-                  });
-                }}
-              >
-                {a.icon && <Icon name={a.icon} size={14} />}
-                {a.label}
-              </button>
-            ))}
-          </div>
-        </div>
+      {p.selectable && (
+        <BulkActionBar
+          count={selected.length}
+          onClear={() => setSelected([])}
+          actions={(p.bulkActions || []).map((a) => ({
+            label: a.label,
+            icon: a.icon,
+            danger: a.danger,
+            onClick: () => a.onClick(selRows, () => setSelected([])),
+          }))}
+        />
       )}
     </div>
   );

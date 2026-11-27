@@ -2,7 +2,10 @@ import { expect, test } from "@playwright/test";
 import { KITS, THEMES, WIDTHS, previewPages } from "./pages";
 
 /** Phase 8: a screenshot of every preview, both kits × light/dark × 390/1440 px. */
-test.use({ baseURL: "http://localhost:4174", reducedMotion: "reduce" });
+test.use({
+  baseURL: `http://localhost:${process.env.E2E_DOCS_PORT ?? 4174}`,
+  reducedMotion: "reduce",
+});
 
 for (const kit of KITS)
   for (const theme of THEMES)

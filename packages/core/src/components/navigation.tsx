@@ -1,10 +1,10 @@
 "use client";
 import * as React from "react";
-import { useStrings } from "../context.js";
+import { useLinkAs, useStrings } from "../context.js";
 import { NAVIGATION_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
-import { FOCUSABLE, moveFocus, useControlled, useId, useOutside } from "../hooks.js";
+import { FOCUSABLE, moveFocus, useControlled, useId, useOutside, usePhone } from "../hooks.js";
 import { Portal } from "../portal.js";
 import { Avatar, IconButton } from "./foundation.js";
 import { Menu } from "./feedback.js";
@@ -111,7 +111,7 @@ export function Tabs(p: TabsProps) {
 export function Breadcrumb(p: BreadcrumbProps) {
   const t = useStrings(NAVIGATION_STRINGS);
   const items = (p.items || []).map((it) => (typeof it === "string" ? { label: it } : it));
-  const Link = (p.linkAs || "a") as React.ElementType;
+  const Link = useLinkAs(p.linkAs);
   return (
     <nav
       style={p.style}
@@ -162,7 +162,7 @@ export function Pagination(p: PaginationProps) {
     if (i === 1 || i === total || Math.abs(i - cur) <= 1) pages.push(i);
     else if (pages[pages.length - 1] !== "…") pages.push("…");
   }
-  const Link = (p.linkAs || "a") as React.ElementType;
+  const Link = useLinkAs(p.linkAs);
   const step = (to: number, icon: "chevronLeft" | "chevronRight", label: string) => {
     const off = to < 1 || to > total;
     // links cannot be disabled: at the ends the arrow is a disabled button
@@ -393,20 +393,6 @@ export function NavigationMenu(p: NavigationMenuProps) {
 }
 
 /* ── Sidebar: app navigation with groups, nested pages and a collapsed (icons) mode ── */
-/** Whether the screen is phone-sized (the sidebar becomes a drawer there). */
-function usePhone(): boolean {
-  const [phone, setPhone] = React.useState(false);
-  React.useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-    const mq = window.matchMedia("(max-width: 760px)");
-    const on = () => setPhone(mq.matches);
-    on();
-    mq.addEventListener("change", on);
-    return () => mq.removeEventListener("change", on);
-  }, []);
-  return phone;
-}
-
 const typing = (t: EventTarget | null) =>
   t instanceof HTMLElement && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
 
@@ -528,7 +514,7 @@ export function Sidebar(p: SidebarProps) {
   const toggleRef = React.useRef<HTMLButtonElement>(null);
   const timer = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const uid = useId("side");
-  const Link = (p.linkAs || "a") as React.ElementType;
+  const Link = useLinkAs(p.linkAs);
 
   // remember the collapsed state. The stored value is applied first; nothing is written until the
   // state shows it (a controlled parent applies it a render later, and StrictMode runs the effects
@@ -654,7 +640,11 @@ export function Sidebar(p: SidebarProps) {
       ) : it.badge ? (
         <span className="tf-sidebar-badge">{it.badge}</span>
       ) : null}
-      {it.count ? <span className="tf-sidebar-count">{it.count}</span> : null}
+      {it.count ? (
+        <span className={cx("tf-sidebar-count", it.countTone === "signal" && "signal")}>
+          {it.count}
+        </span>
+      ) : null}
       {it.items && chevron && <Icon name="chevronDown" size={14} className="tf-sidebar-chev" />}
     </>
   );

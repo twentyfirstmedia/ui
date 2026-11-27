@@ -11,6 +11,7 @@ import type {
   Tint,
   TintIconProps,
 } from "./types.js";
+import { useLinkAs } from "../context.js";
 
 /* ── Actions ── */
 /** Renders `child` with extra class and content instead of a native element (`asChild`). */
@@ -74,12 +75,12 @@ export function IconButton(props: NativeRest<IconButtonProps>) {
     className,
   );
   const named = { "aria-label": label, title: label, ...native };
+  const Link = useLinkAs(linkAs);
   if (asChild && children) {
     const el = slot(React.Children.only(children), cls, named, () => <Icon name={icon} />);
     if (el) return el;
   }
   if (href != null) {
-    const Link = (linkAs || "a") as React.ElementType;
     return (
       <Link {...named} href={href} className={cls}>
         <Icon name={icon} />

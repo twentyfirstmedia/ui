@@ -3,7 +3,10 @@ import { expect, test } from "@playwright/test";
 import { KITS, THEMES, guidePages, previewPages } from "./pages";
 
 /** Phase 8: axe without violations on every docs page, both kits, light and dark. */
-test.use({ baseURL: "http://localhost:4174", reducedMotion: "reduce" });
+test.use({
+  baseURL: `http://localhost:${process.env.E2E_DOCS_PORT ?? 4174}`,
+  reducedMotion: "reduce",
+});
 
 for (const kit of KITS)
   for (const theme of THEMES)

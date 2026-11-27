@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { leaving, usePresence } from "../presence.js";
-import { useFormat, useStrings } from "../context.js";
+import { useFormat, useLinkAs, useStrings } from "../context.js";
+import { DaySeparator } from "./common.js";
 import { WORKSPACE_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { useScrollFocus, useTrap } from "../hooks.js";
@@ -20,6 +21,7 @@ import type {
   FlowStep,
   IconName,
   InvoicePreviewProps,
+  NotificationItem,
   NotificationListProps,
   PaletteItem,
   PermissionMatrixProps,
@@ -274,10 +276,49 @@ export function CommandPalette(p: CommandPaletteProps) {
     </div>
   );
 }
+const dayOf = (d: Date | string | number) => {
+  const x = new Date(d);
+  return `${x.getFullYear()}-${x.getMonth()}-${x.getDate()}`;
+};
+
 export function NotificationList(p: NotificationListProps) {
   const t = useStrings(WORKSPACE_STRINGS);
+  const Link = useLinkAs(p.linkAs);
   const f = React.useState<"all" | "unread">("all"),
-    items = (p.items || []).filter((n) => f[0] === "all" || n.unread);
+    items = (p.items || []).filter((n) => p.hideFilter || f[0] === "all" || n.unread);
+  const note = (n: NotificationItem) => {
+    const body = (
+      <>
+        <TintIcon icon={n.icon} tint={n.tint} />
+        <span className="tf-note-text">
+          <b>{n.title}</b>
+          {n.text && <span>{n.text}</span>}
+        </span>
+        <span className="tf-note-time">
+          {n.time}
+          {n.unread && <span className="tf-unread" />}
+        </span>
+      </>
+    );
+    const cls = cx("tf-note", n.unread && "unread");
+    return n.href ? (
+      <Link key={n.id} href={n.href} className={cls} onClick={() => p.onOpen?.(n)}>
+        {body}
+      </Link>
+    ) : (
+      <button key={n.id} type="button" className={cls} onClick={() => p.onOpen?.(n)}>
+        {body}
+      </button>
+    );
+  };
+  // items with a date are grouped by day, in the order given
+  const groups: { key: string; date?: NotificationItem["date"]; items: NotificationItem[] }[] = [];
+  for (const n of items) {
+    const key = n.date !== undefined ? dayOf(n.date) : "";
+    const last = groups[groups.length - 1];
+    if (last && last.key === key) last.items.push(n);
+    else groups.push({ key, date: n.date, items: [n] });
+  }
   return (
     <div
       style={p.style}
@@ -285,20 +326,8 @@ export function NotificationList(p: NotificationListProps) {
       role="region"
       aria-label={t.notifications}
     >
-      <div
-        className="tf-header"
-        style={{
-          alignItems: "center",
-          padding: "6px 8px 0",
-        }}
-      >
-        <b
-          style={{
-            fontSize: 16,
-          }}
-        >
-          {t.notifications}
-        </b>
+      <div className="tf-header tf-notes-head">
+        <b className="tf-notes-title">{t.notifications}</b>
         <Button
           variant="ghost"
           size="sm"
@@ -309,40 +338,28 @@ export function NotificationList(p: NotificationListProps) {
           {t.markAllRead}
         </Button>
       </div>
-      <div
-        style={{
-          padding: "0 8px",
-        }}
-      >
-        <Tabs
-          block
-          items={[t.all, t.unread]}
-          value={f[0] === "all" ? t.all : t.unread}
-          onChange={(v) => f[1](v === t.unread ? "unread" : "all")}
-        />
-      </div>
+      {!p.hideFilter && (
+        <div className="tf-notes-filter">
+          <Tabs
+            block
+            items={[t.all, t.unread]}
+            value={f[0] === "all" ? t.all : t.unread}
+            onChange={(v) => f[1](v === t.unread ? "unread" : "all")}
+          />
+        </div>
+      )}
       <div className="tf-notes-list">
         {items.length ? (
-          items.map((n) => (
-            <button
-              key={n.id}
-              type="button"
-              className={cx("tf-note", n.unread && "unread")}
-              onClick={() => {
-                p.onOpen && p.onOpen(n);
-              }}
-            >
-              <TintIcon icon={n.icon} tint={n.tint} />
-              <span className="tf-note-text">
-                <b>{n.title}</b>
-                <span>{n.text}</span>
-              </span>
-              <span className="tf-note-time">
-                {n.time}
-                {n.unread && <span className="tf-unread" />}
-              </span>
-            </button>
-          ))
+          groups.map((g) =>
+            g.key ? (
+              <section key={g.key} className="tf-notes-day">
+                <DaySeparator date={g.date} now={p.now} />
+                {g.items.map(note)}
+              </section>
+            ) : (
+              <React.Fragment key="undated">{g.items.map(note)}</React.Fragment>
+            ),
+          )
         ) : (
           <div className="tf-notes-empty">
             <TintIcon icon="check" tint="mint" size={40} />
