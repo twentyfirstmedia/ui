@@ -393,6 +393,16 @@ Notiz (Wunsch aus FollowerPilot): Der Admin von FollowerPilot hatte das Aussehen
 
 Notiz (Auftrag aus HQ, 27.11.2026): HQ stellt seine ganze Oberfläche auf das Kit um. Abweichungen vom Auftrag: Texte kommen nicht über eine `labels`-Prop je Komponente, sondern wie im ganzen Kit über `UIProvider messages` (ein deutsches Wörterbuch für die App); Tests prüfen, dass mit deutschen Texten kein Englisch übrig bleibt. Dichte und Bewegung behalten die drei Stufen des Kits. Der Passkey-Schritt ist eine Prop (`stepUp`) statt automatisch je Familie. Befehle haben drei Risikostufen (lesen, ändern, kritisch). Das Handy-Sheet der Popover steckt in `sheet.tsx`, weil DataTable sonst sein Größenbudget reißt.
 
+### Phase 43: HQ auf dem Kit, Teil 2: Chat, Kalender, Mail, Dateien, Finanzen, Mission Control (0.15.0)
+- [x] Chat: Aktionen an Nachrichten (Kopieren, Neu erzeugen, Bearbeiten mit `MessageEditor`, `VersionSwitch`, Daumen mit Kommentar), `RichText` mit Tabellen, Aufgabenlisten und sicheren Links, Erwähnungen mit `@` als Chips, Diktat (von der App gesteuert), Sprachnachrichten, Tippen, Mitlesen mit „Einsteigen“; `ChatThread`, `HandoffLine`, `SystemLine`, `VoiceNote`, `VoiceLog`; `ChatList` mit Gruppen, Status und Such-Tokens; `ChatWorkspace` mit Zurück auf dem Handy und verstellbarem Detailbereich; `VoiceMode` mit Unterbrechen und Verlauf
+- [x] Kalender: `CalendarView` (Tag, Woche, Monat, Agenda, mehrere Kalender, Ziehen zum Anlegen, Zusagen), `EventInvite`
+- [x] Webmail: `MailHtml` (Sandbox, Bilder erst auf Klick), `RecipientInput`, `MailComposer` (Später senden, Rückgängig), `MailFolders`, `MailFilterBar`, `MailRulesEditor`, `AutoReplyEditor`, `MailRouteList`; `InboxList` mit Auswahl und `BulkActionBar`, Abmelden mit einem Klick
+- [x] Dateien und Finanzen: `FileBrowser`, `InvoiceEditor` mit `InvoicePreview`, `ExportDialog` für die Buchhaltung (DATEV), `ImportSuggestions`, `PeriodLock`; Brand-Studio: `PaletteSwatches`, `AssetCard`
+- [x] Muster `MissionControlScreen`: Chat mit dem Haupt-Agenten in der Mitte, Freigaben, Kosten, `AgentNetwork` und `CoordinationTicker` drumherum, Tabs auf dem Handy, Glas über `Ambient`
+- [x] Tests (Unit mit deutschen Texten, e2e), Doku-Seiten, Changesets, README-Zahlen
+
+Notiz: Diktat nutzt nicht die Web Speech API, weil die Audio an Dritte schickt; die App liefert Zustand und Zwischentext. „Rückgängig“ beim Senden zeigt das Kit, die App hält die Mail in der Zeit zurück. Handy-Layouts richten sich nach der Breite der Komponente (Container Queries), nicht nach dem Fenster. Die Buchhaltungs-Ausfuhr ist eine Variante von `ExportDialog` statt einer eigenen DATEV-Komponente. Die Bündelgrenze von `Button` steigt auf 4,5 KB, weil drei Icons (Mikrofon, Mikro aus, Kamera) fest eingebaut sind.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`
