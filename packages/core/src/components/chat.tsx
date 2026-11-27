@@ -561,7 +561,7 @@ export function ChatMessage(p: ChatMessageProps) {
   }
   const versioned = (p.versionCount || 0) > 1;
   const showActions = p.actions !== false && !p.streaming && !editing;
-  const visible = p.actionsVisible || (!me && p.onRetry ? "always" : "hover");
+  const visible = p.actionsVisible || ((!me && p.onRetry) || versioned ? "always" : "hover");
   const hasBody = !!(p.text || p.children || p.streaming);
   return (
     <div

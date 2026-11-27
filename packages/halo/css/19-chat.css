@@ -120,6 +120,39 @@
   border-bottom: 0;
 }
 
+/* ── Tool calls: the trace link beside the head ── */
+.tf-tool-top {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.tf-tool-top > .tf-tool-head {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.tf-tool-trace {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 28px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border-radius: var(--radius-pill);
+  color: var(--ink-muted);
+  font: 600 12px/16px var(--font-sans);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tf-tool-trace:hover {
+  background: var(--accent);
+  color: var(--ink);
+}
+.tf-tool-trace:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
 /* ── Messages: actions, attachments, markers ── */
 .tf-msg {
   scroll-margin: 24px;
@@ -411,7 +444,7 @@
   box-sizing: border-box;
   padding: 4px 12px 4px 4px;
   border: 0;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-lg);
   background: var(--surface-sunken);
   color: var(--ink);
   font: 500 12px/16px var(--font-sans);
@@ -536,6 +569,9 @@
   margin: 0;
   opacity: 0;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
 }
 .tf-voicenote-wave:has(input:focus-visible) {
   outline: 2px solid var(--focus);
@@ -897,8 +933,15 @@ a.tf-chatrow {
 }
 
 /* ── ChatWorkspace: back button, resizable details, one pane on phones ── */
-.tf-chatws {
+.tf-chatws-frame {
   container: tf-chatws / inline-size;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.tf-chatws-frame > .tf-chatws {
+  flex: 1 1 auto;
   grid-template-columns: 304px minmax(0, 1fr);
 }
 .tf-chatws.with-details {
@@ -1028,20 +1071,17 @@ a.tf-chatrow {
   max-width: 85%;
   padding: 8px 12px;
   border-radius: var(--radius-md);
-  background: var(--surface-sunken);
+  background: var(--frame-active);
+  color: var(--on-frame);
   overflow-wrap: anywhere;
 }
 .tf-voice-turns li.me {
   align-self: flex-end;
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--on-frame);
+  color: var(--frame);
 }
 .tf-voice-turns li b {
   font: 600 12px/16px var(--font-sans);
-  opacity: 0.8;
-}
-.tf-voice-turns li:not(.live) {
-  opacity: 0.85;
 }
 .tf-voice-controls {
   display: flex;
@@ -1061,7 +1101,7 @@ a.tf-chatrow {
   padding: calc(env(safe-area-inset-top, 0px) + 24px) 16px
     calc(env(safe-area-inset-bottom, 0px) + 24px);
   border-radius: 0;
-  background: var(--canvas);
+  background: var(--frame);
 }
 @media (max-width: 760px) {
   .tf-voice.fs-phone {
@@ -1072,14 +1112,16 @@ a.tf-chatrow {
     padding: calc(env(safe-area-inset-top, 0px) + 24px) 16px
       calc(env(safe-area-inset-bottom, 0px) + 24px);
     border-radius: 0;
-    background: var(--canvas);
+    background: var(--frame);
     overflow-y: auto;
   }
 }
 
 /* ── Glass: the workspace panes and a composer or read-along bar on their own ── */
 [data-surface="glass"] :is(.tf-chatws-list, .tf-chatws-thread, .tf-chatws-details):not(.tf-solid),
-.tf-chatws.tf-glass > :is(.tf-chatws-list, .tf-chatws-thread, .tf-chatws-details),
+.tf-chatws-frame.tf-glass
+  > .tf-chatws
+  > :is(.tf-chatws-list, .tf-chatws-thread, .tf-chatws-details),
 [data-surface="glass"]
   :is(.tf-composer, .tf-readonly):not(
     :is(.tf-panel, .tf-card, .tf-chatws, .tf-modal, .tf-drawer, .tf-glass) *

@@ -1253,7 +1253,8 @@ export interface ChatMessageProps extends BaseProps {
   actions?: boolean;
   /**
    * When the action row shows: "always", or "hover" (on hover and focus; always on touch
-   * screens). Default "always" for an answer with `onRetry` (the last one), else "hover".
+   * screens). Default "always" for an answer with `onRetry` (the last one) and for a message with versions,
+   * else "hover".
    */
   actionsVisible?: "always" | "hover";
   /** Edit in place on the user's own message: called with the new text. */

@@ -294,58 +294,60 @@ export function ChatWorkspace(p: ChatWorkspaceProps) {
   return (
     <div
       style={{ ...p.style, ["--details-w" as string]: clamp(w) + "px" }}
-      className={cx("tf-chatws", p.details && "with-details", "view-" + view, p.className)}
+      className={cx("tf-chatws-frame", p.className)}
     >
-      <div
-        className="tf-chatws-list"
-        onClickCapture={(e) => {
-          // picking a conversation opens its thread on narrow screens
-          if ((e.target as HTMLElement).closest?.(".tf-chatrow")) setView("thread");
-        }}
-      >
-        {p.list}
+      <div className={cx("tf-chatws", p.details && "with-details", "view-" + view)}>
+        <div
+          className="tf-chatws-list"
+          onClickCapture={(e) => {
+            // picking a conversation opens its thread on narrow screens
+            if ((e.target as HTMLElement).closest?.(".tf-chatrow")) setView("thread");
+          }}
+        >
+          {p.list}
+        </div>
+        <div className="tf-chatws-thread">
+          <button type="button" className="tf-chatws-back" onClick={() => setView("list")}>
+            <Icon name="chevronLeft" size={16} />
+            {p.backLabel || t.backToChats}
+          </button>
+          {p.thread}
+        </div>
+        {p.details && (
+          <>
+            <div
+              className="tf-chatws-resize"
+              role="separator"
+              aria-orientation="vertical"
+              aria-label={t.resizeDetails}
+              aria-valuenow={clamp(w)}
+              aria-valuemin={DETAILS_MIN}
+              aria-valuemax={DETAILS_MAX}
+              tabIndex={0}
+              onPointerDown={(e) => {
+                e.currentTarget.setPointerCapture?.(e.pointerId);
+                drag.current = { x: e.clientX, w: clamp(w) };
+              }}
+              onPointerMove={(e) => {
+                if (drag.current) setW(clamp(drag.current.w + drag.current.x - e.clientX));
+              }}
+              onPointerUp={() => {
+                drag.current = null;
+              }}
+              onKeyDown={(e) => {
+                const step = e.shiftKey ? 64 : 16;
+                if (e.key === "ArrowLeft") setW(clamp(w + step));
+                else if (e.key === "ArrowRight") setW(clamp(w - step));
+                else if (e.key === "Home") setW(DETAILS_MAX);
+                else if (e.key === "End") setW(DETAILS_MIN);
+                else return;
+                e.preventDefault();
+              }}
+            />
+            <div className="tf-chatws-details">{p.details}</div>
+          </>
+        )}
       </div>
-      <div className="tf-chatws-thread">
-        <button type="button" className="tf-chatws-back" onClick={() => setView("list")}>
-          <Icon name="chevronLeft" size={16} />
-          {p.backLabel || t.backToChats}
-        </button>
-        {p.thread}
-      </div>
-      {p.details && (
-        <>
-          <div
-            className="tf-chatws-resize"
-            role="separator"
-            aria-orientation="vertical"
-            aria-label={t.resizeDetails}
-            aria-valuenow={clamp(w)}
-            aria-valuemin={DETAILS_MIN}
-            aria-valuemax={DETAILS_MAX}
-            tabIndex={0}
-            onPointerDown={(e) => {
-              e.currentTarget.setPointerCapture?.(e.pointerId);
-              drag.current = { x: e.clientX, w: clamp(w) };
-            }}
-            onPointerMove={(e) => {
-              if (drag.current) setW(clamp(drag.current.w + drag.current.x - e.clientX));
-            }}
-            onPointerUp={() => {
-              drag.current = null;
-            }}
-            onKeyDown={(e) => {
-              const step = e.shiftKey ? 64 : 16;
-              if (e.key === "ArrowLeft") setW(clamp(w + step));
-              else if (e.key === "ArrowRight") setW(clamp(w - step));
-              else if (e.key === "Home") setW(DETAILS_MAX);
-              else if (e.key === "End") setW(DETAILS_MIN);
-              else return;
-              e.preventDefault();
-            }}
-          />
-          <div className="tf-chatws-details">{p.details}</div>
-        </>
-      )}
     </div>
   );
 }
