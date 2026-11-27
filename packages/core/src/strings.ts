@@ -1184,8 +1184,14 @@ export const AGENTS_STRINGS: Pick<
 };
 
 /** Strings of the components in `app-chrome.tsx`. */
-export const APP_CHROME_STRINGS: Pick<UIStrings, "coreModule"> = {
+export interface UIStrings {
+  /** MobileTabBar: title of the sheet behind "More". */
+  morePages: string;
+}
+export const APP_CHROME_STRINGS: Pick<UIStrings, "coreModule" | "more" | "morePages"> = {
   coreModule: "Core module, always on",
+  more: "More",
+  morePages: "More pages",
 };
 
 /** Strings of the components in `approvals.tsx`. */
@@ -1780,7 +1786,13 @@ export const SHELL_STRINGS: Pick<
   | "expandPanel"
   | "collapsePanel"
   | "closeSearch"
+  | "skipToContent"
+  | "more"
+  | "morePages"
 > = {
+  skipToContent: "Skip to content",
+  more: "More",
+  morePages: "More pages",
   tools: "Tools",
   quickActions: "Quick actions",
   expandRail: "Show names",
@@ -1790,7 +1802,26 @@ export const SHELL_STRINGS: Pick<
   closeSearch: "Close search",
 };
 
+export interface UIStrings {
+  /** AppShell: the link that jumps past the navigation. */
+  skipToContent: string;
+}
+
 /** Strings of the components in `appearance.tsx`. */
+export interface UIStrings {
+  appearanceColor: string;
+  appearanceDefault: string;
+  appearanceCustom: string;
+  /** Names of the brand colour presets (`THEME_PRESETS`). */
+  brandColors: {
+    blue: string;
+    violet: string;
+    emerald: string;
+    orange: string;
+    rose: string;
+    teal: string;
+  };
+}
 export const APPEARANCE_STRINGS: Pick<
   UIStrings,
   | "appearance"
@@ -1808,7 +1839,22 @@ export const APPEARANCE_STRINGS: Pick<
   | "appearanceNormal"
   | "appearanceLively"
   | "appearanceOff"
+  | "appearanceColor"
+  | "appearanceDefault"
+  | "appearanceCustom"
+  | "brandColors"
 > = {
+  appearanceColor: "Colour",
+  appearanceDefault: "Default",
+  appearanceCustom: "Custom colour",
+  brandColors: {
+    blue: "Blue",
+    violet: "Violet",
+    emerald: "Emerald",
+    orange: "Orange",
+    rose: "Rose",
+    teal: "Teal",
+  },
   appearance: "Appearance",
   appearanceHint: "Saved on this device",
   appearanceStyle: "Style",
@@ -1836,6 +1882,37 @@ export const COMMON_STRINGS: Pick<UIStrings, "bulkActions" | "clear" | "today" |
   clear: "Clear",
   today: "Today",
   yesterday: "Yesterday",
+};
+
+/** Strings of the components in `frame.tsx`. */
+export interface UIStrings {
+  /** NotificationCenter: the bell's name with the unread count. */
+  notificationsUnread: (n: number, formatted?: string) => string;
+  /** Stepper: read after a step's name. */
+  stepDone: string;
+  stepError: string;
+  /** Stepper: accessible name of the steps (default). */
+  steps: string;
+}
+export const FRAME_STRINGS: Pick<
+  UIStrings,
+  | "notifications"
+  | "notificationsUnread"
+  | "markAllRead"
+  | "allCaughtUp"
+  | "stepOf"
+  | "stepDone"
+  | "stepError"
+  | "steps"
+> = {
+  notifications: "Notifications",
+  notificationsUnread: (n, formatted) => `Notifications, ${formatted ?? n} unread`,
+  markAllRead: "Mark all read",
+  allCaughtUp: "You are all caught up",
+  stepOf: (n, total) => `Step ${n} of ${total}`,
+  stepDone: "done",
+  stepError: "needs attention",
+  steps: "Steps",
 };
 
 /** Strings of the components in `site.tsx`. */
@@ -2625,6 +2702,7 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   SHELL_STRINGS,
   APPEARANCE_STRINGS,
   COMMON_STRINGS,
+  FRAME_STRINGS,
   SITE_STRINGS,
   WORKSPACE_STRINGS,
 );

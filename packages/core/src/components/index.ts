@@ -273,6 +273,7 @@ export {
   appearanceProps,
   appearanceScript,
   parseAppearance,
+  appearanceBrandTheme,
   DEFAULT_APPEARANCE,
   type AppearanceProviderProps,
   type UseAppearanceOptions,
@@ -294,4 +295,5 @@ export {
   TransactionRow,
 } from "./workspace.js";
 export { BulkActionBar, DaySeparator, Highlight, highlightParts } from "./common.js";
+export { NotificationCenter, Stepper, InputGroup, matchPath } from "./frame.js";
 export type * from "./types.js";

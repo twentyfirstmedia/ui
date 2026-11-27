@@ -4,7 +4,7 @@ import { useLinkAs, useStrings } from "../context.js";
 import { NAVIGATION_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
-import { FOCUSABLE, moveFocus, useControlled, useId, useOutside } from "../hooks.js";
+import { FOCUSABLE, moveFocus, useControlled, useId, useOutside, usePhone } from "../hooks.js";
 import { Portal } from "../portal.js";
 import { Avatar, IconButton } from "./foundation.js";
 import { Menu } from "./feedback.js";
@@ -393,20 +393,6 @@ export function NavigationMenu(p: NavigationMenuProps) {
 }
 
 /* ── Sidebar: app navigation with groups, nested pages and a collapsed (icons) mode ── */
-/** Whether the screen is phone-sized (the sidebar becomes a drawer there). */
-function usePhone(): boolean {
-  const [phone, setPhone] = React.useState(false);
-  React.useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-    const mq = window.matchMedia("(max-width: 760px)");
-    const on = () => setPhone(mq.matches);
-    on();
-    mq.addEventListener("change", on);
-    return () => mq.removeEventListener("change", on);
-  }, []);
-  return phone;
-}
-
 const typing = (t: EventTarget | null) =>
   t instanceof HTMLElement && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
 
@@ -654,7 +640,11 @@ export function Sidebar(p: SidebarProps) {
       ) : it.badge ? (
         <span className="tf-sidebar-badge">{it.badge}</span>
       ) : null}
-      {it.count ? <span className="tf-sidebar-count">{it.count}</span> : null}
+      {it.count ? (
+        <span className={cx("tf-sidebar-count", it.countTone === "signal" && "signal")}>
+          {it.count}
+        </span>
+      ) : null}
       {it.items && chevron && <Icon name="chevronDown" size={14} className="tf-sidebar-chev" />}
     </>
   );

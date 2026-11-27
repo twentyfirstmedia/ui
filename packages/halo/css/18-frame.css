@@ -1,0 +1,501 @@
+/* App frame (0.15): route links in the shell, signal counts, skip link, safe areas, the phone tab
+   bar with "More", NotificationCenter, the colour row of AppearanceMenu, popovers as sheets,
+   Stepper and InputGroup */
+
+/* Counts in the signal colour (open approvals and the like) */
+.tf-nav-count.signal,
+.tf-sidebar-count.signal,
+.tf-dotcount.signal {
+  background: var(--signal);
+  color: var(--signal-bg);
+}
+
+/* Links in the top nav, rail and dock look like the buttons they replace */
+a.tf-nav-item,
+a.tf-rail-btn,
+a.tf-dock-btn,
+a.tf-tabbar-item {
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+/* Skip link: hidden until it gets the keyboard focus */
+.tf-skip {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.tf-skip:focus,
+.tf-skip:focus-visible {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: var(--z-toast);
+  width: auto;
+  height: auto;
+  clip-path: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font: 600 14px/20px var(--font-sans);
+  text-decoration: none;
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+/* the skip link's target takes the focus without drawing a ring around the whole page */
+.tf-main:focus {
+  outline: none;
+}
+
+/* Safe areas (a PWA in standalone mode on iOS): the frame reaches under the notch and the home
+   indicator, its content stays clear of them */
+.tf-shell.tf-shell-fill {
+  border-top: env(safe-area-inset-top, 0px) solid transparent;
+  border-left: env(safe-area-inset-left, 0px) solid transparent;
+  border-right: env(safe-area-inset-right, 0px) solid transparent;
+}
+.tf-shell.tf-shell-fill:not(.tf-shell-tabbed) {
+  border-bottom: env(safe-area-inset-bottom, 0px) solid transparent;
+}
+
+/* The tab bar of AppShell: phones only, along the bottom while the page scrolls */
+.tf-shell-tabbar {
+  display: none;
+}
+@media (max-width: 760px) {
+  .tf-shell-tabbed > .tf-shell-tabbar {
+    display: grid;
+    position: sticky;
+    bottom: 0;
+    z-index: var(--z-sticky);
+    margin: 8px -8px -8px;
+  }
+  .tf-shell.tf-shell-sidebar.tf-shell-tabbed > .tf-shell-tabbar {
+    grid-column: 1 / -1;
+  }
+}
+[data-surface="glass"] .tf-shell-tabbar {
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+}
+
+/* "More" of the tab bar: the other pages in a sheet */
+.tf-tabbar-more-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tf-tabbar-more-label {
+  padding: 8px 12px 0;
+  font: 600 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+}
+.tf-tabbar-more-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tf-tabbar-more-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink);
+  font: 600 15px/20px var(--font-sans);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.tf-tabbar-more-item:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.tf-tabbar-more-item.on {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.tf-tabbar-more-item:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.tf-tabbar-more-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* A popover that opens as a bottom sheet on phones */
+.tf-pop-sheet {
+  max-height: 85vh;
+  max-height: 85dvh;
+  overflow-y: auto;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+}
+
+/* NotificationCenter: the bell with its count, the list in a popover */
+.tf-notify-bell {
+  position: relative;
+  display: inline-flex;
+}
+.tf-notify-count {
+  top: 0;
+  right: 0;
+  pointer-events: none;
+  box-shadow: 0 0 0 2px var(--surface);
+}
+.tf-notes-head {
+  align-items: center;
+  padding: 6px 8px 0;
+}
+.tf-notes-title {
+  font-size: 16px;
+}
+.tf-notes-filter {
+  padding: 0 8px;
+}
+.tf-notes-day {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tf-notes-day .tf-daysep {
+  margin: 8px 12px 4px;
+}
+a.tf-note {
+  text-decoration: none;
+  box-sizing: border-box;
+}
+.tf-notify-list {
+  width: 100%;
+  box-shadow: none;
+  background: transparent;
+  animation: none;
+}
+.tf-pop-sheet .tf-notify-list {
+  padding: 0;
+}
+.tf-pop-sheet .tf-notify-list .tf-notes-list {
+  max-height: none;
+}
+
+/* AppearanceMenu: the colour row */
+.tf-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tf-swatch {
+  position: relative;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  box-sizing: border-box;
+  border-radius: var(--radius-pill);
+  background: var(--swatch, var(--primary));
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  cursor: pointer;
+}
+.tf-swatch.default {
+  background: linear-gradient(135deg, var(--ink) 50%, var(--surface) 50%);
+}
+.tf-swatch.custom:not(.on) {
+  background: conic-gradient(
+    var(--blush),
+    var(--butter),
+    var(--mint),
+    var(--sky),
+    var(--lilac),
+    var(--blush)
+  );
+}
+.tf-swatch.on {
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 4px var(--ink);
+}
+.tf-swatch-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.tf-swatch:has(.tf-swatch-input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+
+/* AppearanceProvider's backdrop for glass: behind everything in its container */
+.tf-appearance-ambient:not(.fixed) {
+  z-index: 0;
+}
+
+/* Stepper: a row of steps on wide screens, "Step 2 of 5" with a bar on phones */
+.tf-stepper {
+  min-width: 0;
+}
+.tf-stepper-list {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tf-step {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tf-step:not(:last-child)::after {
+  content: "";
+  flex: 1 1 16px;
+  min-width: 16px;
+  height: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--line);
+}
+.tf-step.done:not(:last-child)::after {
+  background: var(--primary);
+}
+.tf-step-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 4px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink-muted);
+  font: inherit;
+  text-align: left;
+}
+button.tf-step-btn {
+  cursor: pointer;
+}
+button.tf-step-btn:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.tf-step-btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.tf-step-mark {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  color: var(--ink-muted);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  font: 700 13px/1 var(--font-sans);
+}
+.tf-step.done .tf-step-mark {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: none;
+}
+.tf-step.current .tf-step-mark {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.tf-step.error .tf-step-mark {
+  background: var(--danger-bg);
+  color: var(--danger);
+  box-shadow: inset 0 0 0 1px var(--danger);
+}
+.tf-step.current .tf-step-btn,
+.tf-step.done .tf-step-btn {
+  color: var(--ink);
+}
+.tf-step.error .tf-step-btn {
+  color: var(--danger);
+}
+.tf-step-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.tf-step-label {
+  font: 600 14px/20px var(--font-sans);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tf-step-desc {
+  font: 500 12px/16px var(--font-sans);
+  color: var(--ink-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tf-stepper-compact {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+.tf-stepper-compact-text {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  font: 500 13px/18px var(--font-sans);
+}
+.tf-stepper-compact-count {
+  flex: none;
+  color: var(--ink-muted);
+}
+.tf-stepper-compact-text b {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+.tf-stepper.compact .tf-stepper-list {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.tf-stepper.compact .tf-stepper-compact {
+  display: flex;
+}
+@media (max-width: 760px) {
+  .tf-stepper .tf-stepper-list {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .tf-stepper .tf-stepper-compact {
+    display: flex;
+  }
+}
+
+/* InputGroup: one field outline around the input and its affixes */
+.tf-inputgroup {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  transition: box-shadow var(--dur-fast) ease;
+}
+.tf-inputgroup:hover:not(.disabled):not(:focus-within) {
+  box-shadow: inset 0 0 0 1px var(--ink-muted);
+}
+.tf-inputgroup:focus-within {
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.tf-inputgroup:has(.tf-input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.tf-inputgroup.invalid {
+  box-shadow: inset 0 0 0 2px var(--blush-ink);
+}
+.tf-inputgroup.disabled {
+  opacity: 0.45;
+}
+.tf-inputgroup > .tf-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  padding: 0 16px;
+  background: transparent;
+  box-shadow: none;
+}
+.tf-inputgroup > .tf-input:focus,
+.tf-inputgroup > .tf-input:hover,
+.tf-inputgroup > .tf-input[aria-invalid="true"] {
+  box-shadow: none;
+}
+.tf-inputgroup > .tf-input:focus-visible {
+  outline: none;
+}
+.tf-ig-affix {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  min-width: 0;
+}
+.tf-ig-affix.start {
+  padding-left: 4px;
+}
+.tf-ig-affix.end {
+  padding-right: 4px;
+}
+.tf-ig-affix.text {
+  padding: 0 0 0 16px;
+  color: var(--ink-muted);
+  font: 500 14px/20px var(--font-sans);
+  white-space: nowrap;
+}
+.tf-ig-affix.text.end {
+  padding: 0 16px 0 0;
+}
+.tf-ig-affix.text + .tf-input {
+  padding-left: 4px;
+}
+.tf-inputgroup > .tf-input:has(+ .tf-ig-affix.text) {
+  padding-right: 4px;
+}
+.tf-ig-affix > .tf-ico,
+.tf-ig-affix > svg {
+  margin: 0 8px 0 12px;
+  color: var(--ink-muted);
+}
+.tf-ig-affix.end > .tf-ico,
+.tf-ig-affix.end > svg {
+  margin: 0 12px 0 8px;
+}
+.tf-ig-affix .tf-select {
+  height: 32px;
+  box-shadow: none;
+  background-color: var(--surface-sunken);
+}
+@media (pointer: coarse) {
+  .tf-inputgroup > .tf-input,
+  .tf-ig-affix.text {
+    font-size: 16px;
+  }
+}
+
+/* BottomSheet's head: the title and the close button */
+.tf-sheet-head {
+  align-items: center;
+}

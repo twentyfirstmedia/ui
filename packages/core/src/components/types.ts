@@ -256,9 +256,15 @@ export interface PageHeaderProps extends BaseProps {
   actions?: ReactNode[];
 }
 export interface NavItem {
+  /** Stable id (default the label); `active` and `onNavigate` use it. */
+  id?: string;
   label: string;
   icon: IconName;
   count?: number;
+  /** `"signal"` draws the count in the signal colour (e.g. open approvals). */
+  countTone?: "neutral" | "signal";
+  /** Renders the item as a link (with `linkAs`, or `UIProvider linkAs`, for a router's link). */
+  href?: string;
 }
 export interface TopBarProps extends BaseProps {
   /** The product name, or a node (a logo mark with the name). */
@@ -267,12 +273,16 @@ export interface TopBarProps extends BaseProps {
   brandDot?: boolean;
   tag?: string;
   items: NavItem[];
+  /** Id (or label) of the current page. */
   active?: string;
   user?: { name: string; email?: string };
-  onNavigate?: (label: string) => void;
+  /** Called with the item's id (or label). */
+  onNavigate?: (id: string) => void;
   extra?: ReactNode;
   userOpen?: boolean;
   onUser?: () => void;
+  /** The element items with an `href` render as (default `UIProvider linkAs`, else `a`). */
+  linkAs?: ElementType;
 }
 export interface RailItem {
   label: string;
@@ -280,6 +290,8 @@ export interface RailItem {
   active?: boolean;
   count?: number;
   onClick?: () => void;
+  /** Renders the button as a link (with the rail's `linkAs`). */
+  href?: string;
 }
 export interface SideRailProps extends BaseProps {
   top?: RailItem[];
@@ -292,6 +304,8 @@ export interface SideRailProps extends BaseProps {
   toggle?: boolean;
   /** Accessible name of the rail (default "Tools"). */
   label?: string;
+  /** The element items with an `href` render as (default `UIProvider linkAs`, else `a`). */
+  linkAs?: ElementType;
 }
 export interface FloatingLayoutProps extends BaseProps {
   /** What the UI floats over, filling the layout: a map, a 3D canvas, a video, a photo. */
@@ -347,10 +361,14 @@ export interface DockItem {
   icon: IconName;
   tint?: Tint | "plain";
   onClick?: () => void;
+  /** Renders the button as a link (with the dock's `linkAs`). */
+  href?: string;
 }
 export interface DockProps extends BaseProps {
   items: DockItem[];
   label?: string;
+  /** The element items with an `href` render as (default `UIProvider linkAs`, else `a`). */
+  linkAs?: ElementType;
   /** `"glass"`: translucent glass over what is behind (maps, 3D, video, photos); `"solid"` opts out inside a glass `UIProvider`. */
   surface?: Surface;
 }
@@ -428,7 +446,31 @@ export interface PaginationProps extends BaseProps {
   label?: string;
 }
 export interface AppShellProps extends BaseProps {
+  /** Id (or label) of the current page; or let `pathname` find it. */
   active?: string;
+  /**
+   * The current path (`usePathname()` in Next.js): the page whose `href` matches it marks itself,
+   * the longest match winning, so `/settings/billing` marks "Billing" before "Settings".
+   */
+  pathname?: string;
+  /**
+   * The element nav items with an `href` render as everywhere in the shell (top nav, sidebar, tab
+   * bar, rail, dock), e.g. Next.js `Link`; default `UIProvider linkAs`, else `a`.
+   */
+  linkAs?: ElementType;
+  /** The bell in the top bar: unread count, a popover (a sheet on phones) with the list. */
+  notifications?: NotificationCenterProps;
+  /** The look menu (`AppearanceMenu`) in the top bar; `true` for the default one. */
+  appearance?: boolean | AppearanceMenuProps;
+  /**
+   * On phones (up to 760px wide): a tab bar at the bottom with the first pages (default 4) and
+   * "More" for the rest. `true` or the number of tabs.
+   */
+  tabBar?: boolean | number;
+  /** A "Skip to content" link before the navigation (default true). */
+  skipLink?: boolean;
+  /** Id of the `<main>` element the skip link jumps to (default generated). */
+  mainId?: string;
   /** The product name, or a node (a logo mark with the name; collapsed sidebars show it whole). */
   brand?: ReactNode;
   /** The status dot after the brand (default `true`); turn it off next to a logo of your own. */
@@ -700,11 +742,21 @@ export interface NotificationItem {
   text?: string;
   time?: string;
   unread?: boolean;
+  /** When it happened: the list groups items by day ("Today", "Yesterday", a date). */
+  date?: Date | string | number;
+  /** A deep link to what it is about (with `linkAs` for a router's link). */
+  href?: string;
 }
 export interface NotificationListProps extends BaseProps {
   items: NotificationItem[];
   onOpen?: (n: NotificationItem) => void;
   onReadAll?: () => void;
+  /** The element items with an `href` render as (default `UIProvider linkAs`, else `a`). */
+  linkAs?: ElementType;
+  /** What counts as today for the day groups (default now). */
+  now?: Date | string | number;
+  /** Hide the "All / Unread" tabs. */
+  hideFilter?: boolean;
 }
 export interface FlowStep {
   kind: "trigger" | "condition" | "agent" | "approval" | "action";
@@ -852,6 +904,8 @@ export interface SegmentedProps extends BaseProps {
   size?: "sm";
   block?: boolean;
   label?: string;
+  /** While an option is hovered, before it is picked (`null` when the pointer leaves). */
+  onPreview?: (value: string | null) => void;
 }
 export interface ComboboxProps extends BaseProps {
   label?: string;
@@ -2048,11 +2102,30 @@ export interface AttachmentPreviewProps extends BaseProps {
   width?: number | string;
   inline?: boolean;
 }
+export interface MobileTabBarItem {
+  id: string;
+  label: string;
+  icon: IconName;
+  count?: number;
+  /** `"signal"` draws the count in the signal colour. */
+  countTone?: "neutral" | "signal";
+  /** Renders the tab as a link (with `linkAs`). */
+  href?: string;
+}
 export interface MobileTabBarProps extends BaseProps {
-  items: { id: string; label: string; icon: IconName; count?: number }[];
+  items: MobileTabBarItem[];
   active?: string;
   onPick?: (id: string) => void;
   label?: string;
+  /** The element tabs with an `href` render as (default `UIProvider linkAs`, else `a`). */
+  linkAs?: ElementType;
+  /**
+   * Pages that do not fit: a "More" tab at the end opens a sheet listing them (grouped when they
+   * carry `group`). It shows as current while one of them is.
+   */
+  more?: (MobileTabBarItem & { group?: string })[];
+  /** Icon of the "More" tab (default `menu`). */
+  moreIcon?: IconName;
 }
 export interface PushNotificationProps extends BaseProps {
   app?: string;
@@ -2850,6 +2923,8 @@ export interface SidebarItem {
   /** Required for pages; options in a filter group usually go without. */
   icon?: IconName;
   count?: number;
+  /** `"signal"` draws the count in the signal colour (e.g. open approvals). */
+  countTone?: "neutral" | "signal";
   /** A small marker instead of a number: `"dot"` for new activity, or a short word such as "New". */
   badge?: string;
   /** Renders the item as a link to this address (with `linkAs` for a router's link, e.g. Next.js `Link`). */
@@ -4043,16 +4118,31 @@ export interface Appearance {
   density: Density | "auto";
   surface: Surface;
   motion: Motion;
+  /**
+   * Brand colour: a key of `THEME_PRESETS` (`"blue"`, `"violet"` …) or a hex colour (`"#0f766e"`)
+   * that goes through `brandTheme`. Unset: the kit's own primary.
+   */
+  brand?: string;
 }
-export type AppearanceRow = "kit" | "theme" | "density" | "motion" | "surface";
+export type AppearanceRow = "kit" | "theme" | "brand" | "density" | "motion" | "surface";
 export interface AppearanceMenuProps extends BaseProps {
   /** The current look; without it the menu reads and writes the nearest `AppearanceProvider`. */
   value?: Appearance;
   onChange?: (patch: Partial<Appearance>) => void;
   /** Kits to choose from; with two or more the menu shows the Style row. */
   kits?: Kit[];
-  /** The rows to show (default: style when there are kits, theme, density, motion and glass). */
+  /**
+   * The rows to show (default: style when there are kits, theme, colour, density, motion and
+   * glass). Leave `"brand"` out for an app with a fixed brand colour.
+   */
   rows?: AppearanceRow[];
+  /**
+   * While the reader hovers a choice (or drags the custom colour), before it is picked; `null` when
+   * the pointer leaves. Without it the menu previews through the nearest `AppearanceProvider`.
+   */
+  onPreview?: (patch: Partial<Appearance> | null) => void;
+  /** On phones the menu opens as a bottom sheet (default true). */
+  sheet?: boolean;
   /** Under the title, e.g. "Saved for your account" (default "Saved on this device"). */
   hint?: ReactNode;
   /** Which edge of the trigger the menu lines up with (default `end`, for the top bar's end). */
@@ -4123,4 +4213,51 @@ export interface HighlightProps extends BaseProps {
   terms?: string[];
   /** Marks `query` as one phrase instead of word by word. */
   exact?: boolean;
+}
+
+/* ── App frame (frame.tsx) ── */
+export interface NotificationCenterProps
+  extends Omit<NotificationListProps, "style" | "className">, BaseProps {
+  /** Unread count on the bell (default: the unread items). */
+  unread?: number;
+  /** Whether the list is open (controlled). */
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** Which edge of the bell the panel lines up with (default `end`). */
+  align?: "start" | "end";
+}
+export type StepState = "done" | "current" | "upcoming" | "error";
+export interface StepperStep {
+  id?: string;
+  label: string;
+  /** A second line under the label (desktop). */
+  description?: string;
+  /** Overrides the state `current` gives the step (e.g. `"error"`). */
+  state?: StepState;
+}
+export interface StepperProps extends BaseProps {
+  steps: StepperStep[];
+  /** Index of the current step: earlier steps are done, later ones upcoming. */
+  current?: number;
+  /** Makes done steps (and error steps) buttons that go back to them. */
+  onStepClick?: (index: number) => void;
+  /** Accessible name of the steps (default "Steps"). */
+  label?: string;
+  /**
+   * `auto` (default): the row of steps on wide screens, "Step 2 of 5" with a progress bar on
+   * phones. `compact` always shows the short form.
+   */
+  variant?: "auto" | "compact";
+}
+export interface InputGroupProps extends Omit<TextFieldProps, "suffix" | "icon" | "action"> {
+  /**
+   * Before the input: text ("https://", "€") is read with the field; an `Icon`, a `Select` or a
+   * `Button` sits in the group as it is.
+   */
+  start?: ReactNode;
+  /** After the input: text ("@acme.com", "kg"), an icon or a control (copy, unit select …). */
+  end?: ReactNode;
+  /** Your own control instead of the built-in input (it should carry `className="tf-input"`). */
+  children?: ReactNode;
 }

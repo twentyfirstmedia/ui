@@ -1,15 +1,17 @@
 "use client";
 import * as React from "react";
-import { useStrings } from "../context.js";
+import { useLinkAs, useStrings } from "../context.js";
 import { APP_CHROME_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
 import { Badge, TintIcon } from "./foundation.js";
 import { StatusIndicator } from "./status.js";
 import { Tooltip } from "./overlays.js";
+import { BottomSheet } from "./sheet.js";
 import type {
   ConfigPRSummaryProps,
   IconName,
+  MobileTabBarItem,
   MobileTabBarProps,
   ModuleRegistryProps,
   PushNotificationProps,
@@ -18,32 +20,137 @@ import type {
 /* ── App chrome ── */
 export function MobileTabBar(p: MobileTabBarProps) {
   const t = useStrings(APP_CHROME_STRINGS);
+  const Link = useLinkAs(p.linkAs);
+  const [moreOpen, setMoreOpen] = React.useState(false);
+  const more = p.more || [];
+  const moreOn = more.some((it) => it.id === p.active);
+  const moreCount = more.reduce((n, it) => n + (it.count || 0), 0);
+  const moreSignal = more.some((it) => it.count && it.countTone === "signal");
+  const count = (n: number | undefined, tone?: "neutral" | "signal") =>
+    n ? <span className={cx("tf-dotcount", tone === "signal" && "signal")}>{n}</span> : null;
+  const tab = (it: MobileTabBarItem) => {
+    const on = it.id === p.active;
+    const inner = (
+      <>
+        <span className="tf-tabbar-ico">
+          <Icon name={it.icon} size={20} />
+          {count(it.count, it.countTone)}
+        </span>
+        <span className="tf-tabbar-label">{it.label}</span>
+      </>
+    );
+    const cls = cx("tf-tabbar-item", on && "on");
+    return it.href ? (
+      <Link
+        key={it.id}
+        href={it.href}
+        className={cls}
+        aria-current={on ? "page" : undefined}
+        onClick={() => p.onPick?.(it.id)}
+      >
+        {inner}
+      </Link>
+    ) : (
+      <button
+        key={it.id}
+        type="button"
+        className={cls}
+        aria-current={on ? "page" : undefined}
+        onClick={() => {
+          p.onPick && p.onPick(it.id);
+        }}
+      >
+        {inner}
+      </button>
+    );
+  };
+  // the pages behind "More", grouped as given
+  const groups: { name?: string; items: typeof more }[] = [];
+  for (const it of more) {
+    const last = groups[groups.length - 1];
+    if (last && last.name === it.group) last.items.push(it);
+    else groups.push({ name: it.group, items: [it] });
+  }
   return (
     <nav
       style={p.style}
       className={cx("tf-tabbar", p.className)}
       aria-label={p.label || t.mainNavigation}
     >
-      {(p.items || []).map((it) => {
-        const on = it.id === p.active;
-        return (
-          <button
-            key={it.id}
-            type="button"
-            className={cx("tf-tabbar-item", on && "on")}
-            aria-current={on ? "page" : undefined}
-            onClick={() => {
-              p.onPick && p.onPick(it.id);
-            }}
-          >
-            <span className="tf-tabbar-ico">
-              <Icon name={it.icon} size={20} />
-              {it.count ? <span className="tf-dotcount">{it.count}</span> : null}
-            </span>
-            <span className="tf-tabbar-label">{it.label}</span>
-          </button>
-        );
-      })}
+      {(p.items || []).map(tab)}
+      {more.length > 0 && (
+        <button
+          type="button"
+          className={cx("tf-tabbar-item", (moreOn || moreOpen) && "on")}
+          aria-haspopup="dialog"
+          aria-expanded={moreOpen}
+          aria-current={moreOn ? "page" : undefined}
+          onClick={() => setMoreOpen(true)}
+        >
+          <span className="tf-tabbar-ico">
+            <Icon name={p.moreIcon || "menu"} size={20} />
+            {count(moreCount, moreSignal ? "signal" : undefined)}
+          </span>
+          <span className="tf-tabbar-label">{t.more}</span>
+        </button>
+      )}
+      {more.length > 0 && (
+        <BottomSheet
+          open={moreOpen}
+          title={t.morePages}
+          onClose={() => setMoreOpen(false)}
+          className="tf-tabbar-more"
+        >
+          {groups.map((g, gi) => (
+            <div key={g.name ?? gi} className="tf-tabbar-more-group">
+              {g.name && <div className="tf-tabbar-more-label">{g.name}</div>}
+              <ul className="tf-tabbar-more-list">
+                {g.items.map((it) => {
+                  const on = it.id === p.active;
+                  const inner = (
+                    <>
+                      <Icon name={it.icon} />
+                      <span className="tf-tabbar-more-text">{it.label}</span>
+                      {it.count ? (
+                        <span className={cx("tf-nav-count", it.countTone === "signal" && "signal")}>
+                          {it.count}
+                        </span>
+                      ) : null}
+                    </>
+                  );
+                  const pick = () => {
+                    p.onPick?.(it.id);
+                    setMoreOpen(false);
+                  };
+                  return (
+                    <li key={it.id}>
+                      {it.href ? (
+                        <Link
+                          href={it.href}
+                          className={cx("tf-tabbar-more-item", on && "on")}
+                          aria-current={on ? "page" : undefined}
+                          onClick={pick}
+                        >
+                          {inner}
+                        </Link>
+                      ) : (
+                        <button
+                          type="button"
+                          className={cx("tf-tabbar-more-item", on && "on")}
+                          aria-current={on ? "page" : undefined}
+                          onClick={pick}
+                        >
+                          {inner}
+                        </button>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </BottomSheet>
+      )}
     </nav>
   );
 }
