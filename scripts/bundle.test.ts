@@ -5,7 +5,7 @@ describe("bundle size", () => {
   it("one small component pulls in only what it needs", async () => {
     const button = await bundleSize(["Button"]);
     const all = await bundleSize(publicComponents());
-    expect(button.gzip).toBeLessThan(4 * 1024); // the icon set (all paths) is part of it
+    expect(button.gzip).toBeLessThan(4.5 * 1024); // the icon set (all paths) is part of it
     expect(button.gzip).toBeLessThan(all.gzip / 10);
     // nothing of unrelated, heavy components
     expect(button.code).not.toContain("tf-rte");

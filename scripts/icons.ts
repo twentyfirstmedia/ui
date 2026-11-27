@@ -9,7 +9,7 @@
  *   Free (CC BY 4.0), fitted the same way.
  *
  * Every drawing is centred on the 24px grid (as the kit's own icons are). Names are camelCase;
- * brands start with `brand`. The kit's own 97 icons (packages/core/src/icons.ts) stay as they are
+ * brands start with `brand`. The kit's own 100 icons (packages/core/src/icons.ts) stay as they are
  * and are only listed here for the categories.
  *
  *   node scripts/icons.ts          write
@@ -1047,7 +1047,7 @@ function centre(d: string, scale = 1): string {
 }
 
 /** Library icons that moved into the kit's own set; kept as exports for existing imports. */
-const FORMER_LIBRARY = ["volume", "trophy", "receipt"];
+const FORMER_LIBRARY = ["volume", "trophy", "receipt", "mic", "micOff", "camera"];
 
 export function build(): string {
   const lucide = JSON.parse(
@@ -1166,7 +1166,7 @@ export function build(): string {
     const kit = (ICON_PATHS as Record<string, string>)[n];
     if (!kit) throw new Error(`former library icon ${n} is not in the kit's own set`);
     lines.push(
-      `/** @deprecated Part of the kit's own set since 0.10: use the name directly, no \`registerIcons\` needed. */\nexport const ${n}: string = "${kit}";`,
+      `/** @deprecated Part of the kit's own set: use the name directly, no \`registerIcons\` needed. */\nexport const ${n}: string = "${kit}";`,
     );
   }
   if (missing.length) throw new Error(`not found: ${missing.join(", ")}`);

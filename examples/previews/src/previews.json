@@ -275,21 +275,73 @@
     "name": "ChatMessage",
     "group": "AI",
     "width": 820,
-    "height": 720,
-    "components": ["ChatMessage"]
+    "height": 1100,
+    "components": [
+      "ChatMessage",
+      "MessageEditor",
+      "VersionSwitch",
+      "FeedbackRating",
+      "VoiceNote",
+      "RichText"
+    ]
+  },
+  {
+    "name": "RichText",
+    "group": "AI",
+    "width": 820,
+    "height": 900,
+    "components": ["RichText", "CodeBlock"]
+  },
+  {
+    "name": "MessageEditor",
+    "group": "AI",
+    "width": 820,
+    "height": 320,
+    "components": ["MessageEditor", "VersionSwitch"]
   },
   {
     "name": "ChatWorkspace",
     "group": "AI",
     "width": 1100,
-    "height": 640,
+    "height": 800,
     "components": [
-      "ChatList",
-      "ChatMessage",
       "ChatWorkspace",
-      "FeedbackRating",
+      "ChatList",
+      "ChatThread",
+      "ChatMessage",
+      "Composer",
+      "DaySeparator",
+      "HandoffLine",
+      "VoiceLog",
+      "ToolCall",
+      "ApprovalCard",
+      "AgentDetails",
       "SearchHits",
-      "ThinkingLine"
+      "TypingIndicator"
+    ]
+  },
+  {
+    "name": "ChatList",
+    "group": "AI",
+    "width": 520,
+    "height": 600,
+    "components": ["ChatList"]
+  },
+  {
+    "name": "ChatThread",
+    "group": "AI",
+    "width": 820,
+    "height": 760,
+    "components": [
+      "ChatThread",
+      "DaySeparator",
+      "HandoffLine",
+      "SystemLine",
+      "VoiceLog",
+      "VoiceNote",
+      "TypingIndicator",
+      "ReadOnlyBar",
+      "ChatMessage"
     ]
   },
   {
@@ -310,8 +362,8 @@
     "name": "Composer",
     "group": "AI",
     "width": 820,
-    "height": 520,
-    "components": ["AgentStatus", "Composer", "PromptStarters", "UsageMeter"]
+    "height": 560,
+    "components": ["Composer", "AgentStatus", "PromptStarters", "UsageMeter"]
   },
   {
     "name": "ConfigPRSummary",
@@ -1179,8 +1231,15 @@
     "name": "VoiceMode",
     "group": "AI",
     "width": 760,
-    "height": 520,
-    "components": ["Segmented", "VoiceMode"]
+    "height": 640,
+    "components": ["VoiceMode", "Segmented"]
+  },
+  {
+    "name": "VoiceNote",
+    "group": "AI",
+    "width": 720,
+    "height": 560,
+    "components": ["VoiceNote", "VoiceLog"]
   },
   {
     "name": "WorkflowScreen",

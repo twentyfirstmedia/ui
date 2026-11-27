@@ -1260,29 +1260,89 @@ export interface Source {
   url?: string;
   onClick?: () => void;
 }
+export interface ChatAttachment {
+  name: string;
+  /** Shown next to the name ("2.4 MB"). */
+  size?: string;
+  /** `"image"` (or `"img"`) shows a thumbnail; anything else a file chip. */
+  kind?: string;
+  /** Where the file opens or downloads from. */
+  url?: string;
+  /** A smaller image for the thumbnail (default `url`). */
+  thumb?: string;
+}
 export interface ChatMessageProps extends BaseProps {
   role: "user" | "assistant" | "system";
+  /** Stable id: `ChatThread jumpTo` scrolls to it (rendered as `data-message-id`). */
+  id?: string;
   name?: string;
   time?: string;
   model?: string;
   text?: string;
   streaming?: boolean;
   tint?: Tint;
+  /** Icon of a system line. */
+  icon?: IconName;
   sources?: Source[];
-  attachments?: { name: string; size?: string; kind?: string }[];
+  /** Images show as thumbnails, other files as chips with a download link. */
+  attachments?: ChatAttachment[];
+  /** Mentions in a user's `text` (from `Composer`), drawn as tinted chips. */
+  mentions?: Mention[];
+  /** Marks the words of a search in the text. */
+  highlight?: string;
+  /** A voice message instead of text: the player, its length and the transcript. */
+  voice?: { src?: string; duration?: number; transcript?: ReactNode; peaks?: number[] };
+  /** "Dictated" under the message. */
+  dictated?: boolean;
+  /** "In voice conversation" under the message. */
+  inVoice?: boolean;
   usage?: string;
+  /** Regenerate: pass it on the last answer only. */
   onRetry?: () => void;
-  onFeedback?: (v: "up" | "down") => void;
+  /** Thumbs up or down (null when the reader takes it back). */
+  onFeedback?: (v: "up" | "down" | null) => void;
+  /** The comment after thumbs down (an empty comment for thumbs up). */
+  onFeedbackComment?: (v: "up" | "down", comment?: string) => void;
+  /** `false` hides the action row; the rest of the props pick which actions show. */
   actions?: boolean;
+  /**
+   * When the action row shows: "always", or "hover" (on hover and focus; always on touch
+   * screens). Default "always" for an answer with `onRetry` (the last one) and for a message with versions,
+   * else "hover".
+   */
+  actionsVisible?: "always" | "hover";
+  /** Edit in place on the user's own message: called with the new text. */
+  onEdit?: (text: string) => void;
+  /** Controls whether the editor is open. */
+  editing?: boolean;
+  onEditingChange?: (editing: boolean) => void;
+  /** Versions of an edited message or a regenerated answer: "‹ 2/3 ›" (0-based index). */
+  versionIndex?: number;
+  versionCount?: number;
+  onVersionChange?: (index: number) => void;
+  /** While a version is being made. */
+  versionBusy?: boolean;
+  /** Content above the bubble: a tool call, the reasoning, an approval card. */
   before?: ReactNode;
+  /** Content below the bubble: an approval card, a form, a result. */
   after?: ReactNode;
   children?: ReactNode;
   feedback?: "up" | "down" | null;
+  /** Router link for relative links in the text. */
+  linkAs?: ElementType;
 }
 export interface RichTextProps extends BaseProps {
+  /**
+   * Markdown: paragraphs, headings, **bold**, *italic*, ~~strike~~, `code`, links, bare URLs,
+   * nested and task lists, quotes, tables, rules and fenced code blocks with copy.
+   */
   text: string;
   streaming?: boolean;
   className?: string;
+  /** Marks the words of a search. */
+  highlight?: string;
+  /** Router link for relative links. */
+  linkAs?: ElementType;
 }
 export interface CodeBlockProps extends BaseProps {
   code: string;
@@ -1298,6 +1358,13 @@ export interface ToolCallProps extends BaseProps {
   input?: unknown;
   output?: unknown;
   defaultOpen?: boolean;
+  /** A "Trace" link to the run's trace (in your tracing tool). */
+  traceHref?: string;
+  /** Instead of `traceHref`: opens the trace yourself. */
+  onTrace?: () => void;
+  /** Text of the trace link (default "Trace"). */
+  traceLabel?: string;
+  linkAs?: ElementType;
 }
 export interface ReasoningProps extends BaseProps {
   steps?: string[];
@@ -1330,7 +1397,8 @@ export interface ComposerCommand {
 export interface ComposerProps extends BaseProps {
   value?: string;
   onChange?: (v: string) => void;
-  onSend?: (text: string, files: (File | { name: string })[]) => void;
+  /** Sends text, files and what goes with it (mentions, whether it was dictated). */
+  onSend?: (text: string, files: (File | ComposerAttachment)[], meta: ComposerSendMeta) => void;
   busy?: boolean;
   onStop?: () => void;
   placeholder?: string;
@@ -1340,12 +1408,43 @@ export interface ComposerProps extends BaseProps {
   onModel?: (id: string) => void;
   commands?: ComposerCommand[];
   onCommand?: (c: ComposerCommand) => void;
-  attachments?: (File | { name: string })[];
-  onAttach?: (files: FileList) => void;
+  /** Files to send: `File`s (images get a thumbnail) or items with progress or an error. */
+  attachments?: (File | ComposerAttachment)[];
+  /** Turns on attaching by the paperclip, by dropping and by pasting files. */
+  onAttach?: (files: FileList | File[]) => void;
   onRemoveAttachment?: (i: number) => void;
+  /** A camera button on touch screens (takes a photo as an attachment). */
+  camera?: boolean;
   hint?: string;
   left?: ReactNode;
   disabled?: boolean;
+  /** Who can be mentioned with `@`: agents and people, grouped by `group`. */
+  mentionOptions?: MentionOption[];
+  /** Controls the mentions in the text (they move along as the text changes). */
+  mentions?: Mention[];
+  onMentionsChange?: (mentions: Mention[]) => void;
+  /**
+   * Dictation, run by your app (speech to text on your server): `active` shows the recording
+   * state, `interim` the words heard so far in the field. Put the final words into `value`.
+   */
+  dictation?: ComposerDictation;
+  /** Shows the microphone and starts or stops dictation (also ⌥ Space). */
+  onDictate?: () => void;
+  /**
+   * Hold the microphone to record a voice message, slide away to cancel, let go to send. The
+   * recording stays in the browser until you get it here.
+   */
+  onVoiceMessage?: (audio: Blob, durationMs: number) => void;
+  /** Called while the person types, at most every `typingInterval` ms (default 3000). */
+  onTyping?: () => void;
+  typingInterval?: number;
+  /** Names of the people typing right now, shown above the field. */
+  typing?: string[];
+  /** Shows the read-along bar instead of the field (watching a conversation). */
+  readOnly?: boolean;
+  /** "Step in" on the read-along bar. */
+  onStepIn?: () => void;
+  readOnlyText?: string;
 }
 export interface AgentStatusProps extends BaseProps {
   status: "Running" | "Thinking" | "Waiting for approval" | "Idle" | "Paused" | "Error" | string;
@@ -1840,30 +1939,80 @@ export interface AgentDetailsProps extends BaseProps {
 export interface ChatListItem {
   id: string;
   name: string;
+  /** The last message (or what the agent is doing). */
   sub?: ReactNode;
+  /** When the last message came, as shown ("09:41", "Mon"); see `date`. */
   time?: string;
+  /** When the last message came: shown relative when `time` is missing; used by `before:`. */
+  date?: Date | string | number;
   tint?: Tint;
+  /** A person (avatar with initials) instead of an agent mark. */
   avatar?: boolean;
+  /** An avatar picture. */
+  avatarSrc?: string;
+  /** The agent's state as a status dot. */
   status?: Status;
   unread?: number;
   pinned?: boolean;
+  /** Project or team, matched by `in:`. */
+  project?: string;
+  /** Who writes in it, matched by `from:` (the name counts too). */
+  from?: string[];
+  /** Opens the conversation as a link (with `linkAs`). */
+  href?: string;
+}
+export interface ChatListGroup {
+  title: string;
+  mark?: Tint;
+  items: ChatListItem[];
 }
 export interface ChatListProps extends BaseProps {
-  groups: { title: string; mark?: Tint; items: ChatListItem[] }[];
+  /** Groups as you sort them: pinned, the agents of each project, people. */
+  groups: ChatListGroup[];
   selected?: string;
   onSelect?: (id: string) => void;
-  onSearch?: (q: string) => void;
+  /** Called with the query and its tokens, e.g. to search on your server. */
+  onSearch?: (q: string, parsed: ChatQuery) => void;
+  /** Controls the search (tokens `from:`, `in:`, `before:`, `after:` and words). */
+  query?: string;
+  onQueryChange?: (q: string) => void;
+  /** `false`: the list does not filter itself (your server does, from `onSearch`). */
+  filter?: boolean;
   filters?: ReactNode;
   searchPlaceholder?: string;
+  linkAs?: ElementType;
 }
 export interface ChatWorkspaceProps extends BaseProps {
   list: ReactNode;
   thread: ReactNode;
+  /** A third pane (agent details, search hits); hidden below 1040px. */
   details?: ReactNode;
   className?: string;
+  /**
+   * Narrow layouts (below 760px) show one pane: the list or the thread. Picking a chat row
+   * switches to the thread; the back button returns to the list. Controlled or not.
+   */
+  view?: "list" | "thread";
+  defaultView?: "list" | "thread";
+  onViewChange?: (view: "list" | "thread") => void;
+  /** Text of the back button (default "Back to chats"). */
+  backLabel?: string;
+  /** Width of the details pane in px (drag or arrow keys on its edge); default 304. */
+  detailsWidth?: number;
+  defaultDetailsWidth?: number;
+  onDetailsWidthChange?: (px: number) => void;
 }
 export interface SearchHitsProps extends BaseProps {
-  items: { id: string | number; chat: string; time?: string; who?: string; text: string }[];
+  /** Hits; `messageId` is what `ChatThread jumpTo` takes. */
+  items: {
+    id: string | number;
+    chat: string;
+    time?: string;
+    who?: string;
+    text: string;
+    messageId?: string;
+  }[];
+  /** Marks each word of the query in the hits. */
   query?: string;
   onOpen?: (item: NonNullable<SearchHitsProps["items"]>[number]) => void;
   emptyText?: string;
@@ -1873,12 +2022,21 @@ export interface ThinkingLineProps extends BaseProps {
 }
 export interface FeedbackRatingProps extends BaseProps {
   value?: "up" | "down" | null;
-  onRate?: (v: "up" | "down") => void;
+  /** Called on every press; `null` when an `inline` rating is taken back. */
+  onRate?: (v: "up" | "down" | null) => void;
   onSubmit?: (v: "up" | "down", comment?: string) => void;
   label?: string;
   placeholder?: string;
   thanks?: string;
   askOnUp?: boolean;
+  /**
+   * For an action row (ChatMessage uses it): the buttons stay and show what was pressed, a second
+   * press takes it back, and the comment field opens below the row.
+   */
+  inline?: boolean;
+  /** Accessible names of the buttons (default "Good" and "Not good"). */
+  upLabel?: string;
+  downLabel?: string;
 }
 export interface ActivityItem {
   time?: string;
@@ -1973,12 +2131,22 @@ export interface OrgChartProps extends BaseProps {
 export interface VoiceModeProps extends BaseProps {
   name: string;
   tint?: Tint;
-  state: "listening" | "thinking" | "speaking" | "idle";
+  /**
+   * listening, thinking, speaking; "interrupted" right after the person spoke over the agent
+   * (barge-in); "connecting" before the first turn; idle.
+   */
+  state: "listening" | "thinking" | "speaking" | "interrupted" | "connecting" | "idle";
   stateLabel?: string;
   transcript?: ReactNode;
+  /** The conversation so far, shown live (the last one may still be `live`). */
+  turns?: VoiceTurn[];
   muted?: boolean;
   onMute?: () => void;
   onEnd?: () => void;
+  /** While the agent speaks: a button to interrupt it (the person can also just talk). */
+  onInterrupt?: () => void;
+  /** Covers the whole screen: on phones (default), always or never. */
+  fullscreen?: "phone" | "always" | "never";
 }
 
 /* ── Kit 4: operations ── */
@@ -4646,4 +4814,175 @@ export interface DomainHeaderProps extends BaseProps {
   actions?: ReactNode;
   /** What counts as today for `days` (default now). */
   now?: Date | string | number;
+}
+
+/* ── Chat: mentions, composer extras, thread pieces (chat.tsx, chat-thread.tsx, agents.tsx) ── */
+/** A mention in a text: the `@Name` from `start` to `end` (UTF-16 offsets). */
+export interface Mention {
+  id: string;
+  label: string;
+  start: number;
+  end: number;
+  tint?: Tint;
+}
+/** Who can be mentioned in a `Composer`. */
+export interface MentionOption {
+  id: string;
+  label: string;
+  /** "agent" draws an agent mark, "person" an avatar. */
+  kind?: "agent" | "person";
+  /** Heading of the group in the suggestions ("Agents · Northwind", "People"). */
+  group?: string;
+  /** A second line: the role or team. */
+  role?: string;
+  tint?: Tint;
+  avatarSrc?: string;
+  /** More words that find it ("atlas", "support"). */
+  keywords?: string;
+}
+export interface ComposerAttachment {
+  name: string;
+  size?: string;
+  /** An image to show as the thumbnail. */
+  thumb?: string;
+  /** Upload progress from 0 to 1. */
+  progress?: number;
+  /** An upload error, shown on the chip. */
+  error?: string;
+}
+export interface ComposerSendMeta {
+  mentions: Mention[];
+  /** Whether dictation filled some of the text. */
+  dictated: boolean;
+}
+export interface ComposerDictation {
+  active: boolean;
+  /** The words heard so far, shown greyed after the text. */
+  interim?: string;
+  state?: "starting" | "listening" | "stopping";
+  /** Why dictation stopped ("No microphone"), shown as the hint. */
+  error?: string;
+}
+export interface ChatThreadProps extends BaseProps {
+  children?: ReactNode;
+  /** Scrolls to the message with this `id` (a search hit) and marks it for a moment. */
+  jumpTo?: string;
+  /** Change it to jump to the same message again. */
+  jumpKey?: string | number;
+  /** Follows the newest message while it grows, unless the reader scrolled up (default true). */
+  stickToBottom?: boolean;
+  /** Accessible name (default "Conversation"). */
+  label?: string;
+}
+export interface MessageEditorProps extends BaseProps {
+  value?: string;
+  defaultValue?: string;
+  onChange?: (v: string) => void;
+  /** Enter (or the button) sends the new text. */
+  onSubmit?: (text: string) => void;
+  /** Esc (or the button) cancels. */
+  onCancel?: () => void;
+  /** The line under the field (default "The conversation runs again from here"). */
+  hint?: string;
+  submitLabel?: string;
+  label?: string;
+  busy?: boolean;
+  /** Focuses the field with the caret at the end (default true). */
+  autoFocus?: boolean;
+}
+export interface VersionSwitchProps extends BaseProps {
+  /** How many versions there are. */
+  count: number;
+  /** The version shown, 0-based (default the newest). */
+  index?: number;
+  defaultIndex?: number;
+  onChange?: (index: number) => void;
+  /** While a new version is being made: the arrows wait. */
+  busy?: boolean;
+  label?: string;
+}
+export interface HandoffParty {
+  name: string;
+  tint?: Tint;
+  icon?: IconName;
+  kind?: "agent" | "person";
+  avatar?: string;
+}
+export interface HandoffLineProps extends BaseProps {
+  /** Who hands the work over. */
+  from: HandoffParty;
+  /** Who takes it. */
+  to: HandoffParty;
+  /** Why, in a few words. */
+  reason?: ReactNode;
+  time?: string;
+  id?: string;
+  /** Opens the conversation between the two. */
+  href?: string;
+  onClick?: () => void;
+  linkAs?: ElementType;
+}
+export interface SystemLineProps extends BaseProps {
+  children?: ReactNode;
+  icon?: IconName;
+  time?: string;
+  id?: string;
+  tone?: "neutral" | "warning" | "danger";
+}
+export interface VoiceNoteProps extends BaseProps {
+  /** The recording (any URL the browser can play). */
+  src?: string;
+  /** Length in seconds (default: read from the file). */
+  duration?: number;
+  /** The words, behind "Show transcript". */
+  transcript?: ReactNode;
+  transcriptOpen?: boolean;
+  onTranscriptOpenChange?: (open: boolean) => void;
+  /** Loudness per moment, 0 to 1, for the bars (default: a steady pattern). */
+  peaks?: number[];
+  /** Drawn as the user's own (on the primary colour). */
+  mine?: boolean;
+  label?: string;
+}
+export interface VoiceTurn {
+  id?: string | number;
+  who: "user" | "agent";
+  name?: string;
+  text: ReactNode;
+  /** Still being spoken (shows a caret). */
+  live?: boolean;
+}
+export interface VoiceLogProps extends BaseProps {
+  /** Default "Voice conversation". */
+  title?: string;
+  /** Length as shown ("4:12"). */
+  duration?: string;
+  time?: string;
+  turns: VoiceTurn[];
+  /** The recording, if it was kept. */
+  audio?: string;
+  audioDuration?: number;
+  id?: string;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+export interface TypingIndicatorProps extends BaseProps {
+  /** Who is typing (renders nothing when empty). */
+  names: string[];
+  /** Your own text instead of "Lena is typing…". */
+  text?: string;
+}
+export interface ReadOnlyBarProps extends BaseProps {
+  /** Default "You are reading along". */
+  text?: string;
+  /** Default "Step in". */
+  actionLabel?: string;
+  onAction?: () => void;
+  children?: ReactNode;
+}
+/** A chat search split into its tokens: `from:`, `in:`, `before:`, `after:` and the words. */
+export interface ChatQuery {
+  text: string;
+  tokens: { key: "from" | "in" | "before" | "after"; value: string; raw: string }[];
 }
