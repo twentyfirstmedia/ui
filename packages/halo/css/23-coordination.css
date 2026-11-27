@@ -227,6 +227,7 @@
 /* CoordinationTicker */
 .tf-ticker {
   min-width: 0;
+  container-type: inline-size;
 }
 .tf-ticker-list {
   list-style: none;
@@ -301,6 +302,19 @@ a.tf-ticker-link:focus-visible {
   padding: 12px 4px;
   color: var(--ink-muted);
   font: 500 13px/20px var(--font-sans);
+}
+
+/* narrow: the time goes under the text */
+@container (max-width: 360px) {
+  .tf-ticker-link {
+    flex-wrap: wrap;
+  }
+  .tf-ticker-text {
+    flex-basis: calc(100% - 28px);
+  }
+  .tf-ticker-time {
+    padding-left: 28px;
+  }
 }
 
 /* Glass (reduced transparency switches the glass tokens themselves) */
