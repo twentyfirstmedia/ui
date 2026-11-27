@@ -806,7 +806,10 @@ export interface InvoicePreviewProps extends BaseProps {
   to: string;
   issued: string;
   due: string;
-  lines: { d: string; q: number; u: number; v: number }[];
+  /** Lines: description, quantity, unit price, VAT rate in percent, optional discount in percent. */
+  lines: { d: string; q: number; u: number; v: number; discount?: number }[];
+  /** Discount on the whole invoice in percent (shown as subtotal, discount, net). */
+  discount?: number;
   note?: string;
   kind?: string;
   brand?: string;
@@ -1260,29 +1263,89 @@ export interface Source {
   url?: string;
   onClick?: () => void;
 }
+export interface ChatAttachment {
+  name: string;
+  /** Shown next to the name ("2.4 MB"). */
+  size?: string;
+  /** `"image"` (or `"img"`) shows a thumbnail; anything else a file chip. */
+  kind?: string;
+  /** Where the file opens or downloads from. */
+  url?: string;
+  /** A smaller image for the thumbnail (default `url`). */
+  thumb?: string;
+}
 export interface ChatMessageProps extends BaseProps {
   role: "user" | "assistant" | "system";
+  /** Stable id: `ChatThread jumpTo` scrolls to it (rendered as `data-message-id`). */
+  id?: string;
   name?: string;
   time?: string;
   model?: string;
   text?: string;
   streaming?: boolean;
   tint?: Tint;
+  /** Icon of a system line. */
+  icon?: IconName;
   sources?: Source[];
-  attachments?: { name: string; size?: string; kind?: string }[];
+  /** Images show as thumbnails, other files as chips with a download link. */
+  attachments?: ChatAttachment[];
+  /** Mentions in a user's `text` (from `Composer`), drawn as tinted chips. */
+  mentions?: Mention[];
+  /** Marks the words of a search in the text. */
+  highlight?: string;
+  /** A voice message instead of text: the player, its length and the transcript. */
+  voice?: { src?: string; duration?: number; transcript?: ReactNode; peaks?: number[] };
+  /** "Dictated" under the message. */
+  dictated?: boolean;
+  /** "In voice conversation" under the message. */
+  inVoice?: boolean;
   usage?: string;
+  /** Regenerate: pass it on the last answer only. */
   onRetry?: () => void;
-  onFeedback?: (v: "up" | "down") => void;
+  /** Thumbs up or down (null when the reader takes it back). */
+  onFeedback?: (v: "up" | "down" | null) => void;
+  /** The comment after thumbs down (an empty comment for thumbs up). */
+  onFeedbackComment?: (v: "up" | "down", comment?: string) => void;
+  /** `false` hides the action row; the rest of the props pick which actions show. */
   actions?: boolean;
+  /**
+   * When the action row shows: "always", or "hover" (on hover and focus; always on touch
+   * screens). Default "always" for an answer with `onRetry` (the last one) and for a message with versions,
+   * else "hover".
+   */
+  actionsVisible?: "always" | "hover";
+  /** Edit in place on the user's own message: called with the new text. */
+  onEdit?: (text: string) => void;
+  /** Controls whether the editor is open. */
+  editing?: boolean;
+  onEditingChange?: (editing: boolean) => void;
+  /** Versions of an edited message or a regenerated answer: "‹ 2/3 ›" (0-based index). */
+  versionIndex?: number;
+  versionCount?: number;
+  onVersionChange?: (index: number) => void;
+  /** While a version is being made. */
+  versionBusy?: boolean;
+  /** Content above the bubble: a tool call, the reasoning, an approval card. */
   before?: ReactNode;
+  /** Content below the bubble: an approval card, a form, a result. */
   after?: ReactNode;
   children?: ReactNode;
   feedback?: "up" | "down" | null;
+  /** Router link for relative links in the text. */
+  linkAs?: ElementType;
 }
 export interface RichTextProps extends BaseProps {
+  /**
+   * Markdown: paragraphs, headings, **bold**, *italic*, ~~strike~~, `code`, links, bare URLs,
+   * nested and task lists, quotes, tables, rules and fenced code blocks with copy.
+   */
   text: string;
   streaming?: boolean;
   className?: string;
+  /** Marks the words of a search. */
+  highlight?: string;
+  /** Router link for relative links. */
+  linkAs?: ElementType;
 }
 export interface CodeBlockProps extends BaseProps {
   code: string;
@@ -1298,6 +1361,13 @@ export interface ToolCallProps extends BaseProps {
   input?: unknown;
   output?: unknown;
   defaultOpen?: boolean;
+  /** A "Trace" link to the run's trace (in your tracing tool). */
+  traceHref?: string;
+  /** Instead of `traceHref`: opens the trace yourself. */
+  onTrace?: () => void;
+  /** Text of the trace link (default "Trace"). */
+  traceLabel?: string;
+  linkAs?: ElementType;
 }
 export interface ReasoningProps extends BaseProps {
   steps?: string[];
@@ -1330,7 +1400,8 @@ export interface ComposerCommand {
 export interface ComposerProps extends BaseProps {
   value?: string;
   onChange?: (v: string) => void;
-  onSend?: (text: string, files: (File | { name: string })[]) => void;
+  /** Sends text, files and what goes with it (mentions, whether it was dictated). */
+  onSend?: (text: string, files: (File | ComposerAttachment)[], meta: ComposerSendMeta) => void;
   busy?: boolean;
   onStop?: () => void;
   placeholder?: string;
@@ -1340,12 +1411,43 @@ export interface ComposerProps extends BaseProps {
   onModel?: (id: string) => void;
   commands?: ComposerCommand[];
   onCommand?: (c: ComposerCommand) => void;
-  attachments?: (File | { name: string })[];
-  onAttach?: (files: FileList) => void;
+  /** Files to send: `File`s (images get a thumbnail) or items with progress or an error. */
+  attachments?: (File | ComposerAttachment)[];
+  /** Turns on attaching by the paperclip, by dropping and by pasting files. */
+  onAttach?: (files: FileList | File[]) => void;
   onRemoveAttachment?: (i: number) => void;
+  /** A camera button on touch screens (takes a photo as an attachment). */
+  camera?: boolean;
   hint?: string;
   left?: ReactNode;
   disabled?: boolean;
+  /** Who can be mentioned with `@`: agents and people, grouped by `group`. */
+  mentionOptions?: MentionOption[];
+  /** Controls the mentions in the text (they move along as the text changes). */
+  mentions?: Mention[];
+  onMentionsChange?: (mentions: Mention[]) => void;
+  /**
+   * Dictation, run by your app (speech to text on your server): `active` shows the recording
+   * state, `interim` the words heard so far in the field. Put the final words into `value`.
+   */
+  dictation?: ComposerDictation;
+  /** Shows the microphone and starts or stops dictation (also ⌥ Space). */
+  onDictate?: () => void;
+  /**
+   * Hold the microphone to record a voice message, slide away to cancel, let go to send. The
+   * recording stays in the browser until you get it here.
+   */
+  onVoiceMessage?: (audio: Blob, durationMs: number) => void;
+  /** Called while the person types, at most every `typingInterval` ms (default 3000). */
+  onTyping?: () => void;
+  typingInterval?: number;
+  /** Names of the people typing right now, shown above the field. */
+  typing?: string[];
+  /** Shows the read-along bar instead of the field (watching a conversation). */
+  readOnly?: boolean;
+  /** "Step in" on the read-along bar. */
+  onStepIn?: () => void;
+  readOnlyText?: string;
 }
 export interface AgentStatusProps extends BaseProps {
   status: "Running" | "Thinking" | "Waiting for approval" | "Idle" | "Paused" | "Error" | string;
@@ -1840,30 +1942,80 @@ export interface AgentDetailsProps extends BaseProps {
 export interface ChatListItem {
   id: string;
   name: string;
+  /** The last message (or what the agent is doing). */
   sub?: ReactNode;
+  /** When the last message came, as shown ("09:41", "Mon"); see `date`. */
   time?: string;
+  /** When the last message came: shown relative when `time` is missing; used by `before:`. */
+  date?: Date | string | number;
   tint?: Tint;
+  /** A person (avatar with initials) instead of an agent mark. */
   avatar?: boolean;
+  /** An avatar picture. */
+  avatarSrc?: string;
+  /** The agent's state as a status dot. */
   status?: Status;
   unread?: number;
   pinned?: boolean;
+  /** Project or team, matched by `in:`. */
+  project?: string;
+  /** Who writes in it, matched by `from:` (the name counts too). */
+  from?: string[];
+  /** Opens the conversation as a link (with `linkAs`). */
+  href?: string;
+}
+export interface ChatListGroup {
+  title: string;
+  mark?: Tint;
+  items: ChatListItem[];
 }
 export interface ChatListProps extends BaseProps {
-  groups: { title: string; mark?: Tint; items: ChatListItem[] }[];
+  /** Groups as you sort them: pinned, the agents of each project, people. */
+  groups: ChatListGroup[];
   selected?: string;
   onSelect?: (id: string) => void;
-  onSearch?: (q: string) => void;
+  /** Called with the query and its tokens, e.g. to search on your server. */
+  onSearch?: (q: string, parsed: ChatQuery) => void;
+  /** Controls the search (tokens `from:`, `in:`, `before:`, `after:` and words). */
+  query?: string;
+  onQueryChange?: (q: string) => void;
+  /** `false`: the list does not filter itself (your server does, from `onSearch`). */
+  filter?: boolean;
   filters?: ReactNode;
   searchPlaceholder?: string;
+  linkAs?: ElementType;
 }
 export interface ChatWorkspaceProps extends BaseProps {
   list: ReactNode;
   thread: ReactNode;
+  /** A third pane (agent details, search hits); hidden below 1040px. */
   details?: ReactNode;
   className?: string;
+  /**
+   * Narrow layouts (below 760px) show one pane: the list or the thread. Picking a chat row
+   * switches to the thread; the back button returns to the list. Controlled or not.
+   */
+  view?: "list" | "thread";
+  defaultView?: "list" | "thread";
+  onViewChange?: (view: "list" | "thread") => void;
+  /** Text of the back button (default "Back to chats"). */
+  backLabel?: string;
+  /** Width of the details pane in px (drag or arrow keys on its edge); default 304. */
+  detailsWidth?: number;
+  defaultDetailsWidth?: number;
+  onDetailsWidthChange?: (px: number) => void;
 }
 export interface SearchHitsProps extends BaseProps {
-  items: { id: string | number; chat: string; time?: string; who?: string; text: string }[];
+  /** Hits; `messageId` is what `ChatThread jumpTo` takes. */
+  items: {
+    id: string | number;
+    chat: string;
+    time?: string;
+    who?: string;
+    text: string;
+    messageId?: string;
+  }[];
+  /** Marks each word of the query in the hits. */
   query?: string;
   onOpen?: (item: NonNullable<SearchHitsProps["items"]>[number]) => void;
   emptyText?: string;
@@ -1873,12 +2025,21 @@ export interface ThinkingLineProps extends BaseProps {
 }
 export interface FeedbackRatingProps extends BaseProps {
   value?: "up" | "down" | null;
-  onRate?: (v: "up" | "down") => void;
+  /** Called on every press; `null` when an `inline` rating is taken back. */
+  onRate?: (v: "up" | "down" | null) => void;
   onSubmit?: (v: "up" | "down", comment?: string) => void;
   label?: string;
   placeholder?: string;
   thanks?: string;
   askOnUp?: boolean;
+  /**
+   * For an action row (ChatMessage uses it): the buttons stay and show what was pressed, a second
+   * press takes it back, and the comment field opens below the row.
+   */
+  inline?: boolean;
+  /** Accessible names of the buttons (default "Good" and "Not good"). */
+  upLabel?: string;
+  downLabel?: string;
 }
 export interface ActivityItem {
   time?: string;
@@ -1973,12 +2134,22 @@ export interface OrgChartProps extends BaseProps {
 export interface VoiceModeProps extends BaseProps {
   name: string;
   tint?: Tint;
-  state: "listening" | "thinking" | "speaking" | "idle";
+  /**
+   * listening, thinking, speaking; "interrupted" right after the person spoke over the agent
+   * (barge-in); "connecting" before the first turn; idle.
+   */
+  state: "listening" | "thinking" | "speaking" | "interrupted" | "connecting" | "idle";
   stateLabel?: string;
   transcript?: ReactNode;
+  /** The conversation so far, shown live (the last one may still be `live`). */
+  turns?: VoiceTurn[];
   muted?: boolean;
   onMute?: () => void;
   onEnd?: () => void;
+  /** While the agent speaks: a button to interrupt it (the person can also just talk). */
+  onInterrupt?: () => void;
+  /** Covers the whole screen: on phones (default), always or never. */
+  fullscreen?: "phone" | "always" | "never";
 }
 
 /* ── Kit 4: operations ── */
@@ -2115,20 +2286,42 @@ export interface AccountSwitcherProps extends BaseProps {
   unread?: number;
   allLabel?: string;
 }
+export interface InboxListItem {
+  id: string | number;
+  from: string;
+  time?: string;
+  subject: string;
+  snippet?: string;
+  unread?: boolean;
+  to?: string;
+  agent?: { label: string; tone?: Tone };
+  tags?: string[];
+  starred?: boolean;
+  /** Shows a paperclip. */
+  attachments?: boolean;
+  /** Opens the message by link (with `linkAs`). */
+  href?: string;
+}
 export interface InboxListProps extends BaseProps {
-  items: {
-    id: string | number;
-    from: string;
-    time?: string;
-    subject: string;
-    snippet?: string;
-    unread?: boolean;
-    to?: string;
-    agent?: { label: string; tone?: Tone };
-    tags?: string[];
-  }[];
+  items: InboxListItem[];
+  /** The open message. */
   selected?: string | number;
-  onOpen?: (m: NonNullable<InboxListProps["items"]>[number]) => void;
+  onOpen?: (m: InboxListItem) => void;
+  /** A checkbox per row; the checked ids (controlled) / initially / on change. */
+  selectable?: boolean;
+  checked?: (string | number)[];
+  defaultChecked?: (string | number)[];
+  onCheckedChange?: (ids: (string | number)[]) => void;
+  /** Actions for the checked messages, in a `BulkActionBar` above the list. */
+  bulkActions?: {
+    label: string;
+    icon?: IconName;
+    danger?: boolean;
+    onClick: (ids: (string | number)[]) => void;
+  }[];
+  /** A star per row. */
+  onStar?: (m: InboxListItem, starred: boolean) => void;
+  linkAs?: ElementType;
 }
 export interface MailThreadProps extends BaseProps {
   subject: string;
@@ -2145,6 +2338,10 @@ export interface MailThreadProps extends BaseProps {
     attachments?: { name: string; size?: string }[];
   }[];
   reply?: ReactNode;
+  /** A newsletter: one-click unsubscribe under the subject (RFC 8058 List-Unsubscribe-Post). */
+  unsubscribe?: { sender?: string; onUnsubscribe: () => void; done?: boolean; busy?: boolean };
+  /** Buttons next to the subject (reply, archive …). */
+  actions?: ReactNode;
 }
 export interface SignatureEditorProps extends BaseProps {
   value?: Record<string, string>;
@@ -2351,6 +2548,8 @@ export interface LiveFeedProps extends BaseProps {
 }
 export interface RichTextEditorProps extends BaseProps {
   label?: ReactNode;
+  /** Hide the label visually; it stays the editor's accessible name. */
+  hideLabel?: boolean;
   defaultValue?: string;
   value?: string;
   onChange?: (html: string) => void;
@@ -2557,8 +2756,28 @@ export interface ExportDialogProps extends BaseProps {
   ranges?: boolean;
   range?: { from: Date | null; to: Date | null } | null;
   note?: ReactNode;
+  /**
+   * Accounting export (e.g. DATEV): the pre-check shown before exporting: the bookings that go
+   * in and their sum, drafts left out, and your own lines.
+   */
+  check?: {
+    count: number;
+    sum?: number;
+    currency?: string;
+    /** Drafts that are not exported (shown as a warning). */
+    drafts?: number;
+    items?: { label: ReactNode; tone?: "ok" | "warning" | "danger" }[];
+  };
+  /** Settings the export needs and that are missing; while any is listed, Export stays off. */
+  missing?: { label: string; href?: string; onClick?: () => void; action?: string }[];
+  /** Router link for `missing[].href` (default `a`, or the provider's `linkAs`). */
+  linkAs?: ElementType;
+  /** Offers "Lock the month with the export" (a string replaces the label); `onExport` gets `lock`. */
+  lockPeriod?: boolean | string;
+  /** Start with the lock ticked. */
+  defaultLock?: boolean;
   onExport?: (
-    o: { format: string; columns: string[]; range: DateRange | null },
+    o: { format: string; columns: string[]; range: DateRange | null; lock?: boolean },
     progress: (pct: number) => void,
   ) => void | Promise<void>;
   onDownload?: () => void;
@@ -4646,4 +4865,810 @@ export interface DomainHeaderProps extends BaseProps {
   actions?: ReactNode;
   /** What counts as today for `days` (default now). */
   now?: Date | string | number;
+}
+
+/* ── Chat: mentions, composer extras, thread pieces (chat.tsx, chat-thread.tsx, agents.tsx) ── */
+/** A mention in a text: the `@Name` from `start` to `end` (UTF-16 offsets). */
+export interface Mention {
+  id: string;
+  label: string;
+  start: number;
+  end: number;
+  tint?: Tint;
+}
+/** Who can be mentioned in a `Composer`. */
+export interface MentionOption {
+  id: string;
+  label: string;
+  /** "agent" draws an agent mark, "person" an avatar. */
+  kind?: "agent" | "person";
+  /** Heading of the group in the suggestions ("Agents · Northwind", "People"). */
+  group?: string;
+  /** A second line: the role or team. */
+  role?: string;
+  tint?: Tint;
+  avatarSrc?: string;
+  /** More words that find it ("atlas", "support"). */
+  keywords?: string;
+}
+export interface ComposerAttachment {
+  name: string;
+  size?: string;
+  /** An image to show as the thumbnail. */
+  thumb?: string;
+  /** Upload progress from 0 to 1. */
+  progress?: number;
+  /** An upload error, shown on the chip. */
+  error?: string;
+}
+export interface ComposerSendMeta {
+  mentions: Mention[];
+  /** Whether dictation filled some of the text. */
+  dictated: boolean;
+}
+export interface ComposerDictation {
+  active: boolean;
+  /** The words heard so far, shown greyed after the text. */
+  interim?: string;
+  state?: "starting" | "listening" | "stopping";
+  /** Why dictation stopped ("No microphone"), shown as the hint. */
+  error?: string;
+}
+export interface ChatThreadProps extends BaseProps {
+  children?: ReactNode;
+  /** Scrolls to the message with this `id` (a search hit) and marks it for a moment. */
+  jumpTo?: string;
+  /** Change it to jump to the same message again. */
+  jumpKey?: string | number;
+  /** Follows the newest message while it grows, unless the reader scrolled up (default true). */
+  stickToBottom?: boolean;
+  /** Accessible name (default "Conversation"). */
+  label?: string;
+}
+export interface MessageEditorProps extends BaseProps {
+  value?: string;
+  defaultValue?: string;
+  onChange?: (v: string) => void;
+  /** Enter (or the button) sends the new text. */
+  onSubmit?: (text: string) => void;
+  /** Esc (or the button) cancels. */
+  onCancel?: () => void;
+  /** The line under the field (default "The conversation runs again from here"). */
+  hint?: string;
+  submitLabel?: string;
+  label?: string;
+  busy?: boolean;
+  /** Focuses the field with the caret at the end (default true). */
+  autoFocus?: boolean;
+}
+export interface VersionSwitchProps extends BaseProps {
+  /** How many versions there are. */
+  count: number;
+  /** The version shown, 0-based (default the newest). */
+  index?: number;
+  defaultIndex?: number;
+  onChange?: (index: number) => void;
+  /** While a new version is being made: the arrows wait. */
+  busy?: boolean;
+  label?: string;
+}
+export interface HandoffParty {
+  name: string;
+  tint?: Tint;
+  icon?: IconName;
+  kind?: "agent" | "person";
+  avatar?: string;
+}
+export interface HandoffLineProps extends BaseProps {
+  /** Who hands the work over. */
+  from: HandoffParty;
+  /** Who takes it. */
+  to: HandoffParty;
+  /** Why, in a few words. */
+  reason?: ReactNode;
+  time?: string;
+  id?: string;
+  /** Opens the conversation between the two. */
+  href?: string;
+  onClick?: () => void;
+  linkAs?: ElementType;
+}
+export interface SystemLineProps extends BaseProps {
+  children?: ReactNode;
+  icon?: IconName;
+  time?: string;
+  id?: string;
+  tone?: "neutral" | "warning" | "danger";
+}
+export interface VoiceNoteProps extends BaseProps {
+  /** The recording (any URL the browser can play). */
+  src?: string;
+  /** Length in seconds (default: read from the file). */
+  duration?: number;
+  /** The words, behind "Show transcript". */
+  transcript?: ReactNode;
+  transcriptOpen?: boolean;
+  onTranscriptOpenChange?: (open: boolean) => void;
+  /** Loudness per moment, 0 to 1, for the bars (default: a steady pattern). */
+  peaks?: number[];
+  /** Drawn as the user's own (on the primary colour). */
+  mine?: boolean;
+  label?: string;
+}
+export interface VoiceTurn {
+  id?: string | number;
+  who: "user" | "agent";
+  name?: string;
+  text: ReactNode;
+  /** Still being spoken (shows a caret). */
+  live?: boolean;
+}
+export interface VoiceLogProps extends BaseProps {
+  /** Default "Voice conversation". */
+  title?: string;
+  /** Length as shown ("4:12"). */
+  duration?: string;
+  time?: string;
+  turns: VoiceTurn[];
+  /** The recording, if it was kept. */
+  audio?: string;
+  audioDuration?: number;
+  id?: string;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+export interface TypingIndicatorProps extends BaseProps {
+  /** Who is typing (renders nothing when empty). */
+  names: string[];
+  /** Your own text instead of "Lena is typing…". */
+  text?: string;
+}
+export interface ReadOnlyBarProps extends BaseProps {
+  /** Default "You are reading along". */
+  text?: string;
+  /** Default "Step in". */
+  actionLabel?: string;
+  onAction?: () => void;
+  children?: ReactNode;
+}
+/** A chat search split into its tokens: `from:`, `in:`, `before:`, `after:` and the words. */
+export interface ChatQuery {
+  text: string;
+  tokens: { key: "from" | "in" | "before" | "after"; value: string; raw: string }[];
+}
+/* ── Calendar (calendar.tsx) ── */
+export type CalendarViewMode = "day" | "week" | "month" | "agenda";
+/** A guest's answer, or your own: accepted, tentative ("maybe"), declined or still open. */
+export type CalendarRsvp = "accepted" | "tentative" | "declined" | "open";
+export interface CalendarDef {
+  id: string;
+  label: string;
+  /** The calendar's colour (events take it unless they set their own). */
+  tint?: Tint;
+  /** Shown but not editable, e.g. public holidays: no reply, no actions. */
+  readOnly?: boolean;
+}
+export interface CalendarGuest {
+  name: string;
+  email?: string;
+  status?: CalendarRsvp;
+  organizer?: boolean;
+}
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  start: Date | string | number;
+  end: Date | string | number;
+  /** All day (events of 24 hours or more show in the all-day row too). */
+  allDay?: boolean;
+  /** The `CalendarDef` id it belongs to. */
+  calendar?: string;
+  tint?: Tint;
+  location?: string;
+  description?: ReactNode;
+  guests?: CalendarGuest[];
+  /** Your own answer: shows "Going?" with Yes, Maybe, No in the details (with `onRsvp`). */
+  rsvp?: CalendarRsvp;
+  /** Cancelled: struck through. */
+  cancelled?: boolean;
+  readOnly?: boolean;
+}
+export interface CalendarViewProps extends BaseProps {
+  events: CalendarEvent[];
+  /** Calendars with colour and a visibility toggle each. */
+  calendars?: CalendarDef[];
+  /** Ids of hidden calendars (controlled) / initially hidden / on toggle. */
+  hidden?: string[];
+  defaultHidden?: string[];
+  onHiddenChange?: (ids: string[]) => void;
+  /** Day, week, month or agenda (default week). On phones a week or month shows as a list. */
+  view?: CalendarViewMode;
+  defaultView?: CalendarViewMode;
+  onViewChange?: (view: CalendarViewMode) => void;
+  /** The day the view shows (controlled) / initially (default today). */
+  date?: Date;
+  defaultDate?: Date;
+  onDateChange?: (date: Date) => void;
+  /** The visible range changed (also on mount): load its events. `end` is exclusive. */
+  onRangeChange?: (range: { start: Date; end: Date; view: CalendarViewMode }) => void;
+  /** The views offered in the switcher (default all four). */
+  views?: CalendarViewMode[];
+  /** Click or drag on an empty slot (or Enter on a focused slot): the new event's time. */
+  onCreate?: (slot: { start: Date; end: Date; allDay: boolean }) => void;
+  /** The event whose details are open (controlled) / initially / on open and close. */
+  selected?: string | null;
+  defaultSelected?: string | null;
+  onSelectedChange?: (id: string | null) => void;
+  /** Called when an event's details open. */
+  onOpenEvent?: (event: CalendarEvent) => void;
+  /** Your answer from the details (Yes, Maybe, No) for events with `rsvp`. */
+  onRsvp?: (event: CalendarEvent, rsvp: CalendarRsvp) => void;
+  /** Buttons at the bottom of the details (Edit, Delete, Open). */
+  eventActions?: (event: CalendarEvent) => ReactNode;
+  /** First and last hour of the day and week grid (default 7 to 21; widened to fit events). */
+  hours?: [number, number];
+  /** 1 = Monday (default), 0 = Sunday. */
+  weekStartsOn?: 0 | 1;
+  /** Most events per day in the month (default 3, then "+2 more"). */
+  maxPerDay?: number;
+  /** Heading instead of the date range. */
+  title?: string;
+  /** More controls at the end of the toolbar (a "New event" button). */
+  toolbar?: ReactNode;
+  /** What counts as now (default the clock), for stable tests and server rendering. */
+  now?: Date | string | number;
+}
+export interface EventInviteProps extends BaseProps {
+  title: string;
+  start: Date | string | number;
+  end: Date | string | number;
+  allDay?: boolean;
+  location?: string;
+  organizer?: { name: string; email?: string };
+  /** Number of guests. */
+  guests?: number;
+  /** What else is in the calendar at that time; `[]` says the time is free. */
+  others?: {
+    title: string;
+    start: Date | string | number;
+    end: Date | string | number;
+    allDay?: boolean;
+    tint?: Tint;
+  }[];
+  /** "updated" (the organizer changed it) or "cancelled". */
+  status?: "new" | "updated" | "cancelled";
+  /** What changed, for an update ("New time: 15:00"). */
+  changes?: ReactNode;
+  /** Your answer (controlled) / initially / when a button is pressed. */
+  response?: CalendarRsvp | null;
+  defaultResponse?: CalendarRsvp | null;
+  onRespond?: (response: CalendarRsvp) => void;
+  /** Shows "Add to calendar"; with `added` it says "In your calendar". */
+  onAddToCalendar?: () => void;
+  added?: boolean;
+  /** For a cancelled event that is in the calendar: "Remove from calendar". */
+  onRemove?: () => void;
+  /** A reply is being sent: buttons wait. */
+  busy?: boolean;
+}
+
+/* ── Webmail (webmail.tsx) ── */
+export interface MailHtmlProps extends BaseProps {
+  /** The mail's HTML. Sanitise it on the server; the frame still runs nothing and loads nothing. */
+  html: string;
+  /** The frame's accessible name (default "Message"). */
+  title?: string;
+  /** Remote images loaded (controlled) / initially / when the reader loads them. */
+  images?: boolean;
+  defaultImages?: boolean;
+  onImagesChange?: (images: boolean) => void;
+  /** "Load images" was pressed (e.g. to remember the sender). */
+  onLoadImages?: () => void;
+  /** How many remote images are blocked (default: counted in `html`). */
+  blockedImages?: number;
+  /**
+   * `"paper"` (default): the mail keeps its own light paper in every theme, as senders design it.
+   * `"theme"`: the page's surface and text colours, dark in the dark theme (for plain mails).
+   */
+  appearance?: "paper" | "theme";
+  /** Smallest height in px while it loads (default 120). */
+  minHeight?: number;
+}
+export interface MailRecipient {
+  address: string;
+  name?: string;
+}
+export interface RecipientInputProps extends BaseProps {
+  label: string;
+  hideLabel?: boolean;
+  id?: string;
+  /** The addresses (controlled) / initially / on change. */
+  value?: MailRecipient[];
+  defaultValue?: MailRecipient[];
+  onChange?: (value: MailRecipient[]) => void;
+  /** Known addresses, filtered while typing. */
+  suggestions?: MailRecipient[];
+  /** Or ask your server while typing (debounced). */
+  suggest?: (typed: string) => MailRecipient[] | Promise<MailRecipient[]>;
+  /** Your own address check (default: a plain e-mail pattern). */
+  validate?: (address: string) => boolean;
+  placeholder?: string;
+  hint?: string;
+  error?: string;
+  disabled?: boolean;
+  autoFocus?: boolean;
+}
+export interface MailComposerAttachment {
+  id: string;
+  name: string;
+  size?: string;
+  /** 0–1 while uploading. */
+  progress?: number;
+  error?: string;
+}
+export interface MailDraft {
+  from?: string;
+  to: MailRecipient[];
+  cc: MailRecipient[];
+  bcc: MailRecipient[];
+  subject: string;
+  /** The body as HTML (from the kit's RichTextEditor). */
+  html: string;
+  /** Include the signature (default true). */
+  signature?: boolean;
+  attachments?: MailComposerAttachment[];
+}
+export interface MailComposerProps extends BaseProps {
+  /** Addresses you may send from; a select when there are several. */
+  senders?: { address: string; name?: string }[];
+  /** The draft (controlled) / initially / on every change (save it as a draft). */
+  value?: MailDraft;
+  defaultValue?: Partial<MailDraft>;
+  onChange?: (draft: MailDraft) => void;
+  suggestions?: MailRecipient[];
+  suggest?: (typed: string) => MailRecipient[] | Promise<MailRecipient[]>;
+  /** The signature shown under the text, with a switch to leave it out. */
+  signature?: ReactNode;
+  /** Send (also ⌘/Ctrl+Enter); on only with valid recipients and no upload running. */
+  onSend?: (draft: MailDraft) => void;
+  /**
+   * Shows "Message sent" with Undo in a toast (needs a `<Toaster/>`). Hold the mail for
+   * `undoSeconds` and drop it when this is called.
+   */
+  onUndoSend?: (draft: MailDraft) => void;
+  /** How long Undo stays (default 10 s). */
+  undoSeconds?: number;
+  /** "Send later" with a date and time. */
+  onSchedule?: (draft: MailDraft, at: Date) => void;
+  /** Files picked on this device (add them to `attachments` and upload). */
+  onFiles?: (files: File[]) => void;
+  /** More places to attach from, e.g. "From Drive" (opens your picker). */
+  attachSources?: { label: string; icon?: IconName; onClick: () => void }[];
+  onRemoveAttachment?: (id: string) => void;
+  /** Draft state: saving, saved (at `savedAt`) or failed. */
+  saved?: "saving" | "saved" | "error" | null;
+  savedAt?: Date;
+  onDiscard?: () => void;
+  sending?: boolean;
+  /** Heading (default "New message"). */
+  title?: string;
+  placeholder?: string;
+  minHeight?: number;
+  autoFocus?: boolean;
+  /** More controls in the footer. */
+  footer?: ReactNode;
+}
+export interface MailFolder {
+  id: string;
+  label: string;
+  /** Standard folders get their icon and their menu (empty for trash and junk); own folders can be renamed and deleted. */
+  role?:
+    "inbox" | "drafts" | "sent" | "scheduled" | "starred" | "archive" | "junk" | "trash" | "outbox";
+  unread?: number;
+  icon?: IconName;
+  href?: string;
+  children?: MailFolder[];
+}
+export interface MailFoldersProps extends BaseProps {
+  folders: MailFolder[];
+  /** The open folder (controlled) / initially / on pick. */
+  selected?: string | null;
+  defaultSelected?: string | null;
+  onSelect?: (id: string | null) => void;
+  /** Folders with children open at first. */
+  defaultOpen?: string[];
+  /** New folder (at the top level or inside `parent`). */
+  onCreate?: (name: string, parent: string | null) => void;
+  onRename?: (id: string, name: string) => void;
+  /** Delete an own folder (after a confirmation). */
+  onDelete?: (id: string) => void;
+  /** Empty trash or junk (after a confirmation). */
+  onEmpty?: (id: string) => void;
+  linkAs?: ElementType;
+  /** Accessible name of the navigation (default "Folders"). */
+  label?: string;
+}
+export interface MailFilters {
+  account?: string | null;
+  domain?: string | null;
+  agent?: string | null;
+  unread?: boolean;
+  starred?: boolean;
+  attachments?: boolean;
+}
+export interface MailFilterBarProps extends BaseProps {
+  value?: MailFilters;
+  defaultValue?: MailFilters;
+  onChange?: (filters: MailFilters) => void;
+  accounts?: Option[];
+  domains?: Option[];
+  /** Agents mail can be filtered by (mail an agent handled or drafted). */
+  agents?: Option[];
+  /** Messages matching, shown at the end. */
+  count?: number;
+  label?: string;
+}
+export interface MailRuleCondition {
+  field: "from" | "to" | "subject" | "body";
+  op: "contains" | "notContains" | "is" | "startsWith" | "endsWith";
+  value: string;
+}
+export interface MailRuleAction {
+  type: "move" | "archive" | "markRead" | "star" | "forward" | "handoff" | "delete";
+  /** Folder for move, address for forward, agent for handoff. */
+  value?: string;
+}
+export interface MailRule {
+  id: string;
+  name?: string;
+  enabled?: boolean;
+  /** All conditions must match (default) or any. */
+  match?: "all" | "any";
+  conditions: MailRuleCondition[];
+  actions: MailRuleAction[];
+}
+export interface MailRulesEditorProps extends BaseProps {
+  value?: MailRule[];
+  defaultValue?: MailRule[];
+  onChange?: (rules: MailRule[]) => void;
+  /** Folders for "Move to". */
+  folders?: Option[];
+  /** Agents for "Hand to agent" (the action shows only with agents). */
+  agents?: Option[];
+  /** Shows "Save rules". */
+  onSave?: (rules: MailRule[]) => void;
+  saving?: boolean;
+}
+export interface AutoReplyValue {
+  enabled: boolean;
+  start?: Date | string | null;
+  end?: Date | string | null;
+  subject?: string;
+  message: string;
+  contactsOnly?: boolean;
+}
+export interface AutoReplyEditorProps extends BaseProps {
+  value?: AutoReplyValue;
+  defaultValue?: AutoReplyValue;
+  onChange?: (value: AutoReplyValue) => void;
+  onSave?: (value: AutoReplyValue) => void;
+  saving?: boolean;
+}
+export interface MailRoute {
+  address: string;
+  targets: string[];
+  kind?: "alias" | "forward";
+  active?: boolean;
+  note?: ReactNode;
+}
+export interface MailRouteListProps extends BaseProps {
+  routes: MailRoute[];
+  /** The domain new addresses belong to ("example.com"). */
+  domain?: string;
+  /** Shows "Add address" with a small form. */
+  onAdd?: (route: { address: string; targets: string[]; kind: "alias" | "forward" }) => void;
+  /** Delete (after a confirmation). */
+  onDelete?: (address: string) => void;
+  /** Mailboxes suggested as targets. */
+  suggestions?: MailRecipient[];
+  busy?: boolean;
+  label?: string;
+}
+
+/* ── Files, finance and brand studio (files.tsx, finance.tsx, brand-studio.tsx) ── */
+export interface FileBrowserItem {
+  id: string;
+  name: string;
+  /** `"folder"` or a file kind; without it the kind comes from `mime` or the extension. */
+  kind?: FileKind | "folder";
+  mime?: string;
+  /** Bytes (formatted as KB, MB …) or your own text. */
+  size?: number | string;
+  modified?: Date | string | number;
+  /** Folders: how many items are inside. */
+  count?: number;
+  shared?: boolean;
+  /** Your own meta line instead of size and date. */
+  meta?: string;
+  /** A small image for the grid (your URL). */
+  thumbnail?: string;
+  /** URL of an image or PDF shown in the preview drawer (your URL; the kit loads nothing else). */
+  preview?: string;
+  /** Alt text of an image preview (default: the name). */
+  alt?: string;
+  /** Address of the file in your app ("Open" in the preview, with `linkAs`). */
+  href?: string;
+}
+export interface FileBrowserFolder {
+  id: string;
+  name: string;
+  children?: FileBrowserFolder[];
+}
+export interface FileBrowserUpload {
+  id: string;
+  name: string;
+  /** 0–100. */
+  progress: number;
+  size?: number;
+  /** Large files uploaded in parts: the current part and how many. */
+  part?: number;
+  parts?: number;
+  /** Why it failed (shows the row in the danger colour). */
+  error?: string;
+}
+export interface FileBrowserProps extends BaseProps {
+  /** `"glass"` for a translucent surface over a map, photo or video; `"solid"` opts out inside a glass provider. */
+  surface?: Surface;
+  /** The current folder's folders and files. */
+  items: FileBrowserItem[];
+  /** Breadcrumbs from the root to the current folder (`href` makes them links). */
+  path?: { id: string; name: string; href?: string }[];
+  /** A folder or a breadcrumb was opened. */
+  onNavigate?: (folderId: string) => void;
+  /** A file was opened (files with an image or PDF `preview` also open the preview drawer). */
+  onOpen?: (item: FileBrowserItem) => void;
+  /** Set `false` to open files only through `onOpen`. */
+  previewOnOpen?: boolean;
+  /** Router link for breadcrumbs and "Open" (default `a`, or the provider's `linkAs`). */
+  linkAs?: ElementType;
+  view?: "grid" | "list";
+  defaultView?: "grid" | "list";
+  onViewChange?: (view: "grid" | "list") => void;
+  selected?: string[];
+  defaultSelected?: string[];
+  onSelectedChange?: (ids: string[]) => void;
+  query?: string;
+  defaultQuery?: string;
+  onQueryChange?: (query: string) => void;
+  /** Filters `items` by name as you type (default); `false` when your server searches. */
+  localSearch?: boolean;
+  /** `false` hides the search field. */
+  search?: boolean;
+  searchPlaceholder?: string;
+  /** The id of the file shown in the preview drawer. */
+  preview?: string | null;
+  defaultPreview?: string | null;
+  onPreviewChange?: (id: string | null) => void;
+  /** Shows Upload and accepts dropped files; upload them yourself and pass `uploads`. */
+  onUpload?: (files: File[]) => void;
+  /** File types for the picker (`accept`). */
+  accept?: string;
+  uploads?: FileBrowserUpload[];
+  onCancelUpload?: (id: string) => void;
+  onCreateFolder?: (name: string) => void | Promise<void>;
+  onRename?: (id: string, name: string) => void | Promise<void>;
+  /** With `folders`: Move opens a folder picker. */
+  onMove?: (ids: string[], folderId: string) => void | Promise<void>;
+  /** The folder tree for the move picker. */
+  folders?: FileBrowserFolder[];
+  onTrash?: (ids: string[]) => void | Promise<void>;
+  onDownload?: (ids: string[]) => void;
+  /** Folders before files (default true). */
+  foldersFirst?: boolean;
+  loading?: boolean;
+  emptyText?: string;
+  /** Accessible name (default "Files"). */
+  label?: string;
+  /** More controls in the toolbar. */
+  actions?: ReactNode;
+}
+
+/** A line for `invoiceTotals`: quantity, unit price, VAT rate and discount in percent. */
+export interface InvoiceTotalsLine {
+  quantity: number;
+  price: number;
+  vat: number;
+  discount?: number;
+}
+export interface InvoiceTotals {
+  /** Each line's net after its discount, rounded to cents. */
+  lines: number[];
+  /** Sum of the lines. */
+  subtotal: number;
+  /** The invoice discount as an amount. */
+  discount: number;
+  net: number;
+  /** Per VAT rate, highest first: its net and its VAT, each rounded once. */
+  rates: { rate: number; net: number; vat: number }[];
+  vat: number;
+  total: number;
+}
+export interface InvoiceDraftLine extends InvoiceTotalsLine {
+  id: string;
+  description: string;
+  unit?: string;
+}
+export interface InvoiceDraft {
+  /** The picked customer's id. */
+  customer?: string | null;
+  lines: InvoiceDraftLine[];
+  /** Discount on the whole invoice in percent. */
+  discount?: number;
+  /** The note printed on the invoice. */
+  note?: string;
+}
+export interface InvoiceEditorProps extends BaseProps {
+  value?: InvoiceDraft;
+  defaultValue?: InvoiceDraft;
+  onChange?: (value: InvoiceDraft) => void;
+  /** The customer picker's options. */
+  customers?: { id: string; name: string; detail?: string }[];
+  /** Beside the picker, e.g. a "New customer" button. */
+  customerAction?: ReactNode;
+  /** More fields at the top: dates, payment terms, number. */
+  head?: ReactNode;
+  /** The VAT rates to pick from, in percent (default 19, 7 and 0). Your country's rates are data. */
+  vatRates?: { value: number; label?: string }[];
+  /** Units to pick per line (hours, days, pieces …); omitted: no unit column. */
+  units?: string[];
+  /** Currency for amounts (default the provider's, euros). */
+  currency?: string;
+  /** Discount per line (default true). */
+  lineDiscounts?: boolean;
+  /** Discount on the whole invoice (default true). */
+  invoiceDiscount?: boolean;
+  /** The note field (default true). */
+  notes?: boolean;
+  /** A new line (e.g. with your id); default an empty line with the first VAT rate. */
+  newLine?: () => InvoiceDraftLine;
+  /**
+   * The live InvoicePreview beside the form (its number, from, dates …); `false` hides it. `to`
+   * defaults to the picked customer, the lines and the note come from the editor.
+   */
+  preview?: Partial<Omit<InvoicePreviewProps, "lines">> | false;
+  /** Below this width (default 1100px) the preview moves under the form; below 640px they become tabs. */
+  stackBelow?: number;
+  /** Under the totals: save, issue. */
+  actions?: ReactNode;
+  /** Small print beside the totals ("The number is given when the invoice is issued"). */
+  footnote?: ReactNode;
+  readOnly?: boolean;
+}
+export interface ImportSuggestionLine {
+  id: string;
+  date: Date | string | number;
+  /** The booking text from the statement. */
+  text: string;
+  counterparty?: string;
+  /** Signed: income positive, spending negative. */
+  amount: number;
+  currency?: string;
+  suggestion?: {
+    category: string;
+    /** The booking, e.g. "6815 Office supplies ← 1200 Bank". */
+    booking?: string;
+    /** 0–1. */
+    confidence?: number;
+    /** Why (shown as its tooltip). */
+    reason?: string;
+  };
+  /** `"duplicate"` and `"booked"` lines are shown but cannot be picked (default `"new"`). */
+  state?: "new" | "duplicate" | "booked";
+}
+export interface ImportSuggestionsProps extends BaseProps {
+  /** `"glass"` for a translucent surface over a map, photo or video; `"solid"` opts out inside a glass provider. */
+  surface?: Surface;
+  lines: ImportSuggestionLine[];
+  /** Default: every new line with a suggestion. */
+  selected?: string[];
+  defaultSelected?: string[];
+  onSelectedChange?: (ids: string[]) => void;
+  /** Books the picked lines in one step; a Promise shows the pending state, a rejection its message. */
+  onConfirm?: (ids: string[]) => void | Promise<void>;
+  /** With `onCategoryChange`: a category picker per line. */
+  categories?: string[];
+  onCategoryChange?: (id: string, category: string) => void;
+  onEdit?: (id: string) => void;
+  currency?: string;
+  title?: string;
+  busy?: boolean;
+}
+export interface PeriodLockProps extends BaseProps {
+  /** `"glass"` for a translucent surface over a map, photo or video; `"solid"` opts out inside a glass provider. */
+  surface?: Surface;
+  /** The period's name ("October 2026"), or `month` to format it in the provider's locale. */
+  period?: string;
+  month?: Date | string | number;
+  locked?: boolean;
+  defaultLocked?: boolean;
+  onLockedChange?: (locked: boolean) => void;
+  /** A Promise shows the pending state (e.g. while a passkey is asked); a rejection its message. */
+  onLock?: () => void | Promise<void>;
+  onUnlock?: () => void | Promise<void>;
+  lockedAt?: Date | string | number;
+  lockedBy?: string;
+  /** The line under an open period. */
+  note?: string;
+  /** Ask before locking and unlocking (default true). */
+  confirm?: boolean;
+  /** The confirm button says "Confirm with passkey". */
+  stepUp?: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
+}
+
+export interface PaletteColor {
+  name: string;
+  /** `#rrggbb`: the palette's colour (data, shown as it is). */
+  value: string;
+  /** "Primary", "Accent" … */
+  role?: string;
+  note?: ReactNode;
+}
+export interface PaletteSwatchesProps extends BaseProps {
+  /** `"glass"` for a translucent surface over a map, photo or video; `"solid"` opts out inside a glass provider. */
+  surface?: Surface;
+  colors: PaletteColor[];
+  /** Accessible name (default "Palette"). */
+  label?: string;
+  /** Background for the light contrast (default white). */
+  light?: string;
+  /** Background for the dark contrast (default near black). */
+  dark?: string;
+  /** `false` hides the contrast rows. */
+  contrast?: boolean;
+  /** Small chips with name and values only. */
+  compact?: boolean;
+}
+export type AssetState = "queued" | "generating" | "done" | "failed";
+export interface AssetVersion {
+  id: string;
+  /** The image (your URL; with a watermark if the asset is not bought yet). */
+  src?: string;
+  prompt?: string;
+  state?: AssetState;
+  error?: string;
+  /** The file to download for this version. */
+  downloadHref?: string;
+}
+export interface AssetCardProps extends BaseProps {
+  /** `"glass"` for a translucent surface over a map, photo or video; `"solid"` opts out inside a glass provider. */
+  surface?: Surface;
+  title: string;
+  alt?: string;
+  versions: AssetVersion[];
+  /** The version shown (0-based); default the current one. */
+  version?: number;
+  defaultVersion?: number;
+  onVersionChange?: (index: number) => void;
+  /** The version in use (badge "Current"). */
+  current?: number;
+  onMakeCurrent?: (index: number) => void;
+  /** The state of a new generation (overrides the shown version's). */
+  state?: AssetState;
+  /** A badge on the image: `true` for "Watermark" or your text. */
+  watermark?: boolean | string;
+  /** "1024 × 1024 · €0.04". */
+  meta?: ReactNode;
+  /** Shows Regenerate with a prompt field (prefilled with the version's prompt). */
+  onRegenerate?: (prompt: string) => void;
+  prompt?: string;
+  /** Without a version's `downloadHref`: Download calls this. */
+  onDownload?: (index: number) => void;
+  /** Width / height of the image area (default 1). */
+  ratio?: number;
+  error?: string;
+  /** More buttons in the action row. */
+  actions?: ReactNode;
 }

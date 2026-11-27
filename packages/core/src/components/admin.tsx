@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { useControlled, useId, useTrap } from "../hooks.js";
-import { useFormat, useStrings } from "../context.js";
+import { useFormat, useLinkAs, useStrings } from "../context.js";
 import { ADMIN_STRINGS } from "../strings.js";
 import { cx } from "../cx.js";
 import { Icon } from "../Icon.js";
@@ -1475,7 +1475,10 @@ export function WorkspaceSwitcher(p: WorkspaceSwitcherProps) {
 /* ── Export and 2FA ── */
 export function ExportDialog(p: ExportDialogProps) {
   const t = useStrings(ADMIN_STRINGS);
-  const { formatNumber, formatPercent } = useFormat();
+  const { formatNumber, formatPercent, formatMoney } = useFormat();
+  const Link = useLinkAs(p.linkAs);
+  const lock = React.useState(!!p.defaultLock);
+  const missing = p.missing || [];
   const fmt = React.useState(p.format || (p.formats || ["csv"])[0]),
     cols = React.useState((p.columns || []).filter((c) => c.default !== false).map((c) => c.key)),
     range = React.useState<DateRange | null>(p.range || null),
@@ -1492,6 +1495,7 @@ export function ExportDialog(p: ExportDialogProps) {
         format: fmt[0],
         columns: cols[0],
         range: range[0],
+        ...(p.lockPeriod ? { lock: lock[0] } : {}),
       },
       (x) => {
         prog[1](x);
@@ -1568,6 +1572,70 @@ export function ExportDialog(p: ExportDialogProps) {
               </div>
             </FormField>
           )}
+          {p.check && (
+            <ul className="tf-export-check" aria-label={t.exportPrecheck}>
+              <li>
+                <StatusShape status="ok" />
+                <span>{t.exportBookings(formatNumber(p.check.count), p.check.count)}</span>
+                {p.check.sum != null && (
+                  <b className="tf-num">
+                    {formatMoney(p.check.sum, p.check.currency ?? null, {
+                      minimumFractionDigits: 2,
+                    })}
+                  </b>
+                )}
+              </li>
+              {!!p.check.drafts && (
+                <li>
+                  <StatusShape status="warn" />
+                  <span>{t.exportDraftsLeftOut(formatNumber(p.check.drafts), p.check.drafts)}</span>
+                </li>
+              )}
+              {(p.check.items || []).map((c, i) => (
+                <li key={i}>
+                  <StatusShape
+                    status={c.tone === "danger" ? "danger" : c.tone === "warning" ? "warn" : "ok"}
+                  />
+                  <span>{c.label}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {missing.length > 0 && (
+            <div className="tf-export-missing" role="alert">
+              <b>{t.exportMissing}</b>
+              <ul>
+                {missing.map((m) => (
+                  <li key={m.label}>
+                    <span>{m.label}</span>
+                    {m.href ? (
+                      <Link className="tf-linkbtn" href={m.href}>
+                        {m.action || t.exportFix}
+                      </Link>
+                    ) : m.onClick ? (
+                      <button type="button" className="tf-linkbtn" onClick={m.onClick}>
+                        {m.action || t.exportFix}
+                      </button>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {p.lockPeriod && (
+            <label className="tf-check tf-export-lock">
+              {cbox({
+                checked: lock[0],
+                onChange: () => {
+                  lock[1](!lock[0]);
+                },
+              })}
+              <span>
+                {typeof p.lockPeriod === "string" ? p.lockPeriod : t.exportLockPeriod}
+                <small>{t.exportLockHint}</small>
+              </span>
+            </label>
+          )}
           {p.note && (
             <p
               className="tf-card-desc"
@@ -1584,7 +1652,7 @@ export function ExportDialog(p: ExportDialogProps) {
             </Button>
             <Button
               icon="download"
-              disabled={!cols[0].length && (p.columns || []).length > 0}
+              disabled={(!cols[0].length && (p.columns || []).length > 0) || missing.length > 0}
               onClick={start}
             >
               {t.export}

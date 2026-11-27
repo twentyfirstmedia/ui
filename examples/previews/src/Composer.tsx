@@ -1,5 +1,28 @@
 import * as React from "react";
 import { AgentStatus, Composer, PromptStarters, UsageMeter } from "@twentyfirstmedia/ui-core";
+import type { ComposerAttachment, Mention, MentionOption } from "@twentyfirstmedia/ui-core";
+
+const PEOPLE: MentionOption[] = [
+  {
+    id: "atlas",
+    label: "Atlas",
+    kind: "agent",
+    group: "Agents · Support",
+    role: "Replies to customers",
+    tint: "sky",
+  },
+  {
+    id: "ledger",
+    label: "Ledger",
+    kind: "agent",
+    group: "Agents · Finance",
+    role: "Invoices",
+    tint: "butter",
+  },
+  { id: "lena", label: "Lena Hart", kind: "person", group: "People", role: "Sales lead" },
+  { id: "noah", label: "Noah Berg", kind: "person", group: "People", role: "Finance" },
+];
+const HEARD = "and the open invoices from May";
 
 const MODELS = [
   {
@@ -20,12 +43,16 @@ const MODELS = [
 ];
 function App() {
   const m = React.useState("sonnet"),
-    f = React.useState([
-      {
-        name: "Q1-report.pdf",
-      },
+    f = React.useState<(File | ComposerAttachment)[]>([
+      { name: "Q1-report.pdf", size: "1.2 MB" },
+      { name: "board-deck.key", progress: 0.64 },
     ]),
-    busy = React.useState(false);
+    busy = React.useState(false),
+    [text, setText] = React.useState("Summarize today for @Lena Hart"),
+    [mentions, setMentions] = React.useState<Mention[]>([
+      { id: "lena", label: "Lena Hart", start: 20, end: 30 },
+    ]),
+    [dictating, setDictating] = React.useState(false);
   return (
     <div
       className="tf-panel"
@@ -56,13 +83,25 @@ function App() {
         ]}
       />
       <Composer
-        placeholder="Ask Atlas something, or type / for commands"
+        placeholder="Ask Atlas something, @ to mention, / for commands"
+        value={text}
+        onChange={setText}
+        mentionOptions={PEOPLE}
+        mentions={mentions}
+        onMentionsChange={setMentions}
+        dictation={{ active: dictating, interim: dictating ? HEARD : undefined }}
+        onDictate={() => {
+          if (dictating) setText(text + (text.endsWith(" ") ? "" : " ") + HEARD);
+          setDictating(!dictating);
+        }}
+        onVoiceMessage={() => {}}
+        camera
         models={MODELS}
         model={m[0]}
         onModel={m[1]}
         attachments={f[0]}
         onAttach={(fl) => {
-          f[1](f[0].concat(Array.prototype.slice.call(fl)));
+          f[1](f[0].concat(Array.from(fl)));
         }}
         onRemoveAttachment={(i) => {
           f[1](f[0].filter((_, k) => k !== i));
@@ -86,6 +125,8 @@ function App() {
         ]}
         busy={busy[0]}
         onSend={() => {
+          setText("");
+          setMentions([]);
           busy[1](true);
           setTimeout(() => {
             busy[1](false);

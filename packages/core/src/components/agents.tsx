@@ -3,7 +3,8 @@
 import * as React from "react";
 import { cx } from "../cx.js";
 import { LineDiff } from "./approval-previews.js";
-import { useFormat, useStrings } from "../context.js";
+import { useFormat, useLinkAs, useStrings } from "../context.js";
+import { Highlight } from "./common.js";
 import { AGENTS_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
 import { useControlled } from "../hooks.js";
@@ -21,10 +22,11 @@ import type {
   AgentCardProps,
   AgentDetailsProps,
   BudgetStopProps,
+  ChatListItem,
   ChatListProps,
+  ChatQuery,
   ChatWorkspaceProps,
   DailyBriefingProps,
-  FeedbackRatingProps,
   IconName,
   KeyValueItem,
   MemoryViewerProps,
@@ -107,29 +109,92 @@ export function AgentDetails(p: AgentDetailsProps) {
     </div>
   );
 }
+const QUERY_TOKEN = /(^|\s)(from|in|before|after):("[^"]*"|\S+)/gi;
+
+/** Splits a chat search into `from:`, `in:`, `before:` and `after:` tokens and the free words. */
+export function parseChatQuery(q: string): ChatQuery {
+  const tokens: ChatQuery["tokens"] = [];
+  const text = q
+    .replace(QUERY_TOKEN, (all, lead: string, key: string, value: string) => {
+      tokens.push({
+        key: key.toLowerCase() as ChatQuery["tokens"][number]["key"],
+        value: value.replace(/^"|"$/g, ""),
+        raw: all.trim(),
+      });
+      return lead;
+    })
+    .replace(/\s+/g, " ")
+    .trim();
+  return { text, tokens };
+}
+
+const toDate = (d: Date | string | number | undefined) => {
+  if (d === undefined) return undefined;
+  const x = new Date(d);
+  return Number.isNaN(x.getTime()) ? undefined : x;
+};
+
+function matches(c: ChatListItem, group: string, q: ChatQuery): boolean {
+  const has = (hay: string, needle: string) => hay.toLowerCase().includes(needle.toLowerCase());
+  const sub = typeof c.sub === "string" ? c.sub : "";
+  if (q.text && !q.text.split(" ").every((w) => has(`${c.name} ${sub} ${c.project || ""}`, w)))
+    return false;
+  for (const tk of q.tokens) {
+    if (tk.key === "from" && !has([c.name, ...(c.from || [])].join(" "), tk.value)) return false;
+    if (tk.key === "in" && !has(`${c.project || ""} ${group}`, tk.value)) return false;
+    if (tk.key === "before" || tk.key === "after") {
+      const d = toDate(c.date),
+        limit = toDate(tk.value);
+      if (!d || !limit) return false;
+      if (tk.key === "before" ? d >= limit : d <= limit) return false;
+    }
+  }
+  return true;
+}
+
 export function ChatList(p: ChatListProps) {
   const t = useStrings(AGENTS_STRINGS);
-  const q = React.useState("");
+  const { formatNumber, formatRelative } = useFormat();
+  const Link = useLinkAs(p.linkAs);
+  const [q, setQ] = useControlled(p.query, "", p.onQueryChange);
+  const parsed = React.useMemo(() => parseChatQuery(q), [q]);
   const groups = (p.groups || [])
     .map((g) =>
-      Object.assign({}, g, {
-        items: g.items.filter(
-          (c) =>
-            !q[0] || (c.name + " " + (c.sub || "")).toLowerCase().indexOf(q[0].toLowerCase()) > -1,
-        ),
-      }),
+      p.filter === false ? g : { ...g, items: g.items.filter((c) => matches(c, g.title, parsed)) },
     )
     .filter((g) => g.items.length);
+  const change = (next: string) => {
+    setQ(next);
+    p.onSearch?.(next, parseChatQuery(next));
+  };
   return (
     <div style={p.style} className={cx("tf-chatlist", p.className)}>
       <SearchField
         placeholder={p.searchPlaceholder || t.searchChats}
-        value={q[0]}
+        value={q}
         onChange={(e) => {
-          q[1](e.target.value);
-          p.onSearch && p.onSearch(e.target.value);
+          change(e.target.value);
         }}
       />
+      {parsed.tokens.length > 0 && (
+        <div className="tf-chatlist-tokens">
+          {parsed.tokens.map((tk, i) => (
+            <span key={i} className="tf-chatlist-token">
+              <b>{tk.key}:</b>
+              {tk.value}
+              <button
+                type="button"
+                aria-label={t.removeFilter(tk.raw)}
+                onClick={() => {
+                  change(q.replace(tk.raw, "").replace(/\s+/g, " ").trim());
+                }}
+              >
+                <Icon name="x" size={12} />
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
       {p.filters}
       <div className="tf-chatlist-scroll">
         {groups.length === 0 ? (
@@ -143,42 +208,69 @@ export function ChatList(p: ChatListProps) {
           </p>
         ) : (
           groups.map((g) => (
-            <div key={g.title} className="tf-chatlist-group">
-              <div className="tf-menu-label">
+            <div key={g.title} className="tf-chatlist-group" role="group" aria-label={g.title}>
+              <div className="tf-menu-label" aria-hidden>
                 {g.mark && <i className={"tf-sw tf-sw-" + g.mark} />}
                 {g.title}
               </div>
-              {g.items.map((c) => (
-                <button
-                  key={c.id}
-                  type="button"
-                  className={cx("tf-chatrow", c.id === p.selected && "on")}
-                  onClick={() => {
-                    p.onSelect && p.onSelect(c.id);
-                  }}
-                >
-                  {c.avatar ? (
-                    <Avatar name={c.name} size={36} />
-                  ) : (
-                    <AgentMark tint={c.tint} live={c.status === "running"} size={36} />
-                  )}
-                  <span className="tf-chatrow-text">
-                    <span className="tf-chatrow-top">
-                      <b>{c.name}</b>
-                      <small>{c.time}</small>
+              {g.items.map((c) => {
+                const on = c.id === p.selected;
+                const when = c.time || (c.date !== undefined ? formatRelative(c.date) : undefined);
+                const inner = (
+                  <>
+                    {c.avatar || c.avatarSrc ? (
+                      <Avatar name={c.name} src={c.avatarSrc} size={36} />
+                    ) : (
+                      <AgentMark tint={c.tint} live={c.status === "running"} size={36} />
+                    )}
+                    <span className="tf-chatrow-text">
+                      <span className="tf-chatrow-top">
+                        <b>{c.name}</b>
+                        {when && <small>{when}</small>}
+                      </span>
+                      <span className="tf-chatrow-sub">
+                        {c.status && <StatusShape status={c.status} />}
+                        <span className="tf-chatrow-preview">{c.sub}</span>
+                      </span>
                     </span>
-                    <span className="tf-chatrow-sub">
-                      {c.status && <StatusShape status={c.status} />}
-                      {c.sub}
-                    </span>
-                  </span>
-                  {c.unread ? (
-                    <span className="tf-nav-count">{c.unread}</span>
-                  ) : c.pinned ? (
-                    <Icon name="star" size={13} className="tf-chatrow-pin" />
-                  ) : null}
-                </button>
-              ))}
+                    {c.unread ? (
+                      <span
+                        className="tf-nav-count"
+                        aria-label={t.unreadCount(c.unread, formatNumber(c.unread))}
+                      >
+                        {formatNumber(c.unread)}
+                      </span>
+                    ) : c.pinned ? (
+                      <Icon name="star" size={13} className="tf-chatrow-pin" />
+                    ) : null}
+                  </>
+                );
+                return c.href ? (
+                  <Link
+                    key={c.id}
+                    href={c.href}
+                    className={cx("tf-chatrow", on && "on", c.unread && "unread")}
+                    aria-current={on ? "page" : undefined}
+                    onClick={() => {
+                      p.onSelect && p.onSelect(c.id);
+                    }}
+                  >
+                    {inner}
+                  </Link>
+                ) : (
+                  <button
+                    key={c.id}
+                    type="button"
+                    className={cx("tf-chatrow", on && "on", c.unread && "unread")}
+                    aria-current={on ? "true" : undefined}
+                    onClick={() => {
+                      p.onSelect && p.onSelect(c.id);
+                    }}
+                  >
+                    {inner}
+                  </button>
+                );
+              })}
             </div>
           ))
         )}
@@ -186,12 +278,77 @@ export function ChatList(p: ChatListProps) {
     </div>
   );
 }
+
+const DETAILS_MIN = 240,
+  DETAILS_MAX = 560;
+
 export function ChatWorkspace(p: ChatWorkspaceProps) {
+  const t = useStrings(AGENTS_STRINGS);
+  const [view, setView] = useControlled(p.view, p.defaultView ?? "list", p.onViewChange);
+  const [w, setW] = useControlled(
+    p.detailsWidth,
+    p.defaultDetailsWidth ?? 304,
+    p.onDetailsWidthChange,
+  );
+  const clamp = (n: number) => Math.round(Math.min(DETAILS_MAX, Math.max(DETAILS_MIN, n)));
+  const drag = React.useRef<{ x: number; w: number } | null>(null);
   return (
-    <div style={p.style} className={cx("tf-chatws", p.details && "with-details", p.className)}>
-      <div className="tf-chatws-list">{p.list}</div>
-      <div className="tf-chatws-thread">{p.thread}</div>
-      {p.details && <div className="tf-chatws-details">{p.details}</div>}
+    <div
+      style={{ ...p.style, ["--details-w" as string]: clamp(w) + "px" }}
+      className={cx("tf-chatws-frame", p.className)}
+    >
+      <div className={cx("tf-chatws", p.details && "with-details", "view-" + view)}>
+        <div
+          className="tf-chatws-list"
+          onClickCapture={(e) => {
+            // picking a conversation opens its thread on narrow screens
+            if ((e.target as HTMLElement).closest?.(".tf-chatrow")) setView("thread");
+          }}
+        >
+          {p.list}
+        </div>
+        <div className="tf-chatws-thread">
+          <button type="button" className="tf-chatws-back" onClick={() => setView("list")}>
+            <Icon name="chevronLeft" size={16} />
+            {p.backLabel || t.backToChats}
+          </button>
+          {p.thread}
+        </div>
+        {p.details && (
+          <>
+            <div
+              className="tf-chatws-resize"
+              role="separator"
+              aria-orientation="vertical"
+              aria-label={t.resizeDetails}
+              aria-valuenow={clamp(w)}
+              aria-valuemin={DETAILS_MIN}
+              aria-valuemax={DETAILS_MAX}
+              tabIndex={0}
+              onPointerDown={(e) => {
+                e.currentTarget.setPointerCapture?.(e.pointerId);
+                drag.current = { x: e.clientX, w: clamp(w) };
+              }}
+              onPointerMove={(e) => {
+                if (drag.current) setW(clamp(drag.current.w + drag.current.x - e.clientX));
+              }}
+              onPointerUp={() => {
+                drag.current = null;
+              }}
+              onKeyDown={(e) => {
+                const step = e.shiftKey ? 64 : 16;
+                if (e.key === "ArrowLeft") setW(clamp(w + step));
+                else if (e.key === "ArrowRight") setW(clamp(w - step));
+                else if (e.key === "Home") setW(DETAILS_MAX);
+                else if (e.key === "End") setW(DETAILS_MIN);
+                else return;
+                e.preventDefault();
+              }}
+            />
+            <div className="tf-chatws-details">{p.details}</div>
+          </>
+        )}
+      </div>
     </div>
   );
 }
@@ -202,30 +359,25 @@ export function SearchHits(p: SearchHitsProps) {
       {(p.items || []).length === 0 ? (
         <EmptyState icon="search" title={t.nothingFound} text={p.emptyText} />
       ) : (
-        p.items.map((x) => {
-          const parts = String(x.text).split(
-            new RegExp("(" + (p.query || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "ig"),
-          );
-          return (
-            <button
-              key={x.id}
-              type="button"
-              className="tf-hit"
-              onClick={() => {
-                p.onOpen && p.onOpen(x);
-              }}
-            >
-              <span className="tf-hit-top">
-                <b>{x.chat}</b>
-                <small>{x.time}</small>
-              </span>
-              <span className="tf-hit-text">
-                {x.who && <b>{x.who + ": "}</b>}
-                {parts.map((t, i) => (i % 2 ? <mark key={i}>{t}</mark> : t))}
-              </span>
-            </button>
-          );
-        })
+        p.items.map((x) => (
+          <button
+            key={x.id}
+            type="button"
+            className="tf-hit"
+            onClick={() => {
+              p.onOpen && p.onOpen(x);
+            }}
+          >
+            <span className="tf-hit-top">
+              <b>{x.chat}</b>
+              <small>{x.time}</small>
+            </span>
+            <span className="tf-hit-text">
+              {x.who && <b>{x.who + ": "}</b>}
+              <Highlight text={String(x.text)} query={p.query} />
+            </span>
+          </button>
+        ))
       )}
     </div>
   );
@@ -236,83 +388,6 @@ export function ThinkingLine(p: ThinkingLineProps) {
     <div style={p.style} className={cx("tf-thinking", p.className)} role="status">
       <TypingDots />
       <span>{p.text || t.thinking}</span>
-    </div>
-  );
-}
-export function FeedbackRating(p: FeedbackRatingProps) {
-  const t = useStrings(AGENTS_STRINGS);
-  const v = useControlled<"up" | "down" | null>(p.value, null, (x) => {
-      if (x) p.onRate?.(x);
-    }),
-    c = React.useState(""),
-    sent = React.useState(false);
-  if (sent[0])
-    return (
-      <span className="tf-feedback-done">
-        <Icon name="check" size={13} />
-        {p.thanks || t.thanksNoted}
-      </span>
-    );
-  return (
-    <div style={p.style} className={cx("tf-feedback", p.className)}>
-      <div
-        className="tf-row"
-        style={{
-          gap: 4,
-          flexWrap: "nowrap",
-        }}
-      >
-        {p.label && <span className="tf-card-desc">{p.label}</span>}
-        <button
-          type="button"
-          className={cx("tf-msg-act", v[0] === "up" && "on")}
-          aria-pressed={v[0] === "up"}
-          aria-label={t.good}
-          onClick={() => {
-            v[1]("up");
-            if (!p.askOnUp) {
-              sent[1](true);
-              p.onSubmit && p.onSubmit("up", "");
-            }
-          }}
-        >
-          <Icon name="thumbUp" size={14} />
-        </button>
-        <button
-          type="button"
-          className={cx("tf-msg-act", v[0] === "down" && "on")}
-          aria-pressed={v[0] === "down"}
-          aria-label={t.notGood}
-          onClick={() => {
-            v[1]("down");
-          }}
-        >
-          <Icon name="thumbDown" size={14} />
-        </button>
-      </div>
-      {v[0] === "down" && (
-        <form
-          className="tf-feedback-form tf-in"
-          onSubmit={(e) => {
-            e.preventDefault();
-            sent[1](true);
-            p.onSubmit && p.onSubmit("down", c[0]);
-          }}
-        >
-          <input
-            className="tf-input"
-            autoFocus
-            placeholder={p.placeholder || t.whatShouldBeDifferent}
-            value={c[0]}
-            onChange={(e) => {
-              c[1](e.target.value);
-            }}
-          />
-          <Button type="submit" size="sm">
-            {t.send}
-          </Button>
-        </form>
-      )}
     </div>
   );
 }
@@ -717,21 +792,39 @@ export function OrgChart(p: OrgChartProps) {
 export function VoiceMode(p: VoiceModeProps) {
   const t = useStrings(AGENTS_STRINGS);
   const st = p.state || "listening",
-    bars = [];
+    bars: number[] = [];
   for (let i = 0; i < 24; i++) bars.push(i);
+  const turnsRef = React.useRef<HTMLOListElement>(null);
+  const turns = p.turns || [];
+  const last = turns[turns.length - 1];
+  React.useEffect(() => {
+    const el = turnsRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [turns.length, last?.text]);
+  const label =
+    p.stateLabel ||
+    (st === "listening"
+      ? t.listening
+      : st === "thinking"
+        ? t.thinking
+        : st === "speaking"
+          ? t.speaking
+          : st === "interrupted"
+            ? t.interrupted
+            : st === "connecting"
+              ? t.connecting
+              : t.paused);
   return (
-    <div style={p.style} className={cx("tf-voice", "is-" + st, p.className)}>
+    <div
+      style={p.style}
+      className={cx("tf-voice", "is-" + st, "fs-" + (p.fullscreen || "phone"), p.className)}
+      role="region"
+      aria-label={t.voiceWith(p.name)}
+    >
       <AgentMark tint={p.tint || "lilac"} size={72} live={st !== "idle"} />
       <b className="tf-voice-name">{p.name}</b>
-      <span className="tf-voice-state">
-        {p.stateLabel ||
-          (st === "listening"
-            ? t.listening
-            : st === "thinking"
-              ? t.thinking
-              : st === "speaking"
-                ? t.speaking
-                : t.paused)}
+      <span className="tf-voice-state" role="status">
+        {label}
       </span>
       <div className="tf-voice-wave" aria-hidden>
         {bars.map((b) => (
@@ -739,26 +832,40 @@ export function VoiceMode(p: VoiceModeProps) {
             key={b}
             style={{
               animationDelay: ((b * 47) % 600) + "ms",
-              height: st === "idle" ? 4 : undefined,
+              height: st === "idle" || st === "connecting" ? 4 : undefined,
             }}
           />
         ))}
       </div>
       {p.transcript && <p className="tf-voice-transcript">{p.transcript}</p>}
-      <div
-        className="tf-row"
-        style={{
-          justifyContent: "center",
-        }}
-      >
+      {turns.length > 0 && (
+        <ol ref={turnsRef} className="tf-voice-turns" aria-live="polite">
+          {turns.map((x, i) => (
+            <li key={x.id ?? i} className={cx(x.who === "user" ? "me" : "ai", x.live && "live")}>
+              {x.name && <b>{x.name}</b>}
+              <span>
+                {x.text}
+                {x.live && <span className="tf-caret" aria-hidden />}
+              </span>
+            </li>
+          ))}
+        </ol>
+      )}
+      <div className="tf-voice-controls">
         {p.onMute && (
           <IconButton
-            icon={p.muted ? "x" : "user"}
+            icon={p.muted ? "micOff" : "mic"}
             label={p.muted ? t.unmute : t.mute}
             variant="soft"
             size="lg"
+            aria-pressed={!!p.muted}
             onClick={p.onMute}
           />
+        )}
+        {p.onInterrupt && st === "speaking" && (
+          <Button variant="secondary" icon="micOff" onClick={p.onInterrupt}>
+            {t.interrupt}
+          </Button>
         )}
         {p.onEnd && (
           <button
