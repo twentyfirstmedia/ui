@@ -331,4 +331,19 @@ export {
   TypingIndicator,
   ReadOnlyBar,
 } from "./chat-thread.js";
+export { CalendarView, EventInvite, calendarRange } from "./calendar.js";
+export {
+  MailHtml,
+  RecipientInput,
+  MailComposer,
+  MailFolders,
+  MailFilterBar,
+  MailRulesEditor,
+  AutoReplyEditor,
+  MailRouteList,
+  mailDocument,
+  countRemoteImages,
+  parseRecipients,
+  isEmailAddress,
+} from "./webmail.js";
 export type * from "./types.js";
