@@ -12,6 +12,7 @@ import { FRAME_STRINGS } from "../strings.js";
 import { useControlled, useId } from "../hooks.js";
 import { IconButton } from "./foundation.js";
 import { SheetPopover } from "./sheet.js";
+import { Popover } from "./overlays.js";
 import { NotificationList } from "./workspace.js";
 import { FormField } from "./forms.js";
 import { useFieldError } from "./form.js";
@@ -54,11 +55,13 @@ export function NotificationCenter(p: NotificationCenterProps) {
   const [open, setOpen] = useControlled(p.open, !!p.defaultOpen, p.onOpenChange);
   const unread = p.unread ?? (p.items || []).filter((n) => n.unread).length;
   const shown = unread > 99 ? "99+" : formatNumber(unread);
+  const Pop = p.sheet === false ? Popover : SheetPopover;
   return (
-    <SheetPopover
+    <Pop
       className={cx("tf-notify", p.className)}
       style={p.style}
       align={p.align ?? "end"}
+      side={p.side}
       open={open}
       onOpenChange={setOpen}
       width={380}
@@ -97,7 +100,7 @@ export function NotificationCenter(p: NotificationCenterProps) {
           }}
         />
       )}
-    </SheetPopover>
+    </Pop>
   );
 }
 

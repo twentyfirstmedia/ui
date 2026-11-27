@@ -4226,6 +4226,10 @@ export interface NotificationCenterProps
   onOpenChange?: (open: boolean) => void;
   /** Which edge of the bell the panel lines up with (default `end`). */
   align?: "start" | "end";
+  /** Opens below the bell (default) or above it. */
+  side?: "top" | "bottom";
+  /** On phones the list opens as a bottom sheet (default true). */
+  sheet?: boolean;
 }
 export type StepState = "done" | "current" | "upcoming" | "error";
 export interface StepperStep {

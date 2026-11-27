@@ -5,9 +5,42 @@ and the page on a sheet beside it, with an optional side panel and dock.
 
 **The standard frame** (the example above, and what new apps start with): `navigation="sidebar"`
 with `topbar`; the brand above the sidebar, a `SearchTrigger` that opens a `CommandPalette` as
-`topStart`, page actions and the `AppearanceMenu` as `topEnd`, no dock, the account at the foot of
-the sidebar, and the whole app inside an `AppearanceProvider` that keeps the reader's look. Apps
-can leave out or replace any part; the top navigation (`navigation="top"`) stays available.
+`topStart`, page actions as `topEnd`, then the bell (`notifications`) and the look menu
+(`appearance`), no dock, the account at the foot of the sidebar, a tab bar on phones (`tabBar`),
+and the whole app inside an `AppearanceProvider` that keeps the reader's look. Apps can leave out
+or replace any part; the top navigation (`navigation="top"`) stays available.
+
+## Routes
+
+Give every page an `href` and the shell the current `pathname`: the page whose address the path is
+in marks itself, the longest match winning (`/settings/billing` marks "Billing" before
+"Settings"). Links render through `linkAs` (Next.js `Link`), or once for the whole app through
+`<UIProvider linkAs={Link}>`; the sidebar, the top nav, the tab bar, the rail and the dock all use
+it. `active` still works for apps without routes.
+
+```tsx
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+<AppShell fill navigation="sidebar" topbar brand="Admin" sidebarGroups={groups}
+  pathname={usePathname()} linkAs={Link} notifications={{ items, onReadAll }} appearance tabBar
+  user={{ name, email }} dock={false}>
+  {children}
+</AppShell>
+```
+
+- Counts on pages (`count`) take `countTone: "signal"` for the signal colour, e.g. open approvals.
+- `notifications` puts a `NotificationCenter` (the bell with the unread count) at the end of the top
+  bar, `appearance` the `AppearanceMenu` (`true`, or its props).
+- `tabBar` (or a number of tabs, default 4) shows a `MobileTabBar` along the bottom on phones with
+  the first pages; the rest, children included, open from "More" in a sheet, grouped as in the
+  sidebar.
+- A "Skip to content" link comes first and jumps to the `<main>` element (`skipLink={false}` to
+  leave it out, `mainId` for its id).
+- With `fill` the frame reaches under the notch and the home indicator of an iPhone in standalone
+  mode (`viewport-fit=cover`) and keeps its content clear of them (`env(safe-area-inset-*)`).
+- The sidebar remembers its collapsed state with `sidebar={{ storageKey: "app-sidebar" }}`.
 
 - `sidebarGroups`, `active` and `onNavigate` drive the sidebar; `workspaces` puts a workspace switcher
   and `user` with `userMenu` a user menu on it.

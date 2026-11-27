@@ -72,7 +72,7 @@ a.tf-tabbar-item {
     position: sticky;
     bottom: 0;
     z-index: var(--z-sticky);
-    margin: 8px -8px -8px;
+    margin-top: 8px;
   }
   .tf-shell.tf-shell-sidebar.tf-shell-tabbed > .tf-shell-tabbar {
     grid-column: 1 / -1;
@@ -182,7 +182,10 @@ a.tf-note {
   box-sizing: border-box;
 }
 .tf-notify-list {
-  width: 100%;
+  position: relative;
+  inset: auto;
+  width: auto;
+  box-sizing: border-box;
   box-shadow: none;
   background: transparent;
   animation: none;
@@ -196,15 +199,16 @@ a.tf-note {
 
 /* AppearanceMenu: the colour row */
 .tf-swatches {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 6px;
 }
 .tf-swatch {
   position: relative;
-  flex: none;
-  width: 28px;
-  height: 28px;
+  justify-self: center;
+  width: 100%;
+  max-width: 28px;
+  aspect-ratio: 1;
   box-sizing: border-box;
   border-radius: var(--radius-pill);
   background: var(--swatch, var(--primary));
@@ -435,6 +439,7 @@ button.tf-step-btn:hover {
   min-width: 0;
   height: 100%;
   padding: 0 16px;
+  border: 0;
   background: transparent;
   box-shadow: none;
 }
@@ -483,8 +488,11 @@ button.tf-step-btn:hover {
 .tf-ig-affix.end > svg {
   margin: 0 12px 0 8px;
 }
-.tf-ig-affix .tf-select {
+.tf-ig-affix select.tf-input {
+  width: auto;
   height: 32px;
+  padding: 0 32px 0 12px;
+  border: 0;
   box-shadow: none;
   background-color: var(--surface-sunken);
 }

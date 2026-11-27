@@ -221,6 +221,8 @@ for (const kit of KITS)
           const find = preview.getByRole("button", { name: "Search", exact: true });
           const end = preview.getByRole("button", { name: "New order" });
           const look = preview.getByRole("button", { name: "Appearance" });
+          const bell = preview.getByRole("button", { name: /^Notifications/ });
+          await expect(bell).toBeVisible();
           await expect(menu).toBeVisible();
           await expect(find).toBeVisible();
           await expect(end).toBeVisible();
@@ -251,7 +253,8 @@ for (const kit of KITS)
 
         test("the look menu changes the preview's theme and kit", async ({ page }) => {
           test.skip(density === "compact", "one density is enough");
-          await page.setViewportSize({ width: 1440, height: 900 });
+          // tall enough for the whole menu (it hangs below the bar)
+          await page.setViewportSize({ width: 1440, height: 1200 });
           await open(page, kit, theme, density);
           const preview = page.locator(".docs-preview");
           await preview.getByRole("button", { name: "Appearance" }).click();
@@ -267,6 +270,28 @@ for (const kit of KITS)
           await expect(root).toHaveAttribute("data-kit", kit === "halo" ? "pro" : "halo");
         });
       });
+
+for (const kit of KITS)
+  test(`${kit}: phone tab bar with the other pages behind More`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await open(page, kit, "light", "comfortable");
+    const preview = page.locator(".docs-preview");
+    const bar = preview.locator(".tf-shell-tabbar");
+    await expect(bar).toBeVisible();
+    await expect(bar.getByRole("link", { name: /Orders/ })).toHaveAttribute("aria-current", "page");
+    // the bar stays inside the shell, nothing scrolls sideways
+    const shell = await preview.locator(".tf-shell").boundingBox();
+    const box = await bar.boundingBox();
+    expect(box!.x).toBeGreaterThanOrEqual(shell!.x - 0.5);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(shell!.x + shell!.width + 0.5);
+    await bar.getByRole("button", { name: "More" }).click();
+    const sheet = page.getByRole("dialog", { name: "More pages" });
+    await expect(sheet).toBeVisible();
+    await sheet.getByRole("link", { name: "Billing" }).click();
+    await expect(sheet).toBeHidden();
+    await expect(bar.getByRole("button", { name: "More" })).toHaveAttribute("aria-current", "page");
+    await expect(preview.locator(".tf-header-title")).toHaveText("Billing");
+  });
 
 for (const kit of KITS)
   test(`${kit}: on glass phones the sidebar drawer blurs the page under it`, async ({ page }) => {
