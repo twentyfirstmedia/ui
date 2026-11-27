@@ -274,8 +274,10 @@ export function AgentNetwork(p: AgentNetworkProps) {
 
   const statusWord = (n: AgentNetworkNode) =>
     n.statusLabel || t.agentNetworkStatus[STATUS_OF(n)] || STATUS_OF(n);
-  const nodeName = (n: AgentNetworkNode) =>
-    [n.name, n.project, statusWord(n), n.approvals ? t.approvalsWaiting(n.approvals) : null]
+  // the visible name and project start the accessible name; status and approvals follow
+  const srStatus = (n: AgentNetworkNode) =>
+    ", " +
+    [statusWord(n), n.approvals ? t.approvalsWaiting(n.approvals) : null]
       .filter(Boolean)
       .join(", ");
 
@@ -335,7 +337,6 @@ export function AgentNetwork(p: AgentNetworkProps) {
                   received[n.id] && "received",
                 )}
                 aria-expanded={selected === n.id}
-                aria-label={nodeName(n)}
                 onClick={() => setSelected(selected === n.id ? null : n.id)}
               >
                 <NodeMark node={n} size={28} />
@@ -343,6 +344,7 @@ export function AgentNetwork(p: AgentNetworkProps) {
                   <b>{n.name}</b>
                   {n.project && <small>{n.project}</small>}
                 </span>
+                <span className="tf-sr-only">{srStatus(n)}</span>
                 {n.approvals ? (
                   <span className="tf-agentnet-beacon" aria-hidden>
                     {n.approvals}
@@ -445,7 +447,6 @@ export function AgentNetwork(p: AgentNetworkProps) {
                 data-status={STATUS_OF(n)}
                 style={{ left: pl.x + PAD, top: pl.y + PAD, width: NODE_W, height: NODE_H }}
                 aria-pressed={selected === n.id}
-                aria-label={nodeName(n)}
                 onClick={() => setSelected(selected === n.id ? null : n.id)}
               >
                 <NodeMark node={n} size={32} />
@@ -453,6 +454,7 @@ export function AgentNetwork(p: AgentNetworkProps) {
                   <b>{n.name}</b>
                   <small>{n.project || n.role}</small>
                 </span>
+                <span className="tf-sr-only">{srStatus(n)}</span>
                 <StatusShape status={STATUS_OF(n)} />
                 {n.approvals ? (
                   <span className="tf-agentnet-beacon" aria-hidden>
@@ -545,53 +547,54 @@ export function CoordinationTicker(p: CoordinationTickerProps) {
       {items.length === 0 ? (
         <p className="tf-ticker-empty">{p.emptyText || t.noActivity}</p>
       ) : (
-        <ol
-          className="tf-ticker-list"
+        <div
           role="log"
           aria-live={p.live === false ? "off" : "polite"}
           aria-label={p.label || t.coordination}
         >
-          {items.map((e) => {
-            const body = (
-              <>
-                <span className={cx("tf-ticker-icon", "is-" + e.kind)} aria-hidden>
-                  <Icon name={e.icon || KIND_ICON[e.kind] || "zap"} size={14} />
-                </span>
-                <span className="tf-ticker-text">
-                  {(e.from || e.to) && (
-                    <b className="tf-ticker-route">
-                      {e.from}
-                      {e.from && e.to && (
-                        <>
-                          {" "}
-                          <span aria-hidden>→</span>
-                          <span className="tf-sr-only">{t.to}</span>{" "}
-                        </>
-                      )}
-                      {e.to}
-                      {e.text ? ": " : ""}
-                    </b>
+          <ol className="tf-ticker-list">
+            {items.map((e) => {
+              const body = (
+                <>
+                  <span className={cx("tf-ticker-icon", "is-" + e.kind)} aria-hidden>
+                    <Icon name={e.icon || KIND_ICON[e.kind] || "zap"} size={14} />
+                  </span>
+                  <span className="tf-ticker-text">
+                    {(e.from || e.to) && (
+                      <b className="tf-ticker-route">
+                        {e.from}
+                        {e.from && e.to && (
+                          <>
+                            {" "}
+                            <span aria-hidden>→</span>
+                            <span className="tf-sr-only">{t.to}</span>{" "}
+                          </>
+                        )}
+                        {e.to}
+                        {e.text ? ": " : ""}
+                      </b>
+                    )}
+                    {e.text}
+                  </span>
+                  <time className="tf-ticker-time" dateTime={new Date(e.time).toISOString()}>
+                    {formatRelative(e.time, p.now)}
+                  </time>
+                </>
+              );
+              return (
+                <li key={e.id} className={cx("tf-ticker-item", e.kind === "error" && "danger")}>
+                  {e.href ? (
+                    <Link href={e.href} className="tf-ticker-link">
+                      {body}
+                    </Link>
+                  ) : (
+                    <div className="tf-ticker-link">{body}</div>
                   )}
-                  {e.text}
-                </span>
-                <time className="tf-ticker-time" dateTime={new Date(e.time).toISOString()}>
-                  {formatRelative(e.time, p.now)}
-                </time>
-              </>
-            );
-            return (
-              <li key={e.id} className={cx("tf-ticker-item", e.kind === "error" && "danger")}>
-                {e.href ? (
-                  <Link href={e.href} className="tf-ticker-link">
-                    {body}
-                  </Link>
-                ) : (
-                  <div className="tf-ticker-link">{body}</div>
-                )}
-              </li>
-            );
-          })}
-        </ol>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
       )}
     </div>
   );
