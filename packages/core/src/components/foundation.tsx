@@ -75,12 +75,12 @@ export function IconButton(props: NativeRest<IconButtonProps>) {
     className,
   );
   const named = { "aria-label": label, title: label, ...native };
+  const Link = useLinkAs(linkAs);
   if (asChild && children) {
     const el = slot(React.Children.only(children), cls, named, () => <Icon name={icon} />);
     if (el) return el;
   }
   if (href != null) {
-    const Link = useLinkAs(linkAs);
     return (
       <Link {...named} href={href} className={cls}>
         <Icon name={icon} />
