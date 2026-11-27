@@ -968,6 +968,13 @@ export const SHARED_STRINGS: Pick<
 /** Strings of the components in `admin.tsx`. */
 export const ADMIN_STRINGS: Pick<
   UIStrings,
+  | "exportPrecheck"
+  | "exportBookings"
+  | "exportDraftsLeftOut"
+  | "exportMissing"
+  | "exportFix"
+  | "exportLockPeriod"
+  | "exportLockHint"
   | "minimum"
   | "maximum"
   | "min"
@@ -1099,6 +1106,14 @@ export const ADMIN_STRINGS: Pick<
   period: "Period",
   allTime: "All time",
   exportProgress: "Export progress",
+  exportPrecheck: "Pre-check",
+  exportBookings: (formatted, n) => `${formatted} ${n === 1 ? "booking" : "bookings"}`,
+  exportDraftsLeftOut: (formatted, n) =>
+    `${formatted} ${n === 1 ? "draft is" : "drafts are"} left out`,
+  exportMissing: "Missing settings",
+  exportFix: "Fix",
+  exportLockPeriod: "Lock the month with the export",
+  exportLockHint: "Bookings in it can no longer be changed.",
   preparingFile: "Preparing the file…",
   fileReady: "Your file is ready.",
   newExport: "New export",
@@ -2982,6 +2997,377 @@ export const WEBMAIL_STRINGS: Pick<
   mailWithAttachments: "With attachments",
 };
 
+/** Strings of ExportDialog's accounting pre-check (admin.tsx). */
+export interface UIStrings {
+  exportPrecheck: string;
+  exportBookings: (formatted: string, n: number) => string;
+  exportDraftsLeftOut: (formatted: string, n: number) => string;
+  exportMissing: string;
+  exportFix: string;
+  exportLockPeriod: string;
+  exportLockHint: string;
+}
+
+/** Strings of the components in `finance.tsx`. */
+export interface UIStrings {
+  invoiceCustomer: string;
+  invoicePickCustomer: string;
+  invoiceLines: string;
+  invoiceDescription: string;
+  invoiceDescriptionPlaceholder: string;
+  invoiceQuantity: string;
+  invoiceUnit: string;
+  invoicePrice: string;
+  invoiceLineDiscount: string;
+  invoiceAmount: string;
+  invoiceRemoveLine: (n: number) => string;
+  invoiceNoLines: string;
+  invoiceAddLine: string;
+  invoiceNote: string;
+  invoiceTotals: string;
+  invoiceDiscountPct: string;
+  invoiceVatOn: (rate: string, base: string) => string;
+  invoiceEdit: string;
+  invoiceViews: string;
+  importTitle: string;
+  importLinesN: (n: number) => string;
+  importSelectLine: (text: string) => string;
+  importDuplicate: string;
+  importBooked: string;
+  importCategoryFor: (text: string) => string;
+  importConfidence: (pct: string) => string;
+  importNoSuggestion: string;
+  importEdit: (text: string) => string;
+  importConfirmN: (n: number) => string;
+  importConfirming: string;
+  importFailed: string;
+  periodOpen: string;
+  periodLocked: string;
+  periodOpenNote: string;
+  periodLockedNote: string;
+  periodLockedBy: (who: string) => string;
+  periodLock: string;
+  periodUnlock: string;
+  periodWorking: string;
+  periodLockTitle: (period: string) => string;
+  periodUnlockTitle: (period: string) => string;
+  periodLockText: string;
+  periodUnlockText: string;
+  periodConfirmPasskey: string;
+  periodFailed: string;
+}
+export const FINANCE_STRINGS: Pick<
+  UIStrings,
+  | "invoiceCustomer"
+  | "invoicePickCustomer"
+  | "invoiceLines"
+  | "invoiceDescription"
+  | "invoiceDescriptionPlaceholder"
+  | "invoiceQuantity"
+  | "invoiceUnit"
+  | "invoicePrice"
+  | "invoiceLineDiscount"
+  | "invoiceAmount"
+  | "invoiceRemoveLine"
+  | "invoiceNoLines"
+  | "invoiceAddLine"
+  | "invoiceNote"
+  | "invoiceTotals"
+  | "invoiceDiscountPct"
+  | "invoiceVatOn"
+  | "invoiceEdit"
+  | "invoiceViews"
+  | "importTitle"
+  | "importLinesN"
+  | "importSelectLine"
+  | "importDuplicate"
+  | "importBooked"
+  | "importCategoryFor"
+  | "importConfidence"
+  | "importNoSuggestion"
+  | "importEdit"
+  | "importConfirmN"
+  | "importConfirming"
+  | "importFailed"
+  | "periodOpen"
+  | "periodLocked"
+  | "periodOpenNote"
+  | "periodLockedNote"
+  | "periodLockedBy"
+  | "periodLock"
+  | "periodUnlock"
+  | "periodWorking"
+  | "periodLockTitle"
+  | "periodUnlockTitle"
+  | "periodLockText"
+  | "periodUnlockText"
+  | "periodConfirmPasskey"
+  | "periodFailed"
+  | "vat"
+  | "subtotal"
+  | "total"
+  | "preview"
+  | "selectAll"
+> = {
+  invoiceCustomer: "Customer",
+  invoicePickCustomer: "Pick a customer",
+  invoiceLines: "Line items",
+  invoiceDescription: "Description",
+  invoiceDescriptionPlaceholder: "What you delivered",
+  invoiceQuantity: "Qty",
+  invoiceUnit: "Unit",
+  invoicePrice: "Unit price",
+  invoiceLineDiscount: "Disc. %",
+  invoiceAmount: "Amount",
+  invoiceRemoveLine: (n) => `Remove line ${n}`,
+  invoiceNoLines: "No line items yet.",
+  invoiceAddLine: "Add line",
+  invoiceNote: "Note on the invoice",
+  invoiceTotals: "Totals",
+  invoiceDiscountPct: "Discount %",
+  invoiceVatOn: (rate, base) => `VAT ${rate} on ${base}`,
+  invoiceEdit: "Edit",
+  invoiceViews: "Invoice",
+  importTitle: "Bank statement",
+  importLinesN: (n) => `${n} ${n === 1 ? "line" : "lines"}`,
+  importSelectLine: (text) => `Select ${text}`,
+  importDuplicate: "Duplicate",
+  importBooked: "Booked",
+  importCategoryFor: (text) => `Category for ${text}`,
+  importConfidence: (pct) => `${pct} sure`,
+  importNoSuggestion: "No suggestion",
+  importEdit: (text) => `Edit booking for ${text}`,
+  importConfirmN: (n) => (n === 1 ? "Book 1 line" : `Book ${n} lines`),
+  importConfirming: "Booking…",
+  importFailed: "Booking failed. Try again.",
+  periodOpen: "Open",
+  periodLocked: "Locked",
+  periodOpenNote: "Bookings can still be added and changed.",
+  periodLockedNote: "Bookings can no longer be changed.",
+  periodLockedBy: (who) => `Locked ${who}`,
+  periodLock: "Lock",
+  periodUnlock: "Unlock",
+  periodWorking: "Working…",
+  periodLockTitle: (period) => `Lock ${period}?`,
+  periodUnlockTitle: (period) => `Unlock ${period}?`,
+  periodLockText: "Bookings in this period can no longer be added, changed or deleted.",
+  periodUnlockText:
+    "Bookings in this period can be changed again. Exports already sent stay as they are.",
+  periodConfirmPasskey: "Confirm with passkey",
+  periodFailed: "That did not work. Try again.",
+  vat: "VAT",
+  subtotal: "Subtotal",
+  total: "Total",
+  preview: "Preview",
+  selectAll: "Select all",
+};
+
+/** Strings of the components in `files.tsx`. */
+export interface UIStrings {
+  files: string;
+  searchFiles: string;
+  gridView: string;
+  listView: string;
+  newFolder: string;
+  upload: string;
+  uploads: string;
+  uploadPart: (part: number, parts: number) => string;
+  uploadPercent: (pct: number) => string;
+  fileUploaded: string;
+  uploadingFile: (name: string) => string;
+  cancelUploadOf: (name: string) => string;
+  itemsN: (n: number) => string;
+  modified: string;
+  size: string;
+  loadingFiles: string;
+  noFilesMatch: (query: string) => string;
+  emptyFolder: string;
+  filesDropHint: string;
+  dropToUpload: string;
+  selectItem: (name: string) => string;
+  renameItem: (name: string) => string;
+  actionsFor: (name: string) => string;
+  rename: string;
+  move: string;
+  moveToTrash: string;
+  previewOf: (name: string) => string;
+  noPreview: string;
+  create: string;
+  folderName: string;
+  moveItems: (n: number) => string;
+  moveHere: string;
+  chooseFolder: string;
+  trashTitle: (n: number) => string;
+  trashText: string;
+}
+export const FILES_STRINGS: Pick<
+  UIStrings,
+  | "files"
+  | "searchFiles"
+  | "gridView"
+  | "listView"
+  | "newFolder"
+  | "upload"
+  | "uploads"
+  | "uploadPart"
+  | "uploadPercent"
+  | "fileUploaded"
+  | "uploadingFile"
+  | "cancelUploadOf"
+  | "itemsN"
+  | "modified"
+  | "size"
+  | "loadingFiles"
+  | "noFilesMatch"
+  | "emptyFolder"
+  | "filesDropHint"
+  | "dropToUpload"
+  | "selectItem"
+  | "renameItem"
+  | "actionsFor"
+  | "rename"
+  | "move"
+  | "moveToTrash"
+  | "previewOf"
+  | "noPreview"
+  | "create"
+  | "folderName"
+  | "moveItems"
+  | "moveHere"
+  | "chooseFolder"
+  | "trashTitle"
+  | "trashText"
+  | "open"
+  | "download"
+  | "moveTo"
+  | "shared"
+  | "view"
+  | "selectAll"
+> = {
+  files: "Files",
+  searchFiles: "Search files",
+  gridView: "Grid",
+  listView: "List",
+  newFolder: "New folder",
+  upload: "Upload",
+  uploads: "Uploads",
+  uploadPart: (part, parts) => `Part ${part} of ${parts}`,
+  uploadPercent: (pct) => `${pct}%`,
+  fileUploaded: "Uploaded",
+  uploadingFile: (name) => `Uploading ${name}`,
+  cancelUploadOf: (name) => `Cancel upload of ${name}`,
+  itemsN: (n) => `${n} ${n === 1 ? "item" : "items"}`,
+  modified: "Modified",
+  size: "Size",
+  loadingFiles: "Loading files",
+  noFilesMatch: (query) => `Nothing matches “${query}”`,
+  emptyFolder: "This folder is empty",
+  filesDropHint: "Drop files here or use Upload.",
+  dropToUpload: "Drop to upload",
+  selectItem: (name) => `Select ${name}`,
+  renameItem: (name) => `New name for ${name}`,
+  actionsFor: (name) => `Actions for ${name}`,
+  rename: "Rename",
+  move: "Move",
+  moveToTrash: "Move to trash",
+  previewOf: (name) => `Preview of ${name}`,
+  noPreview: "No preview for this file",
+  create: "Create",
+  folderName: "Folder name",
+  moveItems: (n) => (n === 1 ? "Move 1 item" : `Move ${n} items`),
+  moveHere: "Move here",
+  chooseFolder: "Choose a folder",
+  trashTitle: (n) => (n === 1 ? "Move 1 item to the trash?" : `Move ${n} items to the trash?`),
+  trashText: "You can restore them from the trash.",
+  open: "Open",
+  download: "Download",
+  moveTo: "Move to",
+  shared: "Shared",
+  view: "View",
+  selectAll: "Select all",
+};
+
+/** Strings of the components in `brand-studio.tsx`. */
+export interface UIStrings {
+  palette: string;
+  hex: string;
+  oklch: string;
+  copyValue: (label: string, value: string) => string;
+  onLight: string;
+  onDark: string;
+  contrastRatio: (ratio: string) => string;
+  contrastFail: string;
+  contrastLarge: string;
+  assetQueued: string;
+  assetGenerating: string;
+  assetDone: string;
+  assetFailed: string;
+  watermark: string;
+  versions: string;
+  previousVersion: string;
+  nextVersion: string;
+  assetVersionOf: (n: number, total: number) => string;
+  currentVersion: string;
+  makeCurrent: string;
+  prompt: string;
+  generate: string;
+  downloadVersion: (n: number) => string;
+}
+export const BRAND_STUDIO_STRINGS: Pick<
+  UIStrings,
+  | "palette"
+  | "hex"
+  | "oklch"
+  | "copyValue"
+  | "onLight"
+  | "onDark"
+  | "contrastRatio"
+  | "contrastFail"
+  | "contrastLarge"
+  | "assetQueued"
+  | "assetGenerating"
+  | "assetDone"
+  | "assetFailed"
+  | "watermark"
+  | "versions"
+  | "previousVersion"
+  | "nextVersion"
+  | "assetVersionOf"
+  | "currentVersion"
+  | "makeCurrent"
+  | "prompt"
+  | "generate"
+  | "downloadVersion"
+  | "regenerate"
+  | "copied"
+> = {
+  palette: "Palette",
+  hex: "HEX",
+  oklch: "OKLCH",
+  copyValue: (label, value) => `Copy ${label} ${value}`,
+  onLight: "On light",
+  onDark: "On dark",
+  contrastRatio: (ratio) => `${ratio} : 1`,
+  contrastFail: "Fails",
+  contrastLarge: "AA large",
+  assetQueued: "Queued",
+  assetGenerating: "Generating",
+  assetDone: "Ready",
+  assetFailed: "Failed",
+  watermark: "Watermark",
+  versions: "Versions",
+  previousVersion: "Previous version",
+  nextVersion: "Next version",
+  assetVersionOf: (n, total) => `Version ${n} of ${total}`,
+  currentVersion: "Current",
+  makeCurrent: "Make current",
+  prompt: "Prompt",
+  generate: "Generate",
+  downloadVersion: (n) => `Download version ${n}`,
+  regenerate: "Regenerate",
+  copied: "Copied",
+};
+
 /** Strings of the components in `site.tsx`. */
 export const SITE_STRINGS: Pick<
   UIStrings,
@@ -3011,6 +3397,8 @@ export const SITE_STRINGS: Pick<
 /** Strings of the components in `workspace.tsx`. */
 export const WORKSPACE_STRINGS: Pick<
   UIStrings,
+  | "subtotal"
+  | "discount"
   | "sectionPages"
   | "commandPalette"
   | "paletteSearchPlaceholder"
@@ -3046,6 +3434,8 @@ export const WORKSPACE_STRINGS: Pick<
   | "noSuggestion"
   | "accept"
 > = {
+  subtotal: "Subtotal",
+  discount: "Discount",
   sectionPages: (section) => `${section || "Section"} pages`,
   commandPalette: "Command palette",
   paletteSearchPlaceholder: "Search pages, actions and records…",
@@ -3776,6 +4166,9 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   CHAT_THREAD_STRINGS,
   CALENDAR_STRINGS,
   WEBMAIL_STRINGS,
+  FINANCE_STRINGS,
+  FILES_STRINGS,
+  BRAND_STUDIO_STRINGS,
   SITE_STRINGS,
   WORKSPACE_STRINGS,
 );
