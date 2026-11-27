@@ -6,7 +6,10 @@ import { KITS, THEMES } from "./pages";
  * pattern: they are translucent and blurred, text on them stays readable over any backdrop, and
  * reduced transparency, forced colours and a missing blur fall back to solid surfaces.
  */
-test.use({ baseURL: "http://localhost:4174", reducedMotion: "reduce" });
+test.use({
+  baseURL: `http://localhost:${process.env.E2E_DOCS_PORT ?? 4174}`,
+  reducedMotion: "reduce",
+});
 
 /** Glass surfaces to check per pattern: UI over a map, and a whole app shell over Ambient. */
 const PAGES = [

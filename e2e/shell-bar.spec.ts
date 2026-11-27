@@ -10,7 +10,10 @@ import { KITS, THEMES } from "./pages";
  * the bar and beside the sidebar; with `fill` bar and sidebar stay while the page scrolls; on
  * phones the bar is the sidebar's bar with the end actions and a search button.
  */
-test.use({ baseURL: "http://localhost:4174", reducedMotion: "reduce" });
+test.use({
+  baseURL: `http://localhost:${process.env.E2E_DOCS_PORT ?? 4174}`,
+  reducedMotion: "reduce",
+});
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DENSITIES = ["comfortable", "compact"] as const;

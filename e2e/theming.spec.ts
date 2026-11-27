@@ -11,7 +11,10 @@ import { KITS, previewPages } from "./pages";
  * Deliberately outside the theme, and skipped: meaning colours (tints, statuses, diffs) and
  * whatever is drawn on the dark app frame, on paper (e-mail, invoice), on photos or count badges.
  */
-test.use({ baseURL: "http://localhost:4174", reducedMotion: "reduce" });
+test.use({
+  baseURL: `http://localhost:${process.env.E2E_DOCS_PORT ?? 4174}`,
+  reducedMotion: "reduce",
+});
 
 export const THEME_VARS = [
   "background",

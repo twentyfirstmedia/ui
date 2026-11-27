@@ -4,7 +4,7 @@ import { expect, test } from "@playwright/test";
  * Phase 4: an app loads both kits (themes.css) and switches between them at runtime with
  * data-kit. No reload, no console errors, the markup stays identical and React state survives.
  */
-test.use({ baseURL: "http://localhost:4173" });
+test.use({ baseURL: `http://localhost:${process.env.E2E_KIT_PORT ?? 4173}` });
 
 test("switches Halo ↔ Pro at runtime", async ({ page }) => {
   const errors: string[] = [];

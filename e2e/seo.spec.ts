@@ -5,7 +5,7 @@ import { expect, test, type APIRequestContext } from "@playwright/test";
  * fits a result snippet, a canonical URL to itself, a social card, one h1, valid structured data
  * and a Markdown twin; llms.txt only links to files that exist; robots, manifest and icons resolve.
  */
-const BASE = "http://localhost:4174";
+const BASE = `http://localhost:${process.env.E2E_DOCS_PORT ?? 4174}`;
 const SITE = "https://ui.twentyfirst.media";
 const local = (url: string) => url.replace(SITE, BASE);
 

@@ -6,7 +6,10 @@ import { KITS, THEMES } from "./pages";
  * The landing page: axe in both kits × light/dark, no sideways scroll on phones, and the kit
  * switch restyles the whole page without a reload, keeping state and remembering the choice.
  */
-test.use({ baseURL: "http://localhost:4174", reducedMotion: "reduce" });
+test.use({
+  baseURL: `http://localhost:${process.env.E2E_DOCS_PORT ?? 4174}`,
+  reducedMotion: "reduce",
+});
 
 for (const kit of KITS)
   for (const theme of THEMES)

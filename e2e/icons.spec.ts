@@ -8,7 +8,10 @@ import { KITS, previewPages } from "./pages";
  * optically on its centroid), and every icon-only box (icon buttons, tinted icons, rail, dock)
  * centres its icon to the half pixel.
  */
-test.use({ baseURL: "http://localhost:4174", reducedMotion: "reduce" });
+test.use({
+  baseURL: `http://localhost:${process.env.E2E_DOCS_PORT ?? 4174}`,
+  reducedMotion: "reduce",
+});
 
 test("every icon drawing is centred on the 24px grid", async ({ page }) => {
   const off = await page.evaluate(

@@ -6,7 +6,7 @@ import { KITS } from "./pages";
  * off stops everything, layers animate out before they leave, a reduced-motion setting always
  * wins, the header switch is remembered, and a Stagger below the fold waits to be seen.
  */
-test.use({ baseURL: "http://localhost:4174" });
+test.use({ baseURL: `http://localhost:${process.env.E2E_DOCS_PORT ?? 4174}` });
 
 async function demo(page: Page, kit: string, level: "Off" | "Standard" | "Expressive") {
   await page.goto(`/${kit}/motion/`);

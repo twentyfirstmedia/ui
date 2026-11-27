@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 /** Phase 7: docs chrome — routes for both kits, live kit switch, search and theme. */
-test.use({ baseURL: "http://localhost:4174" });
+test.use({ baseURL: `http://localhost:${process.env.E2E_DOCS_PORT ?? 4174}` });
 
 test("the root is the landing page and links into the docs", async ({ page }) => {
   await page.goto("/");

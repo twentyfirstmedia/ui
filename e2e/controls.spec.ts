@@ -7,7 +7,10 @@ import { KITS, guidePages, previewPages } from "./pages";
  * Checked on every docs page (the docs chrome uses the kit too). The dark top bar keeps the
  * reference's own 36 / 28 px items (`tf-nav-item`, `tf-topbtn`) and is not part of the scale.
  */
-test.use({ baseURL: "http://localhost:4174", reducedMotion: "reduce" });
+test.use({
+  baseURL: `http://localhost:${process.env.E2E_DOCS_PORT ?? 4174}`,
+  reducedMotion: "reduce",
+});
 
 const SCALE: Record<string, number[]> = { halo: [32, 40, 48], pro: [24, 28, 34] };
 const CONTROLS = [
