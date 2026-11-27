@@ -384,6 +384,15 @@ Notiz: Die Umschalttaste kommt beim Klick aus dem Mausereignis. Bei Leertaste me
 
 Notiz (Wunsch aus FollowerPilot): Der Admin von FollowerPilot hatte das Aussehen-Menü oben rechts und die Topbar mit Suche selbst gebaut. Das ist jetzt der Standard des Kits; Apps dürfen weiter ihren eigenen Rahmen bauen. Die Texte kommen aus `APPEARANCE_STRINGS`. Der Suchknopf bekommt seinen Namen aus dem sichtbaren Text (axe `label-content-name-mismatch`), `label` nur, wenn er den Text enthält.
 
+### Phase 42: HQ auf dem Kit, Teil 1: Rahmen, Freigaben, Koordination (0.15.0)
+- [x] Grundlagen: `UIProvider linkAs` (ein Router-Link für die ganze App), `BulkActionBar` (auch in DataTable), `DaySeparator`, `Highlight`
+- [x] App-Rahmen: `AppearanceMenu` mit Markenfarbe, Vorschau und Sheet auf dem Handy; `AppShell` mit `pathname`, Glocke, Aussehen-Menü, Tab-Leiste mit „Mehr“, Skip-Link und Safe Areas; `NotificationCenter`, `Stepper`, `InputGroup`
+- [x] Freigaben: `ChangePreview`, `CommandPreview`, `MessagePreview`, `CampaignPreview`, `DocumentPreview`, `EventPreview`, `MoneyPreview`; `ApprovalCard` mit Passkey-Schritt, Handy-Layout und kompakter Form; `ApprovalInbox` mit Filtern und „Erledigt“; `CommandWhitelist`, `DomainHeader`
+- [x] Koordination: `AgentNetwork` (Hierarchie als Live-Graph mit Übergaben, Liste auf dem Handy), `CoordinationTicker`
+- [x] Tests (Unit mit deutschen Texten, e2e), Doku-Seiten, Changesets
+
+Notiz (Auftrag aus HQ, 27.11.2026): HQ stellt seine ganze Oberfläche auf das Kit um. Abweichungen vom Auftrag: Texte kommen nicht über eine `labels`-Prop je Komponente, sondern wie im ganzen Kit über `UIProvider messages` (ein deutsches Wörterbuch für die App); Tests prüfen, dass mit deutschen Texten kein Englisch übrig bleibt. Dichte und Bewegung behalten die drei Stufen des Kits. Der Passkey-Schritt ist eine Prop (`stepUp`) statt automatisch je Familie. Befehle haben drei Risikostufen (lesen, ändern, kritisch). Das Handy-Sheet der Popover steckt in `sheet.tsx`, weil DataTable sonst sein Größenbudget reißt.
+
 ## Offen (Robin)
 - Nach dem ersten Release über Trusted Publishing (0.2.1): je Package „Publishing access“ auf „Require two-factor authentication and disallow tokens“, npm-Token löschen, Secret `NPM_TOKEN` löschen
 - Hosting: die Doku läuft auf `ui.twentyfirst.media`; später evtl. `twentyfirst.design`
