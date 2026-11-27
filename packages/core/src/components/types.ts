@@ -754,7 +754,10 @@ export interface InvoicePreviewProps extends BaseProps {
   to: string;
   issued: string;
   due: string;
-  lines: { d: string; q: number; u: number; v: number }[];
+  /** Lines: description, quantity, unit price, VAT rate in percent, optional discount in percent. */
+  lines: { d: string; q: number; u: number; v: number; discount?: number }[];
+  /** Discount on the whole invoice in percent (shown as subtotal, discount, net). */
+  discount?: number;
   note?: string;
   kind?: string;
   brand?: string;
@@ -2420,8 +2423,28 @@ export interface ExportDialogProps extends BaseProps {
   ranges?: boolean;
   range?: { from: Date | null; to: Date | null } | null;
   note?: ReactNode;
+  /**
+   * Accounting export (e.g. DATEV): the pre-check shown before exporting: the bookings that go
+   * in and their sum, drafts left out, and your own lines.
+   */
+  check?: {
+    count: number;
+    sum?: number;
+    currency?: string;
+    /** Drafts that are not exported (shown as a warning). */
+    drafts?: number;
+    items?: { label: ReactNode; tone?: "ok" | "warning" | "danger" }[];
+  };
+  /** Settings the export needs and that are missing; while any is listed, Export stays off. */
+  missing?: { label: string; href?: string; onClick?: () => void; action?: string }[];
+  /** Router link for `missing[].href` (default `a`, or the provider's `linkAs`). */
+  linkAs?: ElementType;
+  /** Offers "Lock the month with the export" (a string replaces the label); `onExport` gets `lock`. */
+  lockPeriod?: boolean | string;
+  /** Start with the lock ticked. */
+  defaultLock?: boolean;
   onExport?: (
-    o: { format: string; columns: string[]; range: DateRange | null },
+    o: { format: string; columns: string[]; range: DateRange | null; lock?: boolean },
     progress: (pct: number) => void,
   ) => void | Promise<void>;
   onDownload?: () => void;
@@ -4123,4 +4146,301 @@ export interface HighlightProps extends BaseProps {
   terms?: string[];
   /** Marks `query` as one phrase instead of word by word. */
   exact?: boolean;
+}
+
+/* ── Files, finance and brand studio (files.tsx, finance.tsx, brand-studio.tsx) ── */
+export interface FileBrowserItem {
+  id: string;
+  name: string;
+  /** `"folder"` or a file kind; without it the kind comes from `mime` or the extension. */
+  kind?: FileKind | "folder";
+  mime?: string;
+  /** Bytes (formatted as KB, MB …) or your own text. */
+  size?: number | string;
+  modified?: Date | string | number;
+  /** Folders: how many items are inside. */
+  count?: number;
+  shared?: boolean;
+  /** Your own meta line instead of size and date. */
+  meta?: string;
+  /** A small image for the grid (your URL). */
+  thumbnail?: string;
+  /** URL of an image or PDF shown in the preview drawer (your URL; the kit loads nothing else). */
+  preview?: string;
+  /** Alt text of an image preview (default: the name). */
+  alt?: string;
+  /** Address of the file in your app ("Open" in the preview, with `linkAs`). */
+  href?: string;
+}
+export interface FileBrowserFolder {
+  id: string;
+  name: string;
+  children?: FileBrowserFolder[];
+}
+export interface FileBrowserUpload {
+  id: string;
+  name: string;
+  /** 0–100. */
+  progress: number;
+  size?: number;
+  /** Large files uploaded in parts: the current part and how many. */
+  part?: number;
+  parts?: number;
+  /** Why it failed (shows the row in the danger colour). */
+  error?: string;
+}
+export interface FileBrowserProps extends BaseProps {
+  /** `"glass"` for a translucent surface over a map, photo or video; `"solid"` opts out inside a glass provider. */
+  surface?: Surface;
+  /** The current folder's folders and files. */
+  items: FileBrowserItem[];
+  /** Breadcrumbs from the root to the current folder (`href` makes them links). */
+  path?: { id: string; name: string; href?: string }[];
+  /** A folder or a breadcrumb was opened. */
+  onNavigate?: (folderId: string) => void;
+  /** A file was opened (files with an image or PDF `preview` also open the preview drawer). */
+  onOpen?: (item: FileBrowserItem) => void;
+  /** Set `false` to open files only through `onOpen`. */
+  previewOnOpen?: boolean;
+  /** Router link for breadcrumbs and "Open" (default `a`, or the provider's `linkAs`). */
+  linkAs?: ElementType;
+  view?: "grid" | "list";
+  defaultView?: "grid" | "list";
+  onViewChange?: (view: "grid" | "list") => void;
+  selected?: string[];
+  defaultSelected?: string[];
+  onSelectedChange?: (ids: string[]) => void;
+  query?: string;
+  defaultQuery?: string;
+  onQueryChange?: (query: string) => void;
+  /** Filters `items` by name as you type (default); `false` when your server searches. */
+  localSearch?: boolean;
+  /** `false` hides the search field. */
+  search?: boolean;
+  searchPlaceholder?: string;
+  /** The id of the file shown in the preview drawer. */
+  preview?: string | null;
+  defaultPreview?: string | null;
+  onPreviewChange?: (id: string | null) => void;
+  /** Shows Upload and accepts dropped files; upload them yourself and pass `uploads`. */
+  onUpload?: (files: File[]) => void;
+  /** File types for the picker (`accept`). */
+  accept?: string;
+  uploads?: FileBrowserUpload[];
+  onCancelUpload?: (id: string) => void;
+  onCreateFolder?: (name: string) => void | Promise<void>;
+  onRename?: (id: string, name: string) => void | Promise<void>;
+  /** With `folders`: Move opens a folder picker. */
+  onMove?: (ids: string[], folderId: string) => void | Promise<void>;
+  /** The folder tree for the move picker. */
+  folders?: FileBrowserFolder[];
+  onTrash?: (ids: string[]) => void | Promise<void>;
+  onDownload?: (ids: string[]) => void;
+  /** Folders before files (default true). */
+  foldersFirst?: boolean;
+  loading?: boolean;
+  emptyText?: string;
+  /** Accessible name (default "Files"). */
+  label?: string;
+  /** More controls in the toolbar. */
+  actions?: ReactNode;
+}
+
+/** A line for `invoiceTotals`: quantity, unit price, VAT rate and discount in percent. */
+export interface InvoiceTotalsLine {
+  quantity: number;
+  price: number;
+  vat: number;
+  discount?: number;
+}
+export interface InvoiceTotals {
+  /** Each line's net after its discount, rounded to cents. */
+  lines: number[];
+  /** Sum of the lines. */
+  subtotal: number;
+  /** The invoice discount as an amount. */
+  discount: number;
+  net: number;
+  /** Per VAT rate, highest first: its net and its VAT, each rounded once. */
+  rates: { rate: number; net: number; vat: number }[];
+  vat: number;
+  total: number;
+}
+export interface InvoiceDraftLine extends InvoiceTotalsLine {
+  id: string;
+  description: string;
+  unit?: string;
+}
+export interface InvoiceDraft {
+  /** The picked customer's id. */
+  customer?: string | null;
+  lines: InvoiceDraftLine[];
+  /** Discount on the whole invoice in percent. */
+  discount?: number;
+  /** The note printed on the invoice. */
+  note?: string;
+}
+export interface InvoiceEditorProps extends BaseProps {
+  value?: InvoiceDraft;
+  defaultValue?: InvoiceDraft;
+  onChange?: (value: InvoiceDraft) => void;
+  /** The customer picker's options. */
+  customers?: { id: string; name: string; detail?: string }[];
+  /** Beside the picker, e.g. a "New customer" button. */
+  customerAction?: ReactNode;
+  /** More fields at the top: dates, payment terms, number. */
+  head?: ReactNode;
+  /** The VAT rates to pick from, in percent (default 19, 7 and 0). Your country's rates are data. */
+  vatRates?: { value: number; label?: string }[];
+  /** Units to pick per line (hours, days, pieces …); omitted: no unit column. */
+  units?: string[];
+  /** Currency for amounts (default the provider's, euros). */
+  currency?: string;
+  /** Discount per line (default true). */
+  lineDiscounts?: boolean;
+  /** Discount on the whole invoice (default true). */
+  invoiceDiscount?: boolean;
+  /** The note field (default true). */
+  notes?: boolean;
+  /** A new line (e.g. with your id); default an empty line with the first VAT rate. */
+  newLine?: () => InvoiceDraftLine;
+  /**
+   * The live InvoicePreview beside the form (its number, from, dates …); `false` hides it. `to`
+   * defaults to the picked customer, the lines and the note come from the editor.
+   */
+  preview?: Partial<Omit<InvoicePreviewProps, "lines">> | false;
+  /** Below this width (default 900px) the form and the preview become tabs. */
+  stackBelow?: number;
+  /** Under the totals: save, issue. */
+  actions?: ReactNode;
+  /** Small print beside the totals ("The number is given when the invoice is issued"). */
+  footnote?: ReactNode;
+  readOnly?: boolean;
+}
+export interface ImportSuggestionLine {
+  id: string;
+  date: Date | string | number;
+  /** The booking text from the statement. */
+  text: string;
+  counterparty?: string;
+  /** Signed: income positive, spending negative. */
+  amount: number;
+  currency?: string;
+  suggestion?: {
+    category: string;
+    /** The booking, e.g. "6815 Office supplies ← 1200 Bank". */
+    booking?: string;
+    /** 0–1. */
+    confidence?: number;
+    /** Why (shown as its tooltip). */
+    reason?: string;
+  };
+  /** `"duplicate"` and `"booked"` lines are shown but cannot be picked (default `"new"`). */
+  state?: "new" | "duplicate" | "booked";
+}
+export interface ImportSuggestionsProps extends BaseProps {
+  /** `"glass"` for a translucent surface over a map, photo or video; `"solid"` opts out inside a glass provider. */
+  surface?: Surface;
+  lines: ImportSuggestionLine[];
+  /** Default: every new line with a suggestion. */
+  selected?: string[];
+  defaultSelected?: string[];
+  onSelectedChange?: (ids: string[]) => void;
+  /** Books the picked lines in one step; a Promise shows the pending state, a rejection its message. */
+  onConfirm?: (ids: string[]) => void | Promise<void>;
+  /** With `onCategoryChange`: a category picker per line. */
+  categories?: string[];
+  onCategoryChange?: (id: string, category: string) => void;
+  onEdit?: (id: string) => void;
+  currency?: string;
+  title?: string;
+  busy?: boolean;
+}
+export interface PeriodLockProps extends BaseProps {
+  /** `"glass"` for a translucent surface over a map, photo or video; `"solid"` opts out inside a glass provider. */
+  surface?: Surface;
+  /** The period's name ("October 2026"), or `month` to format it in the provider's locale. */
+  period?: string;
+  month?: Date | string | number;
+  locked?: boolean;
+  defaultLocked?: boolean;
+  onLockedChange?: (locked: boolean) => void;
+  /** A Promise shows the pending state (e.g. while a passkey is asked); a rejection its message. */
+  onLock?: () => void | Promise<void>;
+  onUnlock?: () => void | Promise<void>;
+  lockedAt?: Date | string | number;
+  lockedBy?: string;
+  /** The line under an open period. */
+  note?: string;
+  /** Ask before locking and unlocking (default true). */
+  confirm?: boolean;
+  /** The confirm button says "Confirm with passkey". */
+  stepUp?: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
+}
+
+export interface PaletteColor {
+  name: string;
+  /** `#rrggbb`: the palette's colour (data, shown as it is). */
+  value: string;
+  /** "Primary", "Accent" … */
+  role?: string;
+  note?: ReactNode;
+}
+export interface PaletteSwatchesProps extends BaseProps {
+  /** `"glass"` for a translucent surface over a map, photo or video; `"solid"` opts out inside a glass provider. */
+  surface?: Surface;
+  colors: PaletteColor[];
+  /** Accessible name (default "Palette"). */
+  label?: string;
+  /** Background for the light contrast (default white). */
+  light?: string;
+  /** Background for the dark contrast (default near black). */
+  dark?: string;
+  /** `false` hides the contrast rows. */
+  contrast?: boolean;
+  /** Small chips with name and values only. */
+  compact?: boolean;
+}
+export type AssetState = "queued" | "generating" | "done" | "failed";
+export interface AssetVersion {
+  id: string;
+  /** The image (your URL; with a watermark if the asset is not bought yet). */
+  src?: string;
+  prompt?: string;
+  state?: AssetState;
+  error?: string;
+  /** The file to download for this version. */
+  downloadHref?: string;
+}
+export interface AssetCardProps extends BaseProps {
+  /** `"glass"` for a translucent surface over a map, photo or video; `"solid"` opts out inside a glass provider. */
+  surface?: Surface;
+  title: string;
+  alt?: string;
+  versions: AssetVersion[];
+  /** The version shown (0-based); default the current one. */
+  version?: number;
+  defaultVersion?: number;
+  onVersionChange?: (index: number) => void;
+  /** The version in use (badge "Current"). */
+  current?: number;
+  onMakeCurrent?: (index: number) => void;
+  /** The state of a new generation (overrides the shown version's). */
+  state?: AssetState;
+  /** A badge on the image: `true` for "Watermark" or your text. */
+  watermark?: boolean | string;
+  /** "1024 × 1024 · €0.04". */
+  meta?: ReactNode;
+  /** Shows Regenerate with a prompt field (prefilled with the version's prompt). */
+  onRegenerate?: (prompt: string) => void;
+  prompt?: string;
+  /** Without a version's `downloadHref`: Download calls this. */
+  onDownload?: (index: number) => void;
+  /** Width / height of the image area (default 1). */
+  ratio?: number;
+  error?: string;
+  /** More buttons in the action row. */
+  actions?: ReactNode;
 }

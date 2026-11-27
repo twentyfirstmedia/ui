@@ -294,4 +294,7 @@ export {
   TransactionRow,
 } from "./workspace.js";
 export { BulkActionBar, DaySeparator, Highlight, highlightParts } from "./common.js";
+export { FileBrowser, fileKindOf } from "./files.js";
+export { InvoiceEditor, ImportSuggestions, PeriodLock } from "./finance.js";
+export { PaletteSwatches, AssetCard } from "./brand-studio.js";
 export type * from "./types.js";

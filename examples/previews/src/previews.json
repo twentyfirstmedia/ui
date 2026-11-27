@@ -375,8 +375,8 @@
   {
     "name": "ExportDialog",
     "group": "Overlays",
-    "width": 900,
-    "height": 620,
+    "width": 1100,
+    "height": 760,
     "components": ["ExportDialog"]
   },
   {
@@ -392,16 +392,12 @@
     "width": 1280,
     "height": 760,
     "components": [
-      "Chip",
       "CommandPalette",
-      "FileCard",
+      "FileBrowser",
       "Icon",
       "IconButton",
       "PageHeader",
-      "SearchField",
-      "Stagger",
       "SubNav",
-      "Tabs",
       "TopBar"
     ]
   },
@@ -490,11 +486,10 @@
       "Button",
       "Icon",
       "IconButton",
-      "InvoicePreview",
+      "InvoiceEditor",
       "PageHeader",
       "Select",
       "SubNav",
-      "TintIcon",
       "TopBar",
       "TransactionRow"
     ]
@@ -519,6 +514,41 @@
     "width": 1100,
     "height": 1000,
     "components": ["LedgerTable", "PnLStatement", "ReceiptSuggestion"]
+  },
+  {
+    "name": "InvoiceEditor",
+    "group": "Data",
+    "width": 1280,
+    "height": 920,
+    "components": ["InvoiceEditor", "InvoicePreview"]
+  },
+  {
+    "name": "ImportSuggestions",
+    "group": "Data",
+    "width": 1000,
+    "height": 640,
+    "components": ["ImportSuggestions", "Panel"]
+  },
+  {
+    "name": "PeriodLock",
+    "group": "Data",
+    "width": 800,
+    "height": 420,
+    "components": ["PeriodLock", "Panel"]
+  },
+  {
+    "name": "PaletteSwatches",
+    "group": "Media",
+    "width": 1100,
+    "height": 520,
+    "components": ["PaletteSwatches"]
+  },
+  {
+    "name": "AssetCard",
+    "group": "Media",
+    "width": 1100,
+    "height": 620,
+    "components": ["AssetCard"]
   },
   {
     "name": "LineChart",
@@ -1040,6 +1070,13 @@
     "width": 900,
     "height": 460,
     "components": ["ContextMenu", "InlineEdit", "KeyValue", "TreeView"]
+  },
+  {
+    "name": "FileBrowser",
+    "group": "Data",
+    "width": 1100,
+    "height": 720,
+    "components": ["FileBrowser", "BulkActionBar", "Breadcrumb"]
   },
   {
     "name": "TriggerList",
