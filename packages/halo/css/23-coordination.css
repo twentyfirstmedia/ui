@@ -148,23 +148,16 @@
   gap: 4px;
 }
 .tf-agentnet-details {
-  position: absolute;
-  left: 8px;
-  bottom: 8px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 280px;
-  max-width: calc(100% - 16px);
+  margin-top: 8px;
   box-sizing: border-box;
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  background: var(--popover);
-  color: var(--popover-foreground);
-  box-shadow: var(--shadow-float);
-  cursor: auto;
-  user-select: text;
+  background: var(--surface);
+  color: var(--ink);
 }
 .tf-agentnet-details-head {
   display: flex;
@@ -228,10 +221,7 @@
   outline-offset: 2px;
 }
 .tf-agentnet.is-list .tf-agentnet-details {
-  position: static;
-  width: auto;
-  max-width: none;
-  box-shadow: none;
+  margin-top: 0;
 }
 
 /* CoordinationTicker */

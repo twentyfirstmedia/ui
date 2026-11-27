@@ -146,7 +146,7 @@ function NodeMark({ node, size }: { node: AgentNetworkNode; size: number }) {
   return node.avatar !== undefined ? (
     <Avatar name={node.name} src={node.avatar || undefined} size={size} />
   ) : (
-    <AgentMark tint={node.tint} icon={node.icon} size={size} live={STATUS_OF(node) === "running"} />
+    <AgentMark tint={node.tint} icon={node.icon} size={size} />
   );
 }
 
@@ -507,8 +507,8 @@ export function AgentNetwork(p: AgentNetworkProps) {
             <Icon name="expand" />
           </button>
         </div>
-        {details}
       </div>
+      {details}
       {/* handoffs read out for screen readers, since the travelling dot is visual only */}
       <div className="tf-sr-only" aria-live="polite">
         {packets.length > 0 &&
