@@ -294,4 +294,10 @@ export {
   TransactionRow,
 } from "./workspace.js";
 export { BulkActionBar, DaySeparator, Highlight, highlightParts } from "./common.js";
+export {
+  AgentNetwork,
+  CoordinationTicker,
+  layoutAgentNetwork,
+  handoffPath,
+} from "./coordination.js";
 export type * from "./types.js";

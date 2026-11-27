@@ -692,6 +692,20 @@
     "components": ["OrgChart"]
   },
   {
+    "name": "AgentNetwork",
+    "group": "AI",
+    "width": 1000,
+    "height": 520,
+    "components": ["AgentNetwork", "Panel", "Button"]
+  },
+  {
+    "name": "CoordinationTicker",
+    "group": "AI",
+    "width": 720,
+    "height": 420,
+    "components": ["CoordinationTicker", "Panel"]
+  },
+  {
     "name": "Panel",
     "group": "Data",
     "width": 960,

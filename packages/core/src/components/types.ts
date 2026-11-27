@@ -4124,3 +4124,83 @@ export interface HighlightProps extends BaseProps {
   /** Marks `query` as one phrase instead of word by word. */
   exact?: boolean;
 }
+
+/* ── Coordination (coordination.tsx) ── */
+export interface AgentNetworkNode {
+  id: string;
+  name: string;
+  /** Project or team, shown under the name. */
+  project?: string;
+  role?: string;
+  /** State in the kit's vocabulary: idle, running (working), signal (waiting for approval), warn, danger (error), ok. */
+  status?: Status;
+  /** Word for the status instead of the built-in one. */
+  statusLabel?: string;
+  /** Open approvals: a beacon with the count on the node. */
+  approvals?: number;
+  tint?: Tint;
+  icon?: IconName;
+  /** A person instead of an agent mark: the photo URL, or "" for initials. */
+  avatar?: string;
+  /** Short text in the details card (current task, last run …). */
+  detail?: ReactNode;
+  /** The agent's page, linked from the details card. */
+  href?: string;
+  children?: AgentNetworkNode[];
+}
+export interface AgentNetworkHandoff {
+  /** Unique per handoff: each new id sends one packet. */
+  id: string;
+  from: string;
+  to: string;
+  /** What is handed over, shown on the packet. */
+  label?: string;
+}
+export interface AgentNetworkProps extends BaseProps {
+  /** The orchestrator, with its leads and their agents as children. */
+  root: AgentNetworkNode;
+  /** Handoffs from your event stream; each new id animates a packet from `from` to `to`. */
+  handoffs?: AgentNetworkHandoff[];
+  /** Also animates the handoffs present at mount (default: only later ones). */
+  animateInitial?: boolean;
+  /** "auto" (default): the graph, or a list when narrower than 560px. */
+  layout?: "auto" | "graph" | "list";
+  /** Height of the graph viewport (default 440). */
+  height?: number;
+  /** Selected node id (controlled); `null` for none. */
+  selected?: string | null;
+  defaultSelected?: string | null;
+  onSelect?: (node: AgentNetworkNode | null) => void;
+  /** More content for the details card of the selected node. */
+  renderDetails?: (node: AgentNetworkNode) => ReactNode;
+  /** Text of the details card's link (default "Open"). */
+  openLabel?: string;
+  /** Accessible name of the graph (default "Agent network"). */
+  label?: string;
+  linkAs?: ElementType;
+}
+export interface CoordinationEvent {
+  id: string;
+  kind: "handoff" | "run" | "approval" | "message" | "error" | "done";
+  /** Who passed it on or started it. */
+  from?: string;
+  /** Who received it. */
+  to?: string;
+  text?: ReactNode;
+  time: Date | string | number;
+  icon?: IconName;
+  href?: string;
+}
+export interface CoordinationTickerProps extends BaseProps {
+  /** Newest first. */
+  items: CoordinationEvent[];
+  /** Shows at most this many. */
+  max?: number;
+  /** Announces new lines to screen readers (default true). */
+  live?: boolean;
+  /** Reference time for "2 min ago" (default now). */
+  now?: Date | string | number;
+  emptyText?: string;
+  label?: string;
+  linkAs?: ElementType;
+}

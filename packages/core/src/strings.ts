@@ -1838,6 +1838,56 @@ export const COMMON_STRINGS: Pick<UIStrings, "bulkActions" | "clear" | "today" |
   yesterday: "Yesterday",
 };
 
+/** Strings of the components in `coordination.tsx`. */
+export interface UIStrings {
+  agentNetwork: string;
+  agentNetworkStatus: Record<string, string>;
+  approvalsWaiting: (n: number) => string;
+  openAgent: string;
+  zoomIn: string;
+  zoomOut: string;
+  fitToView: string;
+  handoffAnnounce: (from: string, to: string, what?: string) => string;
+  coordination: string;
+  noActivity: string;
+  to: string;
+}
+export const COORDINATION_STRINGS: Pick<
+  UIStrings,
+  | "agentNetwork"
+  | "agentNetworkStatus"
+  | "approvalsWaiting"
+  | "openAgent"
+  | "zoomIn"
+  | "zoomOut"
+  | "fitToView"
+  | "handoffAnnounce"
+  | "coordination"
+  | "noActivity"
+  | "to"
+  | "close"
+> = {
+  agentNetwork: "Agent network",
+  agentNetworkStatus: {
+    idle: "Idle",
+    running: "Working",
+    signal: "Waiting for approval",
+    warn: "Needs attention",
+    danger: "Error",
+    ok: "Done",
+  },
+  approvalsWaiting: (n) => (n === 1 ? "1 approval waiting" : `${n} approvals waiting`),
+  openAgent: "Open",
+  zoomIn: "Zoom in",
+  zoomOut: "Zoom out",
+  fitToView: "Fit to view",
+  handoffAnnounce: (from, to, what) => `${from} handed ${what ? `"${what}"` : "work"} to ${to}.`,
+  coordination: "Coordination",
+  noActivity: "Nothing happening right now",
+  to: "to",
+  close: "Close",
+};
+
 /** Strings of the components in `site.tsx`. */
 export const SITE_STRINGS: Pick<
   UIStrings,
@@ -2625,6 +2675,7 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   SHELL_STRINGS,
   APPEARANCE_STRINGS,
   COMMON_STRINGS,
+  COORDINATION_STRINGS,
   SITE_STRINGS,
   WORKSPACE_STRINGS,
 );
