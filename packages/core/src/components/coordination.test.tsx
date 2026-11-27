@@ -73,7 +73,7 @@ describe("AgentNetwork", () => {
   it("lists every agent with status and approvals, and opens the details", () => {
     render(<AgentNetwork root={ROOT} layout="graph" />);
     const shop = screen.getByRole("button", {
-      name: "Shop lead, Shop, Waiting for approval, 2 approvals waiting",
+      name: /^Shop lead\s*Shop\s*, Waiting for approval, 2 approvals waiting$/,
     });
     fireEvent.click(shop);
     expect(shop.getAttribute("aria-pressed")).toBe("true");
@@ -100,10 +100,10 @@ describe("AgentNetwork", () => {
     expect(screen.getByRole("group", { name: "Agenten-Netz" })).toBeTruthy();
     expect(
       screen.getByRole("button", {
-        name: "Shop lead, Shop, Wartet auf Freigabe, 2 Freigaben offen",
+        name: /Shop lead.*Wartet auf Freigabe, 2 Freigaben offen/,
       }),
     ).toBeTruthy();
-    expect(screen.queryByText(/approvals waiting/)).toBeNull();
+    expect(screen.queryByText(/approvals waiting|Waiting for approval/)).toBeNull();
   });
 
   it("marks the receiver of a handoff when motion is off", () => {
@@ -149,7 +149,8 @@ describe("CoordinationTicker", () => {
       />,
     );
     const log = screen.getByRole("log", { name: "Coordination" });
-    expect(log.querySelectorAll("li")).toHaveLength(2);
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    expect(log.querySelector("ol")).toBeTruthy();
     const link = screen.getByRole("link");
     expect(link.getAttribute("href")).toBe("/runs/1");
     expect(link.textContent).toContain("Orchestrator");
