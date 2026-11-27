@@ -2332,5 +2332,27 @@
     "width": 720,
     "height": 200,
     "components": ["SearchTrigger", "CommandPalette"]
+  },
+  {
+    "name": "MissionControlScreen",
+    "group": "Pages",
+    "width": 1440,
+    "height": 1240,
+    "components": [
+      "AppShell",
+      "AgentNetwork",
+      "CoordinationTicker",
+      "ChatThread",
+      "ChatMessage",
+      "Composer",
+      "PromptStarters",
+      "ApprovalCard",
+      "MoneyPreview",
+      "UsageMeter",
+      "Tabs",
+      "SearchTrigger",
+      "CommandPalette",
+      "AppearanceProvider"
+    ]
   }
 ]
