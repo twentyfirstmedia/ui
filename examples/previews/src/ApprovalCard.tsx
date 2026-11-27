@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ApprovalCard } from "@twentyfirstmedia/ui-core";
+import { ApprovalCard, ChangePreview } from "@twentyfirstmedia/ui-core";
 import type { ApprovalDecision } from "@twentyfirstmedia/ui-core";
 
 function App() {
@@ -36,6 +36,20 @@ function App() {
           }
         </div>
       </ApprovalCard>
+      <div style={{ maxWidth: 360 }}>
+        <ApprovalCard
+          compact
+          href="#"
+          agent="Scout"
+          project="Domains"
+          family="infra"
+          age="3 min"
+          title="Set TTL of ops-test to 300"
+          text="Faster rollout of the next verification change."
+        >
+          <ChangePreview fields={[{ label: "TTL", before: "3600", after: "300", mono: true }]} />
+        </ApprovalCard>
+      </div>
       <ApprovalCard
         agent="Ledger"
         project="Finance"

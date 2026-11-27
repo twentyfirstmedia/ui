@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cx } from "../cx.js";
+import { LineDiff } from "./approval-previews.js";
 import { useFormat, useStrings } from "../context.js";
 import { AGENTS_STRINGS } from "../strings.js";
 import { Icon } from "../Icon.js";
@@ -536,27 +537,6 @@ export function MemoryViewer(p: MemoryViewerProps) {
 }
 export function OverrideDiff(p: OverrideDiffProps) {
   const t = useStrings(AGENTS_STRINGS);
-  const a = String(p.before || "").split("\n"),
-    b = String(p.after || "").split("\n"),
-    rows = [];
-  let i = 0,
-    j = 0;
-  while (i < a.length || j < b.length) {
-    if (a[i] === b[j]) {
-      rows.push([" ", a[i]]);
-      i++;
-      j++;
-    } else if (j < b.length && a.indexOf(b[j], i) < 0) {
-      rows.push(["+", b[j]]);
-      j++;
-    } else if (i < a.length) {
-      rows.push(["-", a[i]]);
-      i++;
-    } else {
-      rows.push(["+", b[j]]);
-      j++;
-    }
-  }
   return (
     <div style={p.style} className={cx("tf-diff", p.className)}>
       <div className="tf-diff-head">
@@ -582,15 +562,7 @@ export function OverrideDiff(p: OverrideDiffProps) {
           )}
         </span>
       </div>
-      <pre className="tf-diff-body">
-        {rows.map((r, k) => (
-          <span key={k} className={r[0] === "+" ? "add" : r[0] === "-" ? "del" : ""}>
-            <i>{r[0]}</i>
-            {r[1]}
-            {"\n"}
-          </span>
-        ))}
-      </pre>
+      <LineDiff before={p.before} after={p.after} context={p.context ?? Infinity} />
     </div>
   );
 }

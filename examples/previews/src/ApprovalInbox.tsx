@@ -1,8 +1,8 @@
 import * as React from "react";
 import { ApprovalInbox } from "@twentyfirstmedia/ui-core";
-import type { ApprovalInboxItem } from "@twentyfirstmedia/ui-core";
+import type { ApprovalInboxItem, ApprovalKey } from "@twentyfirstmedia/ui-core";
 
-const items: ApprovalInboxItem[] = [
+const ITEMS: ApprovalInboxItem[] = [
   {
     id: 1,
     title: "Send reply to Northwind",
@@ -17,7 +17,7 @@ const items: ApprovalInboxItem[] = [
     id: 2,
     title: "Refund €10.00 to card ending 4242",
     agent: "Ledger",
-    project: "Chatteo",
+    project: "Billing",
     family: "money",
     age: "38 min",
     ageMin: 38,
@@ -26,7 +26,7 @@ const items: ApprovalInboxItem[] = [
     id: 3,
     title: "Set daily ad budget to €30",
     agent: "Ads",
-    project: "Northwind",
+    project: "Marketing",
     family: "marketing",
     age: "12 min",
     ageMin: 12,
@@ -40,13 +40,43 @@ const items: ApprovalInboxItem[] = [
     age: "3 min",
     ageMin: 3,
   },
+  {
+    id: 5,
+    title: "Restart nginx on web-1",
+    agent: "Ops",
+    project: "Platform",
+    family: "infra",
+    decision: { key: "A", by: "Mara Ellis", at: "08:12" },
+  },
+  {
+    id: 6,
+    title: "Delete the duplicate contact Ida N.",
+    agent: "Growth",
+    project: "Sales",
+    family: "apps",
+    decision: { key: "C", by: "Lukas", at: "Yesterday" },
+  },
 ];
-function App() {
-  const s = React.useState<string | number>(1);
+
+export default function Preview() {
+  const [items, setItems] = React.useState(ITEMS);
+  const [selected, setSelected] = React.useState<string | number>(1);
+  const decide = (id: string | number, key: ApprovalKey) => {
+    // A and C decide at once; B and D would open the text field of the card next to the list
+    if (key !== "A" && key !== "C") return;
+    setItems((all) =>
+      all.map((x) => (x.id === id ? { ...x, decision: { key, by: "You", at: "now" } } : x)),
+    );
+  };
   return (
-    <div className="tf-panel tf-panel-flush tf-panel-list">
-      <ApprovalInbox items={items} selected={s[0]} onSelect={s[1]} />
+    <div className="tf-panel">
+      <ApprovalInbox
+        items={items}
+        selected={selected}
+        onSelect={setSelected}
+        onDecide={decide}
+        filters
+      />
     </div>
   );
 }
-export default App;

@@ -1201,6 +1201,27 @@ export const APPROVALS_STRINGS: Pick<
   | "riskFamily"
   | "approvals"
   | "nothingWaiting"
+  | "needsPasskey"
+  | "confirmWithPasskey"
+  | "sendingAnswer"
+  | "passkeyFailed"
+  | "answerFailed"
+  | "showPayload"
+  | "hidePayload"
+  | "inboxOpen"
+  | "inboxDone"
+  | "inboxView"
+  | "inboxFilters"
+  | "filterProject"
+  | "filterFamily"
+  | "filterAgent"
+  | "allProjects"
+  | "allFamilies"
+  | "allAgents"
+  | "escalatesSoon"
+  | "nothingDecided"
+  | "noApprovalMatches"
+  | "decidedAs"
 > = {
   approveAsShown: "Yes, run it as shown",
   approveWithChange: "Yes, with a change",
@@ -1219,6 +1240,28 @@ export const APPROVALS_STRINGS: Pick<
   },
   approvals: "Approvals",
   nothingWaiting: "Nothing waiting for you",
+  needsPasskey: "Needs your passkey",
+  confirmWithPasskey: "Confirm with passkey",
+  sendingAnswer: "Sending your answer",
+  passkeyFailed: "The passkey was not confirmed. Nothing ran; try again.",
+  answerFailed: "Your answer did not go through. Nothing ran; try again.",
+  showPayload: "Show what runs",
+  hidePayload: "Hide what runs",
+  inboxOpen: "Open",
+  inboxDone: "Done",
+  inboxView: "Show",
+  inboxFilters: "Filter approvals",
+  filterProject: "Project",
+  filterFamily: "Risk family",
+  filterAgent: "Agent",
+  allProjects: "All projects",
+  allFamilies: "All families",
+  allAgents: "All agents",
+  escalatesSoon: (n, formatted) =>
+    n === 1 ? "1 approval escalates soon" : `${formatted ?? n} approvals escalate soon`,
+  nothingDecided: "Nothing decided yet",
+  noApprovalMatches: "No approval matches these filters",
+  decidedAs: (key, label) => `${key} · ${label}`,
 };
 
 /** Strings of the components in `building-blocks.tsx`. */
@@ -1836,6 +1879,273 @@ export const COMMON_STRINGS: Pick<UIStrings, "bulkActions" | "clear" | "today" |
   clear: "Clear",
   today: "Today",
   yesterday: "Yesterday",
+};
+
+/** Strings of the components in `approvals.tsx` (0.15). */
+export interface UIStrings {
+  needsPasskey: string;
+  confirmWithPasskey: string;
+  sendingAnswer: string;
+  passkeyFailed: string;
+  answerFailed: string;
+  showPayload: string;
+  hidePayload: string;
+  inboxOpen: string;
+  inboxDone: string;
+  inboxView: string;
+  inboxFilters: string;
+  filterProject: string;
+  filterFamily: string;
+  filterAgent: string;
+  allProjects: string;
+  allFamilies: string;
+  allAgents: string;
+  escalatesSoon: (n: number, formatted?: string) => string;
+  nothingDecided: string;
+  noApprovalMatches: string;
+  decidedAs: (key: string, label: string) => string;
+}
+
+/** Strings of the components in `approval-previews.tsx`. */
+export interface UIStrings {
+  previewField: string;
+  previewBefore: string;
+  previewAfter: string;
+  previewChanged: string;
+  previewEmpty: string;
+  lineChanges: string;
+  unchangedLines: (n: number, formatted?: string) => string;
+  commandLabel: string;
+  commandWords: string;
+  serverLabel: string;
+  riskLabel: string;
+  commandRisk: { read: string; change: string; critical: string };
+  stateBefore: string;
+  timeoutLabel: string;
+  seconds: (n: number, formatted?: string) => string;
+  runsOnceAfterA: string;
+  channelLabel: string;
+  recipientLabel: string;
+  senderLabel: string;
+  replyWindow: string;
+  windowOpenUntil: (until: string) => string;
+  windowClosesAt: (until: string) => string;
+  windowClosedSince: (since?: string) => string;
+  lastMessages: string;
+  messageFromCustomer: string;
+  messageFromUs: string;
+  textThatGoesOut: string;
+  templateLabel: string;
+  templateCategory: string;
+  sentOnceAfterA: string;
+  contactsLabel: string;
+  moreContacts: (n: number, formatted?: string) => string;
+  sourceLabel: string;
+  firstSentence: string;
+  scriptLabel: string;
+  callingHours: string;
+  budgetLabel: string;
+  minutesShort: (n: number, formatted?: string) => string;
+  booksInto: string;
+  documentLabel: string;
+  rangeLabel: string;
+  cellLabel: string;
+  openDocument: string;
+  eventWhen: string;
+  allDayLabel: string;
+  placeLabel: string;
+  calendarLabel: string;
+  guestsLabel: string;
+  guestStatus: { accepted: string; declined: string; tentative: string; open: string };
+  conflictsLabel: string;
+  amountLabel: string;
+  referenceLabel: string;
+  accountLabel: string;
+  bookingsLabel: string;
+  totalLabel: string;
+  refundOf: string;
+  needsFreshPasskey: string;
+}
+export const APPROVAL_PREVIEWS_STRINGS: Pick<
+  UIStrings,
+  | "previewField"
+  | "previewBefore"
+  | "previewAfter"
+  | "previewChanged"
+  | "previewEmpty"
+  | "lineChanges"
+  | "unchangedLines"
+  | "commandLabel"
+  | "commandWords"
+  | "serverLabel"
+  | "riskLabel"
+  | "commandRisk"
+  | "stateBefore"
+  | "timeoutLabel"
+  | "seconds"
+  | "runsOnceAfterA"
+  | "channelLabel"
+  | "recipientLabel"
+  | "senderLabel"
+  | "replyWindow"
+  | "windowOpenUntil"
+  | "windowClosesAt"
+  | "windowClosedSince"
+  | "lastMessages"
+  | "messageFromCustomer"
+  | "messageFromUs"
+  | "textThatGoesOut"
+  | "templateLabel"
+  | "templateCategory"
+  | "sentOnceAfterA"
+  | "contactsLabel"
+  | "moreContacts"
+  | "sourceLabel"
+  | "firstSentence"
+  | "scriptLabel"
+  | "callingHours"
+  | "budgetLabel"
+  | "minutesShort"
+  | "booksInto"
+  | "documentLabel"
+  | "rangeLabel"
+  | "cellLabel"
+  | "openDocument"
+  | "eventWhen"
+  | "allDayLabel"
+  | "placeLabel"
+  | "calendarLabel"
+  | "guestsLabel"
+  | "guestStatus"
+  | "conflictsLabel"
+  | "amountLabel"
+  | "referenceLabel"
+  | "accountLabel"
+  | "bookingsLabel"
+  | "totalLabel"
+  | "refundOf"
+  | "needsFreshPasskey"
+> = {
+  previewField: "Field",
+  previewBefore: "Before",
+  previewAfter: "After",
+  previewChanged: "Changed",
+  previewEmpty: "Empty",
+  lineChanges: "Line changes",
+  unchangedLines: (n, formatted) =>
+    n === 1 ? "1 unchanged line" : `${formatted ?? n} unchanged lines`,
+  commandLabel: "Command",
+  commandWords: "Word by word",
+  serverLabel: "Server",
+  riskLabel: "Risk",
+  commandRisk: { read: "Read only", change: "Changes", critical: "Critical" },
+  stateBefore: "State before",
+  timeoutLabel: "Timeout",
+  seconds: (_n, formatted) => `${formatted} s`,
+  runsOnceAfterA: "Runs once after A, never again on its own.",
+  channelLabel: "Channel",
+  recipientLabel: "Recipient",
+  senderLabel: "From",
+  replyWindow: "Reply window",
+  windowOpenUntil: (until) => `Open until ${until}`,
+  windowClosesAt: (until) => `Closes at ${until}`,
+  windowClosedSince: (since) => (since ? `Closed since ${since}` : "Closed"),
+  lastMessages: "Last messages",
+  messageFromCustomer: "Customer",
+  messageFromUs: "You",
+  textThatGoesOut: "Text that goes out",
+  templateLabel: "Template",
+  templateCategory: "Category",
+  sentOnceAfterA: "Goes out once after A, exactly as shown.",
+  contactsLabel: "Contacts",
+  moreContacts: (n, formatted) => `and ${formatted ?? n} more`,
+  sourceLabel: "Source",
+  firstSentence: "First sentence",
+  scriptLabel: "Script",
+  callingHours: "Calling hours",
+  budgetLabel: "Budget",
+  minutesShort: (_n, formatted) => `${formatted} min`,
+  booksInto: "Books into",
+  documentLabel: "Document",
+  rangeLabel: "Range",
+  cellLabel: "Cell",
+  openDocument: "Open document",
+  eventWhen: "When",
+  allDayLabel: "All day",
+  placeLabel: "Place",
+  calendarLabel: "Calendar",
+  guestsLabel: "Guests",
+  guestStatus: {
+    accepted: "Accepted",
+    declined: "Declined",
+    tentative: "Maybe",
+    open: "No answer",
+  },
+  conflictsLabel: "Conflicts",
+  amountLabel: "Amount",
+  referenceLabel: "Reference",
+  accountLabel: "Account",
+  bookingsLabel: "Bookings",
+  totalLabel: "Total",
+  refundOf: "Refund of",
+  needsFreshPasskey: "Needs a fresh passkey",
+};
+
+/** Strings of the components in `infra.tsx`. */
+export interface UIStrings {
+  allowedCommands: string;
+  blockedCommands: string;
+  noAllowedCommands: string;
+  parametersLabel: string;
+  needsApproval: string;
+  runsWithoutApproval: string;
+  expiresLabel: string;
+  notOnFile: string;
+  sslLabel: string;
+  mailLabel: string;
+  registrarLabel: string;
+  dnsLabel: string;
+  renewsAutomatically: string;
+  daysLeft: (n: number, formatted?: string) => string;
+  expired: string;
+}
+export const INFRA_STRINGS: Pick<
+  UIStrings,
+  | "allowedCommands"
+  | "blockedCommands"
+  | "noAllowedCommands"
+  | "parametersLabel"
+  | "needsApproval"
+  | "runsWithoutApproval"
+  | "commandRisk"
+  | "riskLabel"
+  | "expiresLabel"
+  | "notOnFile"
+  | "sslLabel"
+  | "mailLabel"
+  | "registrarLabel"
+  | "dnsLabel"
+  | "renewsAutomatically"
+  | "daysLeft"
+  | "expired"
+> = {
+  allowedCommands: "Allowed commands",
+  blockedCommands: "Always blocked",
+  noAllowedCommands: "No commands allowed on this server",
+  parametersLabel: "Parameters",
+  needsApproval: "Needs approval",
+  runsWithoutApproval: "Runs without approval",
+  commandRisk: { read: "Read only", change: "Changes", critical: "Critical" },
+  riskLabel: "Risk",
+  expiresLabel: "Expires",
+  notOnFile: "Not on file",
+  sslLabel: "SSL",
+  mailLabel: "Mail",
+  registrarLabel: "Registrar",
+  dnsLabel: "DNS",
+  renewsAutomatically: "Renews automatically",
+  daysLeft: (n, formatted) => (n === 1 ? "1 day left" : `${formatted ?? n} days left`),
+  expired: "Expired",
 };
 
 /** Strings of the components in `site.tsx`. */
@@ -2625,6 +2935,8 @@ export const DEFAULT_STRINGS: UIStrings = /* @__PURE__ */ Object.assign(
   SHELL_STRINGS,
   APPEARANCE_STRINGS,
   COMMON_STRINGS,
+  APPROVAL_PREVIEWS_STRINGS,
+  INFRA_STRINGS,
   SITE_STRINGS,
   WORKSPACE_STRINGS,
 );

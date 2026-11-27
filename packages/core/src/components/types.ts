@@ -1523,9 +1523,38 @@ export interface ApprovalCardProps extends BaseProps {
   heading?: string;
   options?: ApprovalOption[];
   approveLabel?: string;
-  onDecide?: (key: ApprovalKey, text?: string) => void;
+  /**
+   * Called with the answer (and the text of B or D). Return a Promise to keep the card busy until
+   * it settles: the answer's button spins and every answer is disabled; a rejection shows an error
+   * (a rejected string is shown as is) and keeps the card open. Once it resolves, a card without a
+   * `decision` prop collapses to its one-line record; with a plain callback, set `decision` yourself.
+   */
+  onDecide?: (key: ApprovalKey, text?: string) => void | Promise<unknown>;
+  /** The decision record: shown as one line instead of the card; `null` keeps the card open. */
   decision?: ApprovalDecision | null;
+  /**
+   * Side panels: tighter, the answers in a row, the payload folded behind "Show what runs" (one
+   * click, never a summary).
+   */
   compact?: boolean;
+  /**
+   * Money, legal and infrastructure decisions: A and B (the answers that run something) need a
+   * fresh passkey. They show "Needs your passkey"; while `onDecide` is pending the pressed answer
+   * says "Confirm with passkey". Do the WebAuthn step-up in `onDecide` and reject if it fails.
+   */
+  stepUp?: boolean;
+  /** The answer being sent, when you track it yourself (controlled busy state). */
+  busy?: ApprovalKey | null;
+  /** An error to show above the answers (controlled); a rejected `onDecide` shows one by itself. */
+  error?: ReactNode;
+  /**
+   * Fills its container, e.g. a deep link on a phone: the content scrolls and A–D stay at the
+   * bottom, full width, in thumb reach (with the safe area).
+   */
+  screen?: boolean;
+  /** Makes the title a link to the full approval (with `linkAs` for a router's link). */
+  href?: string;
+  linkAs?: ElementType;
   /** @deprecated */ onApprove?: () => void;
   /** @deprecated */ onDeny?: () => void;
   /** @deprecated */ onEdit?: (text: string) => void;
@@ -1540,12 +1569,42 @@ export interface ApprovalInboxItem {
   familyLabel?: string;
   age?: string;
   ageMin?: number;
+  /** Close to its escalation: the age turns into a warning and the inbox warns above the list. */
   urgent?: boolean;
+  /** Decided: the row moves to the "Done" view and shows the answer, who and when. */
+  decision?: ApprovalDecision;
+  /** Opens the approval at this address (with the inbox's `linkAs`) instead of `onSelect`. */
+  href?: string;
+}
+/** Which approvals the inbox shows; empty fields show all. */
+export interface ApprovalFilter {
+  project?: string;
+  family?: RiskFamily;
+  agent?: string;
 }
 export interface ApprovalInboxProps extends BaseProps {
   items: ApprovalInboxItem[];
   selected?: ApprovalInboxItem["id"];
+  defaultSelected?: ApprovalInboxItem["id"];
   onSelect?: (id: ApprovalInboxItem["id"]) => void;
+  /**
+   * A–D while the list has focus answer the selected approval. A and C usually decide at once;
+   * B and D open the text field of the card next to the list.
+   */
+  onDecide?: (id: ApprovalInboxItem["id"], key: ApprovalKey) => void;
+  /** Filter selects above the list: `true` for project, family and agent, or the ones you want. */
+  filters?: boolean | ("project" | "family" | "agent")[];
+  filter?: ApprovalFilter;
+  defaultFilter?: ApprovalFilter;
+  onFilterChange?: (filter: ApprovalFilter) => void;
+  /** "open" (default) or "done": the decided approvals. The switch shows when any item is decided or `showDone`. */
+  view?: "open" | "done";
+  defaultView?: "open" | "done";
+  onViewChange?: (view: "open" | "done") => void;
+  showDone?: boolean;
+  /** Warns above the list when approvals are close to escalating (default true). */
+  escalationWarning?: boolean;
+  linkAs?: ElementType;
   emptyTitle?: string;
   emptyText?: string;
   label?: string;
@@ -1813,6 +1872,8 @@ export interface OverrideDiffProps extends BaseProps {
   onPromote?: () => void;
   discardLabel?: string;
   promoteLabel?: string;
+  /** Unchanged lines kept around each change; longer unchanged runs fold into "…" (default: all lines). */
+  context?: number;
 }
 export interface TriggerListProps extends BaseProps {
   items: {
@@ -1930,8 +1991,11 @@ export interface DomainListProps extends BaseProps {
     days?: number;
     ssl?: Status;
     sslLabel?: string;
+    /** Opens the domain's page (with `linkAs` for a router's link) instead of `onOpen`. */
+    href?: string;
   }[];
   onOpen?: (d: NonNullable<DomainListProps["items"]>[number]) => void;
+  linkAs?: ElementType;
 }
 export interface MailAuthStatusProps extends BaseProps {
   rows: {
@@ -4123,4 +4187,242 @@ export interface HighlightProps extends BaseProps {
   terms?: string[];
   /** Marks `query` as one phrase instead of word by word. */
   exact?: boolean;
+}
+
+/* ── Approval previews (approval-previews.tsx) ── */
+/** One line of a line diff: `+` added, `-` removed, ` ` unchanged. */
+export interface DiffLine {
+  op: "+" | "-" | " ";
+  text: string;
+}
+export interface LineDiffProps extends BaseProps {
+  /** Compare two texts … */
+  before?: string;
+  after?: string;
+  /** … or pass the lines yourself. */
+  lines?: DiffLine[];
+  /** Unchanged lines kept around each change; longer runs fold into "…" (default 3; `Infinity` keeps all). */
+  context?: number;
+  /** Accessible name (default "Line changes"). */
+  label?: string;
+}
+export interface ChangeField {
+  label: ReactNode;
+  /** `null` or omitted: the field is empty before (created) or after (deleted). */
+  before?: string | null;
+  after?: string | null;
+  /** Monospace values (records, ids, commands). */
+  mono?: boolean;
+}
+export interface ChangePreviewProps extends BaseProps {
+  /** What changes, in one line ("Update TXT record ops-test · example.com"). */
+  title?: ReactNode;
+  /** Context above the table: provider, account, region, target. */
+  facts?: KeyValueItem[];
+  fields: ChangeField[];
+  /** Heading of the first column (default "Field"). */
+  fieldHeading?: string;
+  /** Only the changed rows. */
+  onlyChanged?: boolean;
+  /** A line diff below the table (config files, long texts), folded around the changes. */
+  diff?: { before: string; after: string; context?: number };
+  /** Worded by you; shown as warnings under the change. */
+  warnings?: ReactNode[];
+}
+export type CommandRisk = "read" | "change" | "critical";
+export interface CommandPreviewProps extends BaseProps {
+  /** The command exactly as it runs. */
+  command: string;
+  /** The same command word by word, when it runs without a shell (argv). */
+  argv?: string[];
+  server: ReactNode;
+  /** Host, user and port ("deploy@203.0.113.7:22"). */
+  host?: string;
+  risk?: CommandRisk;
+  /** Seconds until it is stopped. */
+  timeout?: number;
+  /** What was read before asking (status, a log excerpt), verbatim. */
+  stateBefore?: string;
+  /** When `stateBefore` was read ("09:41"). */
+  stateAt?: ReactNode;
+  /** More facts: host key, whitelist entry, parameters. */
+  facts?: KeyValueItem[];
+  warnings?: ReactNode[];
+}
+export interface MessagePreviewContext {
+  /** `in`: from the customer, `out`: from you. */
+  from: "in" | "out";
+  /** Who wrote it (default "Customer" / "You"). */
+  author?: string;
+  at?: Date | string | number;
+  text: string;
+}
+export interface MessagePreviewProps extends BaseProps {
+  /** One line: "Reply to Erika M. on WhatsApp". */
+  title?: ReactNode;
+  /** The channel's name ("WhatsApp", "Instagram", "SMS"). */
+  channel: string;
+  /** The channel's icon (default `send`); register brand icons to show the logo. */
+  channelIcon?: IconName;
+  /** Already masked, or pass it through `maskRecipient`. */
+  recipient?: string;
+  /** The account it is sent from. */
+  sender?: string;
+  /** Messaging windows (e.g. 24 hours after the customer's last message). */
+  window?: { state: "open" | "closing" | "closed"; until?: Date | string | number };
+  /** The last messages, oldest first. */
+  context?: MessagePreviewContext[];
+  /** Exactly what goes out. */
+  text?: string;
+  /** A pre-approved template instead of free text. */
+  template?: { name: string; category?: string; language?: string; params?: string[] };
+  /** The image or video of a post. */
+  media?: { kind: "image" | "video"; src: string; alt?: string; poster?: string };
+  warnings?: ReactNode[];
+  facts?: KeyValueItem[];
+}
+export interface CampaignContact {
+  name: string;
+  /** Already masked ("…5678"). */
+  phone?: string;
+  source?: string;
+}
+export interface CampaignPreviewProps extends BaseProps {
+  title?: ReactNode;
+  contacts: CampaignContact[];
+  /** All contacts when `contacts` shows only the first ones. */
+  total?: number;
+  /** The first sentence the caller says. */
+  opening: string;
+  /** The whole script (folded). */
+  script?: string;
+  /** Worded by you ("Mon–Fri, 9:00–17:00"). */
+  hours?: ReactNode;
+  budget?: { minutes?: number; amount?: number; currency?: string };
+  /** The calendar appointments are booked into. */
+  calendar?: ReactNode;
+  facts?: KeyValueItem[];
+  warnings?: ReactNode[];
+}
+export interface DocumentPreviewProps extends BaseProps {
+  /** The document's name. */
+  title: ReactNode;
+  /** Text documents: a line diff of `before` and `after`. */
+  before?: string;
+  after?: string;
+  /** Spreadsheets: the cells that change. */
+  cells?: { cell: string; before?: string | null; after?: string | null }[];
+  /** The sheet range ("Budget!B4:D9"). */
+  range?: string;
+  /** Opens the document (new tab, or `linkAs`). */
+  href?: string;
+  linkAs?: ElementType;
+  context?: number;
+  warnings?: ReactNode[];
+}
+export interface EventPreviewGuest {
+  name?: string;
+  email: string;
+  status?: "accepted" | "declined" | "tentative" | "open";
+}
+export interface EventPreviewProps extends BaseProps {
+  title: ReactNode;
+  start: Date | string | number;
+  end?: Date | string | number;
+  allDay?: boolean;
+  /** IANA time zone for the times (default the browser's). */
+  timeZone?: string;
+  location?: ReactNode;
+  calendar?: ReactNode;
+  guests?: EventPreviewGuest[];
+  /** Events at the same time. */
+  conflicts?: { title: string; start: Date | string | number; end?: Date | string | number }[];
+  /** The invitation or description text. */
+  text?: string;
+  warnings?: ReactNode[];
+}
+export interface MoneyBooking {
+  id: string | number;
+  date?: ReactNode;
+  text: ReactNode;
+  account?: ReactNode;
+  amount: number;
+}
+export interface MoneyPreviewProps extends BaseProps {
+  title?: ReactNode;
+  /** In the currency's units (12.5 = €12.50); negative for money going out of a booking. */
+  amount: number;
+  /** ISO code (default EUR). */
+  currency?: string;
+  /** Already masked ("DE89 …3000", "…4242"). */
+  recipient?: string;
+  reference?: ReactNode;
+  account?: ReactNode;
+  /** The bookings this writes, with their sum below. */
+  bookings?: MoneyBooking[];
+  /** A refund: the payment it goes back to. */
+  refund?: { payment: ReactNode; paidAt?: ReactNode; original?: number };
+  /** Shows "Needs a fresh passkey" (default true). */
+  stepUp?: boolean;
+  facts?: KeyValueItem[];
+  warnings?: ReactNode[];
+}
+
+/* ── Infrastructure (infra.tsx) ── */
+export interface WhitelistParam {
+  name: string;
+  /** What values pass: a pattern or a short description ("[a-z0-9-]+"). */
+  pattern?: string;
+  /** Or the fixed values that pass. */
+  values?: string[];
+}
+export interface WhitelistCommand {
+  id: string;
+  /** The command with its parameters in braces: "systemctl restart {service}". */
+  template: string;
+  description?: ReactNode;
+  params?: WhitelistParam[];
+  risk: CommandRisk;
+  /** Needs an approval before it runs (default: unless the risk is `read`). */
+  approval?: boolean;
+}
+export interface WhitelistServer {
+  id: string;
+  name: ReactNode;
+  host?: string;
+  commands: WhitelistCommand[];
+}
+export interface CommandWhitelistProps extends BaseProps {
+  servers: WhitelistServer[];
+  /** Patterns refused on every server, whatever the list says. */
+  blocked?: string[];
+  /** Row actions (edit, remove), e.g. IconButtons or a Menu. */
+  actions?: (command: WhitelistCommand, server: WhitelistServer) => ReactNode;
+}
+export interface DomainHeaderCheck {
+  status: Status;
+  label?: string;
+}
+export interface DomainHeaderProps extends BaseProps {
+  name: string;
+  registrar?: ReactNode;
+  dns?: ReactNode;
+  /** Expiry date (formatted in the provider's locale). */
+  expires?: Date | string | number;
+  /** Days until expiry; worked out from `expires` when omitted. Under 30 warns, under 7 is danger. */
+  days?: number;
+  autoRenew?: boolean;
+  ssl?: DomainHeaderCheck & { expires?: Date | string | number; issuer?: ReactNode };
+  /** The mail lights. */
+  mail?: {
+    mx?: DomainHeaderCheck;
+    spf?: DomainHeaderCheck;
+    dkim?: DomainHeaderCheck;
+    dmarc?: DomainHeaderCheck;
+  };
+  onOpenCheck?: (check: "mx" | "spf" | "dkim" | "dmarc" | "ssl" | "expiry") => void;
+  /** Buttons on the right (renew, add record). */
+  actions?: ReactNode;
+  /** What counts as today for `days` (default now). */
+  now?: Date | string | number;
 }

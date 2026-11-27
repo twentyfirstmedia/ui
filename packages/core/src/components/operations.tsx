@@ -3,7 +3,7 @@ import * as React from "react";
 import { Icon } from "../Icon.js";
 import { cx } from "../cx.js";
 import { useScrollFocus } from "../hooks.js";
-import { useFormat, useStrings } from "../context.js";
+import { useFormat, useLinkAs, useStrings } from "../context.js";
 import { OPERATIONS_STRINGS } from "../strings.js";
 import { StatusIndicator, StatusShape } from "./status.js";
 import { Meter, UptimeBar } from "./developer.js";
@@ -225,19 +225,26 @@ export function DnsRecordTable(p: DnsRecordTableProps) {
   );
 }
 
+/** Status of a domain's expiry: under 7 days danger, under 30 warn, unknown idle. */
+export function expiryStatus(days: number | null | undefined): Status {
+  return days == null ? "idle" : days < 7 ? "danger" : days < 30 ? "warn" : "ok";
+}
+
 export function DomainList(p: DomainListProps) {
   const t = useStrings(OPERATIONS_STRINGS);
+  const Link = useLinkAs(p.linkAs);
   return (
     <div style={p.style} className={cx("tf-domains", p.className)}>
       {(p.items || [])
         .slice()
         .sort((a, b) => (a.days == null ? 9999 : a.days) - (b.days == null ? 9999 : b.days))
         .map((d) => {
-          const st = d.days == null ? "idle" : d.days < 7 ? "danger" : d.days < 30 ? "warn" : "ok";
+          const st = expiryStatus(d.days);
+          const Row = (d.href ? Link : "button") as React.ElementType;
           return (
-            <button
+            <Row
               key={d.name}
-              type="button"
+              {...(d.href ? { href: d.href } : { type: "button" })}
               className="tf-domainrow"
               onClick={() => {
                 p.onOpen && p.onOpen(d);
@@ -256,7 +263,7 @@ export function DomainList(p: DomainListProps) {
                 <small>{"SSL"}</small>
                 <StatusIndicator status={d.ssl || "idle"} label={d.sslLabel} />
               </span>
-            </button>
+            </Row>
           );
         })}
     </div>
