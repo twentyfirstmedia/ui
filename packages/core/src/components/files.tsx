@@ -286,7 +286,6 @@ export function FileBrowser(p: FileBrowserProps) {
           <button
             type="button"
             className="tf-fb-open"
-            aria-label={folder ? t.openFolder(i.name) : undefined}
             onClick={() => open(i)}
             onDoubleClick={(e) => e.preventDefault()}
             onKeyDown={(e) => onItemKey(e, i)}

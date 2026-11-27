@@ -2041,7 +2041,6 @@ export interface UIStrings {
   filesDropHint: string;
   dropToUpload: string;
   selectItem: (name: string) => string;
-  openFolder: (name: string) => string;
   renameItem: (name: string) => string;
   actionsFor: (name: string) => string;
   rename: string;
@@ -2080,7 +2079,6 @@ export const FILES_STRINGS: Pick<
   | "filesDropHint"
   | "dropToUpload"
   | "selectItem"
-  | "openFolder"
   | "renameItem"
   | "actionsFor"
   | "rename"
@@ -2123,7 +2121,6 @@ export const FILES_STRINGS: Pick<
   filesDropHint: "Drop files here or use Upload.",
   dropToUpload: "Drop to upload",
   selectItem: (name) => `Select ${name}`,
-  openFolder: (name) => `Open folder ${name}`,
   renameItem: (name) => `New name for ${name}`,
   actionsFor: (name) => `Actions for ${name}`,
   rename: "Rename",

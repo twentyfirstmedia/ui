@@ -89,7 +89,9 @@ export function InvoiceEditor(p: InvoiceEditorProps) {
   const pct = (n: number) => formatPercent(n, { maximumFractionDigits: 2 });
   const totals = invoiceTotals(value.lines, { discount: value.discount });
   const [ref, width] = useWidth<HTMLDivElement>(undefined, 1200);
-  const narrow = width < (p.stackBelow ?? 900);
+  // side by side when there is room, the preview under the form below `stackBelow`, tabs on phones
+  const stacked = width < (p.stackBelow ?? 1100);
+  const narrow = width < 640;
   const [tab, setTab] = React.useState(t.invoiceEdit);
   const lineDiscounts = p.lineDiscounts !== false;
   const customer = (p.customers || []).find((c) => c.id === value.customer);
@@ -335,7 +337,13 @@ export function InvoiceEditor(p: InvoiceEditorProps) {
   return (
     <div
       ref={ref}
-      className={cx("tf-inv-editor", narrow && "narrow", !preview && "solo", p.className)}
+      className={cx(
+        "tf-inv-editor",
+        stacked && "stacked",
+        narrow && "narrow",
+        !preview && "solo",
+        p.className,
+      )}
       style={p.style}
     >
       {preview && narrow ? (
@@ -398,12 +406,12 @@ export function ImportSuggestions(p: ImportSuggestionsProps) {
   };
   return (
     <section
-      className={cx("tf-import", p.surface && "tf-" + p.surface, p.className)}
+      className={cx("tf-bankimp", p.surface && "tf-" + p.surface, p.className)}
       style={p.style}
       aria-label={p.title || t.importTitle}
       aria-busy={pending || undefined}
     >
-      <div className="tf-import-head">
+      <div className="tf-bankimp-head">
         <label className="tf-check">
           {cbox({
             checked: all,
@@ -412,11 +420,11 @@ export function ImportSuggestions(p: ImportSuggestionsProps) {
             onChange: () => setSelected(all ? [] : selectable.map((l) => l.id)),
             label: t.selectAll,
           })}
-          <span className="tf-import-title">{p.title || t.importTitle}</span>
+          <span className="tf-bankimp-title">{p.title || t.importTitle}</span>
         </label>
         <span className="tf-card-desc">{t.importLinesN(p.lines.length)}</span>
       </div>
-      <ul className="tf-import-list">
+      <ul className="tf-bankimp-list">
         {p.lines.map((l) => {
           const state = l.state ?? "new";
           const disabled = state !== "new" || pending;
@@ -424,9 +432,9 @@ export function ImportSuggestions(p: ImportSuggestionsProps) {
           return (
             <li
               key={l.id}
-              className={cx("tf-import-row", on.has(l.id) && state === "new" && "on", state)}
+              className={cx("tf-bankimp-row", on.has(l.id) && state === "new" && "on", state)}
             >
-              <span className="tf-import-check">
+              <span className="tf-bankimp-check">
                 {cbox({
                   checked: state === "new" && on.has(l.id),
                   disabled,
@@ -434,14 +442,14 @@ export function ImportSuggestions(p: ImportSuggestionsProps) {
                   label: t.importSelectLine(l.text),
                 })}
               </span>
-              <span className="tf-import-text">
+              <span className="tf-bankimp-text">
                 <b>{l.counterparty || l.text}</b>
                 <small>
                   {formatDate(l.date, { day: "numeric", month: "short" })}
                   {l.counterparty ? " · " + l.text : ""}
                 </small>
               </span>
-              <span className="tf-import-suggest">
+              <span className="tf-bankimp-suggest">
                 {state === "duplicate" ? (
                   <Badge tone="warning">{t.importDuplicate}</Badge>
                 ) : state === "booked" ? (
@@ -450,7 +458,7 @@ export function ImportSuggestions(p: ImportSuggestionsProps) {
                   <>
                     {p.categories && p.onCategoryChange ? (
                       <select
-                        className="tf-input tf-import-cat"
+                        className="tf-input tf-bankimp-cat"
                         aria-label={t.importCategoryFor(l.text)}
                         value={s.category}
                         disabled={pending}
@@ -481,7 +489,7 @@ export function ImportSuggestions(p: ImportSuggestionsProps) {
                   <small className="tf-card-desc">{t.importNoSuggestion}</small>
                 )}
               </span>
-              <b className={cx("tf-import-amt", "tf-num", l.amount < 0 ? "out" : "in")}>
+              <b className={cx("tf-bankimp-amt", "tf-num", l.amount < 0 ? "out" : "in")}>
                 {money(l.amount, l.currency)}
               </b>
               {p.onEdit && state === "new" && (
@@ -499,12 +507,12 @@ export function ImportSuggestions(p: ImportSuggestionsProps) {
         })}
       </ul>
       {error && (
-        <p className="tf-import-error" role="alert">
+        <p className="tf-bankimp-error" role="alert">
           <Icon name="x" size={14} />
           {error}
         </p>
       )}
-      <div className="tf-import-foot">
+      <div className="tf-bankimp-foot">
         <span aria-live="polite">
           {t.selectedCount(chosen.length)}
           {chosen.length > 0 && <b className="tf-num">{" · " + money(sum)}</b>}

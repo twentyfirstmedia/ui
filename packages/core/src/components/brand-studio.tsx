@@ -33,7 +33,7 @@ function CopyValue(p: { value: string; label: string }) {
   return (
     <button
       type="button"
-      className="tf-swatch-value"
+      className="tf-psw-value"
       aria-label={t.copyValue(p.label, p.value)}
       onClick={() => {
         try {
@@ -60,11 +60,11 @@ function ContrastRow(p: { color: string; bg: string; label: string }) {
   const level = wcagLevel(ratio);
   const text = ratio.toFixed(ratio >= 10 ? 1 : 2).replace(/\.?0+$/, "");
   return (
-    <div className="tf-swatch-contrast">
-      <span className="tf-swatch-sample" style={{ background: p.bg, color: p.color }} aria-hidden>
-        Aa
+    <div className="tf-psw-contrast">
+      <span className="tf-psw-sample" style={{ background: p.bg }} aria-hidden>
+        <i style={{ background: p.color }} />
       </span>
-      <span className="tf-swatch-on">{p.label}</span>
+      <span className="tf-psw-on">{p.label}</span>
       <span className="tf-mono">{t.contrastRatio(text)}</span>
       <Badge tone={level === "Fail" ? "danger" : level === "AA Large" ? "warning" : "success"}>
         {level === "Fail" ? t.contrastFail : level === "AA Large" ? t.contrastLarge : level}
@@ -79,27 +79,27 @@ export function PaletteSwatches(p: PaletteSwatchesProps) {
   const dark = p.dark ?? ON_DARK;
   return (
     <ul
-      className={cx("tf-swatches", p.compact && "compact", p.className)}
+      className={cx("tf-psw-list", p.compact && "compact", p.className)}
       style={p.style}
       aria-label={p.label || t.palette}
     >
       {p.colors.map((c) => (
-        <li key={c.name + c.value} className={cx("tf-swatch", p.surface && "tf-" + p.surface)}>
-          <span className="tf-swatch-chip" style={{ background: c.value }} aria-hidden />
-          <div className="tf-swatch-body">
-            <div className="tf-swatch-head">
+        <li key={c.name + c.value} className={cx("tf-psw", p.surface && "tf-" + p.surface)}>
+          <span className="tf-psw-chip" style={{ background: c.value }} aria-hidden />
+          <div className="tf-psw-body">
+            <div className="tf-psw-head">
               <b>{c.name}</b>
               {c.role && <small>{c.role}</small>}
             </div>
             <CopyValue value={c.value.toUpperCase()} label={t.hex} />
             {formatOklch(c.value) && <CopyValue value={formatOklch(c.value)} label={t.oklch} />}
             {p.contrast !== false && !p.compact && (
-              <div className="tf-swatch-contrasts">
+              <div className="tf-psw-contrasts">
                 <ContrastRow color={c.value} bg={light} label={t.onLight} />
                 <ContrastRow color={c.value} bg={dark} label={t.onDark} />
               </div>
             )}
-            {c.note && <p className="tf-swatch-note">{c.note}</p>}
+            {c.note && <p className="tf-psw-note">{c.note}</p>}
           </div>
         </li>
       ))}

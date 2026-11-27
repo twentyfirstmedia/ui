@@ -4309,7 +4309,7 @@ export interface InvoiceEditorProps extends BaseProps {
    * defaults to the picked customer, the lines and the note come from the editor.
    */
   preview?: Partial<Omit<InvoicePreviewProps, "lines">> | false;
-  /** Below this width (default 900px) the form and the preview become tabs. */
+  /** Below this width (default 1100px) the preview moves under the form; below 640px they become tabs. */
   stackBelow?: number;
   /** Under the totals: save, issue. */
   actions?: ReactNode;

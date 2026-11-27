@@ -2,7 +2,8 @@
 
 An outgoing invoice as a form beside the InvoicePreview it becomes: customer picker, line items with
 quantity, unit, unit price, VAT rate and discount, a discount on the whole invoice, the note and the
-totals per rate. The preview updates as you type; below 900px wide the form and the preview become tabs.
+totals per rate. The preview updates as you type. It sits beside the form from 1100px (`stackBelow`), under it
+below that, and on phones (below 640px) the form and the preview become tabs.
 
 - `value` / `onChange` (or `defaultValue`) hold the draft: `customer`, `lines` (`id`, `description`,
   `quantity`, `price`, `vat`, `discount`, `unit`), `discount` and `note`.

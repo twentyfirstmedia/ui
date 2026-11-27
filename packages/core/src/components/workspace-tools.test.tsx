@@ -60,7 +60,7 @@ describe("FileBrowser", () => {
         onNavigate={nav}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Open folder Contracts" }));
+    fireEvent.click(screen.getByText("Contracts"));
     expect(nav).toHaveBeenCalledWith("f1");
     fireEvent.click(screen.getByRole("button", { name: "All files" }));
     expect(nav).toHaveBeenLastCalledWith("root");

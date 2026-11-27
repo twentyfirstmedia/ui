@@ -47,7 +47,8 @@
   gap: 12px;
   padding: 10px 12px;
   border-radius: var(--radius-md);
-  background: var(--surface-sunken);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
   color: var(--ink-muted);
 }
 .tf-fb-upload.error {
@@ -361,7 +362,7 @@
   align-items: start;
   min-width: 0;
 }
-.tf-inv-editor.narrow,
+.tf-inv-editor.stacked,
 .tf-inv-editor.solo {
   grid-template-columns: minmax(0, 1fr);
 }
@@ -429,7 +430,7 @@
   min-width: 0;
 }
 .tf-inv-cell .tf-input {
-  height: 36px;
+  height: 32px;
   padding: 0 12px;
 }
 .tf-inv-cell select.tf-input {
@@ -521,6 +522,11 @@
 .tf-inv-preview {
   min-width: 0;
 }
+.tf-inv-editor.stacked:not(.narrow) .tf-inv-preview {
+  width: 100%;
+  max-width: 640px;
+  justify-self: center;
+}
 .tf-paper-lines small {
   color: var(--ink-muted);
 }
@@ -528,7 +534,7 @@
   .tf-inv-th {
     display: none;
   }
-  .tf-inv-row {
+  .tf-inv-lines:is(*, .has-unit.has-disc) .tf-inv-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px 12px;
     padding: 12px 0;
@@ -542,8 +548,13 @@
   .tf-inv-cell.amount {
     text-align: left;
   }
+  .tf-inv-lines .tf-inv-row {
+    position: relative;
+  }
   .tf-inv-cell.tools {
-    justify-content: flex-end;
+    position: absolute;
+    top: 4px;
+    right: 0;
   }
   .tf-inv-foot {
     grid-template-columns: minmax(0, 1fr);
@@ -551,32 +562,32 @@
 }
 
 /* ── ImportSuggestions ── */
-.tf-import {
+.tf-bankimp {
   display: flex;
   flex-direction: column;
   gap: 8px;
   min-width: 0;
-  container: tf-import / inline-size;
+  container: tf-bankimp / inline-size;
 }
-.tf-import-head,
-.tf-import-foot {
+.tf-bankimp-head,
+.tf-bankimp-foot {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 8px 16px;
 }
-.tf-import-title {
+.tf-bankimp-title {
   font: 700 15px/20px var(--font-sans);
 }
-.tf-import-list {
+.tf-bankimp-list {
   display: flex;
   flex-direction: column;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.tf-import-row {
+.tf-bankimp-row {
   display: grid;
   grid-template-columns: auto minmax(0, 1.2fr) minmax(0, 1fr) auto auto;
   align-items: center;
@@ -585,53 +596,53 @@
   border-bottom: 1px solid var(--line);
   border-radius: var(--radius-sm);
 }
-.tf-import-row.on {
+.tf-bankimp-row.on {
   background: var(--surface-sunken);
 }
-.tf-import-row:is(.duplicate, .booked) {
+.tf-bankimp-row:is(.duplicate, .booked) {
   color: var(--ink-muted);
 }
-.tf-import-text,
-.tf-import-suggest {
+.tf-bankimp-text,
+.tf-bankimp-suggest {
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
 }
-.tf-import-suggest {
+.tf-bankimp-suggest {
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   gap: 4px 8px;
 }
-.tf-import-text b {
+.tf-bankimp-text b {
   font: 600 14px/20px var(--font-sans);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.tf-import-text small,
-.tf-import-suggest small {
+.tf-bankimp-text small,
+.tf-bankimp-suggest small {
   font: 500 12px/16px var(--font-sans);
   color: var(--ink-muted);
   overflow-wrap: anywhere;
 }
-.tf-import-cat {
+.tf-bankimp-cat {
   width: auto;
   max-width: 100%;
   height: 32px;
   padding: 0 10px;
 }
-.tf-import-amt {
+.tf-bankimp-amt {
   font: 600 14px/20px var(--font-sans);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   text-align: right;
 }
-.tf-import-amt.in {
+.tf-bankimp-amt.in {
   color: var(--ok);
 }
-.tf-import-error {
+.tf-bankimp-error {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -639,39 +650,40 @@
   font: 600 13px/18px var(--font-sans);
   color: var(--danger);
 }
-.tf-import-foot {
+.tf-bankimp-foot {
   padding-top: 8px;
   font: 500 13px/18px var(--font-sans);
   color: var(--ink-muted);
 }
-.tf-import-foot b {
+.tf-bankimp-foot b {
   color: var(--ink);
 }
-@container tf-import (max-width: 560px) {
-  .tf-import-row {
+@container tf-bankimp (max-width: 560px) {
+  .tf-bankimp-row {
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas:
       "check text amt"
       "check suggest edit";
     row-gap: 6px;
   }
-  .tf-import-check {
+  .tf-bankimp-check {
     grid-area: check;
     align-self: start;
   }
-  .tf-import-text {
+  .tf-bankimp-text {
     grid-area: text;
   }
-  .tf-import-suggest {
+  .tf-bankimp-suggest {
     grid-area: suggest;
   }
-  .tf-import-amt {
+  .tf-bankimp-amt {
     grid-area: amt;
   }
-  .tf-import-row > .tf-iconbtn {
+  .tf-bankimp-row > .tf-iconbtn {
     grid-area: edit;
+    justify-self: end;
   }
-  .tf-import-foot .tf-btn {
+  .tf-bankimp-foot .tf-btn {
     width: 100%;
   }
 }
@@ -724,6 +736,9 @@
 }
 
 /* ── ExportDialog: accounting pre-check ── */
+.tf-export .tf-modal-title {
+  padding-right: 36px;
+}
 .tf-export-check {
   display: flex;
   flex-direction: column;
@@ -784,7 +799,7 @@
 }
 
 /* ── PaletteSwatches ── */
-.tf-swatches {
+.tf-psw-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 12px;
@@ -792,10 +807,10 @@
   padding: 0;
   list-style: none;
 }
-.tf-swatches.compact {
+.tf-psw-list.compact {
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 }
-.tf-swatch {
+.tf-psw {
   display: flex;
   flex-direction: column;
   border-radius: var(--radius-lg);
@@ -804,14 +819,14 @@
   overflow: hidden;
   min-width: 0;
 }
-.tf-swatch-chip {
+.tf-psw-chip {
   height: 88px;
   box-shadow: inset 0 -1px 0 var(--line);
 }
-.tf-swatches.compact .tf-swatch-chip {
+.tf-psw-list.compact .tf-psw-chip {
   height: 56px;
 }
-.tf-swatch-body {
+.tf-psw-body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -819,21 +834,21 @@
   padding: 12px;
   min-width: 0;
 }
-.tf-swatch-head {
+.tf-psw-head {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
   gap: 4px 8px;
   margin-bottom: 4px;
 }
-.tf-swatch-head b {
+.tf-psw-head b {
   font: 700 14px/20px var(--font-sans);
 }
-.tf-swatch-head small {
+.tf-psw-head small {
   font: 500 12px/16px var(--font-sans);
   color: var(--ink-muted);
 }
-.tf-swatch-value {
+.tf-psw-value {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -847,42 +862,42 @@
   font: 500 12px/16px var(--font-sans);
   cursor: pointer;
 }
-.tf-swatch-value .tf-mono {
+.tf-psw-value .tf-mono {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.tf-swatch-value:hover {
+.tf-psw-value:hover {
   background: var(--surface-sunken);
   color: var(--ink);
 }
-.tf-swatch-value:focus-visible {
+.tf-psw-value:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 1px;
 }
-.tf-swatch-contrasts {
+.tf-psw-contrasts {
   display: flex;
   flex-direction: column;
   gap: 6px;
   width: 100%;
   margin-top: 6px;
 }
-.tf-swatch-contrast {
+.tf-psw-contrast {
   display: flex;
   align-items: center;
   gap: 8px;
   font: 500 12px/16px var(--font-sans);
   color: var(--ink-muted);
 }
-.tf-swatch-contrast .tf-mono {
+.tf-psw-contrast .tf-mono {
   font-variant-numeric: tabular-nums;
   color: var(--ink);
 }
-.tf-swatch-on {
+.tf-psw-on {
   flex: 1;
   min-width: 0;
 }
-.tf-swatch-sample {
+.tf-psw-sample {
   display: grid;
   place-items: center;
   width: 28px;
@@ -890,9 +905,13 @@
   flex: none;
   border-radius: var(--radius-sm);
   box-shadow: inset 0 0 0 1px var(--line);
-  font: 700 12px/1 var(--font-sans);
 }
-.tf-swatch-note {
+.tf-psw-sample i {
+  width: 14px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+}
+.tf-psw-note {
   margin: 4px 0 0;
   font: 500 12px/16px var(--font-sans);
   color: var(--ink-muted);
